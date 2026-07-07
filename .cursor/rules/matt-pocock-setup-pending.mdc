@@ -1,0 +1,32 @@
+---
+description: BLOCKING — Matt Pocock one-time repo setup must run before any other work until complete
+alwaysApply: true
+---
+
+# Matt Pocock setup pending (blocking)
+
+## Check first — every session
+
+Before answering **any** user message, read `.cursor/project-setup.json`.
+
+If `"mattPocockSetup": false` (or the file is missing this flag as true):
+
+## Required behavior
+
+1. **Stop.** Do not start feature work, debugging, planning, or other tasks yet.
+2. **Tell the user immediately:** this repo still needs one-time Matt Pocock setup.
+3. **Read and execute** the global skill: `~/.agents/skills/setup-matt-pocock-skills/SKILL.md`  
+   (User may also type `/setup-matt-pocock-skills` or `@setup-matt-pocock-skills`.)
+4. Walk through setup **interactively** — issue tracker, triage labels, domain docs — per that skill. Do not invent defaults unless the user chooses them in the conversation.
+5. When setup files are written (`docs/agents/*`, `AGENTS.md` or `CLAUDE.md` block):
+   - Set `"mattPocockSetup": true` in `.cursor/project-setup.json`
+   - Delete this rule file: `.cursor/rules/matt-pocock-setup-pending.mdc`
+
+## Only exceptions
+
+- User explicitly says **skip Matt Pocock setup** or **setup later** for this session — then proceed with their request and remind them setup is still pending.
+- User message is only **running setup** — proceed with the skill.
+
+## Why this rule exists
+
+The setup skill does not auto-invoke (`disable-model-invocation: true`). This rule is the trigger.
