@@ -210,6 +210,23 @@ function remountIssueSidebar(host, root, ctx) {
   bindIssueSidebarList(root, ctx);
 }
 
+function issueFormIssue(root, issues, ui) {
+  const formIssueKey = root.querySelector('#issue-form')?.dataset.issueKey;
+  if (formIssueKey) {
+    return issues.find((issue) => issue.key === formIssueKey) || null;
+  }
+  return issues.find((issue) => issue.key === ui.selectedIssueKey) || null;
+}
+
+function remountIssueDetail(root, issue, issues, audit, galleryEvidence, onChange, rerender, onNavigateToEvidence) {
+  const detail = root.querySelector('#issue-detail');
+  if (!detail || !issue) {
+    return;
+  }
+  detail.innerHTML = renderIssueForm(issue, audit, galleryEvidence);
+  bindIssueForm(issue, issues, audit, galleryEvidence, root, onChange, rerender, onNavigateToEvidence);
+}
+
 function bindIssueSidebarDnD(container, { issues, audit, phaseFilter, onReorder }) {
   if (!container) {
     return;
@@ -507,6 +524,11 @@ export function renderIssuesView(
   };
 
   const onReorder = (nextIssues, droppedKey) => {
+    const formIssue = issueFormIssue(root, issues, ui);
+    if (formIssue) {
+      applyIssueForm(formIssue, root);
+    }
+
     replaceIssuesArray(issues, nextIssues);
     if (droppedKey) {
       ui.selectedIssueKey = droppedKey;
@@ -517,7 +539,16 @@ export function renderIssuesView(
       remountIssueSidebar(sidebarHost, root, { ...sidebarCtx, onReorder });
       const selectedIssue = issues.find((issue) => issue.key === ui.selectedIssueKey);
       if (selectedIssue) {
-        updateIssueFormHeading(root, selectedIssue);
+        remountIssueDetail(
+          root,
+          selectedIssue,
+          issues,
+          audit,
+          galleryEvidence,
+          onChange,
+          rerender,
+          onNavigateToEvidence
+        );
       }
       onChange();
       onAfterIssueListChange?.();
@@ -629,7 +660,7 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
     .join('');
 
   return `
-    <form class="editor-detail-form issue-editor-layout" id="issue-form">
+    <form class="editor-detail-form issue-editor-layout" id="issue-form" data-issue-key="${escapeAttr(issue.key)}">
       <div class="issue-editor-layout__primary">
         <div class="editor-detail__head">
           <h2>${escapeHtml(issue.id)}: ${escapeHtml(issue.title || 'Untitled')}</h2>
@@ -1346,7 +1377,7 @@ export function applyActiveForm(state) {
   }
 
   if (tab === 'issues') {
-    const issue = state.data.issues.find((item) => item.key === state.ui.selectedIssueKey);
+    const issue = issueFormIssue(root, state.data.issues, state.ui);
     if (issue) {
       applyIssueForm(issue, root);
     }
