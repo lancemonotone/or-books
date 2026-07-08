@@ -1,5 +1,6 @@
 import {
   appendIssueToPhase,
+  compactIssueIds,
   inferMediaType,
   mediaUrl,
   moveIssueToPhaseEnd,
@@ -378,12 +379,11 @@ function bindIssueSidebarDnD(
       }
     }
 
-    const next = reorderIssuesFromDrop(issues, audit, {
+    onReorder({
       draggedKey: key,
       targetPhaseId: dropTargetInfo.targetPhaseId,
       insertBeforeKey: dropTargetInfo.insertBeforeKey,
     });
-    onReorder(next, key);
   });
 }
 
@@ -594,13 +594,19 @@ export function renderIssuesView(
     onNavigateToIssue,
   };
 
-  const onReorder = (nextIssues, droppedKey) => {
+  const onReorder = (dropIntent) => {
+    const droppedKey = dropIntent?.draggedKey ?? null;
     const formIssue = issueFormIssue(root, issues, ui);
-    if (formIssue) {
+    if (formIssue && formIssue.key !== droppedKey) {
       applyIssueForm(formIssue, root);
     }
 
-    replaceIssuesArray(issues, nextIssues);
+    if (dropIntent) {
+      const ordered = reorderIssuesFromDrop(issues, audit, dropIntent);
+      replaceIssuesArray(issues, ordered);
+      compactIssueIds(issues, audit);
+    }
+
     if (droppedKey) {
       ui.selectedIssueKey = droppedKey;
       ui.pinnedIssueScrollKey = droppedKey;
