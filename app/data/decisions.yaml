@@ -1,98 +1,92 @@
 - id: carousel-style
   title: Slider controls (dots or arrows)
-  blocks: ["2.9"]
+  blocks:
+    - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
   question: Which style should all sliders use on the site?
-  recommendation: >
-    Please pick one. The homepage currently mixes dots and arrows, which
-    looks inconsistent. We can show both side by side when we talk.
+  recommendation: |
+    Please pick one. The homepage currently mixes dots and arrows, which looks inconsistent. We can show both side by side when we talk.
   options:
     - value: dots
       label: Dots under the slider
       description: What the homepage book carousels use now.
       evidence:
-        - file: "120911.png"
+        - file: 120911.png
           caption: Homepage, dot-style slider
     - value: arrows
       label: Round arrow buttons
       description: What the About page and Featured Author sections use now.
       evidence:
-        - file: "123850.png"
+        - file: 123850.png
           caption: About page slider
-        - file: "125607.png"
+        - file: 125607.png
           caption: Authors page, Featured Author
-
 - id: rights-catalogs
   title: Rights Catalogs page
   blocks: []
   question: The Rights Catalogs page is still placeholder text. What should we do with it?
-  recommendation: >
-    The page is all Lorem Ipsum. We would hide it from the menu until real
-    copy is ready.
+  recommendation: |
+    The page is all Lorem Ipsum. We would hide it from the menu until real copy is ready.
   options:
     - value: hide
       label: Hide from the menu until there is real content
       evidence:
-        - file: "125507.png"
+        - file: 125507.png
           caption: Rights Catalogs today
     - value: populate
       label: Fill in real catalog content
       evidence:
-        - file: "125507.png"
+        - file: 125507.png
           caption: Rights Catalogs today
     - value: remove
       label: Remove the page and menu link
       evidence:
-        - file: "125507.png"
+        - file: 125507.png
           caption: Rights Catalogs today
-
 - id: mailchimp-signup
   title: Bookseller email signup
-  blocks: ["2.15"]
+  blocks:
+    - 22f6409d-b5e4-46b1-8086-f2839495505e
   question: Where should the bookseller mailing list signup live?
-  recommendation: >
-    We would keep people on orbooks.com and still send signups to your
-    existing Mailchimp list. The standard BigCommerce Mailchimp connection
-    handles store customers; it does not replace this separate bookseller form.
+  recommendation: |
+    We would keep people on orbooks.com and still send signups to your existing Mailchimp list. The standard BigCommerce Mailchimp connection handles store customers; it does not replace this separate bookseller form.
   options:
     - value: embed
       label: Embed the Mailchimp form on an OR Books page
       description: Faster to build. Some Mailchimp styling may show through.
       evidence:
-        - file: "125535.png"
+        - file: 125535.png
           caption: Current signup (leaves the site)
     - value: custom
       label: Build a custom form that posts to Mailchimp
       description: Matches the site design fully. More work to build.
       evidence:
-        - file: "125535.png"
+        - file: 125535.png
           caption: Fields to recreate on-site
-        - file: "125307.png"
+        - file: 125307.png
           caption: Booksellers page
     - value: hosted
       label: Keep the current off-site Mailchimp page
       description: No build work. Visitors leave orbooks.com to sign up.
       evidence:
-        - file: "125535.png"
+        - file: 125535.png
           caption: Current off-site signup
-
 - id: email-policy
   title: How to show email addresses
-  blocks: ["1.4"]
+  blocks:
+    - 11ab1e09-5807-4688-85ed-437200d2fcce
   question: Should email addresses be normal links people can tap to open mail?
-  recommendation: >
-    Use one format everywhere. Right now the same page sometimes shows
-    orders [at] orbooks.com and sometimes rights@orbooks.com, which is
-    confusing on a phone.
+  recommendation: |
+    Use one format everywhere. Right now the same page sometimes shows orders [at] orbooks.com and sometimes rights@orbooks.com, which is confusing on a phone.
   options:
     - value: mailto
       label: Show as links with @ (tap to email)
       description: Easiest on a phone.
       evidence:
-        - file: "125307.png"
+        - file: 125307.png
           caption: Mixed formats on Booksellers page
     - value: obfuscate
       label: Keep the [at] style everywhere
       description: If you still want to deter spam scrapers, use one pattern only.
       evidence:
-        - file: "125307.png"
+        - file: 125307.png
           caption: Mixed formats on Booksellers page

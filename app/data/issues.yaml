@@ -1,4 +1,5 @@
-- id: '1.2'
+- key: 280a567f-7694-47ee-8d72-402e68da199d
+  id: '1.2'
   sprint: 1
   title: Label or Replace the Subjects icons
   impact: critical
@@ -15,7 +16,8 @@
     - Every subject icon has a visible text label on mobile
   evidence:
     - file: 121022.png
-- id: '1.3'
+- key: d64e9880-9bd4-4b26-850b-f04a0b9b341b
+  id: '1.3'
   sprint: 1
   title: Keep the header visible when searching
   impact: critical
@@ -37,7 +39,8 @@
       caption: Search, first screen
     - file: 121904.png
       caption: Search, second screen, header gone
-- id: '1.4'
+- key: 11ab1e09-5807-4688-85ed-437200d2fcce
+  id: '1.4'
   sprint: 1
   title: Show email addresses the same way everywhere
   impact: high
@@ -64,7 +67,8 @@
       caption: Rights Enquiries
     - file: 123949.png
       caption: Contact page
-- id: '1.5'
+- key: 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
+  id: '1.5'
   sprint: 1
   title: Fix text that looks like a link but is not
   impact: high
@@ -85,7 +89,8 @@
       caption: Homepage, See all
     - file: 161534.png
       caption: Article page, section title
-- id: '1.6'
+- key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
+  id: '1.6'
   sprint: 1
   title: Fix Reading Lists View All page
   impact: high
@@ -103,7 +108,8 @@
   evidence:
     - file: 160840.png
       caption: Reading Lists module
-- id: '1.7'
+- key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
+  id: '1.7'
   sprint: 1
   title: Add a way back from news articles
   impact: high
@@ -123,7 +129,8 @@
       caption: News article
     - file: 161534.png
       caption: Media article
-- id: '1.8'
+- key: 1003b1bb-4460-4577-97e9-f737dfe9fead
+  id: '1.8'
   sprint: 1
   title: Open media articles on the first tap
   impact: high
@@ -144,7 +151,8 @@
       caption: Screen recording
     - file: 161238.png
       caption: Read Now overlay
-- id: '1.9'
+- key: f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
+  id: '1.9'
   sprint: 1
   title: Link to other pages mentioned in the FAQ
   impact: high
@@ -162,7 +170,8 @@
   evidence:
     - file: 125833.png
       caption: FAQ page
-- id: '2.1'
+- key: d9a285fd-c112-4962-be45-5bbb594dc1d3
+  id: '2.1'
   sprint: 2
   title: Make headings and titles easier to tell apart
   impact: high
@@ -181,7 +190,8 @@
       caption: Homepage headings
     - file: 123249.png
       caption: Large review quote
-- id: '2.2'
+- key: ad45e92e-3cd0-41a4-a129-f80d2c2908bb
+  id: '2.2'
   sprint: 2
   title: Make buttons look consistent
   impact: high
@@ -202,7 +212,8 @@
       caption: Several button styles
     - file: 123310.png
       caption: Purchase area
-- id: '2.3'
+- key: c392e399-8c2d-4c2e-9896-56b81e76b2d0
+  id: '2.3'
   sprint: 2
   title: Even out spacing between sections
   impact: medium
@@ -222,7 +233,8 @@
       caption: Catalog list gap
     - file: 123249.png
       caption: Reviews section
-- id: '2.4'
+- key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
+  id: '2.4'
   sprint: 2
   title: Make author photos the same size and shape
   impact: high
@@ -242,7 +254,8 @@
       caption: Authors grid
     - file: 123704.png
       caption: Authors grid scrolled
-- id: '2.5'
+- key: 7952f11e-1b30-41a0-b128-5f54fdf49928
+  id: '2.5'
   sprint: 2
   title: Align the header icons
   impact: high
@@ -261,7 +274,8 @@
   evidence:
     - file: 120802.png
       caption: Menu open, search icon off-center
-- id: '2.6'
+- key: 030cf68c-ad0d-4b9f-8c65-f0471faf263b
+  id: '2.6'
   sprint: 2
   title: Left-align long paragraphs on mobile
   impact: medium
@@ -281,7 +295,8 @@
       caption: About page
     - file: 125642.png
       caption: Subsidiary Rights page
-- id: '2.7'
+- key: 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
+  id: '2.7'
   sprint: 2
   title: Remove repeated labels in the menu
   impact: medium
@@ -299,7 +314,8 @@
   evidence:
     - file: 120802.png
       caption: Menu overlay
-- id: '2.8'
+- key: 02bb4d06-502d-44db-907c-062d48f5e58c
+  id: '2.8'
   sprint: 2
   title: Give the header more room in the open menu
   impact: medium
@@ -317,7 +333,8 @@
   evidence:
     - file: 120802.png
       caption: Menu crowding logo
-- id: '2.9'
+- key: d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
+  id: '2.9'
   sprint: 2
   title: Use one slider style across the site
   impact: medium
@@ -339,7 +356,8 @@
       caption: Arrows on About
     - file: 125607.png
       caption: Arrows on Authors
-- id: '2.10'
+- key: b57d706d-de6d-46d7-8e3f-6452f175c362
+  id: '2.10'
   sprint: 2
   title: Stop squashing images in media lists
   impact: high
@@ -362,7 +380,8 @@
       caption: In the Media list
     - file: 161534.png
       caption: Article page, correct proportions
-- id: '2.11'
+- key: 1c59053b-b5c4-4f94-8361-422f66dd6614
+  id: '2.11'
   sprint: 2
   title: Shorten news bylines on mobile
   impact: medium
@@ -382,7 +401,8 @@
       caption: News byline
     - file: 161534.png
       caption: Media byline
-- id: '2.12'
+- key: 5d04c117-9701-492c-beea-4056113fbdf2
+  id: '2.12'
   sprint: 2
   title: Label the Featured Title blocks clearly
   impact: high
@@ -404,7 +424,8 @@
       caption: Featured Title, Red Card
     - file: 123310.png
       caption: Related Interest block
-- id: '2.13'
+- key: 6f242823-63e3-4b9c-b49d-4ecf1336c282
+  id: '2.13'
   sprint: 2
   title: Make legal tables readable on a phone
   impact: high
@@ -422,7 +443,8 @@
   evidence:
     - file: 125733.png
       caption: CCPA table
-- id: '2.14'
+- key: f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
+  id: '2.14'
   sprint: 2
   title: Improve Featured Author text on mobile
   impact: medium
@@ -441,7 +463,8 @@
   evidence:
     - file: 125607.png
       caption: Featured Author section
-- id: '2.15'
+- key: 22f6409d-b5e4-46b1-8086-f2839495505e
+  id: '2.15'
   sprint: 2
   title: Keep bookseller signup on orbooks.com
   impact: medium
@@ -463,7 +486,8 @@
       caption: External signup form
     - file: 125307.png
       caption: Booksellers page
-- id: '3.1'
+- key: 1c49d1b5-8643-4e29-9bc3-f3ad0f35ee4f
+  id: '3.1'
   sprint: 3
   title: Use the same arrow on all accordions
   impact: medium
@@ -478,7 +502,8 @@
   acceptance:
     - All accordions use the same chevron icon and rotation behavior
   evidence: []
-- id: '3.2'
+- key: 016b1384-309d-48ba-a585-398783c97dd6
+  id: '3.2'
   sprint: 3
   title: Make small tap targets easier to hit
   impact: high
@@ -498,7 +523,8 @@
       caption: Pricing options
     - file: 123519.png
       caption: Alphabet filter
-- id: '3.3'
+- key: 8c2911bc-50d4-471b-8045-8fce90267a90
+  id: '3.3'
   sprint: 3
   title: Match footer social icons to the header
   impact: low
@@ -518,7 +544,8 @@
       caption: Footer
     - file: 124005.png
       caption: Contact footer
-- id: '3.4'
+- key: 535334f1-38be-42ea-9a71-735525922eeb
+  id: '3.4'
   sprint: 3
   title: Center the cookie preferences bar with the footer
   impact: low

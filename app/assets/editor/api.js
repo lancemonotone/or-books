@@ -21,11 +21,15 @@ export function dumpYaml(data, file = '') {
   let payload = data;
 
   if (file === 'issues' && Array.isArray(data)) {
-    payload = data.map((issue) => ({
-      ...issue,
-      id: String(issue.id),
-      sprint: Number(issue.sprint),
-    }));
+    payload = data.map((issue) => {
+      const { key, id, sprint, ...rest } = issue;
+      return {
+        key: String(key),
+        id: String(id),
+        sprint: Number(sprint),
+        ...rest,
+      };
+    });
   }
 
   if (file === 'decisions' && Array.isArray(data)) {
@@ -84,7 +88,7 @@ export function syncEvidenceIssueLinks(issues, evidence) {
       if (!fileToIssues.has(item.file)) {
         fileToIssues.set(item.file, new Set());
       }
-      fileToIssues.get(item.file).add(String(issue.id));
+      fileToIssues.get(item.file).add(String(issue.key));
     }
   }
 
@@ -109,4 +113,11 @@ export function suggestIssueId(phase, issues) {
     .map((issue) => Number(String(issue.id).split('.')[1]) || 0);
   const next = numbers.length ? Math.max(...numbers) + 1 : 1;
   return `${phase}.${next}`;
+}
+
+export function newIssueKey() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  throw new Error('crypto.randomUUID is required to create Issue keys.');
 }

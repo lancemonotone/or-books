@@ -4,3 +4,6 @@ app/media/*
 
 # Optional local API config
 app/api/config.php
+
+# Local Node deps for one-shot scripts
+app/node_modules/
