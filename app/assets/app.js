@@ -132,6 +132,12 @@ function issuesForEvidence(file) {
   return row.issues.map(issueByKey).filter(Boolean);
 }
 
+function decisionsForIssue(issueKey) {
+  return state.decisions.filter((decision) =>
+    (decision.blocks || []).includes(issueKey),
+  );
+}
+
 function sprintIssues(sprintId) {
   return state.issues.filter(
     (item) => String(item.sprint) === String(sprintId),
@@ -488,6 +494,10 @@ function renderIssueDetail(issueKey) {
     })
     .join("");
 
+  const linkedDecisionsHtml = decisionsForIssue(issueKey)
+    .map((decision) => renderDecisionCard(decision))
+    .join("");
+
   return `
     <div class="page page--split">
       <div class="page__primary">
@@ -505,6 +515,7 @@ function renderIssueDetail(issueKey) {
           <h2>${escapeHtml(COPY.whatWeSuggest)}</h2>
           <p>${escapeHtml(issue.recommendation?.trim() || "")}</p>
         </section>
+        ${linkedDecisionsHtml ? `<section class="issue-decisions">${linkedDecisionsHtml}</section>` : ""}
         ${renderCommentForm(issue)}
       </div>
       <aside class="page__aside">

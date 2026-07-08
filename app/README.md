@@ -192,7 +192,7 @@ Open `data/decisions.yaml`:
           caption: Homepage, dot-style slider
 ```
 
-`blocks` lists Issue **keys** waiting on this answer (for your reference; not shown in the app). Set the linked note's `status: blocked` when it depends on the answer.
+`blocks` lists Issue **keys** linked to this question. Linked questions appear on those issue pages in the presentation. Set the linked note's `status: blocked` when it depends on the answer.
 
 ### Typical workflow
 

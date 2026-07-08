@@ -14,7 +14,7 @@
     - d9a285fd-c112-4962-be45-5bbb594dc1d3
 - file: 121002.png
   type: image
-  page: Homepage: author and news modules
+  page: "Homepage: author and news modules"
   issues:
     - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
 - file: 121022.png
@@ -41,37 +41,37 @@
   issues: []
 - file: 123119.mp4
   type: video
-  page: In the Media: Read Now overlay
+  page: "In the Media: Read Now overlay"
   poster: 161238.png
   reviewed: true
   issues:
     - 1003b1bb-4460-4577-97e9-f737dfe9fead
 - file: 123202.png
   type: image
-  page: Author: In the Media (squished images)
+  page: "Author: In the Media (squished images)"
   issues:
     - b57d706d-de6d-46d7-8e3f-6452f175c362
 - file: 123215.png
   type: image
-  page: Author: In the Media
+  page: "Author: In the Media"
   issues:
     - b57d706d-de6d-46d7-8e3f-6452f175c362
 - file: 123249.png
   type: image
-  page: Book detail: Run Zohran Run
+  page: "Book detail: Run Zohran Run"
   issues:
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
     - d9a285fd-c112-4962-be45-5bbb594dc1d3
 - file: 123310.png
   type: image
-  page: Book detail: purchase options
+  page: "Book detail: purchase options"
   issues:
     - 016b1384-309d-48ba-a585-398783c97dd6
     - 5d04c117-9701-492c-beea-4056113fbdf2
     - ad45e92e-3cd0-41a4-a129-f80d2c2908bb
 - file: 123327.png
   type: image
-  page: News article: Run Zohran Run
+  page: "News article: Run Zohran Run"
   issues:
     - 1c59053b-b5c4-4f94-8361-422f66dd6614
     - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
@@ -83,7 +83,7 @@
     - 8c2911bc-50d4-471b-8045-8fce90267a90
 - file: 123519.png
   type: image
-  page: Our Authors: filter and grid
+  page: "Our Authors: filter and grid"
   issues:
     - 016b1384-309d-48ba-a585-398783c97dd6
     - 74c65dc5-7a86-4fe3-8327-cf3be9715f38
@@ -94,7 +94,7 @@
   issues: []
 - file: 123704.png
   type: image
-  page: Our Authors: grid scroll
+  page: "Our Authors: grid scroll"
   issues:
     - 74c65dc5-7a86-4fe3-8327-cf3be9715f38
 - file: 123739.png
@@ -105,7 +105,7 @@
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
 - file: 123809.png
   type: image
-  page: Featured Title: Red Card
+  page: "Featured Title: Red Card"
   issues:
     - 5d04c117-9701-492c-beea-4056113fbdf2
 - file: 123828.png
@@ -115,7 +115,7 @@
     - 030cf68c-ad0d-4b9f-8c65-f0471faf263b
 - file: 123850.png
   type: image
-  page: About: video slider
+  page: "About: video slider"
   issues:
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
 - file: 123929.mp4
@@ -135,7 +135,7 @@
     - 8c2911bc-50d4-471b-8045-8fce90267a90
 - file: 125307.png
   type: image
-  page: Booksellers: mixed email formats
+  page: "Booksellers: mixed email formats"
   issues:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
     - 22f6409d-b5e4-46b1-8086-f2839495505e
@@ -150,7 +150,7 @@
     - 11ab1e09-5807-4688-85ed-437200d2fcce
 - file: 125507.png
   type: image
-  page: Rights Catalogs: Lorem Ipsum
+  page: "Rights Catalogs: Lorem Ipsum"
   issues: []
 - file: 125535.png
   type: image
@@ -159,7 +159,7 @@
     - 22f6409d-b5e4-46b1-8086-f2839495505e
 - file: 125607.png
   type: image
-  page: Authors: Featured + directory
+  page: "Authors: Featured + directory"
   issues:
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
     - f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
@@ -204,7 +204,7 @@
     - ad45e92e-3cd0-41a4-a129-f80d2c2908bb
 - file: 161238.png
   type: image
-  page: In the Media list: Read Now overlay
+  page: "In the Media list: Read Now overlay"
   issues:
     - 1003b1bb-4460-4577-97e9-f737dfe9fead
 - file: 161534.png

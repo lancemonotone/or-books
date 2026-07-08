@@ -1306,10 +1306,12 @@ function applyEvidenceForm(row, root) {
 export function renderDecisionsView(
   decisions,
   issues,
+  audit,
   ui,
   root,
   onChange,
   galleryEvidence = [],
+  onNavigateToIssue,
 ) {
   const selected =
     decisions.find((item) => item.id === ui.selectedDecisionId) ||
@@ -1340,7 +1342,7 @@ export function renderDecisionsView(
         </ul>
       </aside>
       <div class="editor-detail" id="decision-detail">
-        ${selected ? renderDecisionForm(selected, issues) : '<p class="editor-lede">Add a question to get started.</p>'}
+        ${selected ? renderDecisionForm(selected, issues, audit) : '<p class="editor-lede">Add a question to get started.</p>'}
       </div>
     </div>
   `;
@@ -1355,10 +1357,12 @@ export function renderDecisionsView(
       renderDecisionsView(
         decisions,
         issues,
+        audit,
         ui,
         root,
         onChange,
         galleryEvidence,
+        onNavigateToIssue,
       );
     });
   });
@@ -1380,10 +1384,12 @@ export function renderDecisionsView(
       renderDecisionsView(
         decisions,
         issues,
+        audit,
         ui,
         root,
         onChange,
         galleryEvidence,
+        onNavigateToIssue,
       );
     });
 
@@ -1402,24 +1408,42 @@ export function renderDecisionsView(
       renderDecisionsView(
         decisions,
         issues,
+        audit,
         ui,
         root,
         onChange,
         galleryEvidence,
+        onNavigateToIssue,
       );
     },
+    onNavigateToIssue,
   );
 }
 
-function renderDecisionForm(decision, issues) {
-  const blockChecks = issues
-    .map(
-      (issue) => `
-      <label class="editor-check">
-        <input type="checkbox" name="blocks" value="${escapeAttr(issue.key)}" ${(decision.blocks || []).includes(issue.key) ? "checked" : ""}>
-        <span>${escapeHtml(issue.id)}: ${escapeHtml(issue.title)}</span>
-      </label>`,
-    )
+function renderDecisionForm(decision, issues, audit) {
+  const linkedGroups = groupIssuesByPhase(issues, audit)
+    .map((group) => {
+      const rows = group.issues
+        .map(
+          (issue) => `
+          <div class="editor-linked-check">
+            <label class="editor-check editor-check--solo">
+              <input type="checkbox" name="blocks" value="${escapeAttr(issue.key)}" ${(decision.blocks || []).includes(issue.key) ? "checked" : ""} aria-label="Link issue ${escapeAttr(issue.id)}">
+            </label>
+            <button type="button" class="issue-composer__linked-link editor-linked-check__open" data-open-issue="${escapeAttr(issue.key)}">
+              <span class="issue-composer__linked-id">${escapeHtml(issue.id)}</span>
+              <span class="issue-composer__linked-title">${escapeHtml(issue.title)}</span>
+            </button>
+          </div>`,
+        )
+        .join("");
+
+      return `
+        <div class="editor-linked-group">
+          <p class="editor-linked-group__title">${escapeHtml(group.title)}</p>
+          <div class="editor-linked-checks">${rows}</div>
+        </div>`;
+    })
     .join("");
 
   const options = (decision.options || [])
@@ -1470,8 +1494,9 @@ function renderDecisionForm(decision, issues) {
       ${field("Question shown to client", textarea("question", decision.question || "", 3))}
       ${field("Suggested approach", textarea("recommendation", decision.recommendation || "", 4))}
       <section class="editor-subsection">
-        <h3>Waiting on these issues (internal)</h3>
-        <div class="editor-checks">${blockChecks || '<p class="editor-muted">No issues yet.</p>'}</div>
+        <h3>Linked issues</h3>
+        <p class="editor-subsection__hint">Check to link. Click a title to edit the issue.</p>
+        <div class="editor-linked-groups">${linkedGroups || '<p class="editor-muted">No issues yet.</p>'}</div>
       </section>
       <section class="editor-subsection">
         <div class="editor-subsection__head">
@@ -1492,6 +1517,7 @@ function bindDecisionForm(
   root,
   onChange,
   rerender,
+  onNavigateToIssue,
 ) {
   const detail = root.querySelector("#decision-detail");
   if (!detail) {
@@ -1612,6 +1638,13 @@ function bindDecisionForm(
         rerender();
       });
     });
+
+  detail.querySelectorAll("[data-open-issue]").forEach((button) => {
+    button.addEventListener("click", () => {
+      applyDecisionForm(decision, root);
+      onNavigateToIssue?.(button.dataset.openIssue);
+    });
+  });
 }
 
 function applyDecisionForm(decision, root) {
@@ -1738,10 +1771,12 @@ export function renderActiveView(
     renderDecisionsView(
       state.data.decisions,
       state.data.issues,
+      state.data.audit,
       state.ui,
       root,
       onChange,
       state.data.evidence,
+      onNavigateToIssue,
     );
   }
 }

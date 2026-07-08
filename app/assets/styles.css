@@ -833,6 +833,12 @@ a.pill {
   padding: 1.25rem;
 }
 
+.issue-decisions {
+  display: grid;
+  gap: 1.25rem;
+  margin-block: 1.5rem 0;
+}
+
 .decision-card__blocks,
 .decision-card__rec {
   font-size: 0.9rem;
