@@ -178,13 +178,6 @@ function focusIssueInSidebar(root, issueKey) {
   }
 }
 
-function updateIssueFormHeading(root, issue) {
-  const heading = root.querySelector('#issue-form .editor-detail__head h2');
-  if (heading && issue) {
-    heading.textContent = `${issue.id}: ${issue.title || 'Untitled'}`;
-  }
-}
-
 function bindIssueSidebarList(root, { issues, audit, ui, phaseFilter, onReorder, onNavigateToIssue }) {
   const sidebar = root.querySelector('[data-issue-sidebar]');
   bindIssueSidebarDnD(sidebar, { issues, audit, phaseFilter, onReorder });
