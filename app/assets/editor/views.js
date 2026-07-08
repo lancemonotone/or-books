@@ -178,9 +178,14 @@ function focusIssueInSidebar(root, issueKey) {
   }
 }
 
-function bindIssueSidebarList(root, { issues, audit, ui, phaseFilter, onReorder, onNavigateToIssue }) {
+function currentIssuePhaseFilter(ui, root) {
+  const fromSelect = root.querySelector('[name="phase-filter"]')?.value;
+  return fromSelect ?? ui.issuePhaseFilter ?? 'all';
+}
+
+function bindIssueSidebarList(root, { issues, audit, ui, onReorder, onNavigateToIssue }) {
   const sidebar = root.querySelector('[data-issue-sidebar]');
-  bindIssueSidebarDnD(sidebar, { issues, audit, phaseFilter, onReorder });
+  bindIssueSidebarDnD(sidebar, { issues, audit, ui, root, onReorder });
 
   root.querySelectorAll('[data-issue-key]').forEach((button) => {
     if (button.matches('[data-drag-handle]')) {
@@ -198,8 +203,8 @@ function bindIssueSidebarList(root, { issues, audit, ui, phaseFilter, onReorder,
 }
 
 function remountIssueSidebar(host, root, ctx) {
-  const { issues, audit, ui, phaseFilter } = ctx;
-  host.innerHTML = renderIssueSidebar(issues, audit, ui, phaseFilter);
+  const phaseFilter = currentIssuePhaseFilter(ctx.ui, root);
+  host.innerHTML = renderIssueSidebar(ctx.issues, ctx.audit, ctx.ui, phaseFilter);
   bindIssueSidebarList(root, ctx);
 }
 
@@ -220,13 +225,19 @@ function remountIssueDetail(root, issue, issues, audit, galleryEvidence, onChang
   bindIssueForm(issue, issues, audit, galleryEvidence, root, onChange, rerender, onNavigateToEvidence);
 }
 
-function bindIssueSidebarDnD(container, { issues, audit, phaseFilter, onReorder }) {
+function bindIssueSidebarDnD(container, { issues, audit, ui, root, onReorder }) {
   if (!container) {
     return;
   }
 
-  const allowCrossPhase = phaseFilter === 'all';
+  if (container.dataset.dndBound === '1') {
+    return;
+  }
+  container.dataset.dndBound = '1';
+
   let draggedKey = null;
+
+  const allowCrossPhase = () => currentIssuePhaseFilter(ui, root) === 'all';
 
   const clearDropState = () => {
     container.querySelectorAll('.is-dragging, .is-drop-before, .is-drop-after').forEach((node) => {
@@ -235,12 +246,13 @@ function bindIssueSidebarDnD(container, { issues, audit, phaseFilter, onReorder 
   };
 
   const resolveDropTarget = (target) => {
+    const crossPhase = allowCrossPhase();
     const item = target.closest('[data-issue-item]');
     if (item) {
       const zone = item.closest('[data-phase-drop-zone]');
-      const phaseId = allowCrossPhase
+      const phaseId = crossPhase
         ? Number(zone?.dataset.phaseDropZone)
-        : Number(container.dataset.singlePhase);
+        : Number(container.dataset.singlePhase || currentIssuePhaseFilter(ui, root));
       return {
         targetPhaseId: phaseId,
         insertBeforeKey: item.dataset.issueKey,
@@ -318,7 +330,7 @@ function bindIssueSidebarDnD(container, { issues, audit, phaseFilter, onReorder 
       return;
     }
 
-    if (!allowCrossPhase) {
+    if (!allowCrossPhase()) {
       const dragged = issues.find((issue) => issue.key === key);
       if (!dragged || Number(dragged.sprint) !== dropTargetInfo.targetPhaseId) {
         return;
@@ -511,7 +523,6 @@ export function renderIssuesView(
     issues,
     audit,
     ui,
-    phaseFilter,
     onReorder: null,
     onNavigateToIssue,
   };

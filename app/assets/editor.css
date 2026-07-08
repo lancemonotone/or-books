@@ -330,8 +330,6 @@ code {
 .editor-issue-groups {
   display: grid;
   gap: 1rem;
-  max-block-size: 28rem;
-  overflow: auto;
 }
 
 .editor-issue-group__title {
