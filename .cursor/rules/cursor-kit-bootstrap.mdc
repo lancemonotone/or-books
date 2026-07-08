@@ -22,7 +22,7 @@ Read `.cursor/project-setup.json` **before every reply**. If `mattPocockSetup` i
 | Any `.css` edit | **`responsive-css`** skill (mandatory) |
 | PHP / asset changes | **`asset-violation-protocol`** rule |
 | Missing data / config | **`fail-fast`** rule — no invented defaults |
-| New feature / bug | Matt Pocock: `/grill-with-docs`, `/tdd`, `/diagnose` when appropriate |
+| New feature / bug | Matt Pocock: `/grill-with-docs`, `/diagnose` when appropriate (**not** `/tdd` — see **`no-tdd`**) |
 | Plans | **`research-confirmed-plans`** — verify before speculative options |
 
 ## Skills location

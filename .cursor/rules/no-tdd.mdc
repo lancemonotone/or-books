@@ -1,0 +1,25 @@
+---
+description: No TDD in this repo — plan, implement, verify manually; do not red-green-refactor or invent a test harness.
+alwaysApply: true
+---
+
+# No TDD (project decision)
+
+This project does **not** use test-driven development.
+
+## Do not
+
+- Invoke or follow the `/tdd` skill (red → green → refactor).
+- Write failing tests first as the default workflow.
+- Add a unit/integration test harness, test runner, or bulk test files for ordinary feature work.
+- Let other skills (e.g. writing-plans, Matt Pocock table in bootstrap) pull in TDD “when appropriate.”
+
+## Do instead
+
+- Lock behavior in a short plan (or clear user instruction).
+- Implement the change.
+- Verify in the browser or with a quick manual check named in the plan.
+
+## Exception
+
+Only introduce automated tests or a harness when the **user explicitly asks** for that task.
