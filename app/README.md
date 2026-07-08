@@ -149,6 +149,7 @@ evidence:
 - file: "121022.png"
   type: image
   page: Book detail — Run Zohran Run
+  url: https://orbooks.com/example-page
   issues:
     - "280a567f-7694-47ee-8d72-402e68da199d"   # Issue keys, not display ids
 ```

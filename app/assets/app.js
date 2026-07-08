@@ -51,6 +51,7 @@ const COPY = {
     "Everything saved so far. You will also see your own answers on each form.",
   noScreenshotsLinked: "No screenshots linked yet.",
   noIssuesLinked: "No issues linked",
+  viewOnSite: "View on site",
   lastSaved: "Saved",
   youChose: "You chose",
   noDecisionsYet: "No answers saved yet.",
@@ -188,6 +189,20 @@ function issueEvidenceFiles(issue) {
   return (issue.evidence || [])
     .map((item) => item.file)
     .filter((file) => evidenceByFile(file));
+}
+
+function evidencePageUrl(row) {
+  const url = String(row?.url || "").trim();
+  return url || null;
+}
+
+function renderEvidencePageLink(row, className = "") {
+  const url = evidencePageUrl(row);
+  if (!url) {
+    return "";
+  }
+  const classes = ["evidence-page-link", className].filter(Boolean).join(" ");
+  return `<a class="${escapeHtml(classes)}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(COPY.viewOnSite)}</a>`;
 }
 
 function renderEvidenceThumb(file, galleryFiles = null) {
@@ -446,9 +461,9 @@ function renderIssueDetail(issueKey) {
       const chipsHtml = issueKeys.length
         ? `<div class="chip-row media-block__chips">${renderIssueChips(issueKeys)}</div>`
         : "";
-      const footerHtml = chipsHtml
-        ? `<figcaption>${chipsHtml}</figcaption>`
-        : "";
+      const pageLink = renderEvidencePageLink(row, "media-block__page-link");
+      const footerParts = [pageLink, chipsHtml].filter(Boolean).join("");
+      const footerHtml = footerParts ? `<figcaption>${footerParts}</figcaption>` : "";
       const editLink = renderEditLink({
         tab: "evidence",
         file: item.file,
@@ -514,6 +529,7 @@ function renderEvidenceGallery(filterFile = null) {
         file: row.file,
         label: `Edit screenshot ${row.file}`,
       });
+      const pageLink = renderEvidencePageLink(row, "gallery-card__page-link");
       return `
         <article class="gallery-card">
           ${thumb}
@@ -522,6 +538,7 @@ function renderEvidenceGallery(filterFile = null) {
               <h2>${escapeHtml(row.page || row.file)}</h2>
               ${editLink}
             </div>
+            ${pageLink}
             <div class="chip-row">${chips || `<span class="muted">${escapeHtml(COPY.noIssuesLinked)}</span>`}</div>
           </div>
         </article>`;
@@ -743,6 +760,10 @@ function renderLightboxFile(file) {
   } else {
     lightboxBody.innerHTML = `<img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(row.page || file)}">`;
   }
+  const pageLink = renderEvidencePageLink(row, "lightbox__page-link");
+  lightboxFooter.innerHTML = pageLink
+    ? `<p class="lightbox__footer-link">${pageLink}</p>`
+    : "";
   return true;
 }
 
@@ -763,7 +784,6 @@ function openLightbox(file, galleryFiles = null) {
     resetLightboxGallery();
     return;
   }
-  lightboxFooter.innerHTML = "";
   updateLightboxNav();
   motion.openLightbox(lightbox);
 }
