@@ -72,12 +72,12 @@ This is not hidden from humans who know the URL. It blocks casual crawlers and d
 
 1. Open `/audit/edit/`.
 2. Sign in with the password.
-3. Use the tabs: **Overview**, **Notes**, **Screenshots**, **Questions**.
-4. Pick an item in the sidebar, edit the form, click **Save section**.
+3. Use the tabs: **Overview**, **Issues**, **Media**, **Questions**.
+4. Pick an item in the sidebar; changes autosave. Deep-link with `?tab=issues&issue=<key>` (UUID), not the display id.
 
 **Media files:** copy PNG or MP4 files into `media/` on the server (or run `scripts/link-media.sh` locally), then click **Reload** in the editor. Use **Add media** or **Change file** to open the image picker.
 
-When you save **Notes**, **Screenshots**, or **Questions**, overview counts in `audit.yaml` are recalculated automatically. The presentation app also counts live from the data files.
+When you save **Issues**, **Media**, or **Questions**, overview counts in `audit.yaml` are recalculated automatically. The presentation app also counts live from the data files.
 
 ## Editing content (manual YAML)
 
@@ -99,13 +99,14 @@ There is no admin screen. You edit **YAML files** in `data/` with any text edito
 Open `data/issues.yaml`. Each item looks like this:
 
 ```yaml
-- id: "1.1"
+- key: "280a567f-7694-47ee-8d72-402e68da199d"   # stable UUID — lasting refs use this
+  id: "1.2"                                       # display label only (phase.sequence)
   sprint: 1
-  title: Add side margins on mobile pages
+  title: Label or Replace the Subjects icons
   impact: critical
   effort: low
   status: planned
-  tags: [layout, spacing]
+  tags: [navigation, subjects]
   problem: >
     What the client sees under "What we found".
   recommendation: >
@@ -114,17 +115,20 @@ Open `data/issues.yaml`. Each item looks like this:
     - Internal checklist for you (not shown in the app)
   evidence:
     - file: "121022.png"
-      caption: Short label under the image
 ```
 
-Change `title`, `problem`, or `recommendation` for client-facing copy. Change `impact` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`) for the pills on each card.
+Every note needs a stable **`key`** (UUID). Chips, URLs, evidence links, decision blocks, comments, and editor deep links all use **`key`**. The **`id`** (`1.2`) is the human label only—do not put it in lasting references.
+
+Change `title`, `problem`, or `recommendation` for client-facing copy. Change `impact` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`, `complete`) for the pills on each card.
 
 `effort`, `tags`, and `acceptance` stay in the file for your own planning. They are **not** shown in the presentation app.
 
+Prefer editing via **`/audit/edit/`** (it assigns `key` and a display `id` for new notes). Hand-editing YAML: generate a new UUID for `key` if you add a row manually.
+
 ### Add a new note
 
-1. Pick the next id in sequence (e.g. `1.10` for phase 1, `2.16` for phase 2).
-2. Add a new block to `issues.yaml` with the same fields as above.
+1. Prefer the editor’s **Add issue** (assigns `key` + display `id`).
+2. Or add a block to `issues.yaml` with a new UUID `key`, next display `id` in sequence (e.g. `1.10`), and the same fields as above.
 3. Set `sprint` to `1`, `2`, or `3` to place it in the right phase.
 4. Link screenshots under `evidence` (see below).
 
@@ -144,10 +148,11 @@ evidence:
 - file: "121022.png"
   type: image
   page: Book detail — Run Zohran Run
-  issues: ["1.1", "2.2"]
+  issues:
+    - "280a567f-7694-47ee-8d72-402e68da199d"   # Issue keys, not display ids
 ```
 
-The filename must match a file in `media/`. Both directions help: notes pull images in, and the Screenshots gallery links back to notes.
+The filename must match a file in `media/`. Both directions help: notes pull images in, and the Media gallery links back to notes.
 
 ### Add a new screenshot or video
 
@@ -171,7 +176,8 @@ Open `data/decisions.yaml`:
 ```yaml
 - id: carousel-style
   title: Slider controls (dots or arrows)
-  blocks: ["2.9"]
+  blocks:
+    - "d1a5bef1-69b2-4ff5-8bf2-61efc6b31212"   # Issue keys
   question: Which style should all sliders use on the site?
   recommendation: >
     Optional text shown as "Our suggestion".
@@ -184,7 +190,7 @@ Open `data/decisions.yaml`:
           caption: Homepage, dot-style slider
 ```
 
-`blocks` lists note ids that are waiting on this answer (for your reference only; not shown in the app). Set the linked note's `status: blocked` when it depends on the answer.
+`blocks` lists Issue **keys** waiting on this answer (for your reference; not shown in the app). Set the linked note's `status: blocked` when it depends on the answer.
 
 ### Typical workflow
 
@@ -196,4 +202,6 @@ Open `data/decisions.yaml`:
 
 ### Views
 
-`#/` overview · `#/sprint/1` (phase 1) · `#/issue/1.3` (note) · `#/evidence` · `#/decisions` · `#/responses`
+`#/` overview · `#/sprint/1` (phase 1) · `#/issue/<key>` (note by UUID; chips still show `1.3`) · `#/evidence` · `#/decisions` · `#/responses`
+
+Old `#/issue/1.3` routes are not supported (hard cut).

@@ -95,8 +95,8 @@ function statusLabel(status) {
   return STATUS_LABELS[status] || status;
 }
 
-function issueById(id) {
-  return state.issues.find((item) => item.id === id);
+function issueByKey(key) {
+  return state.issues.find((item) => item.key === key);
 }
 
 function evidenceByFile(file) {
@@ -108,7 +108,7 @@ function issuesForEvidence(file) {
   if (!row?.issues?.length) {
     return [];
   }
-  return row.issues.map(issueById).filter(Boolean);
+  return row.issues.map(issueByKey).filter(Boolean);
 }
 
 function sprintIssues(sprintId) {
@@ -168,14 +168,14 @@ function renderEvidenceThumb(file) {
     </button>`;
 }
 
-function renderIssueChips(ids) {
-  return ids
-    .map((id) => {
-      const issue = issueById(id);
+function renderIssueChips(keys) {
+  return keys
+    .map((key) => {
+      const issue = issueByKey(key);
       if (!issue) {
         return '';
       }
-      return `<a class="chip chip--issue" href="#/issue/${escapeHtml(issue.id)}">${escapeHtml(issue.id)}</a>`;
+      return `<a class="chip chip--issue" href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a>`;
     })
     .join('');
 }
@@ -192,12 +192,12 @@ function renderIssueCard(issue) {
   const evidenceItems = issue.evidence?.length
     ? issue.evidence
     : state.evidence
-        .filter((row) => row.issues?.includes(issue.id))
+        .filter((row) => row.issues?.includes(issue.key))
         .map((row) => ({ file: row.file }));
 
   return `
     <article class="issue-card">
-      <a class="issue-card__link" href="#/issue/${escapeHtml(issue.id)}">
+      <a class="issue-card__link" href="#/issue/${escapeHtml(issue.key)}">
         <div class="issue-card__head">
           <span class="issue-card__id">${escapeHtml(issue.id)}</span>
           <h2 class="issue-card__title">${escapeHtml(issue.title)}</h2>
@@ -306,11 +306,11 @@ function renderSprint(sprintId) {
 }
 
 function renderCommentForm(issue) {
-  const saved = state.responses.comments[issue.id];
+  const saved = state.responses.comments[issue.key];
   return `
     <section class="feedback-panel" id="feedback">
       <h2>${escapeHtml(COPY.yourFeedback)}</h2>
-      <form class="feedback-form" data-comment-form="${escapeHtml(issue.id)}">
+      <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}">
         <label class="field">
           <span class="field__label">${escapeHtml(COPY.yourName)}</span>
           <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor())}" required maxlength="80">
@@ -331,8 +331,8 @@ function renderCommentForm(issue) {
     </section>`;
 }
 
-function renderIssueDetail(issueId) {
-  const issue = issueById(issueId);
+function renderIssueDetail(issueKey) {
+  const issue = issueByKey(issueKey);
   if (!issue) {
     return `<div class="page"><p>${escapeHtml(COPY.issueNotFound)}</p></div>`;
   }
@@ -341,9 +341,9 @@ function renderIssueDetail(issueId) {
     .map((item) => {
       const row = evidenceByFile(item.file);
       const alt = issue.title || item.file;
-      const issueIds = row?.issues?.length ? row.issues : issuesForEvidence(item.file).map((linked) => linked.id);
-      const chipsHtml = issueIds.length
-        ? `<div class="chip-row media-block__chips">${renderIssueChips(issueIds)}</div>`
+      const issueKeys = row?.issues?.length ? row.issues : issuesForEvidence(item.file).map((linked) => linked.key);
+      const chipsHtml = issueKeys.length
+        ? `<div class="chip-row media-block__chips">${renderIssueChips(issueKeys)}</div>`
         : '';
       const footerHtml = chipsHtml ? `<figcaption>${chipsHtml}</figcaption>` : '';
       const editLink = renderEditLink({
@@ -378,7 +378,7 @@ function renderIssueDetail(issueId) {
           <p class="breadcrumb"><a href="#/sprint/${issue.sprint}">${escapeHtml(COPY.phase)} ${issue.sprint}</a> / ${escapeHtml(issue.id)}</p>
           <div class="page-header__row">
             <h1>${escapeHtml(issue.title)}</h1>
-            ${renderEditLink({ tab: 'issues', issue: issue.id, label: `Edit issue ${issue.id}` })}
+            ${renderEditLink({ tab: 'issues', issue: issue.key, label: `Edit issue ${issue.id}` })}
           </div>
           ${renderMetaRow(issue)}
         </header>
@@ -511,10 +511,11 @@ function renderResponses() {
   const STANCE_LABELS = { agree: 'Yes', disagree: 'No', discuss: 'Not sure yet' };
 
   const commentRows = Object.entries(state.responses.comments)
-    .map(([id, row]) => {
-      const issue = issueById(id);
+    .map(([key, row]) => {
+      const issue = issueByKey(key);
       const stance = STANCE_LABELS[row.stance] || row.stance;
-      return `<tr><td>${escapeHtml(id)}: ${escapeHtml(issue?.title || '')}</td><td>${escapeHtml(stance)}</td><td>${escapeHtml(row.text || '')}</td><td>${escapeHtml(row.author || '')}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      const label = issue ? `${issue.id}: ${issue.title}` : key;
+      return `<tr><td>${escapeHtml(label)}</td><td>${escapeHtml(stance)}</td><td>${escapeHtml(row.text || '')}</td><td>${escapeHtml(row.author || '')}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join('');
 
@@ -555,7 +556,7 @@ function renderRoute() {
     case 'sprint':
       return renderSprint(params.sprintId);
     case 'issue':
-      return renderIssueDetail(params.issueId);
+      return renderIssueDetail(params.issueKey);
     case 'evidence':
       return renderEvidenceGallery();
     case 'evidence-item':

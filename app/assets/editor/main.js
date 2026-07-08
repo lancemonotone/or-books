@@ -44,7 +44,7 @@ const state = {
     decisions: false,
   },
   ui: {
-    selectedIssueId: null,
+    selectedIssueKey: null,
     selectedEvidenceIndex: 0,
     selectedDecisionId: null,
     issuePhaseFilter: 'all',
@@ -128,15 +128,16 @@ function onFormChange(...alsoDirty) {
 
 function updateIssueToolbarActions() {
   const onIssuesTab = state.activeTab === 'issues';
-  const issueId = state.ui.selectedIssueId;
+  const issueKey = state.ui.selectedIssueKey;
+  const issue = state.data.issues.find((item) => item.key === issueKey);
   const hasIssue =
-    onIssuesTab && issueId && state.data.issues.some((item) => item.id === issueId);
+    onIssuesTab && issueKey && issue;
 
   if (viewIssueLink) {
     viewIssueLink.hidden = !hasIssue;
     if (hasIssue) {
-      viewIssueLink.href = `../#/issue/${encodeURIComponent(issueId)}`;
-      viewIssueLink.title = `View issue ${issueId} on presentation`;
+      viewIssueLink.href = `../#/issue/${encodeURIComponent(issueKey)}`;
+      viewIssueLink.title = `View issue ${issue.id} on presentation`;
     } else {
       viewIssueLink.removeAttribute('href');
       viewIssueLink.removeAttribute('title');
@@ -194,8 +195,8 @@ function buildEditorUrl() {
   const url = new URL(window.location.href);
   url.searchParams.set('tab', state.activeTab);
 
-  if (state.activeTab === 'issues' && state.ui.selectedIssueId) {
-    url.searchParams.set('issue', state.ui.selectedIssueId);
+  if (state.activeTab === 'issues' && state.ui.selectedIssueKey) {
+    url.searchParams.set('issue', state.ui.selectedIssueKey);
     url.searchParams.delete('file');
   } else if (state.activeTab === 'evidence') {
     const row = state.data.evidence[state.ui.selectedEvidenceIndex];
@@ -240,12 +241,12 @@ async function restoreEditorFromUrl() {
   renderWorkspace();
 }
 
-async function navigateToIssue(issueId) {
-  if (!issueId || !state.data.issues.some((item) => item.id === issueId)) {
+async function navigateToIssue(issueKey) {
+  if (!issueKey || !state.data.issues.some((item) => item.key === issueKey)) {
     return;
   }
 
-  if (state.activeTab === 'issues' && state.ui.selectedIssueId === issueId) {
+  if (state.activeTab === 'issues' && state.ui.selectedIssueKey === issueKey) {
     return;
   }
 
@@ -255,7 +256,7 @@ async function navigateToIssue(issueId) {
 
   applyActiveForm(state);
   state.activeTab = 'issues';
-  state.ui.selectedIssueId = issueId;
+  state.ui.selectedIssueKey = issueKey;
   syncEditorUrl({ push: true });
   renderWorkspace();
 }
@@ -363,7 +364,7 @@ async function loadAllData() {
     evidence: evidence || [],
     decisions: decisions || [],
   };
-  state.ui.selectedIssueId = state.data.issues[0]?.id ?? null;
+  state.ui.selectedIssueKey = state.data.issues[0]?.key ?? null;
   state.ui.selectedDecisionId = state.data.decisions[0]?.id ?? null;
   state.ui.selectedEvidenceIndex = 0;
   syncAuditStats(state.data.audit, state.data.issues, state.data.evidence, state.data.decisions);
@@ -375,7 +376,7 @@ async function loadAllData() {
 function applyEditorDeepLink() {
   const params = new URLSearchParams(window.location.search);
   const tab = params.get('tab');
-  const issueId = params.get('issue');
+  const issueKey = params.get('issue');
   const file = params.get('file');
 
   if (file) {
@@ -386,9 +387,9 @@ function applyEditorDeepLink() {
     }
   }
 
-  if (issueId && state.data.issues.some((item) => item.id === issueId)) {
+  if (issueKey && state.data.issues.some((item) => item.key === issueKey)) {
     state.activeTab = 'issues';
-    state.ui.selectedIssueId = issueId;
+    state.ui.selectedIssueKey = issueKey;
   }
 
   if (tab && Object.hasOwn(state.data, tab)) {
@@ -519,23 +520,24 @@ reloadButton.addEventListener('click', async () => {
 });
 
 deleteIssueButton?.addEventListener('click', async () => {
-  if (state.activeTab !== 'issues' || !state.ui.selectedIssueId) {
+  if (state.activeTab !== 'issues' || !state.ui.selectedIssueKey) {
     return;
   }
 
-  const issueId = state.ui.selectedIssueId;
-  if (!window.confirm(`Delete issue ${issueId}?`)) {
+  const issueKey = state.ui.selectedIssueKey;
+  const issue = state.data.issues.find((item) => item.key === issueKey);
+  if (!issue || !window.confirm(`Delete issue ${issue.id}?`)) {
     return;
   }
 
   applyActiveForm(state);
-  const index = state.data.issues.findIndex((item) => item.id === issueId);
+  const index = state.data.issues.findIndex((item) => item.key === issueKey);
   if (index === -1) {
     return;
   }
 
   state.data.issues.splice(index, 1);
-  state.ui.selectedIssueId = state.data.issues[0]?.id ?? null;
+  state.ui.selectedIssueKey = state.data.issues[0]?.key ?? null;
   onFormChange();
   renderWorkspace();
   syncEditorUrl({ push: true });

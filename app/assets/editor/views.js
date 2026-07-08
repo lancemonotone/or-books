@@ -1,4 +1,4 @@
-import { inferMediaType, mediaUrl, suggestIssueId } from './api.js';
+import { inferMediaType, mediaUrl, newIssueKey, suggestIssueId } from './api.js';
 import { openIssueComposer } from './issue-composer.js';
 import { openMediaFilePicker, renderMediaChip } from './picker.js';
 
@@ -134,7 +134,7 @@ function openEditorLightbox({ file, title = '', isVideo = false, poster = '' }) 
 }
 
 function issueOptions(issues) {
-  return issues.map((issue) => ({ value: issue.id, label: `${issue.id} — ${issue.title}` }));
+  return issues.map((issue) => ({ value: issue.key, label: `${issue.id} — ${issue.title}` }));
 }
 
 const ISSUE_STATUS_OPTIONS = [
@@ -216,9 +216,9 @@ export function renderIssuesView(
   onNavigateToIssue
 ) {
   const selected =
-    issues.find((issue) => issue.id === ui.selectedIssueId) || issues[0] || null;
+    issues.find((issue) => issue.key === ui.selectedIssueKey) || issues[0] || null;
   if (selected) {
-    ui.selectedIssueId = selected.id;
+    ui.selectedIssueKey = selected.key;
   }
 
   const phaseFilter = ui.issuePhaseFilter || 'all';
@@ -251,7 +251,7 @@ export function renderIssuesView(
             .map(
               (issue) => `
             <li>
-              <button type="button" class="editor-list__btn ${issue.id === ui.selectedIssueId ? 'is-active' : ''}" data-issue-id="${escapeAttr(issue.id)}">
+              <button type="button" class="editor-list__btn ${issue.key === ui.selectedIssueKey ? 'is-active' : ''}" data-issue-key="${escapeAttr(issue.key)}">
                 <span class="editor-list__id">${escapeHtml(issue.id)}</span>
                 <span class="editor-list__title">${escapeHtml(issue.title || 'Untitled')}</span>
               </button>
@@ -271,13 +271,13 @@ export function renderIssuesView(
     renderIssuesView(issues, audit, ui, root, onChange, galleryEvidence, onNavigateToEvidence, onNavigateToIssue);
   });
 
-  root.querySelectorAll('[data-issue-id]').forEach((button) => {
+  root.querySelectorAll('[data-issue-key]').forEach((button) => {
     button.addEventListener('click', () => {
-      const issueId = button.dataset.issueId;
-      if (issueId === ui.selectedIssueId) {
+      const issueKey = button.dataset.issueKey;
+      if (issueKey === ui.selectedIssueKey) {
         return;
       }
-      onNavigateToIssue?.(issueId);
+      onNavigateToIssue?.(issueKey);
     });
   });
 
@@ -285,6 +285,7 @@ export function renderIssuesView(
     const phase = phaseFilter === 'all' ? 1 : Number(phaseFilter);
     const id = suggestIssueId(phase, issues);
     const issue = {
+      key: newIssueKey(),
       id,
       sprint: phase,
       title: 'New issue',
@@ -299,7 +300,7 @@ export function renderIssuesView(
     };
     issues.push(issue);
     onChange();
-    onNavigateToIssue?.(id);
+    onNavigateToIssue?.(issue.key);
   });
 
   if (!selected) {
@@ -367,7 +368,6 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
           <h2>${escapeHtml(issue.id)}: ${escapeHtml(issue.title || 'Untitled')}</h2>
         </div>
         <div class="editor-grid editor-grid--2">
-          ${field('Issue id', input('id', issue.id || ''))}
           ${field('Phase', select('sprint', issue.sprint, (audit.sprints || []).map((s) => ({ value: s.id, label: `Phase ${s.id} — ${s.title}` }))))}
         </div>
         ${field('Title', input('title', issue.title || ''))}
@@ -508,7 +508,6 @@ function applyIssueForm(issue, root) {
     return;
   }
 
-  issue.id = form.querySelector('[name="id"]')?.value ?? issue.id;
   issue.sprint = Number(form.querySelector('[name="sprint"]')?.value || issue.sprint);
   issue.title = form.querySelector('[name="title"]')?.value ?? '';
   issue.impact = form.querySelector('[name="impact"]')?.value ?? 'medium';
@@ -615,9 +614,9 @@ function renderEvidenceForm(row, issues, audit) {
           (issue) => `
           <div class="editor-linked-check">
             <label class="editor-check editor-check--solo">
-              <input type="checkbox" name="issues" value="${escapeAttr(issue.id)}" ${(row.issues || []).includes(issue.id) ? 'checked' : ''} aria-label="Link issue ${escapeAttr(issue.id)}">
+              <input type="checkbox" name="issues" value="${escapeAttr(issue.key)}" ${(row.issues || []).includes(issue.key) ? 'checked' : ''} aria-label="Link issue ${escapeAttr(issue.id)}">
             </label>
-            <button type="button" class="issue-composer__linked-link editor-linked-check__open" data-open-issue="${escapeAttr(issue.id)}">
+            <button type="button" class="issue-composer__linked-link editor-linked-check__open" data-open-issue="${escapeAttr(issue.key)}">
               <span class="issue-composer__linked-id">${escapeHtml(issue.id)}</span>
               <span class="issue-composer__linked-title">${escapeHtml(issue.title)}</span>
             </button>
@@ -724,13 +723,13 @@ function bindEvidenceForm(row, evidence, issues, audit, root, onChange, rerender
       audit,
       issues,
       file: row.file,
-      linkedIssueIds: row.issues || [],
+      linkedIssueKeys: row.issues || [],
       onOpenIssue: onNavigateToIssue,
       onCreate: (issue) => {
         issues.push(issue);
         row.issues = row.issues || [];
-        if (!row.issues.includes(issue.id)) {
-          row.issues.push(issue.id);
+        if (!row.issues.includes(issue.key)) {
+          row.issues.push(issue.key);
         }
         onChange('issues');
         setEditorStatus(`Created issue ${issue.id} and linked this screenshot.`);
@@ -866,7 +865,7 @@ function renderDecisionForm(decision, issues) {
     .map(
       (issue) => `
       <label class="editor-check">
-        <input type="checkbox" name="blocks" value="${escapeAttr(issue.id)}" ${(decision.blocks || []).includes(issue.id) ? 'checked' : ''}>
+        <input type="checkbox" name="blocks" value="${escapeAttr(issue.key)}" ${(decision.blocks || []).includes(issue.key) ? 'checked' : ''}>
         <span>${escapeHtml(issue.id)} — ${escapeHtml(issue.title)}</span>
       </label>`
     )
@@ -1068,7 +1067,7 @@ export function applyActiveForm(state) {
   }
 
   if (tab === 'issues') {
-    const issue = state.data.issues.find((item) => item.id === state.ui.selectedIssueId);
+    const issue = state.data.issues.find((item) => item.key === state.ui.selectedIssueKey);
     if (issue) {
       applyIssueForm(issue, root);
     }

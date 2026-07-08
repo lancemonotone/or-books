@@ -1,4 +1,4 @@
-import { inferMediaType, mediaUrl, suggestIssueId } from './api.js';
+import { inferMediaType, mediaUrl, newIssueKey, suggestIssueId } from './api.js';
 
 let dialog;
 let form;
@@ -77,9 +77,9 @@ function ensureElements() {
   statusNode = document.getElementById('issue-composer-status');
 }
 
-function renderLinkedIssues(linkedIssueIds, allIssues, audit) {
-  const linked = (linkedIssueIds || [])
-    .map((id) => allIssues.find((issue) => String(issue.id) === String(id)))
+function renderLinkedIssues(linkedIssueKeys, allIssues, audit) {
+  const linked = (linkedIssueKeys || [])
+    .map((key) => allIssues.find((issue) => String(issue.key) === String(key)))
     .filter(Boolean);
 
   if (!linked.length) {
@@ -94,7 +94,7 @@ function renderLinkedIssues(linkedIssueIds, allIssues, audit) {
         .map(
           (issue) => `
           <li>
-            <button type="button" class="issue-composer__linked-link" data-issue-id="${escapeHtml(issue.id)}">
+            <button type="button" class="issue-composer__linked-link" data-issue-key="${escapeHtml(issue.key)}">
               <span class="issue-composer__linked-id">${escapeHtml(issue.id)}</span>
               <span class="issue-composer__linked-title">${escapeHtml(issue.title)}</span>
             </button>
@@ -121,20 +121,20 @@ function bindLinkedIssueLinks(onOpenIssue) {
     return;
   }
 
-  linkedNode.querySelectorAll('[data-issue-id]').forEach((button) => {
+  linkedNode.querySelectorAll('[data-issue-key]').forEach((button) => {
     button.addEventListener('click', () => {
-      const issueId = button.dataset.issueId;
+      const issueKey = button.dataset.issueKey;
       dialog?.close();
-      onOpenIssue(issueId);
+      onOpenIssue(issueKey);
     });
   });
 }
 
-function setLinkedIssues(linkedIssueIds, allIssues, onOpenIssue, audit) {
+function setLinkedIssues(linkedIssueKeys, allIssues, onOpenIssue, audit) {
   if (!linkedNode) {
     return;
   }
-  linkedNode.innerHTML = renderLinkedIssues(linkedIssueIds, allIssues, audit);
+  linkedNode.innerHTML = renderLinkedIssues(linkedIssueKeys, allIssues, audit);
   bindLinkedIssueLinks(onOpenIssue);
 }
 
@@ -192,6 +192,7 @@ export function initIssueComposer() {
     }
 
     const issue = {
+      key: newIssueKey(),
       id: suggestIssueId(phase, issuesRef),
       sprint: phase,
       title,
@@ -214,7 +215,7 @@ export function openIssueComposer({
   audit,
   issues,
   file,
-  linkedIssueIds = [],
+  linkedIssueKeys = [],
   onOpenIssue,
   onCreate: createHandler,
 }) {
@@ -237,7 +238,7 @@ export function openIssueComposer({
   form.querySelector('[name="problem"]').value = '';
   form.querySelector('[name="recommendation"]').value = '';
   form.querySelector('[name="impact"]').value = 'medium';
-  setLinkedIssues(linkedIssueIds, issues, onOpenIssue, audit);
+  setLinkedIssues(linkedIssueKeys, issues, onOpenIssue, audit);
   if (previewNode) {
     const isVideo = inferMediaType(file) === 'video';
     previewNode.innerHTML = isVideo
