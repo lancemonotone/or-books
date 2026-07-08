@@ -15,7 +15,8 @@
 - file: 121002.png
   type: image
   page: Homepage — author and news modules
-  issues: []
+  issues:
+    - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
 - file: 121022.png
   type: image
   page: Subjects page
@@ -210,5 +211,4 @@
   issues:
     - 1c59053b-b5c4-4f94-8361-422f66dd6614
     - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
-    - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
     - b57d706d-de6d-46d7-8e3f-6452f175c362

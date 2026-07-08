@@ -78,7 +78,7 @@
     - navigation
     - homepage
   problem: |
-    See all and some section titles look like links but nothing happens when you tap them. Real links nearby make the problem worse.
+    "See all" and some section titles look like links but nothing happens when you tap them. Real links like "Latest News" don't have "See all" and are not visually distinguishable as links.
   recommendation: |
     Either make those words real links or style them so they clearly are not clickable.
   acceptance:
@@ -86,9 +86,7 @@
     - Homepage modules audited and consistent
   evidence:
     - file: 120911.png
-      caption: Homepage, See all
-    - file: 161534.png
-      caption: Article page, section title
+    - file: 121002.png
 - key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
   id: '1.5'
   sprint: 1
@@ -195,18 +193,14 @@
   tags:
     - buttons
     - forms
-  problem: |
-    Add to Cart, Submit, View All, Subscribe, and the quantity control all look different from page to page.
+  problem: Buttons Add to Cart, Submit, View All, View Full Catalog, Subscribe, etc all look different from page to page.
   recommendation: |
     Use one button style and one quantity control style across the site.
   acceptance:
     - Primary CTAs share geometry, padding, and type treatment
-    - Quantity counter matches button system
   evidence:
     - file: 160840.png
-      caption: Several button styles
     - file: 123310.png
-      caption: Purchase area
 - key: c392e399-8c2d-4c2e-9896-56b81e76b2d0
   id: '2.3'
   sprint: 2
