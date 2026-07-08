@@ -1126,6 +1126,7 @@ function renderEvidenceForm(row, issues, audit) {
             ${field("Type", select("type", row.type || inferMediaType(row.file), ["image", "video"]))}
           </div>
           ${field("Image title", input("page", row.page || ""))}
+          ${field("Page URL", input("url", row.url || ""))}
           ${
             row.type === "video" || row.file.endsWith(".mp4")
               ? field(
@@ -1285,6 +1286,12 @@ function applyEvidenceForm(row, root) {
   row.type =
     form.querySelector('[name="type"]')?.value ?? inferMediaType(row.file);
   row.page = form.querySelector('[name="page"]')?.value ?? "";
+  const urlValue = form.querySelector('[name="url"]')?.value?.trim() ?? "";
+  if (urlValue) {
+    row.url = urlValue;
+  } else {
+    delete row.url;
+  }
   row.issues = [...form.querySelectorAll('[name="issues"]:checked')].map(
     (el) => el.value,
   );

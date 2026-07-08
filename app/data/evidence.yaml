@@ -22,11 +22,13 @@
   page: Subjects page
   issues:
     - 280a567f-7694-47ee-8d72-402e68da199d
+  url: https://orbooks.com/
 - file: 121855.png
   type: image
   page: Search entry
   issues:
     - d64e9880-9bd4-4b26-850b-f04a0b9b341b
+  url: https://orbooks.com/
 - file: 121904.png
   type: image
   page: Search active

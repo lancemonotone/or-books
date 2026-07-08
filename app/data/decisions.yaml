@@ -29,16 +29,19 @@
   options:
     - value: hide
       label: Hide from the menu until there is real content
+      description: ''
       evidence:
         - file: 125507.png
           caption: Rights Catalogs today
     - value: populate
       label: Fill in real catalog content
+      description: ''
       evidence:
         - file: 125507.png
           caption: Rights Catalogs today
     - value: remove
       label: Remove the page and menu link
+      description: ''
       evidence:
         - file: 125507.png
           caption: Rights Catalogs today
