@@ -1,7 +1,7 @@
 const yaml = window.jsyaml;
 
 async function fetchYaml(name) {
-  const response = await fetch(`data/${name}.yaml`);
+  const response = await fetch(`data/${name}.yaml`, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error(`Failed to load data/${name}.yaml`);
   }
@@ -9,7 +9,7 @@ async function fetchYaml(name) {
 }
 
 async function fetchJson(path) {
-  const response = await fetch(path);
+  const response = await fetch(path, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error(`Failed to load ${path}`);
   }
