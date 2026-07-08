@@ -4,7 +4,7 @@
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
   question: Which style should all sliders use on the site?
   recommendation: |
-    Please pick one. The homepage currently mixes dots and arrows, which looks inconsistent. We can show both side by side when we talk.
+    Pick one format for consistency. The homepage currently mixes dots and arrows. Both styles can be compared side by side if needed.
   options:
     - value: dots
       label: Dots under the slider
@@ -23,9 +23,9 @@
 - id: rights-catalogs
   title: Rights Catalogs page
   blocks: []
-  question: The Rights Catalogs page is still placeholder text. What should we do with it?
+  question: The Rights Catalogs page is still placeholder text. How should this page be handled?
   recommendation: |
-    The page is all Lorem Ipsum. We would hide it from the menu until real copy is ready.
+    The page is all Lorem Ipsum. Recommended: hide from the menu until real content is ready.
   options:
     - value: hide
       label: Hide from the menu until there is real content
@@ -48,7 +48,7 @@
     - 22f6409d-b5e4-46b1-8086-f2839495505e
   question: Where should the bookseller mailing list signup live?
   recommendation: |
-    We would keep people on orbooks.com and still send signups to your existing Mailchimp list. The standard BigCommerce Mailchimp connection handles store customers; it does not replace this separate bookseller form.
+    Recommended: keep signups on orbooks.com while routing to the existing Mailchimp list. The standard BigCommerce Mailchimp connection handles store customers; it does not replace this separate bookseller form.
   options:
     - value: embed
       label: Embed the Mailchimp form on an OR Books page

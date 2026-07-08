@@ -52,7 +52,7 @@
   problem: |
     Some pages spell out orders [at] orbooks.com and others use rights@orbooks.com. The [at] version cannot be tapped to open mail on a phone.
   recommendation: |
-    Pick one format for the whole site. We suggest normal addresses as links people can tap, unless you prefer the [at] style everywhere.
+    Pick one format for the whole site. Recommended: use tap-to-email links site-wide, unless the [at] style is preferred everywhere.
   acceptance:
     - No page mixes [at] and @ formats
     - All displayed emails are tappable mailto links (if mailto policy chosen)

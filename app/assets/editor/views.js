@@ -782,8 +782,8 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
           ${field("Status", select("status", issue.status, ISSUE_STATUS_OPTIONS))}
         </div>
         ${field("Tags (comma separated)", input("tags", (issue.tags || []).join(", ")))}
-        ${field("What we found", textarea("problem", issue.problem || "", 5))}
-        ${field("What we suggest", textarea("recommendation", issue.recommendation || "", 5))}
+        ${field("Issue Found", textarea("problem", issue.problem || "", 5))}
+        ${field("Suggested Fix", textarea("recommendation", issue.recommendation || "", 5))}
         <section class="editor-subsection">
           <div class="editor-subsection__head">
             <h3>Done when (internal)</h3>
@@ -1460,7 +1460,7 @@ function renderDecisionForm(decision, issues) {
         ${field("Short title", input("title", decision.title || ""))}
       </div>
       ${field("Question shown to client", textarea("question", decision.question || "", 3))}
-      ${field("Our suggestion", textarea("recommendation", decision.recommendation || "", 4))}
+      ${field("Suggested approach", textarea("recommendation", decision.recommendation || "", 4))}
       <section class="editor-subsection">
         <h3>Waiting on these issues (internal)</h3>
         <div class="editor-checks">${blockChecks || '<p class="editor-muted">No issues yet.</p>'}</div>

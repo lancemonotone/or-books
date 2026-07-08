@@ -109,9 +109,9 @@ Open `data/issues.yaml`. Each item looks like this:
   status: planned
   tags: [navigation, subjects]
   problem: >
-    What the client sees under "What we found".
+    What the client sees under "Issue Found".
   recommendation: >
-    What the client sees under "What we suggest".
+    What the client sees under "Suggested Fix".
   acceptance:
     - Internal checklist for you (not shown in the app)
   evidence:
@@ -181,7 +181,7 @@ Open `data/decisions.yaml`:
     - "d1a5bef1-69b2-4ff5-8bf2-61efc6b31212"   # Issue keys
   question: Which style should all sliders use on the site?
   recommendation: >
-    Optional text shown as "Our suggestion".
+    Optional text shown as "Suggested approach".
   options:
     - value: dots
       label: Dots under the slider
