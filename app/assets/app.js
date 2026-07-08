@@ -180,11 +180,11 @@ function issueNeighbors(issueKey) {
 function renderIssueNav(issueKey) {
   const { prev, next } = issueNeighbors(issueKey);
   const prevControl = prev
-    ? `<a class="issue-nav__link" href="#/issue/${escapeHtml(prev.key)}" aria-label="${escapeHtml(COPY.previousIssue)}: ${escapeHtml(prev.id)} ${escapeHtml(prev.title)}">‹</a>`
-    : `<span class="issue-nav__link is-disabled" aria-hidden="true">‹</span>`;
+    ? `<a class="issue-nav__link" href="#/issue/${escapeHtml(prev.key)}" aria-label="${escapeHtml(COPY.previousIssue)}: ${escapeHtml(prev.id)} ${escapeHtml(prev.title)}">${ISSUE_NAV_PREV_ICON}</a>`
+    : `<span class="issue-nav__link is-disabled" aria-hidden="true">${ISSUE_NAV_PREV_ICON}</span>`;
   const nextControl = next
-    ? `<a class="issue-nav__link" href="#/issue/${escapeHtml(next.key)}" aria-label="${escapeHtml(COPY.nextIssue)}: ${escapeHtml(next.id)} ${escapeHtml(next.title)}">›</a>`
-    : `<span class="issue-nav__link is-disabled" aria-hidden="true">›</span>`;
+    ? `<a class="issue-nav__link" href="#/issue/${escapeHtml(next.key)}" aria-label="${escapeHtml(COPY.nextIssue)}: ${escapeHtml(next.id)} ${escapeHtml(next.title)}">${ISSUE_NAV_NEXT_ICON}</a>`
+    : `<span class="issue-nav__link is-disabled" aria-hidden="true">${ISSUE_NAV_NEXT_ICON}</span>`;
 
   return `<nav class="issue-nav" aria-label="Issues in this phase">${prevControl}${nextControl}</nav>`;
 }
@@ -206,6 +206,10 @@ function setAuthor(name) {
 }
 
 const EDIT_ICON = `<svg class="edit-link__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+
+const ISSUE_NAV_PREV_ICON = `<svg class="issue-nav__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>`;
+
+const ISSUE_NAV_NEXT_ICON = `<svg class="issue-nav__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>`;
 
 function editorUrl({ tab, issue, file } = {}) {
   const params = new URLSearchParams();

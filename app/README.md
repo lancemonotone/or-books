@@ -105,7 +105,6 @@ Open `data/issues.yaml`. Each item looks like this:
   sprint: 1
   title: Label or Replace the Subjects icons
   impact: critical
-  effort: low
   status: planned
   tags: [navigation, subjects]
   problem: >
@@ -122,7 +121,7 @@ Every note needs a stable **`key`** (UUID). Chips, URLs, evidence links, decisio
 
 Change `title`, `problem`, or `recommendation` for client-facing copy. Change `impact` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`, `complete`) for the pills on each card.
 
-`effort`, `tags`, and `acceptance` stay in the file for your own planning. They are **not** shown in the presentation app.
+`tags` and `acceptance` stay in the file for your own planning. They are **not** shown in the presentation app.
 
 Prefer editing via **`/audit/edit/`** (it assigns `key` and a display `id` for new notes). Hand-editing YAML: generate a new UUID for `key` if you add a row manually.
 

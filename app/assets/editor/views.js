@@ -696,7 +696,6 @@ export function renderIssuesView(
         sprint: phase,
         title: "New issue",
         impact: "medium",
-        effort: "low",
         status: "planned",
         tags: [],
         problem: "",
@@ -814,18 +813,13 @@ function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
           )}
         </div>
         ${field("Title", input("title", issue.title || ""))}
-        <div class="editor-grid editor-grid--3">
+        <div class="editor-grid editor-grid--2">
           ${field("Urgency", select("impact", issue.impact, ["critical", "high", "medium", "low"]))}
-          ${field("Effort (internal)", select("effort", issue.effort, ["low", "medium", "high"]))}
           ${field("Status", select("status", issue.status, ISSUE_STATUS_OPTIONS))}
         </div>
         ${field("Tags (comma separated)", input("tags", (issue.tags || []).join(", ")))}
         ${field("Issue Found", textarea("problem", issue.problem || "", 5))}
         ${field("Suggested Fix", textarea("recommendation", issue.recommendation || "", 5))}
-        <label class="editor-check">
-          <input type="checkbox" name="reviewed" ${issue.reviewed === true ? "checked" : ""}>
-          <span>Reviewed</span>
-        </label>
         <section class="editor-subsection">
           <div class="editor-subsection__head">
             <h3>Done when (internal)</h3>
@@ -1005,7 +999,6 @@ function applyIssueForm(issue, root) {
   );
   issue.title = form.querySelector('[name="title"]')?.value ?? "";
   issue.impact = form.querySelector('[name="impact"]')?.value ?? "medium";
-  issue.effort = form.querySelector('[name="effort"]')?.value ?? "low";
   issue.status = form.querySelector('[name="status"]')?.value ?? "planned";
   issue.tags = (form.querySelector('[name="tags"]')?.value || "")
     .split(",")
@@ -1014,11 +1007,6 @@ function applyIssueForm(issue, root) {
   issue.problem = form.querySelector('[name="problem"]')?.value ?? "";
   issue.recommendation =
     form.querySelector('[name="recommendation"]')?.value ?? "";
-  if (form.querySelector('[name="reviewed"]')?.checked) {
-    issue.reviewed = true;
-  } else {
-    delete issue.reviewed;
-  }
   issue.acceptance = [
     ...form.querySelectorAll("[data-acceptance-index] input"),
   ].map((el) => el.value);

@@ -272,10 +272,12 @@ code {
   border-radius: var(--radius);
   background: var(--color-surface);
   color: var(--color-text);
-  font-size: 1.35rem;
-  line-height: 1;
   text-decoration: none;
   box-shadow: var(--shadow);
+
+  & .issue-nav__icon {
+    display: block;
+  }
 
   &:hover {
     color: var(--color-accent);

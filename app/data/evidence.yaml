@@ -5,6 +5,7 @@
     - 02bb4d06-502d-44db-907c-062d48f5e58c
     - 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
     - 7952f11e-1b30-41a0-b128-5f54fdf49928
+  url: https://orbooks.com/
 - file: 120911.png
   type: image
   page: Homepage
@@ -39,43 +40,52 @@
   url: https://orbooks.com/
 - file: 122948.mp4
   type: video
-  page: Screen recording (pending review)
-  issues: []
+  page: Author Page Accordion Titles Font
+  issues:
+    - 12737e6f-b52c-4f53-97b6-50c68e98a871
+  url: https://orbooks.com/authors/h/theodore-hamm/
+  poster: 170035.png
 - file: 123119.mp4
   type: video
   page: 'In the Media: Read Now overlay'
   poster: 161238.png
   issues:
     - 1003b1bb-4460-4577-97e9-f737dfe9fead
+    - 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
+  url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 123202.png
   type: image
   page: 'Author: In the Media (squished images)'
   issues:
     - b57d706d-de6d-46d7-8e3f-6452f175c362
+  url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 123215.png
   type: image
   page: 'Author: In the Media'
   issues:
     - b57d706d-de6d-46d7-8e3f-6452f175c362
+  url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 123249.png
   type: image
   page: 'Book detail: Run Zohran Run'
   issues:
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
     - d9a285fd-c112-4962-be45-5bbb594dc1d3
+  url: https://orbooks.com/catalog/run-zohran-run/
 - file: 123310.png
   type: image
   page: 'Book detail: purchase options'
   issues:
     - 016b1384-309d-48ba-a585-398783c97dd6
-    - 5d04c117-9701-492c-beea-4056113fbdf2
     - ad45e92e-3cd0-41a4-a129-f80d2c2908bb
+    - c392e399-8c2d-4c2e-9896-56b81e76b2d0
+  url: https://orbooks.com/catalog/run-zohran-run/
 - file: 123327.png
   type: image
   page: 'News article: Run Zohran Run'
   issues:
-    - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
     - 1c59053b-b5c4-4f94-8361-422f66dd6614
+    - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
   url: https://orbooks.com/news/the-inside-story-behind-new-yorks-first-democratic-socialist-mayor-run-zohran-run/
 - file: 123434.png
   type: image
@@ -89,6 +99,7 @@
   issues:
     - 016b1384-309d-48ba-a585-398783c97dd6
     - 74c65dc5-7a86-4fe3-8327-cf3be9715f38
+  url: https://orbooks.com/authors/
 - file: 123547.mp4
   type: video
   page: Screen recording (pending review)
@@ -98,6 +109,7 @@
   page: 'Our Authors: grid scroll'
   issues:
     - 74c65dc5-7a86-4fe3-8327-cf3be9715f38
+  url: https://orbooks.com/authors/
 - file: 123739.png
   type: image
   page: Catalog list + Featured Title
@@ -114,11 +126,13 @@
   page: About
   issues:
     - 030cf68c-ad0d-4b9f-8c65-f0471faf263b
+  url: https://orbooks.com/about/
 - file: 123850.png
   type: image
   page: 'About: video slider'
   issues:
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
+  url: https://orbooks.com/about/
 - file: 123929.mp4
   type: video
   page: Screen recording (pending review)
@@ -169,11 +183,13 @@
   issues:
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
     - f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
+  url: https://orbooks.com/authors/
 - file: 125642.png
   type: image
   page: Subsidiary Rights
   issues:
     - 030cf68c-ad0d-4b9f-8c65-f0471faf263b
+  url: https://orbooks.com/subsidiary-rights/
 - file: 125703.png
   type: image
   page: Privacy notice TOC
@@ -198,6 +214,7 @@
   page: FAQ
   issues:
     - f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
+  url: https://orbooks.com/faq/
 - file: 130006.png
   type: image
   page: Shipping / orders info
@@ -215,13 +232,14 @@
   page: 'In the Media list: Read Now overlay'
   issues:
     - 1003b1bb-4460-4577-97e9-f737dfe9fead
+  url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 161534.png
   type: image
   page: Media single article
   issues:
+    - 1c59053b-b5c4-4f94-8361-422f66dd6614
     - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
     - b57d706d-de6d-46d7-8e3f-6452f175c362
-    - 1c59053b-b5c4-4f94-8361-422f66dd6614
   url: https://orbooks.com/news/mamdani-5-months-later-meet-mayor-mamdani/
 - file: 164729.png
   type: image
@@ -234,4 +252,26 @@
   page: Reading Lists module
   issues:
     - 62f9d4cd-453f-472e-81f4-7b252f7577bd
+  url: https://orbooks.com/
+- file: 170035.png
+  type: image
+  page: Author Page Accordions
+  issues: []
+  url: https://orbooks.com/authors/h/theodore-hamm/
+- file: 171653.png
+  type: image
+  page: Book Page Thumbnail
+  issues:
+    - 6eb190a1-cfcd-4029-8261-05027bb3da83
+  url: https://orbooks.com/catalog/run-zohran-run/
+- file: 173459.mp4
+  type: video
+  page: Button Animation
+  issues:
+    - 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
+  url: https://orbooks.com/about/
+- file: 174154.png
+  type: image
+  page: Home Page Featured Title Module
+  issues: []
   url: https://orbooks.com/

@@ -203,7 +203,6 @@ export function initIssueComposer() {
       sprint: phase,
       title,
       impact,
-      effort: "low",
       status: "planned",
       tags: [],
       problem,

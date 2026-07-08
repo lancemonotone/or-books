@@ -3,7 +3,6 @@
   sprint: 1
   title: Label or Replace the Subjects icons
   impact: critical
-  effort: low
   status: planned
   tags:
     - navigation
@@ -21,7 +20,6 @@
   sprint: 1
   title: Keep the header visible when searching
   impact: critical
-  effort: medium
   status: planned
   tags:
     - search
@@ -44,7 +42,6 @@
   sprint: 1
   title: Show email addresses the same way everywhere
   impact: high
-  effort: low
   status: planned
   tags:
     - content
@@ -72,7 +69,6 @@
   sprint: 1
   title: Fix text that looks like a link but is not
   impact: high
-  effort: low
   status: planned
   tags:
     - navigation
@@ -92,7 +88,6 @@
   sprint: 1
   title: Fix Reading Lists View All page
   impact: high
-  effort: medium
   status: planned
   tags:
     - navigation
@@ -111,7 +106,6 @@
   sprint: 1
   title: Add a way back from news articles
   impact: high
-  effort: low
   status: planned
   tags:
     - navigation
@@ -132,7 +126,6 @@
   sprint: 1
   title: Link to other pages mentioned in the FAQ
   impact: high
-  effort: low
   status: planned
   tags:
     - content
@@ -150,7 +143,6 @@
   sprint: 1
   title: Open media articles on the first tap
   impact: high
-  effort: low
   status: planned
   tags:
     - interaction
@@ -170,7 +162,6 @@
   sprint: 1
   title: Rights Catalogs page
   impact: medium
-  effort: low
   status: blocked
   tags:
     - content
@@ -190,7 +181,6 @@
   sprint: 1
   title: Fix Rights Enquiries page heading typo
   impact: low
-  effort: low
   status: planned
   tags:
     - content
@@ -205,12 +195,30 @@
     - Page slug spelled correctly
   evidence:
     - file: 125454.png
+- key: 6eb190a1-cfcd-4029-8261-05027bb3da83
+  id: '1.11'
+  sprint: 1
+  title: Scale the book cover on mobile
+  impact: medium
+  status: planned
+  tags:
+    - layout
+    - book-detail
+  problem: |
+    On book detail pages, the cover image fills most of the phone screen. Readers must scroll before they see the description, format options, or purchase buttons.
+  recommendation: |
+    Limit cover height on small screens so the title, key details, and primary actions appear in the first screenful. Keep a way to view the full cover if needed.
+  acceptance:
+    - Cover does not dominate the first viewport on typical phone widths
+    - Title and at least one primary action are visible without scrolling on first load
+  evidence:
+    - file: 171653.png
+      caption: Run Zohran Run book page on mobile
 - key: d9a285fd-c112-4962-be45-5bbb594dc1d3
   id: '2.1'
   sprint: 2
   title: Make headings and titles easier to tell apart
   impact: high
-  effort: medium
   status: planned
   tags:
     - typography
@@ -228,7 +236,6 @@
   sprint: 2
   title: Make buttons look consistent
   impact: high
-  effort: medium
   status: planned
   tags:
     - buttons
@@ -246,7 +253,6 @@
   sprint: 2
   title: Even out spacing between sections
   impact: medium
-  effort: low
   status: planned
   tags:
     - spacing
@@ -259,15 +265,13 @@
     - No unexplained large whitespace between related modules
   evidence:
     - file: 123739.png
-      caption: Catalog list gap
     - file: 123249.png
-      caption: Reviews section
+    - file: 123310.png
 - key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
   id: '2.4'
   sprint: 2
   title: Make author photos the same size and shape
   impact: high
-  effort: medium
   status: planned
   tags:
     - images
@@ -288,7 +292,6 @@
   sprint: 2
   title: Align the header icons
   impact: high
-  effort: low
   status: planned
   tags:
     - header
@@ -308,7 +311,6 @@
   sprint: 2
   title: Left-align long paragraphs on mobile
   impact: medium
-  effort: low
   status: planned
   tags:
     - typography
@@ -329,7 +331,6 @@
   sprint: 2
   title: Remove repeated labels in the menu
   impact: medium
-  effort: low
   status: planned
   tags:
     - navigation
@@ -348,7 +349,6 @@
   sprint: 2
   title: Give the header more room in the open menu
   impact: medium
-  effort: low
   status: planned
   tags:
     - navigation
@@ -367,30 +367,25 @@
   sprint: 2
   title: Use one slider style across the site
   impact: medium
-  effort: medium
   status: blocked
   tags:
     - carousels
     - homepage
   problem: |
-    Some sliders use dots and others use arrow buttons. The homepage even mixes both.
+    Some sliders use dots and others use arrow buttons. The homepage mixes both.
   recommendation: |
     Choose dots or arrows and use that everywhere. See Questions for you.
   acceptance:
     - One slider navigation pattern used everywhere
   evidence:
     - file: 120911.png
-      caption: Dots on homepage
     - file: 123850.png
-      caption: Arrows on About
     - file: 125607.png
-      caption: Arrows on Authors
 - key: b57d706d-de6d-46d7-8e3f-6452f175c362
   id: '2.10'
   sprint: 2
   title: Stop squashing images in media lists
   impact: high
-  effort: medium
   status: planned
   tags:
     - images
@@ -414,7 +409,6 @@
   sprint: 2
   title: Shorten news bylines on mobile
   impact: medium
-  effort: low
   status: planned
   tags:
     - content
@@ -435,7 +429,6 @@
   sprint: 2
   title: Label the Featured Title blocks clearly
   impact: high
-  effort: medium
   status: planned
   tags:
     - widgets
@@ -448,17 +441,12 @@
     - Featured block has visible section label in same position on all templates
   evidence:
     - file: 123739.png
-      caption: Catalog list
     - file: 123809.png
-      caption: Featured Title, Red Card
-    - file: 123310.png
-      caption: Related Interest block
 - key: 6f242823-63e3-4b9c-b49d-4ecf1336c282
   id: '2.13'
   sprint: 2
   title: Make legal tables readable on a phone
   impact: high
-  effort: medium
   status: planned
   tags:
     - legal
@@ -477,7 +465,6 @@
   sprint: 2
   title: Improve Featured Author text on mobile
   impact: medium
-  effort: low
   status: planned
   tags:
     - typography
@@ -497,7 +484,6 @@
   sprint: 2
   title: Keep bookseller signup on orbooks.com
   impact: medium
-  effort: medium
   status: blocked
   tags:
     - forms
@@ -520,7 +506,6 @@
   sprint: 3
   title: Use the same arrow on all accordions
   impact: medium
-  effort: low
   status: planned
   tags:
     - components
@@ -536,7 +521,6 @@
   sprint: 3
   title: Make small tap targets easier to hit
   impact: high
-  effort: low
   status: planned
   tags:
     - accessibility
@@ -557,7 +541,6 @@
   sprint: 3
   title: Match footer social icons to the header
   impact: low
-  effort: low
   status: planned
   tags:
     - footer
@@ -578,7 +561,6 @@
   sprint: 3
   title: Center the cookie preferences bar with the footer
   impact: low
-  effort: low
   status: planned
   tags:
     - footer
@@ -592,3 +574,41 @@
   evidence:
     - file: 123434.png
       caption: Footer alignment
+- key: 12737e6f-b52c-4f53-97b6-50c68e98a871
+  id: '3.5'
+  sprint: 3
+  title: Keep accordion titles steady on hover
+  impact: low
+  status: planned
+  tags:
+    - components
+    - interaction
+  problem: |
+    On some pages with accordions (for example author profiles), hovering or tapping a section title makes the text animate or shift. The motion draws attention away from the content and feels out of place for a publisher site.
+  recommendation: |
+    Keep accordion titles visually stable on hover, focus, and tap. If you need feedback, use a subtle change to the arrow or background—not animated title text.
+  acceptance:
+    - Accordion title text does not animate or shift on hover, focus, or tap
+    - Any feedback uses arrow or background only
+  evidence:
+    - file: 122948.mp4
+      caption: Author page accordion titles
+- key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
+  id: '3.6'
+  sprint: 3
+  title: Remove distracting motion on buttons
+  impact: low
+  status: planned
+  tags:
+    - interaction
+    - media
+  problem: |
+    In the In the Media section on author pages, the Read Now button fades and slides up when it appears. The entrance animation feels unnecessary and makes a simple action look fussy.
+  recommendation: |
+    Show the Read Now control immediately, without a slide or bounce. If any transition is needed, keep it to a brief, subtle fade with no vertical movement.
+  acceptance:
+    - Read Now does not slide or bounce into view on author In the Media items
+    - Button is readable as soon as it appears
+  evidence:
+    - file: 123119.mp4
+    - file: 173459.mp4
