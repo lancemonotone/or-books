@@ -399,7 +399,7 @@ async function loadSession() {
     renderWorkspace();
     syncEditorUrl({ push: false });
     setSaveIndicator('idle');
-    setStatus(editorStatus, 'Loaded.');
+    setStatus(editorStatus, '');
   } catch (error) {
     if (error.message.includes('not configured')) {
       showPanel(blockedPanel);

@@ -133,6 +133,14 @@
     </form>
   </dialog>
 
+  <dialog class="editor-lightbox" id="editor-lightbox" aria-label="Media preview">
+    <div class="editor-lightbox__toolbar">
+      <span class="editor-lightbox__title" id="editor-lightbox-title"></span>
+      <button type="button" class="editor-lightbox__close" data-lightbox-close aria-label="Close">×</button>
+    </div>
+    <div class="editor-lightbox__body" id="editor-lightbox-body"></div>
+  </dialog>
+
   <script src="../assets/vendor/js-yaml.min.js"></script>
   <script type="module" src="../assets/editor/main.js"></script>
 </body>

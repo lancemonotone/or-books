@@ -97,6 +97,46 @@ function frontendIssueUrl(issueId) {
   return `../#/issue/${encodeURIComponent(issueId)}`;
 }
 
+const ICON_EXTERNAL = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+const ICON_REPLACE = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>`;
+const ICON_TRASH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`;
+
+function openEditorLightbox({ file, title = '', isVideo = false, poster = '' }) {
+  const dialog = document.getElementById('editor-lightbox');
+  const titleNode = document.getElementById('editor-lightbox-title');
+  const bodyNode = document.getElementById('editor-lightbox-body');
+  if (!dialog || !bodyNode) {
+    return;
+  }
+
+  if (titleNode) {
+    titleNode.textContent = title || file;
+  }
+
+  bodyNode.innerHTML = isVideo
+    ? `<video controls autoplay src="${mediaUrl(file)}" ${poster ? `poster="${poster}"` : ''}></video>`
+    : `<img src="${mediaUrl(file)}" alt="${escapeAttr(title || file)}">`;
+
+  if (!dialog.dataset.bound) {
+    dialog.dataset.bound = '1';
+    dialog.querySelector('[data-lightbox-close]')?.addEventListener('click', () => {
+      dialog.close();
+      bodyNode.innerHTML = '';
+    });
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) {
+        dialog.close();
+        bodyNode.innerHTML = '';
+      }
+    });
+    dialog.addEventListener('close', () => {
+      bodyNode.innerHTML = '';
+    });
+  }
+
+  dialog.showModal();
+}
+
 function issueOptions(issues) {
   return issues.map((issue) => ({ value: issue.id, label: `${issue.id} — ${issue.title}` }));
 }
@@ -276,20 +316,42 @@ export function renderIssuesView(
 }
 
 function renderIssueForm(issue, audit, galleryEvidence = []) {
-  const evidenceRows = (issue.evidence || [])
-    .map(
-      (item, index) => `
-      <div class="evidence-row" data-evidence-index="${index}">
-        ${renderMediaChip(item.file, evidenceImageTitle(item.file, galleryEvidence))}
-        <div class="evidence-row__fields">
-          <div class="evidence-row__actions">
-            <button type="button" class="editor-button editor-button--ghost editor-button--small" data-open-media="${escapeAttr(item.file)}">Open in Media</button>
-            <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="pick-evidence" data-index="${index}">Change file</button>
-            <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="remove-evidence" data-index="${index}">Remove</button>
+  const evidenceCards = (issue.evidence || [])
+    .map((item, index) => {
+      const title = evidenceImageTitle(item.file, galleryEvidence);
+      const galleryRow = (galleryEvidence || []).find((row) => row.file === item.file);
+      const isVideo =
+        galleryRow?.type === 'video' || String(item.file || '').toLowerCase().endsWith('.mp4');
+      const poster = galleryRow?.poster ? mediaUrl(galleryRow.poster) : '';
+      const preview = isVideo
+        ? `<video preload="metadata" src="${mediaUrl(item.file)}" ${poster ? `poster="${poster}"` : ''} muted playsinline></video>`
+        : `<img src="${mediaUrl(item.file)}" alt="${escapeAttr(title || item.file)}" loading="lazy">`;
+
+      return `
+      <article class="issue-media-card" data-evidence-index="${index}">
+        <div class="issue-media-card__frame">
+          <button
+            type="button"
+            class="issue-media-card__preview"
+            data-action="preview-evidence"
+            data-file="${escapeAttr(item.file)}"
+            data-title="${escapeAttr(title || item.file)}"
+            data-video="${isVideo ? '1' : '0'}"
+            ${poster ? `data-poster="${escapeAttr(poster)}"` : ''}
+            aria-label="Open ${escapeAttr(title || item.file)}"
+          >${preview}</button>
+          <div class="issue-media-card__actions">
+            <button type="button" class="issue-media-icon" data-open-media="${escapeAttr(item.file)}" aria-label="Open in Media" title="Open in Media">${ICON_EXTERNAL}</button>
+            <button type="button" class="issue-media-icon" data-action="pick-evidence" data-index="${index}" aria-label="Change file" title="Change file">${ICON_REPLACE}</button>
+            <button type="button" class="issue-media-icon issue-media-icon--danger" data-action="remove-evidence" data-index="${index}" aria-label="Remove" title="Remove">${ICON_TRASH}</button>
           </div>
         </div>
-      </div>`
-    )
+        <div class="issue-media-card__meta">
+          <p class="issue-media-card__file">${escapeHtml(item.file)}</p>
+          ${title ? `<p class="issue-media-card__title">${escapeHtml(title)}</p>` : ''}
+        </div>
+      </article>`;
+    })
     .join('');
 
   const acceptance = (issue.acceptance || [])
@@ -303,44 +365,46 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
     .join('');
 
   return `
-    <form class="editor-detail-form" id="issue-form">
-      <div class="editor-detail__head">
-        <div class="editor-detail__intro">
-          <h2>${escapeHtml(issue.id)}: ${escapeHtml(issue.title || 'Untitled')}</h2>
-          <a class="editor-detail__frontend-link" href="${escapeAttr(frontendIssueUrl(issue.id))}">View on presentation</a>
+    <form class="editor-detail-form issue-editor-layout" id="issue-form">
+      <div class="issue-editor-layout__primary">
+        <div class="editor-detail__head">
+          <div class="editor-detail__intro">
+            <h2>${escapeHtml(issue.id)}: ${escapeHtml(issue.title || 'Untitled')}</h2>
+            <a class="editor-detail__frontend-link" href="${escapeAttr(frontendIssueUrl(issue.id))}">View on presentation</a>
+          </div>
+          <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="delete-issue">Delete issue</button>
         </div>
-        <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="delete-issue">Delete issue</button>
-      </div>
-      <div class="editor-grid editor-grid--2">
-        ${field('Issue id', input('id', issue.id || ''))}
-        ${field('Phase', select('sprint', issue.sprint, (audit.sprints || []).map((s) => ({ value: s.id, label: `Phase ${s.id} — ${s.title}` }))))}
-      </div>
-      ${field('Title', input('title', issue.title || ''))}
-      <div class="editor-grid editor-grid--3">
-        ${field('Urgency', select('impact', issue.impact, ['critical', 'high', 'medium', 'low']))}
-        ${field('Effort (internal)', select('effort', issue.effort, ['low', 'medium', 'high']))}
-        ${field('Status', select('status', issue.status, ISSUE_STATUS_OPTIONS))}
-      </div>
-      ${field('Tags (comma separated)', input('tags', (issue.tags || []).join(', ')))}
-      ${field('What we found', textarea('problem', issue.problem || '', 5))}
-      ${field('What we suggest', textarea('recommendation', issue.recommendation || '', 5))}
-      <section class="editor-subsection">
-        <div class="editor-subsection__head">
-          <h3>Done when (internal)</h3>
-          <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="add-acceptance">Add line</button>
+        <div class="editor-grid editor-grid--2">
+          ${field('Issue id', input('id', issue.id || ''))}
+          ${field('Phase', select('sprint', issue.sprint, (audit.sprints || []).map((s) => ({ value: s.id, label: `Phase ${s.id} — ${s.title}` }))))}
         </div>
-        <div class="editor-stack">${acceptance || '<p class="editor-muted">No checklist lines yet.</p>'}</div>
-      </section>
-      <section class="editor-subsection">
+        ${field('Title', input('title', issue.title || ''))}
+        <div class="editor-grid editor-grid--3">
+          ${field('Urgency', select('impact', issue.impact, ['critical', 'high', 'medium', 'low']))}
+          ${field('Effort (internal)', select('effort', issue.effort, ['low', 'medium', 'high']))}
+          ${field('Status', select('status', issue.status, ISSUE_STATUS_OPTIONS))}
+        </div>
+        ${field('Tags (comma separated)', input('tags', (issue.tags || []).join(', ')))}
+        ${field('What we found', textarea('problem', issue.problem || '', 5))}
+        ${field('What we suggest', textarea('recommendation', issue.recommendation || '', 5))}
+        <section class="editor-subsection">
+          <div class="editor-subsection__head">
+            <h3>Done when (internal)</h3>
+            <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="add-acceptance">Add line</button>
+          </div>
+          <div class="editor-stack">${acceptance || '<p class="editor-muted">No checklist lines yet.</p>'}</div>
+        </section>
+      </div>
+      <aside class="issue-editor-layout__media">
         <div class="editor-subsection__head">
           <div class="editor-subsection__intro">
             <h3>Media</h3>
-            <p class="editor-subsection__hint">Screenshots and videos for this issue. Open in Media to edit gallery details.</p>
+            <p class="editor-subsection__hint">Screenshots and videos for this issue.</p>
           </div>
           <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="add-evidence">Add media</button>
         </div>
-        <div class="editor-stack">${evidenceRows || '<p class="editor-muted">No media linked yet.</p>'}</div>
-      </section>
+        <div class="issue-media-stack">${evidenceCards || '<p class="editor-muted">No media linked yet.</p>'}</div>
+      </aside>
     </form>
   `;
 }
@@ -410,7 +474,8 @@ function bindIssueForm(issue, issues, galleryEvidence, root, onChange, rerender,
   });
 
   detail.querySelectorAll('[data-action="pick-evidence"]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
       applyIssueForm(issue, root);
       const index = Number(button.dataset.index);
       openMediaFilePicker({
@@ -428,7 +493,8 @@ function bindIssueForm(issue, issues, galleryEvidence, root, onChange, rerender,
   });
 
   detail.querySelectorAll('[data-action="remove-evidence"]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
       applyIssueForm(issue, root);
       issue.evidence.splice(Number(button.dataset.index), 1);
       onChange();
@@ -437,9 +503,21 @@ function bindIssueForm(issue, issues, galleryEvidence, root, onChange, rerender,
   });
 
   detail.querySelectorAll('[data-open-media]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
       applyIssueForm(issue, root);
       onNavigateToEvidence?.(button.dataset.openMedia);
+    });
+  });
+
+  detail.querySelectorAll('[data-action="preview-evidence"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      openEditorLightbox({
+        file: button.dataset.file,
+        title: button.dataset.title || '',
+        isVideo: button.dataset.video === '1',
+        poster: button.dataset.poster || '',
+      });
     });
   });
 }
@@ -463,7 +541,7 @@ function applyIssueForm(issue, root) {
   issue.problem = form.querySelector('[name="problem"]')?.value ?? '';
   issue.recommendation = form.querySelector('[name="recommendation"]')?.value ?? '';
   issue.acceptance = [...form.querySelectorAll('[data-acceptance-index] input')].map((el) => el.value);
-  issue.evidence = [...form.querySelectorAll('[data-evidence-index]')].map((row, index) => ({
+  issue.evidence = [...form.querySelectorAll('.issue-media-card[data-evidence-index]')].map((row, index) => ({
     file: issue.evidence?.[index]?.file || '',
   }));
 }
