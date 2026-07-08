@@ -61,6 +61,32 @@ function evidenceImageTitle(file, galleryEvidence) {
   return row?.page || "";
 }
 
+function galleryEvidenceRow(file, galleryEvidence) {
+  return (galleryEvidence || []).find((item) => item.file === file) || null;
+}
+
+function renderEditorEvidencePageLink(row) {
+  const url = String(row?.url || "").trim();
+  if (!url) {
+    return "";
+  }
+  return `<a class="evidence-page-link media-block__page-link" href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
+}
+
+function renderEditorIssueChips(issueKeys, issues) {
+  return (issueKeys || [])
+    .map((key) => {
+      const linked = (issues || []).find(
+        (issue) => String(issue.key) === String(key),
+      );
+      if (!linked) {
+        return "";
+      }
+      return `<button type="button" class="chip chip--issue" data-open-issue="${escapeAttr(linked.key)}">${escapeHtml(linked.id)}</button>`;
+    })
+    .join("");
+}
+
 function phaseTitle(audit, phaseId) {
   const sprint = (audit?.sprints || []).find(
     (item) => String(item.id) === String(phaseId),
@@ -244,12 +270,13 @@ function remountIssueDetail(
   onChange,
   rerender,
   onNavigateToEvidence,
+  onNavigateToIssue,
 ) {
   const detail = root.querySelector("#issue-detail");
   if (!detail || !issue) {
     return;
   }
-  detail.innerHTML = renderIssueForm(issue, audit, galleryEvidence);
+  detail.innerHTML = renderIssueForm(issue, audit, galleryEvidence, issues);
   bindIssueForm(
     issue,
     issues,
@@ -259,6 +286,7 @@ function remountIssueDetail(
     onChange,
     rerender,
     onNavigateToEvidence,
+    onNavigateToIssue,
   );
 }
 
@@ -568,7 +596,7 @@ export function renderIssuesView(
         </div>
       </aside>
       <div class="editor-detail" id="issue-detail">
-        ${selected ? renderIssueForm(selected, audit, galleryEvidence) : '<p class="editor-lede">Add an issue to get started.</p>'}
+        ${selected ? renderIssueForm(selected, audit, galleryEvidence, issues) : '<p class="editor-lede">Add an issue to get started.</p>'}
       </div>
     </div>
   `;
@@ -629,6 +657,7 @@ export function renderIssuesView(
           onChange,
           rerender,
           onNavigateToEvidence,
+          onNavigateToIssue,
         );
       }
       onChange();
@@ -694,6 +723,7 @@ export function renderIssuesView(
     onChange,
     rerender,
     onNavigateToEvidence,
+    onNavigateToIssue,
   );
 
   if (ui.pinnedIssueScrollKey) {
@@ -704,13 +734,11 @@ export function renderIssuesView(
   }
 }
 
-function renderIssueForm(issue, audit, galleryEvidence = []) {
+function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
   const evidenceCards = (issue.evidence || [])
     .map((item, index) => {
+      const galleryRow = galleryEvidenceRow(item.file, galleryEvidence);
       const title = evidenceImageTitle(item.file, galleryEvidence);
-      const galleryRow = (galleryEvidence || []).find(
-        (row) => row.file === item.file,
-      );
       const isVideo =
         galleryRow?.type === "video" ||
         String(item.file || "")
@@ -720,13 +748,24 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
       const preview = isVideo
         ? `<video preload="metadata" src="${mediaUrl(item.file)}" ${poster ? `poster="${poster}"` : ""} muted playsinline></video>`
         : `<img src="${mediaUrl(item.file)}" alt="${escapeAttr(title || item.file)}" loading="lazy">`;
+      const issueKeys = galleryRow?.issues?.length
+        ? galleryRow.issues
+        : [issue.key];
+      const chipsHtml = issueKeys.length
+        ? `<div class="chip-row media-block__chips">${renderEditorIssueChips(issueKeys, issues)}</div>`
+        : "";
+      const pageLink = renderEditorEvidencePageLink(galleryRow);
+      const footerParts = [pageLink, chipsHtml].filter(Boolean).join("");
+      const footerHtml = footerParts
+        ? `<figcaption>${footerParts}</figcaption>`
+        : "";
 
       return `
-      <article class="issue-media-card" data-evidence-index="${index}">
+      <figure class="issue-media-card media-block" data-evidence-index="${index}">
         <div class="issue-media-card__frame">
           <button
             type="button"
-            class="issue-media-card__preview"
+            class="issue-media-card__preview media-block__image"
             data-action="preview-evidence"
             data-file="${escapeAttr(item.file)}"
             data-title="${escapeAttr(title || item.file)}"
@@ -740,11 +779,8 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
             <button type="button" class="issue-media-icon issue-media-icon--danger" data-action="remove-evidence" data-index="${index}" aria-label="Remove" title="Remove">${ICON_TRASH}</button>
           </div>
         </div>
-        <div class="issue-media-card__meta">
-          <p class="issue-media-card__file">${escapeHtml(item.file)}</p>
-          ${title ? `<p class="issue-media-card__title">${escapeHtml(title)}</p>` : ""}
-        </div>
-      </article>`;
+        ${footerHtml}
+      </figure>`;
     })
     .join("");
 
@@ -786,6 +822,10 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
         ${field("Tags (comma separated)", input("tags", (issue.tags || []).join(", ")))}
         ${field("Issue Found", textarea("problem", issue.problem || "", 5))}
         ${field("Suggested Fix", textarea("recommendation", issue.recommendation || "", 5))}
+        <label class="editor-check">
+          <input type="checkbox" name="reviewed" ${issue.reviewed === true ? "checked" : ""}>
+          <span>Reviewed</span>
+        </label>
         <section class="editor-subsection">
           <div class="editor-subsection__head">
             <h3>Done when (internal)</h3>
@@ -802,7 +842,7 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
           </div>
           <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="add-evidence">Add media</button>
         </div>
-        <div class="issue-media-stack">${evidenceCards || '<p class="editor-muted">No media linked yet.</p>'}</div>
+        <div class="issue-media-stack evidence-stack">${evidenceCards || '<p class="editor-muted">No media linked yet.</p>'}</div>
       </aside>
     </form>
   `;
@@ -817,6 +857,7 @@ function bindIssueForm(
   onChange,
   rerender,
   onNavigateToEvidence,
+  onNavigateToIssue,
 ) {
   const detail = root.querySelector("#issue-detail");
   if (!detail) {
@@ -932,6 +973,13 @@ function bindIssueForm(
     });
   });
 
+  detail.querySelectorAll("[data-open-issue]").forEach((button) => {
+    button.addEventListener("click", () => {
+      applyIssueForm(issue, root);
+      onNavigateToIssue?.(button.dataset.openIssue);
+    });
+  });
+
   detail
     .querySelectorAll('[data-action="preview-evidence"]')
     .forEach((button) => {
@@ -966,6 +1014,11 @@ function applyIssueForm(issue, root) {
   issue.problem = form.querySelector('[name="problem"]')?.value ?? "";
   issue.recommendation =
     form.querySelector('[name="recommendation"]')?.value ?? "";
+  if (form.querySelector('[name="reviewed"]')?.checked) {
+    issue.reviewed = true;
+  } else {
+    delete issue.reviewed;
+  }
   issue.acceptance = [
     ...form.querySelectorAll("[data-acceptance-index] input"),
   ].map((el) => el.value);
@@ -1140,10 +1193,6 @@ function renderEvidenceForm(row, issues, audit) {
                 )
               : ""
           }
-          <label class="editor-check">
-            <input type="checkbox" name="reviewed" ${row.reviewed === false ? "" : "checked"}>
-            <span>Reviewed</span>
-          </label>
           <section class="editor-subsection">
             <div class="editor-subsection__head">
               <h3>Linked issues</h3>
@@ -1302,12 +1351,6 @@ function applyEvidenceForm(row, root) {
   row.issues = [...form.querySelectorAll('[name="issues"]:checked')].map(
     (el) => el.value,
   );
-
-  if (row.type === "video" || row.file.endsWith(".mp4")) {
-    row.reviewed = form.querySelector('[name="reviewed"]')?.checked ?? true;
-  } else {
-    delete row.reviewed;
-  }
 }
 
 export function renderDecisionsView(

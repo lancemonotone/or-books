@@ -10,13 +10,15 @@
   page: Homepage
   issues:
     - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
-    - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
     - d9a285fd-c112-4962-be45-5bbb594dc1d3
+    - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
+  url: https://orbooks.com/
 - file: 121002.png
   type: image
   page: 'Homepage: author and news modules'
   issues:
     - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
+  url: https://orbooks.com/
 - file: 121022.png
   type: image
   page: Subjects page
@@ -34,16 +36,15 @@
   page: Search active
   issues:
     - d64e9880-9bd4-4b26-850b-f04a0b9b341b
+  url: https://orbooks.com/
 - file: 122948.mp4
   type: video
   page: Screen recording (pending review)
-  reviewed: false
   issues: []
 - file: 123119.mp4
   type: video
   page: 'In the Media: Read Now overlay'
   poster: 161238.png
-  reviewed: true
   issues:
     - 1003b1bb-4460-4577-97e9-f737dfe9fead
 - file: 123202.png
@@ -90,7 +91,6 @@
 - file: 123547.mp4
   type: video
   page: Screen recording (pending review)
-  reviewed: false
   issues: []
 - file: 123704.png
   type: image
@@ -121,13 +121,13 @@
 - file: 123929.mp4
   type: video
   page: Screen recording (pending review)
-  reviewed: false
   issues: []
 - file: 123949.png
   type: image
   page: Contact Us
   issues:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
+  url: https://orbooks.com/contact-us/
 - file: 124005.png
   type: image
   page: Contact form + footer
@@ -139,6 +139,7 @@
   issues:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
     - 22f6409d-b5e4-46b1-8086-f2839495505e
+  url: https://orbooks.com/booksellers/
 - file: 125329.png
   type: image
   page: In Bookstores
@@ -148,11 +149,14 @@
   page: Rights Enquiries
   issues:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
+    - 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
+  url: https://orbooks.com/rights-enquires/
 - file: 125507.png
   type: image
   page: 'Rights Catalogs: Lorem Ipsum'
   issues:
     - fb10d3ef-47f4-49e0-852e-b75d75b4244f
+  url: https://orbooks.com/rights-catalogs/
 - file: 125535.png
   type: image
   page: Mailchimp bookseller signup
@@ -187,6 +191,7 @@
   page: Terms & Conditions
   issues:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
+  url: https://orbooks.com/terms-conditions/
 - file: 125833.png
   type: image
   page: FAQ
@@ -197,6 +202,7 @@
   page: Shipping / orders info
   issues:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
+  url: https://orbooks.com/faq/
 - file: 160840.png
   type: image
   page: Reading Lists module

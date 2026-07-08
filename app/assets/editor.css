@@ -5,6 +5,7 @@
   --color-muted: #5f5a54;
   --color-border: #d8d2c8;
   --color-accent: #8b1e1e;
+  --color-accent-soft: #f3e4e4;
   --color-error: #8b1e1e;
   --font-body: system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", monospace;
@@ -503,6 +504,71 @@ code {
   gap: 1rem;
 }
 
+.issue-media-stack.evidence-stack {
+  --preview-max-block-size: var(--issue-media-max-block);
+}
+
+.media-block {
+  position: relative;
+  margin: 0;
+}
+
+.media-block__image {
+  cursor: zoom-in;
+}
+
+.issue-media-card.media-block figcaption {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.media-block__page-link {
+  display: block;
+  margin-block-end: 0.35rem;
+}
+
+.evidence-page-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  color: var(--color-accent);
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  display: inline-block;
+  font-size: 0.8rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: #ece8e2;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+button.chip {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+}
+
+.chip--issue {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.chip--issue:hover {
+  background: #ead5d5;
+}
+
 .issue-media-card {
   display: grid;
   gap: 0.55rem;
@@ -588,24 +654,6 @@ code {
 .issue-media-icon--danger:hover {
   color: #b91c1c;
   border-color: #fecaca;
-}
-
-.issue-media-card__meta {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.issue-media-card__file {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--color-muted);
-}
-
-.issue-media-card__title {
-  margin: 0;
-  font-size: 0.88rem;
-  color: var(--color-text);
 }
 
 .editor-lightbox {

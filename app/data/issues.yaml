@@ -171,13 +171,40 @@
   title: Rights Catalogs page
   impact: medium
   effort: low
-  status: planned
-  tags: []
-  problem: ''
-  recommendation: ''
-  acceptance: []
+  status: blocked
+  tags:
+    - content
+    - rights
+  problem: |
+    The Rights Catalogs page (/rights-catalogs) is still placeholder copy. The body is Lorem Ipsum, but the page is linked in the site navigation. Visitors can open a page that looks unfinished.
+  recommendation: |
+    Do not leave placeholder text live in the menu. Recommended: hide the page from navigation until real catalog content is ready. See Questions for you to choose hide, populate, or remove.
+  acceptance:
+    - No Lorem Ipsum remains on any public page
+    - Navigation lists Rights Catalogs only if the page has real content (or the page is removed per your answer)
+    - If hidden, the link is removed from menus until content is ready
   evidence:
     - file: 125507.png
+- key: 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
+  id: '1.10'
+  sprint: 1
+  title: Fix Rights Enquiries page heading typo
+  impact: low
+  effort: low
+  status: planned
+  tags:
+    - content
+    - rights
+  problem: |
+    The Rights Enquiries page heading is misspelled as "RIGHTS ENQUIRES." It is the wrong word and looks unprofessional on a public page. The page slug is also misspelled as "/rights-enquires/"
+  recommendation: |
+    Change the heading to "Rights Enquiries" everywhere it appears on that page. Ensure the page slug updates.
+  acceptance:
+    - Page heading reads "Rights Enquiries" (not "Enquires")
+    - No other copy on the page repeats the misspelling
+    - Page slug spelled correctly
+  evidence:
+    - file: 125454.png
 - key: d9a285fd-c112-4962-be45-5bbb594dc1d3
   id: '2.1'
   sprint: 2
