@@ -1,22 +1,3 @@
-- id: '1.1'
-  sprint: 1
-  title: Add side margins on mobile pages
-  impact: critical
-  effort: low
-  status: planned
-  tags:
-    - layout
-    - spacing
-  problem: |
-    On several pages the text runs right to the edge of the screen. On the book page in particular there is almost no space on the left and right.
-  recommendation: |
-    Give all main page content the same left and right padding on a phone so reading is comfortable everywhere.
-  acceptance:
-    - No body copy or primary controls touch the viewport edge on mobile
-    - Book detail and catalog pages use the same horizontal inset
-  evidence:
-    - file: 123249.png
-      caption: Book page, text at the edge
 - id: '1.2'
   sprint: 1
   title: Label or Replace the Subjects icons

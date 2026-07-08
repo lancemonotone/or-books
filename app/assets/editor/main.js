@@ -23,6 +23,8 @@ const saveIndicatorText = document.getElementById('save-indicator-text');
 const workspace = document.getElementById('workspace');
 const reloadButton = document.getElementById('reload-button');
 const logoutButton = document.getElementById('logout-button');
+const viewIssueLink = document.getElementById('view-issue-link');
+const deleteIssueButton = document.getElementById('delete-issue-button');
 const saveHoneypot = document.getElementById('save-honeypot');
 const tabButtons = document.querySelectorAll('[data-tab]');
 
@@ -124,9 +126,32 @@ function onFormChange(...alsoDirty) {
   scheduleAutosave();
 }
 
+function updateIssueToolbarActions() {
+  const onIssuesTab = state.activeTab === 'issues';
+  const issueId = state.ui.selectedIssueId;
+  const hasIssue =
+    onIssuesTab && issueId && state.data.issues.some((item) => item.id === issueId);
+
+  if (viewIssueLink) {
+    viewIssueLink.hidden = !hasIssue;
+    if (hasIssue) {
+      viewIssueLink.href = `../#/issue/${encodeURIComponent(issueId)}`;
+      viewIssueLink.title = `View issue ${issueId} on presentation`;
+    } else {
+      viewIssueLink.removeAttribute('href');
+      viewIssueLink.removeAttribute('title');
+    }
+  }
+
+  if (deleteIssueButton) {
+    deleteIssueButton.hidden = !hasIssue;
+  }
+}
+
 function renderWorkspace() {
   renderActiveView(state, workspace, onFormChange, navigateToIssue, navigateToEvidence);
   updateTabs();
+  updateIssueToolbarActions();
 }
 
 function captureEditorFocus() {
@@ -491,6 +516,30 @@ reloadButton.addEventListener('click', async () => {
   } catch (error) {
     setStatus(editorStatus, error.message, true);
   }
+});
+
+deleteIssueButton?.addEventListener('click', async () => {
+  if (state.activeTab !== 'issues' || !state.ui.selectedIssueId) {
+    return;
+  }
+
+  const issueId = state.ui.selectedIssueId;
+  if (!window.confirm(`Delete issue ${issueId}?`)) {
+    return;
+  }
+
+  applyActiveForm(state);
+  const index = state.data.issues.findIndex((item) => item.id === issueId);
+  if (index === -1) {
+    return;
+  }
+
+  state.data.issues.splice(index, 1);
+  state.ui.selectedIssueId = state.data.issues[0]?.id ?? null;
+  onFormChange();
+  renderWorkspace();
+  syncEditorUrl({ push: true });
+  await flushAutosave();
 });
 
 logoutButton.addEventListener('click', async () => {
