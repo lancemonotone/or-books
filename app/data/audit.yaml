@@ -13,7 +13,7 @@ sprints:
     subtitle: Do these first
     title: Urgent fixes
     description: |
-      Layout, search, links that do not work, pages with no way back, and taps that take an extra step. These get in the way of reading and buying on a phone.
+      Layout, search, links that do not work, pages with no way back, and taps that take an extra step. These get in the way of reading and buying.
   - id: 2
     subtitle: Next pass
     title: Visual consistency
