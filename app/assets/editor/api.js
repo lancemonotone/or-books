@@ -158,7 +158,7 @@ export function compactIssueIds(issues, audit, phaseIds = null) {
   for (const phaseId of phases) {
     let sequence = 1;
     for (const issue of issues) {
-      if (Number(issue.sprint) === phaseId) {
+      if (Number(issue.sprint) === Number(phaseId)) {
         issue.id = `${phaseId}.${sequence}`;
         sequence += 1;
       }
@@ -166,15 +166,48 @@ export function compactIssueIds(issues, audit, phaseIds = null) {
   }
 }
 
+function normalizePhaseId(value) {
+  const phaseId = Number(value);
+  return Number.isFinite(phaseId) ? phaseId : null;
+}
+
+function findPhaseGroup(groups, phaseId) {
+  const target = normalizePhaseId(phaseId);
+  if (target === null) {
+    return null;
+  }
+  return groups.find((group) => normalizePhaseId(group.id) === target) || null;
+}
+
+function ensurePhaseGroup(groups, audit, issues, phaseId) {
+  const normalized = normalizePhaseId(phaseId);
+  if (normalized === null) {
+    return null;
+  }
+
+  let group = findPhaseGroup(groups, normalized);
+  if (!group) {
+    group = { id: normalized, keys: [] };
+    groups.push(group);
+    const order = phaseOrder(audit, issues);
+    groups.sort(
+      (a, b) =>
+        order.indexOf(normalizePhaseId(a.id)) - order.indexOf(normalizePhaseId(b.id)),
+    );
+  }
+  return group;
+}
+
 export function flattenIssuesFromGroups(issues, audit, phaseGroups) {
   const byKey = new Map(issues.map((issue) => [String(issue.key), issue]));
   const result = [];
   const used = new Set();
-  const touchedPhases = new Set();
 
   for (const group of phaseGroups) {
-    const phaseId = Number(group.id);
-    touchedPhases.add(phaseId);
+    const phaseId = normalizePhaseId(group.id);
+    if (phaseId === null) {
+      continue;
+    }
 
     for (const key of group.keys) {
       const issue = byKey.get(String(key));
@@ -190,11 +223,10 @@ export function flattenIssuesFromGroups(issues, audit, phaseGroups) {
   for (const issue of issues) {
     if (!used.has(String(issue.key))) {
       result.push(issue);
-      touchedPhases.add(Number(issue.sprint));
     }
   }
 
-  compactIssueIds(result, audit, [...touchedPhases]);
+  compactIssueIds(result, audit);
   return result;
 }
 
@@ -228,8 +260,13 @@ export function moveIssueToPhaseEnd(issues, audit, issueKey, targetPhaseId) {
 }
 
 export function reorderIssuesFromDrop(issues, audit, { draggedKey, targetPhaseId, insertBeforeKey = null }) {
+  const normalizedTarget = normalizePhaseId(targetPhaseId);
+  if (normalizedTarget === null) {
+    return issues;
+  }
+
   const groups = issuesByPhase(issues, audit).map((group) => ({
-    id: group.id,
+    id: normalizePhaseId(group.id),
     keys: group.issues.map((issue) => issue.key),
   }));
 
@@ -237,10 +274,9 @@ export function reorderIssuesFromDrop(issues, audit, { draggedKey, targetPhaseId
     group.keys = group.keys.filter((key) => key !== draggedKey);
   }
 
-  let targetGroup = groups.find((group) => group.id === Number(targetPhaseId));
+  const targetGroup = ensurePhaseGroup(groups, audit, issues, normalizedTarget);
   if (!targetGroup) {
-    targetGroup = { id: Number(targetPhaseId), keys: [] };
-    groups.push(targetGroup);
+    return issues;
   }
 
   if (insertBeforeKey) {
