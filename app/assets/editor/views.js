@@ -1401,6 +1401,7 @@ export function renderDecisionsView(
     selected,
     decisions,
     issues,
+    audit,
     galleryEvidence,
     root,
     onChange,
@@ -1494,7 +1495,16 @@ function renderDecisionForm(decision, issues, audit) {
       ${field("Question shown to client", textarea("question", decision.question || "", 3))}
       ${field("Suggested approach", textarea("recommendation", decision.recommendation || "", 4))}
       <section class="editor-subsection">
-        <h3>Linked issues</h3>
+        <div class="editor-subsection__head">
+          <h3>Linked issues</h3>
+          <button
+            type="button"
+            class="editor-button editor-button--ghost editor-button--small"
+            data-action="compose-issue"
+          >
+            Add issue
+          </button>
+        </div>
         <p class="editor-subsection__hint">Check to link. Click a title to edit the issue.</p>
         <div class="editor-linked-groups">${linkedGroups || '<p class="editor-muted">No issues yet.</p>'}</div>
       </section>
@@ -1513,6 +1523,7 @@ function bindDecisionForm(
   decision,
   decisions,
   issues,
+  audit,
   galleryEvidence,
   root,
   onChange,
@@ -1545,6 +1556,36 @@ function bindDecisionForm(
       decisions.splice(index, 1);
       onChange();
       rerender();
+    });
+
+  detail
+    .querySelector('[data-action="compose-issue"]')
+    ?.addEventListener("click", () => {
+      applyDecisionForm(decision, root);
+      const linkedIssueKeys = decision.blocks || [];
+
+      openIssueComposer({
+        audit,
+        issues,
+        file: "",
+        linkedIssueKeys,
+        onOpenIssue: onNavigateToIssue,
+        onCreate: (issue) => {
+          const ordered = appendIssueToPhase(issues, audit, issue);
+          replaceIssuesArray(issues, ordered);
+
+          decision.blocks = decision.blocks || [];
+          if (!decision.blocks.includes(issue.key)) {
+            decision.blocks.push(issue.key);
+          }
+
+          onChange("issues");
+          setEditorStatus(
+            `Created issue ${issue.id} and linked this question.`,
+          );
+          rerender();
+        },
+      });
     });
 
   detail

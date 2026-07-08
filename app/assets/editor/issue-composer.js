@@ -209,7 +209,7 @@ export function initIssueComposer() {
       problem,
       recommendation,
       acceptance: [],
-      evidence: [{ file: mediaFile }],
+      evidence: mediaFile ? [{ file: mediaFile }] : [],
     };
 
     onCreate(issue);
@@ -246,10 +246,14 @@ export function openIssueComposer({
   form.querySelector('[name="impact"]').value = "medium";
   setLinkedIssues(linkedIssueKeys, issues, onOpenIssue, audit);
   if (previewNode) {
-    const isVideo = inferMediaType(file) === "video";
-    previewNode.innerHTML = isVideo
-      ? `<video controls preload="metadata" src="${mediaUrl(file)}"></video>`
-      : `<img src="${mediaUrl(file)}" alt="">`;
+    if (!file) {
+      previewNode.innerHTML = "";
+    } else {
+      const isVideo = inferMediaType(file) === "video";
+      previewNode.innerHTML = isVideo
+        ? `<video controls preload="metadata" src="${mediaUrl(file)}"></video>`
+        : `<img src="${mediaUrl(file)}" alt="">`;
+    }
   }
   setComposerStatus("");
 
