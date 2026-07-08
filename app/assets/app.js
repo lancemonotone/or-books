@@ -51,7 +51,6 @@ const COPY = {
     "Everything saved so far. You will also see your own answers on each form.",
   noScreenshotsLinked: "No screenshots linked yet.",
   noIssuesLinked: "No issues linked",
-  viewOnSite: "View on site",
   lastSaved: "Saved",
   youChose: "You chose",
   noDecisionsYet: "No answers saved yet.",
@@ -202,7 +201,7 @@ function renderEvidencePageLink(row, className = "") {
     return "";
   }
   const classes = ["evidence-page-link", className].filter(Boolean).join(" ");
-  return `<a class="${escapeHtml(classes)}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(COPY.viewOnSite)}</a>`;
+  return `<a class="${escapeHtml(classes)}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
 }
 
 function renderEvidenceThumb(file, galleryFiles = null) {
