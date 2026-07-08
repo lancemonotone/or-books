@@ -152,6 +152,64 @@ function replaceIssuesArray(issues, nextIssues) {
   issues.splice(0, issues.length, ...nextIssues);
 }
 
+function issueSidebarScrollRoot(root) {
+  return root.querySelector('.editor-issue-groups') || root.querySelector('[data-issue-sidebar]');
+}
+
+function focusIssueInSidebar(root, issueKey) {
+  const item = root.querySelector(`[data-issue-item][data-issue-key="${CSS.escape(issueKey)}"]`);
+  if (!item) {
+    return;
+  }
+
+  const scrollRoot = issueSidebarScrollRoot(root);
+  if (!scrollRoot) {
+    item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    return;
+  }
+
+  const scrollRect = scrollRoot.getBoundingClientRect();
+  const itemRect = item.getBoundingClientRect();
+
+  if (itemRect.top < scrollRect.top) {
+    scrollRoot.scrollBy({ top: itemRect.top - scrollRect.top, behavior: 'smooth' });
+  } else if (itemRect.bottom > scrollRect.bottom) {
+    scrollRoot.scrollBy({ top: itemRect.bottom - scrollRect.bottom, behavior: 'smooth' });
+  }
+}
+
+function updateIssueFormHeading(root, issue) {
+  const heading = root.querySelector('#issue-form .editor-detail__head h2');
+  if (heading && issue) {
+    heading.textContent = `${issue.id}: ${issue.title || 'Untitled'}`;
+  }
+}
+
+function bindIssueSidebarList(root, { issues, audit, ui, phaseFilter, onReorder, onNavigateToIssue }) {
+  const sidebar = root.querySelector('[data-issue-sidebar]');
+  bindIssueSidebarDnD(sidebar, { issues, audit, phaseFilter, onReorder });
+
+  root.querySelectorAll('[data-issue-key]').forEach((button) => {
+    if (button.matches('[data-drag-handle]')) {
+      return;
+    }
+    button.addEventListener('click', () => {
+      const issueKey = button.dataset.issueKey;
+      if (issueKey === ui.selectedIssueKey) {
+        return;
+      }
+      ui.pinnedIssueScrollKey = null;
+      onNavigateToIssue?.(issueKey);
+    });
+  });
+}
+
+function remountIssueSidebar(host, root, ctx) {
+  const { issues, audit, ui, phaseFilter } = ctx;
+  host.innerHTML = renderIssueSidebar(issues, audit, ui, phaseFilter);
+  bindIssueSidebarList(root, ctx);
+}
+
 function bindIssueSidebarDnD(container, { issues, audit, phaseFilter, onReorder }) {
   if (!container) {
     return;
@@ -262,7 +320,7 @@ function bindIssueSidebarDnD(container, { issues, audit, phaseFilter, onReorder 
       targetPhaseId: dropTargetInfo.targetPhaseId,
       insertBeforeKey: dropTargetInfo.insertBeforeKey,
     });
-    onReorder(next);
+    onReorder(next, key);
   });
 }
 
@@ -386,7 +444,8 @@ export function renderIssuesView(
   onChange,
   galleryEvidence = [],
   onNavigateToEvidence,
-  onNavigateToIssue
+  onNavigateToIssue,
+  onAfterIssueListChange
 ) {
   const selected =
     issues.find((issue) => issue.key === ui.selectedIssueKey) || issues[0] || null;
@@ -413,7 +472,9 @@ export function renderIssuesView(
             )
           )
         )}
-        ${renderIssueSidebar(issues, audit, ui, phaseFilter)}
+        <div data-issue-sidebar-host>
+          ${renderIssueSidebar(issues, audit, ui, phaseFilter)}
+        </div>
       </aside>
       <div class="editor-detail" id="issue-detail">
         ${selected ? renderIssueForm(selected, audit, galleryEvidence) : '<p class="editor-lede">Add an issue to get started.</p>'}
@@ -422,39 +483,65 @@ export function renderIssuesView(
   `;
 
   const rerender = () => {
-    renderIssuesView(issues, audit, ui, root, onChange, galleryEvidence, onNavigateToEvidence, onNavigateToIssue);
+    renderIssuesView(
+      issues,
+      audit,
+      ui,
+      root,
+      onChange,
+      galleryEvidence,
+      onNavigateToEvidence,
+      onNavigateToIssue,
+      onAfterIssueListChange
+    );
   };
 
-  const onReorder = (nextIssues) => {
+  const sidebarHost = root.querySelector('[data-issue-sidebar-host]');
+  const sidebarCtx = {
+    issues,
+    audit,
+    ui,
+    phaseFilter,
+    onReorder: null,
+    onNavigateToIssue,
+  };
+
+  const onReorder = (nextIssues, droppedKey) => {
     replaceIssuesArray(issues, nextIssues);
+    if (droppedKey) {
+      ui.selectedIssueKey = droppedKey;
+      ui.pinnedIssueScrollKey = droppedKey;
+    }
+
+    if (sidebarHost) {
+      remountIssueSidebar(sidebarHost, root, { ...sidebarCtx, onReorder });
+      const selectedIssue = issues.find((issue) => issue.key === ui.selectedIssueKey);
+      if (selectedIssue) {
+        updateIssueFormHeading(root, selectedIssue);
+      }
+      onChange();
+      onAfterIssueListChange?.();
+      if (droppedKey) {
+        requestAnimationFrame(() => {
+          focusIssueInSidebar(root, droppedKey);
+        });
+      }
+      return;
+    }
+
     onChange();
     rerender();
   };
 
+  sidebarCtx.onReorder = onReorder;
+
   root.querySelector('[name="phase-filter"]')?.addEventListener('change', (event) => {
     ui.issuePhaseFilter = event.target.value;
+    ui.pinnedIssueScrollKey = null;
     rerender();
   });
 
-  bindIssueSidebarDnD(root.querySelector('[data-issue-sidebar]'), {
-    issues,
-    audit,
-    phaseFilter,
-    onReorder,
-  });
-
-  root.querySelectorAll('[data-issue-key]').forEach((button) => {
-    if (button.matches('[data-drag-handle]')) {
-      return;
-    }
-    button.addEventListener('click', () => {
-      const issueKey = button.dataset.issueKey;
-      if (issueKey === ui.selectedIssueKey) {
-        return;
-      }
-      onNavigateToIssue?.(issueKey);
-    });
-  });
+  bindIssueSidebarList(root, sidebarCtx);
 
   root.querySelector('[data-action="add-issue"]')?.addEventListener('click', () => {
     const phase = phaseFilter === 'all' ? 1 : Number(phaseFilter);
@@ -483,6 +570,13 @@ export function renderIssuesView(
   }
 
   bindIssueForm(selected, issues, audit, galleryEvidence, root, onChange, rerender, onNavigateToEvidence);
+
+  if (ui.pinnedIssueScrollKey) {
+    const scrollKey = ui.pinnedIssueScrollKey;
+    requestAnimationFrame(() => {
+      focusIssueInSidebar(root, scrollKey);
+    });
+  }
 }
 
 function renderIssueForm(issue, audit, galleryEvidence = []) {
@@ -1275,7 +1369,7 @@ export function applyActiveForm(state) {
   }
 }
 
-export function renderActiveView(state, root, onChange, onNavigateToIssue, onNavigateToEvidence) {
+export function renderActiveView(state, root, onChange, onNavigateToIssue, onNavigateToEvidence, onAfterIssueListChange) {
   if (state.activeTab === 'audit') {
     renderAuditView(state.data.audit, root, onChange);
     return;
@@ -1290,7 +1384,8 @@ export function renderActiveView(state, root, onChange, onNavigateToIssue, onNav
       onChange,
       state.data.evidence,
       onNavigateToEvidence,
-      onNavigateToIssue
+      onNavigateToIssue,
+      onAfterIssueListChange
     );
     return;
   }

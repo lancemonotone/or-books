@@ -49,6 +49,7 @@ const state = {
     selectedEvidenceIndex: 0,
     selectedDecisionId: null,
     issuePhaseFilter: 'all',
+    pinnedIssueScrollKey: null,
   },
 };
 
@@ -151,7 +152,7 @@ function updateIssueToolbarActions() {
 }
 
 function renderWorkspace() {
-  renderActiveView(state, workspace, onFormChange, navigateToIssue, navigateToEvidence);
+  renderActiveView(state, workspace, onFormChange, navigateToIssue, navigateToEvidence, updateIssueToolbarActions);
   updateTabs();
   updateIssueToolbarActions();
 }
@@ -257,6 +258,9 @@ async function navigateToIssue(issueKey) {
 
   applyActiveForm(state);
   state.activeTab = 'issues';
+  if (issueKey !== state.ui.selectedIssueKey) {
+    state.ui.pinnedIssueScrollKey = null;
+  }
   state.ui.selectedIssueKey = issueKey;
   syncEditorUrl({ push: true });
   renderWorkspace();
