@@ -10,8 +10,8 @@
   page: Homepage
   issues:
     - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
-    - d9a285fd-c112-4962-be45-5bbb594dc1d3
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
+    - d9a285fd-c112-4962-be45-5bbb594dc1d3
   url: https://orbooks.com/
 - file: 121002.png
   type: image
@@ -74,8 +74,9 @@
   type: image
   page: 'News article: Run Zohran Run'
   issues:
-    - 1c59053b-b5c4-4f94-8361-422f66dd6614
     - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
+    - 1c59053b-b5c4-4f94-8361-422f66dd6614
+  url: https://orbooks.com/news/the-inside-story-behind-new-yorks-first-democratic-socialist-mayor-run-zohran-run/
 - file: 123434.png
   type: image
   page: Global footer
@@ -207,8 +208,8 @@
   type: image
   page: Reading Lists module
   issues:
-    - 62f9d4cd-453f-472e-81f4-7b252f7577bd
     - ad45e92e-3cd0-41a4-a129-f80d2c2908bb
+  url: https://orbooks.com/
 - file: 161238.png
   type: image
   page: 'In the Media list: Read Now overlay'
@@ -218,6 +219,19 @@
   type: image
   page: Media single article
   issues:
-    - 1c59053b-b5c4-4f94-8361-422f66dd6614
     - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
     - b57d706d-de6d-46d7-8e3f-6452f175c362
+    - 1c59053b-b5c4-4f94-8361-422f66dd6614
+  url: https://orbooks.com/news/mamdani-5-months-later-meet-mayor-mamdani/
+- file: 164729.png
+  type: image
+  page: Reading Lists page
+  issues:
+    - 62f9d4cd-453f-472e-81f4-7b252f7577bd
+  url: https://orbooks.com/reading-lists/
+- file: 165045.png
+  type: image
+  page: Reading Lists module
+  issues:
+    - 62f9d4cd-453f-472e-81f4-7b252f7577bd
+  url: https://orbooks.com/

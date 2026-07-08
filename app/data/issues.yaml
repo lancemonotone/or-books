@@ -98,14 +98,14 @@
     - navigation
     - homepage
   problem: |
-    View All under Reading Lists goes to a page that shows the same icons already on the homepage. There is nothing new there.
+    View All under Reading Lists goes to a page that shows the same information already on the homepage. There is nothing new there.
   recommendation: |
     Add real content on that page (descriptions, filters, etc.) or remove the link and keep the module on the homepage only.
   acceptance:
     - View All page adds value beyond the homepage module, or route is removed
   evidence:
-    - file: 160840.png
-      caption: Reading Lists module
+    - file: 164729.png
+    - file: 165045.png
 - key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
   id: '1.6'
   sprint: 1
