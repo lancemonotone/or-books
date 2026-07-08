@@ -2,16 +2,16 @@
   type: image
   page: Menu overlay
   issues:
-    - 7952f11e-1b30-41a0-b128-5f54fdf49928
-    - 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
     - 02bb4d06-502d-44db-907c-062d48f5e58c
+    - 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
+    - 7952f11e-1b30-41a0-b128-5f54fdf49928
 - file: 120911.png
   type: image
   page: Homepage
   issues:
     - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
-    - d9a285fd-c112-4962-be45-5bbb594dc1d3
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
+    - d9a285fd-c112-4962-be45-5bbb594dc1d3
 - file: 121002.png
   type: image
   page: Homepage — author and news modules
@@ -57,33 +57,33 @@
   type: image
   page: Book detail — Run Zohran Run
   issues:
-    - d9a285fd-c112-4962-be45-5bbb594dc1d3
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
+    - d9a285fd-c112-4962-be45-5bbb594dc1d3
 - file: 123310.png
   type: image
   page: Book detail — purchase options
   issues:
+    - 016b1384-309d-48ba-a585-398783c97dd6
     - 5d04c117-9701-492c-beea-4056113fbdf2
     - ad45e92e-3cd0-41a4-a129-f80d2c2908bb
-    - 016b1384-309d-48ba-a585-398783c97dd6
 - file: 123327.png
   type: image
   page: News article — Run Zohran Run
   issues:
-    - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
     - 1c59053b-b5c4-4f94-8361-422f66dd6614
+    - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
 - file: 123434.png
   type: image
   page: Global footer
   issues:
-    - 8c2911bc-50d4-471b-8045-8fce90267a90
     - 535334f1-38be-42ea-9a71-735525922eeb
+    - 8c2911bc-50d4-471b-8045-8fce90267a90
 - file: 123519.png
   type: image
   page: Our Authors — filter and grid
   issues:
-    - 74c65dc5-7a86-4fe3-8327-cf3be9715f38
     - 016b1384-309d-48ba-a585-398783c97dd6
+    - 74c65dc5-7a86-4fe3-8327-cf3be9715f38
 - file: 123547.mp4
   type: video
   page: Screen recording (pending review)
@@ -158,8 +158,8 @@
   type: image
   page: Authors — Featured + directory
   issues:
-    - f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
+    - f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
 - file: 125642.png
   type: image
   page: Subsidiary Rights
@@ -208,7 +208,7 @@
   type: image
   page: Media single article
   issues:
-    - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
-    - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
-    - b57d706d-de6d-46d7-8e3f-6452f175c362
     - 1c59053b-b5c4-4f94-8361-422f66dd6614
+    - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
+    - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
+    - b57d706d-de6d-46d7-8e3f-6452f175c362

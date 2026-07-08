@@ -1,5 +1,5 @@
 - key: 280a567f-7694-47ee-8d72-402e68da199d
-  id: '1.2'
+  id: '1.1'
   sprint: 1
   title: Label or Replace the Subjects icons
   impact: critical
@@ -17,7 +17,7 @@
   evidence:
     - file: 121022.png
 - key: d64e9880-9bd4-4b26-850b-f04a0b9b341b
-  id: '1.3'
+  id: '1.2'
   sprint: 1
   title: Keep the header visible when searching
   impact: critical
@@ -40,7 +40,7 @@
     - file: 121904.png
       caption: Search, second screen, header gone
 - key: 11ab1e09-5807-4688-85ed-437200d2fcce
-  id: '1.4'
+  id: '1.3'
   sprint: 1
   title: Show email addresses the same way everywhere
   impact: high
@@ -68,7 +68,7 @@
     - file: 123949.png
       caption: Contact page
 - key: 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
-  id: '1.5'
+  id: '1.4'
   sprint: 1
   title: Fix text that looks like a link but is not
   impact: high
@@ -90,7 +90,7 @@
     - file: 161534.png
       caption: Article page, section title
 - key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
-  id: '1.6'
+  id: '1.5'
   sprint: 1
   title: Fix Reading Lists View All page
   impact: high
@@ -109,7 +109,7 @@
     - file: 160840.png
       caption: Reading Lists module
 - key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
-  id: '1.7'
+  id: '1.6'
   sprint: 1
   title: Add a way back from news articles
   impact: high
@@ -129,6 +129,24 @@
       caption: News article
     - file: 161534.png
       caption: Media article
+- key: f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
+  id: '1.7'
+  sprint: 1
+  title: Link to other pages mentioned in the FAQ
+  impact: high
+  effort: low
+  status: planned
+  tags:
+    - content
+    - faq
+  problem: |
+    The FAQ mentions other pages (for example the Booksellers page) as plain text. They are not links.
+  recommendation: |
+    Turn those references into normal links.
+  acceptance:
+    - Every in-copy page reference in FAQ is a tappable link
+  evidence:
+    - file: 125833.png
 - key: 1003b1bb-4460-4577-97e9-f737dfe9fead
   id: '1.8'
   sprint: 1
@@ -148,28 +166,7 @@
     - No intermediate overlay CTA blocking the card
   evidence:
     - file: 123119.mp4
-      caption: Screen recording
     - file: 161238.png
-      caption: Read Now overlay
-- key: f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
-  id: '1.9'
-  sprint: 1
-  title: Link to other pages mentioned in the FAQ
-  impact: high
-  effort: low
-  status: planned
-  tags:
-    - content
-    - faq
-  problem: |
-    The FAQ mentions other pages (for example the Booksellers page) as plain text. They are not links.
-  recommendation: |
-    Turn those references into normal links.
-  acceptance:
-    - Every in-copy page reference in FAQ is a tappable link
-  evidence:
-    - file: 125833.png
-      caption: FAQ page
 - key: d9a285fd-c112-4962-be45-5bbb594dc1d3
   id: '2.1'
   sprint: 2
@@ -187,9 +184,7 @@
     - Section heading vs book title distinguishable at a glance
   evidence:
     - file: 120911.png
-      caption: Homepage headings
     - file: 123249.png
-      caption: Large review quote
 - key: ad45e92e-3cd0-41a4-a129-f80d2c2908bb
   id: '2.2'
   sprint: 2
