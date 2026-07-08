@@ -18,6 +18,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -72,15 +76,32 @@ code {
 .editor-header__title {
   margin: 0;
   font-weight: 650;
+  margin-inline-end: auto;
 }
 
-.editor-header__link {
-  color: var(--color-accent);
+.editor-header__nav {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.editor-header__nav-link {
   text-decoration: none;
+  color: var(--color-muted);
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.92rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.editor-header__link:hover {
-  text-decoration: underline;
+.editor-header__nav-link:hover {
+  color: var(--color-text);
+  background: #ece8e2;
 }
 
 .editor-main {
@@ -187,13 +208,28 @@ code {
   border: 1px solid var(--color-border);
 }
 
-.editor-toolbar {
+.editor-toolbar-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: end;
+  gap: 1rem 1.25rem;
+  margin-block-end: 1rem;
+  position: relative;
+  z-index: 10;
+  background: var(--color-bg);
+}
+
+.editor-toolbar-wrap--media {
+  grid-template-columns: 1fr;
+  justify-items: end;
+}
+
+.editor-toolbar__issue-actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-block-end: 1rem;
+  align-items: center;
+  justify-content: end;
+  gap: 0.5rem;
 }
 
 .editor-toolbar__actions {
@@ -201,15 +237,18 @@ code {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .save-indicator {
-  min-inline-size: 4.75rem;
   min-block-size: 1.25rem;
   margin: 0;
   font-size: 0.85rem;
   color: var(--color-muted);
   text-align: end;
+  pointer-events: none;
+  justify-self: end;
 }
 
 .save-indicator__text {
@@ -807,6 +846,7 @@ code {
   @media (min-width: 768px) {
     position: sticky;
     top: 1rem;
+    z-index: 0;
   }
 
   & .media-chip--large {
@@ -1192,8 +1232,16 @@ code {
   }
 }
 
-@media (min-width: 768px) {
-  .editor-toolbar {
-    --gap: 1.25rem;
+@media (max-width: 767px) {
+  .editor-toolbar-wrap:not(.editor-toolbar-wrap--media) {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-toolbar__issue-actions {
+    justify-content: start;
+  }
+
+  .save-indicator {
+    justify-self: end;
   }
 }

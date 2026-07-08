@@ -13,7 +13,10 @@
   <header class="editor-header">
     <div class="editor-header__inner">
       <p class="editor-header__title">OR Books · Content editor</p>
-      <a class="editor-header__link" href="../">Open presentation</a>
+      <nav class="editor-header__nav" aria-label="Editor">
+        <a class="editor-header__nav-link" href="../">Open presentation</a>
+        <button type="button" class="editor-header__nav-link" id="logout-button" hidden>Sign out</button>
+      </nav>
     </div>
   </header>
 
@@ -42,16 +45,15 @@
         <button type="button" class="editor-tabs__btn" data-tab="decisions">Questions</button>
       </nav>
 
-      <div class="editor-toolbar">
-        <p class="editor-toolbar__hint">Changes save automatically. Use <strong>Reload</strong> after adding files to <code>media/</code> on the server.</p>
-        <div class="editor-toolbar__actions">
-          <p class="save-indicator" id="save-indicator" aria-live="polite">
-            <span class="save-indicator__text" id="save-indicator-text">&nbsp;</span>
-          </p>
+      <div class="editor-toolbar-wrap" id="editor-toolbar-wrap">
+        <p class="editor-toolbar__hint" id="issues-toolbar-hint">Changes save automatically. Use <strong>Reload</strong> after adding files to <code>media/</code> on the server.</p>
+        <p class="save-indicator" id="save-indicator" aria-live="polite">
+          <span class="save-indicator__text" id="save-indicator-text"></span>
+        </p>
+        <div class="editor-toolbar__issue-actions" id="issues-toolbar-actions">
           <a class="editor-button editor-button--ghost" id="view-issue-link" hidden href="#">View</a>
           <button type="button" class="editor-button editor-button--ghost" id="delete-issue-button" hidden>Delete issue</button>
           <button type="button" class="editor-button editor-button--ghost" id="reload-button">Reload</button>
-          <button type="button" class="editor-button editor-button--ghost" id="logout-button">Sign out</button>
         </div>
       </div>
 

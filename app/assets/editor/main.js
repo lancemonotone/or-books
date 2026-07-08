@@ -26,6 +26,9 @@ const reloadButton = document.getElementById('reload-button');
 const logoutButton = document.getElementById('logout-button');
 const viewIssueLink = document.getElementById('view-issue-link');
 const deleteIssueButton = document.getElementById('delete-issue-button');
+const issuesToolbarHint = document.getElementById('issues-toolbar-hint');
+const issuesToolbarActions = document.getElementById('issues-toolbar-actions');
+const editorToolbarWrap = document.getElementById('editor-toolbar-wrap');
 const saveHoneypot = document.getElementById('save-honeypot');
 const tabButtons = document.querySelectorAll('[data-tab]');
 
@@ -57,6 +60,9 @@ function showPanel(panel) {
   [loginPanel, workspacePanel, blockedPanel].forEach((node) => {
     node.hidden = node !== panel;
   });
+  if (logoutButton) {
+    logoutButton.hidden = panel !== workspacePanel;
+  }
 }
 
 function setStatus(node, message, isError = false) {
@@ -95,7 +101,7 @@ function setSaveIndicator(mode, detail = '') {
     return;
   }
 
-  saveIndicatorText.textContent = '\u00a0';
+  saveIndicatorText.textContent = '';
 }
 
 function markDirty(tab = state.activeTab) {
@@ -128,17 +134,30 @@ function onFormChange(...alsoDirty) {
   scheduleAutosave();
 }
 
+function presentationIssueUrl(issueKey) {
+  return new URL(`../index.html#/issue/${encodeURIComponent(issueKey)}`, window.location.href).href;
+}
+
 function updateIssueToolbarActions() {
-  const onIssuesTab = state.activeTab === 'issues';
+  const onMediaTab = state.activeTab === 'evidence';
   const issueKey = state.ui.selectedIssueKey;
   const issue = state.data.issues.find((item) => item.key === issueKey);
-  const hasIssue =
-    onIssuesTab && issueKey && issue;
+  const hasIssue = state.activeTab === 'issues' && issueKey && issue;
+
+  if (issuesToolbarHint) {
+    issuesToolbarHint.hidden = onMediaTab;
+  }
+
+  if (issuesToolbarActions) {
+    issuesToolbarActions.hidden = onMediaTab;
+  }
+
+  editorToolbarWrap?.classList.toggle('editor-toolbar-wrap--media', onMediaTab);
 
   if (viewIssueLink) {
     viewIssueLink.hidden = !hasIssue;
     if (hasIssue) {
-      viewIssueLink.href = `../#/issue/${encodeURIComponent(issueKey)}`;
+      viewIssueLink.href = presentationIssueUrl(issueKey);
       viewIssueLink.title = `View issue ${issue.id} on presentation`;
     } else {
       viewIssueLink.removeAttribute('href');
@@ -503,7 +522,7 @@ tabButtons.forEach((button) => {
   });
 });
 
-reloadButton.addEventListener('click', async () => {
+async function handleReload() {
   if (isDirty()) {
     const saved = await flushAutosave();
     if (!saved && isDirty() && !window.confirm('Could not save. Discard changes and reload?')) {
@@ -522,9 +541,9 @@ reloadButton.addEventListener('click', async () => {
   } catch (error) {
     setStatus(editorStatus, error.message, true);
   }
-});
+}
 
-deleteIssueButton?.addEventListener('click', async () => {
+async function handleDeleteIssue() {
   if (state.activeTab !== 'issues' || !state.ui.selectedIssueKey) {
     return;
   }
@@ -549,7 +568,41 @@ deleteIssueButton?.addEventListener('click', async () => {
   renderWorkspace();
   syncEditorUrl({ push: true });
   await flushAutosave();
-});
+}
+
+function bindEditorToolbar() {
+  const issueActions = document.querySelector('.editor-toolbar__issue-actions');
+  if (!issueActions || issueActions.dataset.bound) {
+    return;
+  }
+  issueActions.dataset.bound = '1';
+
+  issueActions.addEventListener('click', async (event) => {
+    const viewLink = event.target.closest('#view-issue-link');
+    if (viewLink?.href) {
+      event.preventDefault();
+      window.location.assign(viewLink.href);
+      return;
+    }
+
+    if (event.target.closest('#reload-button')) {
+      event.preventDefault();
+      await handleReload();
+      return;
+    }
+
+    if (event.target.closest('#delete-issue-button')) {
+      event.preventDefault();
+      await handleDeleteIssue();
+    }
+  });
+}
+
+bindEditorToolbar();
+
+reloadButton?.addEventListener('click', handleReload);
+
+deleteIssueButton?.addEventListener('click', handleDeleteIssue);
 
 logoutButton.addEventListener('click', async () => {
   if (isDirty()) {
