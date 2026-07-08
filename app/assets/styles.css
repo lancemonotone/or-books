@@ -835,10 +835,40 @@ th {
   padding: 0.25rem 0.5rem;
 }
 
+.lightbox__stage {
+  --nav-size: 2.5rem;
+
+  display: grid;
+  grid-template-columns: var(--nav-size) minmax(0, 1fr) var(--nav-size);
+  align-items: center;
+}
+
+.lightbox__nav {
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.25rem;
+  inline-size: var(--nav-size);
+  block-size: var(--nav-size);
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
 .lightbox__body {
   padding: 0.5rem;
   overflow: auto;
   max-height: calc(92vh - 6rem);
+  min-inline-size: 0;
 }
 
 .lightbox__footer {

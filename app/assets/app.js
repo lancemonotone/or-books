@@ -78,6 +78,13 @@ const lightbox = document.getElementById('lightbox');
 const lightboxTitle = document.getElementById('lightbox-title');
 const lightboxBody = document.getElementById('lightbox-body');
 const lightboxFooter = document.getElementById('lightbox-footer');
+const lightboxPrev = lightbox.querySelector('[data-lightbox-prev]');
+const lightboxNext = lightbox.querySelector('[data-lightbox-next]');
+
+const lightboxGallery = {
+  files: [],
+  index: -1,
+};
 
 function escapeHtml(value) {
   return String(value)
@@ -146,23 +153,37 @@ function renderEditLink({ tab, issue, file, label = 'Edit', className = '' }) {
   return `<a class="${escapeHtml(classes)}" href="${escapeHtml(href)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">${EDIT_ICON}</a>`;
 }
 
-function renderEvidenceThumb(file) {
+function evidenceGalleryAttr(files) {
+  if (!files || files.length <= 1) {
+    return '';
+  }
+  return ` data-evidence-gallery="${escapeHtml(files.join(','))}"`;
+}
+
+function issueEvidenceFiles(issue) {
+  return (issue.evidence || [])
+    .map((item) => item.file)
+    .filter((file) => evidenceByFile(file));
+}
+
+function renderEvidenceThumb(file, galleryFiles = null) {
   const row = evidenceByFile(file);
   if (!row) {
     return '';
   }
+  const galleryAttr = evidenceGalleryAttr(galleryFiles);
   const label = row.page || file;
   if (row.type === 'video') {
     const poster = row.poster ? mediaUrl(row.poster) : '';
     return `
-      <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}" title="${escapeHtml(label)}">
+      <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
         ${poster ? `<img src="${escapeHtml(poster)}" alt="" loading="lazy">` : '<span class="evidence-thumb__placeholder"></span>'}
         <span class="evidence-thumb__play" aria-hidden="true">▶</span>
         <span class="evidence-thumb__label">${escapeHtml(file.replace(/\.(png|mp4)$/, ''))}</span>
       </button>`;
   }
   return `
-    <button type="button" class="evidence-thumb" data-open-evidence="${escapeHtml(file)}" title="${escapeHtml(label)}">
+    <button type="button" class="evidence-thumb" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
       <img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(label)}" loading="lazy">
       <span class="evidence-thumb__label">${escapeHtml(file.replace('.png', ''))}</span>
     </button>`;
@@ -194,6 +215,9 @@ function renderIssueCard(issue) {
     : state.evidence
         .filter((row) => row.issues?.includes(issue.key))
         .map((row) => ({ file: row.file }));
+  const galleryFiles = evidenceItems
+    .map((item) => item.file)
+    .filter((file) => evidenceByFile(file));
 
   return `
     <article class="issue-card">
@@ -205,7 +229,7 @@ function renderIssueCard(issue) {
         ${renderMetaRow(issue)}
         <p class="issue-card__summary">${escapeHtml(issue.problem?.trim().split('\n')[0] || '')}</p>
       </a>
-      ${evidenceItems.length ? `<div class="issue-card__evidence">${evidenceItems.map((e) => renderEvidenceThumb(e.file)).join('')}</div>` : ''}
+      ${evidenceItems.length ? `<div class="issue-card__evidence">${evidenceItems.map((e) => renderEvidenceThumb(e.file, galleryFiles)).join('')}</div>` : ''}
     </article>`;
 }
 
@@ -337,6 +361,9 @@ function renderIssueDetail(issueKey) {
     return `<div class="page"><p>${escapeHtml(COPY.issueNotFound)}</p></div>`;
   }
 
+  const galleryFiles = issueEvidenceFiles(issue);
+  const galleryAttr = evidenceGalleryAttr(galleryFiles);
+
   const evidenceHtml = (issue.evidence || [])
     .map((item) => {
       const row = evidenceByFile(item.file);
@@ -363,7 +390,7 @@ function renderIssueDetail(issueKey) {
       return `
         <figure class="media-block">
           ${editLink}
-          <button type="button" class="media-block__image" data-open-evidence="${escapeHtml(item.file)}">
+          <button type="button" class="media-block__image" data-open-evidence="${escapeHtml(item.file)}"${galleryAttr}>
             <img src="${escapeHtml(mediaUrl(item.file))}" alt="${escapeHtml(alt)}" loading="lazy">
           </button>
           ${footerHtml}
@@ -590,10 +617,37 @@ function render() {
   });
 }
 
-function openLightbox(file) {
+function parseEvidenceGallery(button) {
+  const raw = button.dataset.evidenceGallery;
+  if (!raw) {
+    return null;
+  }
+  return raw
+    .split(',')
+    .map((file) => file.trim())
+    .filter((file) => evidenceByFile(file));
+}
+
+function resetLightboxGallery() {
+  lightboxGallery.files = [];
+  lightboxGallery.index = -1;
+}
+
+function updateLightboxNav() {
+  const hasGallery = lightboxGallery.files.length > 1;
+  lightboxPrev.hidden = !hasGallery;
+  lightboxNext.hidden = !hasGallery;
+  if (!hasGallery) {
+    return;
+  }
+  lightboxPrev.disabled = lightboxGallery.index <= 0;
+  lightboxNext.disabled = lightboxGallery.index >= lightboxGallery.files.length - 1;
+}
+
+function renderLightboxFile(file) {
   const row = evidenceByFile(file);
   if (!row) {
-    return;
+    return false;
   }
   lightboxTitle.textContent = row.page || file;
   if (row.type === 'video') {
@@ -601,13 +655,57 @@ function openLightbox(file) {
   } else {
     lightboxBody.innerHTML = `<img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(row.page || file)}">`;
   }
+  return true;
+}
+
+function openLightbox(file, galleryFiles = null) {
+  const files = galleryFiles && galleryFiles.length > 1 ? galleryFiles : null;
+  if (files) {
+    const index = files.indexOf(file);
+    if (index === -1) {
+      resetLightboxGallery();
+    } else {
+      lightboxGallery.files = files;
+      lightboxGallery.index = index;
+    }
+  } else {
+    resetLightboxGallery();
+  }
+  if (!renderLightboxFile(file)) {
+    resetLightboxGallery();
+    return;
+  }
   lightboxFooter.innerHTML = '';
+  updateLightboxNav();
   motion.openLightbox(lightbox);
+}
+
+function stepLightbox(delta) {
+  if (lightboxGallery.files.length <= 1) {
+    return;
+  }
+  const nextIndex = lightboxGallery.index + delta;
+  if (nextIndex < 0 || nextIndex >= lightboxGallery.files.length) {
+    return;
+  }
+  lightboxGallery.index = nextIndex;
+  renderLightboxFile(lightboxGallery.files[nextIndex]);
+  updateLightboxNav();
+}
+
+function closeLightbox() {
+  motion.closeLightbox(lightbox);
+  lightboxBody.innerHTML = '';
+  resetLightboxGallery();
+  updateLightboxNav();
 }
 
 function bindPageHandlers() {
   main.querySelectorAll('[data-open-evidence]').forEach((btn) => {
-    btn.addEventListener('click', () => openLightbox(btn.dataset.openEvidence));
+    btn.addEventListener('click', () => {
+      const gallery = parseEvidenceGallery(btn);
+      openLightbox(btn.dataset.openEvidence, gallery);
+    });
   });
 
   main.querySelectorAll('[data-comment-form]').forEach((form) => {
@@ -674,22 +772,35 @@ function bindPageHandlers() {
 }
 
 function bindGlobalHandlers() {
-  lightbox.querySelector('[data-lightbox-close]').addEventListener('click', () => {
-    motion.closeLightbox(lightbox);
-    lightboxBody.innerHTML = '';
-  });
+  lightbox.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
+
+  lightboxPrev.addEventListener('click', () => stepLightbox(-1));
+  lightboxNext.addEventListener('click', () => stepLightbox(1));
 
   lightbox.addEventListener('click', (event) => {
     if (event.target === lightbox) {
-      motion.closeLightbox(lightbox);
-      lightboxBody.innerHTML = '';
+      closeLightbox();
     }
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && lightbox.open) {
-      motion.closeLightbox(lightbox);
-      lightboxBody.innerHTML = '';
+    if (!lightbox.open) {
+      return;
+    }
+    if (event.key === 'Escape') {
+      closeLightbox();
+      return;
+    }
+    if (lightboxGallery.files.length <= 1) {
+      return;
+    }
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      stepLightbox(-1);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      stepLightbox(1);
     }
   });
 }

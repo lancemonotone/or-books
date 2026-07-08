@@ -31,7 +31,11 @@
       <span class="lightbox__title" id="lightbox-title"></span>
       <button type="button" class="lightbox__close" data-lightbox-close aria-label="Close">×</button>
     </div>
-    <div class="lightbox__body" id="lightbox-body"></div>
+    <div class="lightbox__stage">
+      <button type="button" class="lightbox__nav lightbox__nav--prev" data-lightbox-prev aria-label="Previous screenshot" hidden>‹</button>
+      <div class="lightbox__body" id="lightbox-body"></div>
+      <button type="button" class="lightbox__nav lightbox__nav--next" data-lightbox-next aria-label="Next screenshot" hidden>›</button>
+    </div>
     <div class="lightbox__footer" id="lightbox-footer"></div>
   </dialog>
 
