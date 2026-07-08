@@ -13,6 +13,7 @@
   --color-medium: #92680a;
   --color-low: #4b5563;
   --color-planned: #374151;
+  --color-in-progress: #1d4ed8;
   --color-blocked: #7c2d12;
   --color-complete: #047857;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -525,11 +526,27 @@ code {
   background: #ece8e2;
 }
 
+a.pill {
+  text-decoration: none;
+  transition: filter var(--transition-fast), box-shadow var(--transition-fast);
+
+  &:hover {
+    filter: brightness(0.97);
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 8%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
 .pill--critical { background: #fde8e8; color: var(--color-critical); }
 .pill--high { background: #ffedd5; color: var(--color-high); }
 .pill--medium { background: #fef3c7; color: var(--color-medium); }
 .pill--low { background: #e5e7eb; color: var(--color-low); }
 .pill--planned { background: #e5e7eb; color: var(--color-planned); }
+.pill--in_progress { background: #dbeafe; color: var(--color-in-progress); }
 .pill--blocked { background: #ffedd5; color: var(--color-blocked); }
 .pill--complete { background: #d1fae5; color: var(--color-complete); }
 

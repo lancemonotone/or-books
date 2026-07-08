@@ -51,6 +51,9 @@ const COPY = {
   loadError: 'Could not load review data',
   phaseNotFound: 'Phase not found.',
   issueNotFound: 'Issue not found.',
+  filterNotFound: 'No issues match this filter.',
+  urgencyFilterTitle: (label) => `Urgency: ${label}`,
+  statusFilterTitle: (label) => `Status: ${label}`,
 };
 
 const IMPACT_LABELS = {
@@ -62,6 +65,7 @@ const IMPACT_LABELS = {
 
 const STATUS_LABELS = {
   planned: 'Planned',
+  in_progress: 'In progress',
   blocked: 'Waiting on you',
   complete: 'Complete',
 };
@@ -123,6 +127,14 @@ function issuesForEvidence(file) {
 
 function sprintIssues(sprintId) {
   return state.issues.filter((item) => String(item.sprint) === String(sprintId));
+}
+
+function issuesByImpact(impact) {
+  return state.issues.filter((item) => item.impact === impact);
+}
+
+function issuesByStatus(status) {
+  return state.issues.filter((item) => item.status === status);
 }
 
 function getAuthor() {
@@ -207,8 +219,8 @@ function renderIssueChips(keys) {
 function renderMetaRow(issue) {
   return `
     <div class="meta-row">
-      <span class="pill pill--${escapeHtml(issue.impact)}">${escapeHtml(impactLabel(issue.impact))}</span>
-      <span class="pill pill--status pill--${escapeHtml(issue.status)}">${escapeHtml(statusLabel(issue.status))}</span>
+      <a class="pill pill--${escapeHtml(issue.impact)}" href="#/issues/impact/${escapeHtml(issue.impact)}">${escapeHtml(impactLabel(issue.impact))}</a>
+      <a class="pill pill--status pill--${escapeHtml(issue.status)}" href="#/issues/status/${escapeHtml(issue.status)}">${escapeHtml(statusLabel(issue.status))}</a>
     </div>`;
 }
 
@@ -349,6 +361,23 @@ function renderSprint(sprintId) {
         <p class="lede">${escapeHtml(sprint.description.trim())}</p>
       </header>
       <div class="issue-list">${issues.map(renderIssueCard).join('')}</div>
+    </div>`;
+}
+
+function renderFilteredIssues(kind, value) {
+  const issues = kind === 'impact' ? issuesByImpact(value) : issuesByStatus(value);
+  const label = kind === 'impact' ? impactLabel(value) : statusLabel(value);
+  const title =
+    kind === 'impact' ? COPY.urgencyFilterTitle(label) : COPY.statusFilterTitle(label);
+
+  return `
+    <div class="page">
+      <header class="page-header">
+        <p class="breadcrumb"><a href="#/sprints">${escapeHtml(COPY.phases)}</a></p>
+        <h1>${escapeHtml(title)}</h1>
+        <p class="lede">${issues.length} ${COPY.suggestions}</p>
+      </header>
+      <div class="issue-list">${issues.map(renderIssueCard).join('') || `<p>${escapeHtml(COPY.filterNotFound)}</p>`}</div>
     </div>`;
 }
 
@@ -607,6 +636,10 @@ function renderRoute() {
       return renderSprint(params.sprintId);
     case 'issue':
       return renderIssueDetail(params.issueKey);
+    case 'issues-by-impact':
+      return renderFilteredIssues('impact', params.impact);
+    case 'issues-by-status':
+      return renderFilteredIssues('status', params.status);
     case 'evidence':
       return renderEvidenceGallery();
     case 'evidence-item':

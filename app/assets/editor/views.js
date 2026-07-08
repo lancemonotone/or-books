@@ -443,6 +443,7 @@ function issueOptions(issues) {
 
 const ISSUE_STATUS_OPTIONS = [
   { value: "planned", label: "Planned" },
+  { value: "in_progress", label: "In progress" },
   { value: "blocked", label: "Waiting on you" },
   { value: "complete", label: "Complete" },
 ];
