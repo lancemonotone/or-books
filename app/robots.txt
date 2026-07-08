@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /edit/
+Disallow: /api/editor-auth.php
+Disallow: /api/editor-data.php
+Disallow: /api/editor-media.php

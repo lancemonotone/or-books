@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>OR Books — Content editor</title>
+  <link rel="stylesheet" href="../assets/editor.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="editor-header">
+    <div class="editor-header__inner">
+      <p class="editor-header__title">OR Books · Content editor</p>
+      <a class="editor-header__link" href="../">Open presentation</a>
+    </div>
+  </header>
+
+  <main id="main" class="editor-main">
+    <section class="editor-panel editor-panel--login" id="login-panel" hidden>
+      <h1>Sign in</h1>
+      <form class="editor-form" id="login-form">
+        <label class="editor-field">
+          <span class="editor-field__label">Password</span>
+          <input type="password" name="password" id="login-password" required autocomplete="current-password">
+        </label>
+        <label class="editor-honeypot" aria-hidden="true">
+          <span>Website</span>
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </label>
+        <button type="submit" class="editor-button">Sign in</button>
+        <p class="editor-status" id="login-status" role="status"></p>
+      </form>
+    </section>
+
+    <section class="editor-panel editor-panel--workspace" id="workspace-panel" hidden>
+      <nav class="editor-tabs" aria-label="Sections">
+        <button type="button" class="editor-tabs__btn is-active" data-tab="audit">Overview</button>
+        <button type="button" class="editor-tabs__btn" data-tab="issues">Issues</button>
+        <button type="button" class="editor-tabs__btn" data-tab="evidence">Media</button>
+        <button type="button" class="editor-tabs__btn" data-tab="decisions">Questions</button>
+      </nav>
+
+      <div class="editor-toolbar">
+        <p class="editor-toolbar__hint">Changes save automatically. Use <strong>Reload</strong> after adding files to <code>media/</code> on the server.</p>
+        <div class="editor-toolbar__actions">
+          <p class="save-indicator" id="save-indicator" aria-live="polite">
+            <span class="save-indicator__text" id="save-indicator-text">&nbsp;</span>
+          </p>
+          <button type="button" class="editor-button editor-button--ghost" id="reload-button">Reload</button>
+          <button type="button" class="editor-button editor-button--ghost" id="logout-button">Sign out</button>
+        </div>
+      </div>
+
+      <div id="workspace" class="editor-workspace"></div>
+
+      <label class="editor-honeypot" aria-hidden="true">
+        <span>Website</span>
+        <input type="text" id="save-honeypot" tabindex="-1" autocomplete="off">
+      </label>
+      <p class="editor-status" id="editor-status" role="status"></p>
+    </section>
+
+    <section class="editor-panel editor-panel--blocked" id="blocked-panel" hidden>
+      <h1>Editor not configured</h1>
+      <p class="editor-lede">
+        Copy <code>api/config.example.php</code> to <code>api/config.php</code> and set
+        <code>editor_password</code>. Saving requires PHP on the server.
+      </p>
+    </section>
+  </main>
+
+  <dialog class="media-picker" id="media-picker" aria-label="Choose media file">
+    <form method="dialog" class="media-picker__form">
+      <header class="media-picker__header">
+        <h2 class="media-picker__title">Choose file</h2>
+        <button type="button" class="media-picker__close" id="picker-close" aria-label="Close">×</button>
+      </header>
+      <label class="editor-field">
+        <span class="editor-field__label">Filter</span>
+        <input type="search" id="picker-search" class="editor-input" placeholder="Filename…" autocomplete="off">
+      </label>
+      <div class="media-picker__grid" id="picker-grid"></div>
+      <footer class="media-picker__footer">
+        <button type="submit" class="editor-button editor-button--ghost" value="cancel">Cancel</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="issue-composer" id="issue-composer" aria-label="Add issue">
+    <form id="issue-composer-form" class="issue-composer__form">
+      <header class="issue-composer__header">
+        <h2 class="issue-composer__title">Add issue</h2>
+        <button type="button" class="issue-composer__close" id="issue-composer-close" aria-label="Close">×</button>
+      </header>
+      <div class="issue-composer__body">
+        <div class="issue-composer__preview" id="issue-composer-preview" aria-hidden="true"></div>
+        <div class="issue-composer__fields">
+          <div class="issue-composer__linked" id="issue-composer-linked"></div>
+          <label class="editor-field">
+            <span class="editor-field__label">Phase</span>
+            <select class="editor-select" name="sprint"></select>
+          </label>
+          <label class="editor-field">
+            <span class="editor-field__label">Title</span>
+            <input class="editor-input" type="text" name="title" required maxlength="200" autocomplete="off">
+          </label>
+          <label class="editor-field">
+            <span class="editor-field__label">Urgency</span>
+            <select class="editor-select" name="impact">
+              <option value="critical">Most urgent</option>
+              <option value="high">Important</option>
+              <option value="medium" selected>Moderate</option>
+              <option value="low">Minor</option>
+            </select>
+          </label>
+          <label class="editor-field">
+            <span class="editor-field__label">What we found</span>
+            <textarea class="editor-textarea editor-textarea--prose" name="problem" rows="4"></textarea>
+          </label>
+          <label class="editor-field">
+            <span class="editor-field__label">What we suggest</span>
+            <textarea class="editor-textarea editor-textarea--prose" name="recommendation" rows="4"></textarea>
+          </label>
+          <p class="editor-status" id="issue-composer-status" role="status"></p>
+        </div>
+      </div>
+      <footer class="issue-composer__footer">
+        <button type="button" class="editor-button editor-button--ghost" data-action="cancel">Cancel</button>
+        <button type="submit" class="editor-button">Create issue</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="../assets/vendor/js-yaml.min.js"></script>
+  <script type="module" src="../assets/editor/main.js"></script>
+</body>
+</html>

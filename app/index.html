@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OR Books — Mobile Review</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%238b1e1e'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-family='system-ui' font-size='14' font-weight='bold'%3EOR%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" data-view-transition="header">
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="#/" data-nav>OR Books · Mobile Review</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#/" data-nav>Overview</a>
+        <a href="#/sprints" data-nav>Phases</a>
+        <a href="#/evidence" data-nav>Screenshots</a>
+        <a href="#/decisions" data-nav>Questions</a>
+        <a href="#/responses" data-nav data-presenter>Summary</a>
+        <a href="edit/">Editor</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="site-main" data-view-transition="main" tabindex="-1"></main>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Screenshot viewer">
+    <div class="lightbox__toolbar">
+      <span class="lightbox__title" id="lightbox-title"></span>
+      <button type="button" class="lightbox__close" data-lightbox-close aria-label="Close">×</button>
+    </div>
+    <div class="lightbox__body" id="lightbox-body"></div>
+    <div class="lightbox__footer" id="lightbox-footer"></div>
+  </dialog>
+
+  <template id="tpl-save-status">
+    <p class="save-status" role="status"></p>
+  </template>
+
+  <script src="assets/vendor/js-yaml.min.js"></script>
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>

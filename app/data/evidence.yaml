@@ -1,0 +1,215 @@
+- file: 120802.png
+  type: image
+  page: Menu overlay
+  issues:
+    - '2.5'
+    - '2.7'
+    - '2.8'
+- file: 120911.png
+  type: image
+  page: Homepage
+  issues:
+    - '1.5'
+    - '2.1'
+    - '2.9'
+- file: 121002.png
+  type: image
+  page: Homepage — author and news modules
+  issues: []
+- file: 121022.png
+  type: image
+  page: Subjects page
+  issues:
+    - '1.2'
+- file: 121855.png
+  type: image
+  page: Search entry
+  issues:
+    - '1.3'
+- file: 121904.png
+  type: image
+  page: Search active
+  issues:
+    - '1.3'
+- file: 122948.mp4
+  type: video
+  page: Screen recording (pending review)
+  reviewed: false
+  issues: []
+- file: 123119.mp4
+  type: video
+  page: In the Media — Read Now overlay
+  poster: 161238.png
+  reviewed: true
+  issues:
+    - '1.8'
+- file: 123202.png
+  type: image
+  page: Author — In the Media (squished images)
+  issues:
+    - '2.10'
+- file: 123215.png
+  type: image
+  page: Author — In the Media
+  issues:
+    - '2.10'
+- file: 123249.png
+  type: image
+  page: Book detail — Run Zohran Run
+  issues:
+    - '1.1'
+    - '2.1'
+    - '2.3'
+- file: 123310.png
+  type: image
+  page: Book detail — purchase options
+  issues:
+    - '2.12'
+    - '2.2'
+    - '3.2'
+- file: 123327.png
+  type: image
+  page: News article — Run Zohran Run
+  issues:
+    - '1.7'
+    - '2.11'
+- file: 123434.png
+  type: image
+  page: Global footer
+  issues:
+    - '3.3'
+    - '3.4'
+- file: 123519.png
+  type: image
+  page: Our Authors — filter and grid
+  issues:
+    - '2.4'
+    - '3.2'
+- file: 123547.mp4
+  type: video
+  page: Screen recording (pending review)
+  reviewed: false
+  issues: []
+- file: 123704.png
+  type: image
+  page: Our Authors — grid scroll
+  issues:
+    - '2.4'
+- file: 123739.png
+  type: image
+  page: Catalog list + Featured Title
+  issues:
+    - '2.12'
+    - '2.3'
+- file: 123809.png
+  type: image
+  page: Featured Title — Red Card
+  issues:
+    - '2.12'
+- file: 123828.png
+  type: image
+  page: About
+  issues:
+    - '2.6'
+- file: 123850.png
+  type: image
+  page: About — video slider
+  issues:
+    - '2.9'
+- file: 123929.mp4
+  type: video
+  page: Screen recording (pending review)
+  reviewed: false
+  issues: []
+- file: 123949.png
+  type: image
+  page: Contact Us
+  issues:
+    - '1.4'
+- file: 124005.png
+  type: image
+  page: Contact form + footer
+  issues:
+    - '3.3'
+- file: 125307.png
+  type: image
+  page: Booksellers — mixed email formats
+  issues:
+    - '1.4'
+    - '2.15'
+- file: 125329.png
+  type: image
+  page: In Bookstores
+  issues: []
+- file: 125454.png
+  type: image
+  page: Rights Enquiries
+  issues:
+    - '1.4'
+- file: 125507.png
+  type: image
+  page: Rights Catalogs — Lorem Ipsum
+  issues: []
+- file: 125535.png
+  type: image
+  page: Mailchimp bookseller signup
+  issues:
+    - '2.15'
+- file: 125607.png
+  type: image
+  page: Authors — Featured + directory
+  issues:
+    - '2.14'
+    - '2.9'
+- file: 125642.png
+  type: image
+  page: Subsidiary Rights
+  issues:
+    - '2.6'
+- file: 125703.png
+  type: image
+  page: Privacy notice TOC
+  issues: []
+- file: 125733.png
+  type: image
+  page: Privacy CCPA table
+  issues:
+    - '2.13'
+- file: 125756.png
+  type: image
+  page: Privacy Policy & Guidelines
+  issues: []
+- file: 125811.png
+  type: image
+  page: Terms & Conditions
+  issues:
+    - '1.4'
+- file: 125833.png
+  type: image
+  page: FAQ
+  issues:
+    - '1.9'
+- file: 130006.png
+  type: image
+  page: Shipping / orders info
+  issues:
+    - '1.4'
+- file: 160840.png
+  type: image
+  page: Reading Lists module
+  issues:
+    - '1.6'
+    - '2.2'
+- file: 161238.png
+  type: image
+  page: In the Media list — Read Now overlay
+  issues:
+    - '1.8'
+- file: 161534.png
+  type: image
+  page: Media single article
+  issues:
+    - '1.5'
+    - '1.7'
+    - '2.10'
+    - '2.11'

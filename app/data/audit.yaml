@@ -1,0 +1,26 @@
+title: OR Books Mobile Review
+slug: mobile-review
+updated: '2026-07-07'
+summary: |
+  We reviewed orbooks.com on a phone and wrote up what we found. Each issue below has the screenshots and recordings that go with it. Please read through, leave comments where you like, and answer the few questions at the end so we know how to proceed.
+stats:
+  screenshots: 36
+  recordings: 4
+  issues: 28
+  decisions: 4
+sprints:
+  - id: 1
+    title: Urgent fixes
+    subtitle: Do these first
+    description: |
+      Layout, search, links that do not work, pages with no way back, and taps that take an extra step. These get in the way of reading and buying on a phone.
+  - id: 2
+    title: Visual consistency
+    subtitle: Next pass
+    description: |
+      Headings, buttons, sliders, images, and page sections should look like they belong to the same site. Several pages mix styles right now.
+  - id: 3
+    title: Small refinements
+    subtitle: When time allows
+    description: |
+      Icon details, easier-to-tap controls, footer alignment, and other polish items.

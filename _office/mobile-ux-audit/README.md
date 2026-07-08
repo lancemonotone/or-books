@@ -2,6 +2,8 @@
 
 Working area for screenshot-driven discovery, notes, and implementation planning. Source evidence lives in [`../screenshots/`](../screenshots/); this folder holds analysis, inventory, and the plan of attack.
 
+**Client presentation app:** [`../../app/`](../../app/) — interactive deck at `orbooks.com/audit/` when deployed.
+
 ## Status
 
 | Phase | Screenshots | Discovery doc | Status |
@@ -28,7 +30,7 @@ mobile-ux-audit/
 │   ├── screenshots.md          ← master list
 │   └── filename-convention.md  ← {HHMMSS} naming for client sharing
 ├── plan/
-│   └── roadmap.md              ← prioritized sprint tasks
+│   └── roadmap.md              ← prioritized phase tasks
 └── notes/                    ← scratch, meeting notes, open questions
 ```
 

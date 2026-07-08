@@ -1,0 +1,6 @@
+# Audit presentation — large media (link via app/scripts/link-media.* or copy on deploy)
+app/media/*
+!app/media/.gitkeep
+
+# Optional local API config
+app/api/config.php
