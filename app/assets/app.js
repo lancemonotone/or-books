@@ -1,73 +1,80 @@
-import { loadContent, loadResponses, saveComment, saveDecision, mediaUrl } from './api.js';
-import { parseRoute, onRouteChange } from './router.js';
-import { motion } from './motion.js';
+import {
+  loadContent,
+  loadResponses,
+  saveComment,
+  saveDecision,
+  mediaUrl,
+} from "./api.js";
+import { parseRoute, onRouteChange } from "./router.js";
+import { motion } from "./motion.js";
 
-const AUTHOR_KEY = 'or-audit-author';
+const AUTHOR_KEY = "or-audit-author";
 
 const COPY = {
-  brand: 'OR Books · Mobile Review',
-  overview: 'Overview',
-  phases: 'Phases',
-  phase: 'Phase',
-  screenshots: 'Screenshots',
-  yourInput: 'Your input',
-  summary: 'Summary',
-  viewAll: 'View all',
-  suggestions: 'suggested changes',
-  decisionsNeeded: 'Questions for you',
+  brand: "OR Books",
+  overview: "Overview",
+  phases: "Phases",
+  phase: "Phase",
+  screenshots: "Screenshots",
+  yourInput: "Your input",
+  summary: "Summary",
+  viewAll: "View all",
+  suggestions: "suggested changes",
+  decisionsNeeded: "Questions for you",
   decisionsLead: (n) =>
     `${n} questions need answers before related work can continue.`,
-  reviewDecisions: 'Answer the questions',
-  allPhases: 'All phases',
-  openAllPhases: 'Open all',
-  closeAllPhases: 'Close all',
-  openPhase: 'Open phase',
-  whatWeFound: 'Issue Found',
-  whatWeSuggest: 'Suggested Fix',
-  screenshotsHeading: 'Screenshots',
-  screenshotsGallery: 'Screenshots and videos',
-  screenshotsLead: 'Screenshots and recordings, linked to the issues below.',
-  yourFeedback: 'Your feedback',
-  yourName: 'Your name',
-  doYouAgree: 'Do you agree?',
-  agree: 'Yes',
-  disagree: 'No',
-  discuss: 'Not sure yet',
-  commentsOptional: 'Comments (optional)',
-  saveFeedback: 'Save',
-  saveDecision: 'Save answer',
-  commentOptional: 'Comment (optional)',
-  decisionsPageTitle: 'Questions for you',
-  decisionsPageLead: 'Your answers determine how the marked items are handled.',
-  ourSuggestion: 'Suggested approach',
-  summaryTitle: 'Summary of replies',
-  summaryLead: 'Everything saved so far. You will also see your own answers on each form.',
-  noScreenshotsLinked: 'No screenshots linked yet.',
-  noIssuesLinked: 'No issues linked',
-  lastSaved: 'Saved',
-  youChose: 'You chose',
-  noDecisionsYet: 'No answers saved yet.',
-  noFeedbackYet: 'No feedback saved yet.',
-  loadError: 'Could not load review data',
-  phaseNotFound: 'Phase not found.',
-  issueNotFound: 'Issue not found.',
-  filterNotFound: 'No issues match this filter.',
+  reviewDecisions: "Answer the questions",
+  allPhases: "All phases",
+  openAllPhases: "Open all",
+  closeAllPhases: "Close all",
+  openPhase: "Open phase",
+  whatWeFound: "Issue Found",
+  whatWeSuggest: "Suggested Fix",
+  screenshotsHeading: "Screenshots",
+  screenshotsGallery: "Screenshots and videos",
+  screenshotsLead: "Screenshots and recordings, linked to the issues below.",
+  yourFeedback: "Your feedback",
+  yourName: "Your name",
+  doYouAgree: "Do you agree?",
+  agree: "Yes",
+  disagree: "No",
+  discuss: "Not sure yet",
+  commentsOptional: "Comments (optional)",
+  saveFeedback: "Save",
+  saveDecision: "Save answer",
+  commentOptional: "Comment (optional)",
+  decisionsPageTitle: "Questions for you",
+  decisionsPageLead: "Your answers determine how the marked items are handled.",
+  ourSuggestion: "Suggested approach",
+  summaryTitle: "Summary of replies",
+  summaryLead:
+    "Everything saved so far. You will also see your own answers on each form.",
+  noScreenshotsLinked: "No screenshots linked yet.",
+  noIssuesLinked: "No issues linked",
+  lastSaved: "Saved",
+  youChose: "You chose",
+  noDecisionsYet: "No answers saved yet.",
+  noFeedbackYet: "No feedback saved yet.",
+  loadError: "Could not load review data",
+  phaseNotFound: "Phase not found.",
+  issueNotFound: "Issue not found.",
+  filterNotFound: "No issues match this filter.",
   urgencyFilterTitle: (label) => `Urgency: ${label}`,
   statusFilterTitle: (label) => `Status: ${label}`,
 };
 
 const IMPACT_LABELS = {
-  critical: 'Most urgent',
-  high: 'Important',
-  medium: 'Moderate',
-  low: 'Minor',
+  critical: "Most urgent",
+  high: "Important",
+  medium: "Moderate",
+  low: "Minor",
 };
 
 const STATUS_LABELS = {
-  planned: 'Planned',
-  in_progress: 'In progress',
-  blocked: 'Waiting on you',
-  complete: 'Complete',
+  planned: "Planned",
+  in_progress: "In progress",
+  blocked: "Waiting on you",
+  complete: "Complete",
 };
 
 const state = {
@@ -79,14 +86,14 @@ const state = {
   route: parseRoute(),
 };
 
-const main = document.getElementById('main');
-const lightbox = document.getElementById('lightbox');
-const lightboxTitle = document.getElementById('lightbox-title');
-const lightboxBody = document.getElementById('lightbox-body');
-const lightboxFooter = document.getElementById('lightbox-footer');
-const lightboxPrev = lightbox.querySelector('[data-lightbox-prev]');
-const lightboxNext = lightbox.querySelector('[data-lightbox-next]');
-const lightboxStage = lightbox.querySelector('.lightbox__stage');
+const main = document.getElementById("main");
+const lightbox = document.getElementById("lightbox");
+const lightboxTitle = document.getElementById("lightbox-title");
+const lightboxBody = document.getElementById("lightbox-body");
+const lightboxFooter = document.getElementById("lightbox-footer");
+const lightboxPrev = lightbox.querySelector("[data-lightbox-prev]");
+const lightboxNext = lightbox.querySelector("[data-lightbox-next]");
+const lightboxStage = lightbox.querySelector(".lightbox__stage");
 
 const lightboxGallery = {
   files: [],
@@ -95,10 +102,10 @@ const lightboxGallery = {
 
 function escapeHtml(value) {
   return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;');
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
 
 function impactLabel(impact) {
@@ -126,7 +133,9 @@ function issuesForEvidence(file) {
 }
 
 function sprintIssues(sprintId) {
-  return state.issues.filter((item) => String(item.sprint) === String(sprintId));
+  return state.issues.filter(
+    (item) => String(item.sprint) === String(sprintId),
+  );
 }
 
 function issuesByImpact(impact) {
@@ -138,7 +147,7 @@ function issuesByStatus(status) {
 }
 
 function getAuthor() {
-  return localStorage.getItem(AUTHOR_KEY) || '';
+  return localStorage.getItem(AUTHOR_KEY) || "";
 }
 
 function setAuthor(name) {
@@ -150,29 +159,29 @@ const EDIT_ICON = `<svg class="edit-link__icon" width="16" height="16" viewBox="
 function editorUrl({ tab, issue, file } = {}) {
   const params = new URLSearchParams();
   if (tab) {
-    params.set('tab', tab);
+    params.set("tab", tab);
   }
   if (issue) {
-    params.set('issue', issue);
+    params.set("issue", issue);
   }
   if (file) {
-    params.set('file', file);
+    params.set("file", file);
   }
   const query = params.toString();
-  return query ? `edit/?${query}` : 'edit/';
+  return query ? `edit/?${query}` : "edit/";
 }
 
-function renderEditLink({ tab, issue, file, label = 'Edit', className = '' }) {
+function renderEditLink({ tab, issue, file, label = "Edit", className = "" }) {
   const href = editorUrl({ tab, issue, file });
-  const classes = ['edit-link', className].filter(Boolean).join(' ');
+  const classes = ["edit-link", className].filter(Boolean).join(" ");
   return `<a class="${escapeHtml(classes)}" href="${escapeHtml(href)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">${EDIT_ICON}</a>`;
 }
 
 function evidenceGalleryAttr(files) {
   if (!files || files.length <= 1) {
-    return '';
+    return "";
   }
-  return ` data-evidence-gallery="${escapeHtml(files.join(','))}"`;
+  return ` data-evidence-gallery="${escapeHtml(files.join(","))}"`;
 }
 
 function issueEvidenceFiles(issue) {
@@ -184,23 +193,23 @@ function issueEvidenceFiles(issue) {
 function renderEvidenceThumb(file, galleryFiles = null) {
   const row = evidenceByFile(file);
   if (!row) {
-    return '';
+    return "";
   }
   const galleryAttr = evidenceGalleryAttr(galleryFiles);
   const label = row.page || file;
-  if (row.type === 'video') {
-    const poster = row.poster ? mediaUrl(row.poster) : '';
+  if (row.type === "video") {
+    const poster = row.poster ? mediaUrl(row.poster) : "";
     return `
       <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
         ${poster ? `<img src="${escapeHtml(poster)}" alt="" loading="lazy">` : '<span class="evidence-thumb__placeholder"></span>'}
         <span class="evidence-thumb__play" aria-hidden="true">▶</span>
-        <span class="evidence-thumb__label">${escapeHtml(file.replace(/\.(png|mp4)$/, ''))}</span>
+        <span class="evidence-thumb__label">${escapeHtml(file.replace(/\.(png|mp4)$/, ""))}</span>
       </button>`;
   }
   return `
     <button type="button" class="evidence-thumb" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
       <img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(label)}" loading="lazy">
-      <span class="evidence-thumb__label">${escapeHtml(file.replace('.png', ''))}</span>
+      <span class="evidence-thumb__label">${escapeHtml(file.replace(".png", ""))}</span>
     </button>`;
 }
 
@@ -209,11 +218,11 @@ function renderIssueChips(keys) {
     .map((key) => {
       const issue = issueByKey(key);
       if (!issue) {
-        return '';
+        return "";
       }
       return `<a class="chip chip--issue" href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a>`;
     })
-    .join('');
+    .join("");
 }
 
 function renderMetaRow(issue) {
@@ -234,27 +243,33 @@ function renderIssueCard(issue) {
     .map((item) => item.file)
     .filter((file) => evidenceByFile(file));
 
+  const issueHref = `#/issue/${escapeHtml(issue.key)}`;
+
   return `
     <article class="issue-card">
-      <a class="issue-card__link" href="#/issue/${escapeHtml(issue.key)}">
-        <div class="issue-card__head">
-          <span class="issue-card__id">${escapeHtml(issue.id)}</span>
-          <h2 class="issue-card__title">${escapeHtml(issue.title)}</h2>
-        </div>
+      <div class="issue-card__content">
+        <a class="issue-card__link" href="${issueHref}">
+          <div class="issue-card__head">
+            <span class="issue-card__id">${escapeHtml(issue.id)}</span>
+            <h2 class="issue-card__title">${escapeHtml(issue.title)}</h2>
+          </div>
+        </a>
         ${renderMetaRow(issue)}
-        <p class="issue-card__summary">${escapeHtml(issue.problem?.trim().split('\n')[0] || '')}</p>
-      </a>
-      ${evidenceItems.length ? `<div class="issue-card__evidence">${evidenceItems.map((e) => renderEvidenceThumb(e.file, galleryFiles)).join('')}</div>` : ''}
+        <a class="issue-card__link issue-card__link--summary" href="${issueHref}">
+          <p class="issue-card__summary">${escapeHtml(issue.problem?.trim().split("\n")[0] || "")}</p>
+        </a>
+      </div>
+      ${evidenceItems.length ? `<div class="issue-card__evidence">${evidenceItems.map((e) => renderEvidenceThumb(e.file, galleryFiles)).join("")}</div>` : ""}
     </article>`;
 }
 
 function overviewStats() {
   return {
     screenshots: state.evidence.filter(
-      (row) => row.type !== 'video' && !String(row.file || '').endsWith('.mp4')
+      (row) => row.type !== "video" && !String(row.file || "").endsWith(".mp4"),
     ).length,
     recordings: state.evidence.filter(
-      (row) => row.type === 'video' || String(row.file || '').endsWith('.mp4')
+      (row) => row.type === "video" || String(row.file || "").endsWith(".mp4"),
     ).length,
     issues: state.issues.length,
     decisions: state.decisions.length,
@@ -273,7 +288,7 @@ function renderOverview() {
           <p class="sprint-card__desc">${escapeHtml(sprint.description.trim())}</p>
         </a>`;
     })
-    .join('');
+    .join("");
 
   const stats = overviewStats();
   const pendingDecisions = stats.decisions;
@@ -324,11 +339,11 @@ function renderSprintsIndex() {
               <p class="phases-accordion__lede">${escapeHtml(sprint.description.trim())}</p>
               <a href="#/sprint/${sprint.id}">${escapeHtml(COPY.openPhase)}</a>
             </div>
-            <div class="issue-list">${issues.map(renderIssueCard).join('')}</div>
+            <div class="issue-list">${issues.map(renderIssueCard).join("")}</div>
           </div>
         </details>`;
     })
-    .join('');
+    .join("");
 
   return `
     <div class="page page--phases">
@@ -347,7 +362,9 @@ function renderSprintsIndex() {
 }
 
 function renderSprint(sprintId) {
-  const sprint = state.audit.sprints.find((s) => String(s.id) === String(sprintId));
+  const sprint = state.audit.sprints.find(
+    (s) => String(s.id) === String(sprintId),
+  );
   const issues = sprintIssues(sprintId);
   if (!sprint) {
     return `<div class="page"><p>${escapeHtml(COPY.phaseNotFound)}</p></div>`;
@@ -360,15 +377,18 @@ function renderSprint(sprintId) {
         <h1>${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</h1>
         <p class="lede">${escapeHtml(sprint.description.trim())}</p>
       </header>
-      <div class="issue-list">${issues.map(renderIssueCard).join('')}</div>
+      <div class="issue-list">${issues.map(renderIssueCard).join("")}</div>
     </div>`;
 }
 
 function renderFilteredIssues(kind, value) {
-  const issues = kind === 'impact' ? issuesByImpact(value) : issuesByStatus(value);
-  const label = kind === 'impact' ? impactLabel(value) : statusLabel(value);
+  const issues =
+    kind === "impact" ? issuesByImpact(value) : issuesByStatus(value);
+  const label = kind === "impact" ? impactLabel(value) : statusLabel(value);
   const title =
-    kind === 'impact' ? COPY.urgencyFilterTitle(label) : COPY.statusFilterTitle(label);
+    kind === "impact"
+      ? COPY.urgencyFilterTitle(label)
+      : COPY.statusFilterTitle(label);
 
   return `
     <div class="page">
@@ -377,7 +397,7 @@ function renderFilteredIssues(kind, value) {
         <h1>${escapeHtml(title)}</h1>
         <p class="lede">${issues.length} ${COPY.suggestions}</p>
       </header>
-      <div class="issue-list">${issues.map(renderIssueCard).join('') || `<p>${escapeHtml(COPY.filterNotFound)}</p>`}</div>
+      <div class="issue-list">${issues.map(renderIssueCard).join("") || `<p>${escapeHtml(COPY.filterNotFound)}</p>`}</div>
     </div>`;
 }
 
@@ -393,13 +413,13 @@ function renderCommentForm(issue) {
         </label>
         <fieldset class="stance-fieldset">
           <legend>${escapeHtml(COPY.doYouAgree)}</legend>
-          <label><input type="radio" name="stance" value="agree" ${saved?.stance === 'agree' ? 'checked' : ''} required> ${escapeHtml(COPY.agree)}</label>
-          <label><input type="radio" name="stance" value="disagree" ${saved?.stance === 'disagree' ? 'checked' : ''}> ${escapeHtml(COPY.disagree)}</label>
-          <label><input type="radio" name="stance" value="discuss" ${saved?.stance === 'discuss' ? 'checked' : ''}> ${escapeHtml(COPY.discuss)}</label>
+          <label><input type="radio" name="stance" value="agree" ${saved?.stance === "agree" ? "checked" : ""} required> ${escapeHtml(COPY.agree)}</label>
+          <label><input type="radio" name="stance" value="disagree" ${saved?.stance === "disagree" ? "checked" : ""}> ${escapeHtml(COPY.disagree)}</label>
+          <label><input type="radio" name="stance" value="discuss" ${saved?.stance === "discuss" ? "checked" : ""}> ${escapeHtml(COPY.discuss)}</label>
         </fieldset>
         <label class="field">
           <span class="field__label">${escapeHtml(COPY.commentsOptional)}</span>
-          <textarea name="text" rows="3" maxlength="2000">${escapeHtml(saved?.text || '')}</textarea>
+          <textarea name="text" rows="3" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
         </label>
         <button type="submit" class="button">${escapeHtml(COPY.saveFeedback)}</button>
         ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.lastSaved)} ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
@@ -420,22 +440,26 @@ function renderIssueDetail(issueKey) {
     .map((item) => {
       const row = evidenceByFile(item.file);
       const alt = issue.title || item.file;
-      const issueKeys = row?.issues?.length ? row.issues : issuesForEvidence(item.file).map((linked) => linked.key);
+      const issueKeys = row?.issues?.length
+        ? row.issues
+        : issuesForEvidence(item.file).map((linked) => linked.key);
       const chipsHtml = issueKeys.length
         ? `<div class="chip-row media-block__chips">${renderIssueChips(issueKeys)}</div>`
-        : '';
-      const footerHtml = chipsHtml ? `<figcaption>${chipsHtml}</figcaption>` : '';
+        : "";
+      const footerHtml = chipsHtml
+        ? `<figcaption>${chipsHtml}</figcaption>`
+        : "";
       const editLink = renderEditLink({
-        tab: 'evidence',
+        tab: "evidence",
         file: item.file,
         label: `Edit screenshot ${item.file}`,
-        className: 'edit-link--overlay',
+        className: "edit-link--overlay",
       });
-      if (row?.type === 'video') {
+      if (row?.type === "video") {
         return `
           <figure class="media-block">
             ${editLink}
-            <video controls preload="metadata" ${row.poster ? `poster="${escapeHtml(mediaUrl(row.poster))}"` : ''} src="${escapeHtml(mediaUrl(item.file))}"></video>
+            <video controls preload="metadata" ${row.poster ? `poster="${escapeHtml(mediaUrl(row.poster))}"` : ""} src="${escapeHtml(mediaUrl(item.file))}"></video>
             ${footerHtml}
           </figure>`;
       }
@@ -448,7 +472,7 @@ function renderIssueDetail(issueKey) {
           ${footerHtml}
         </figure>`;
     })
-    .join('');
+    .join("");
 
   return `
     <div class="page page--split">
@@ -457,15 +481,15 @@ function renderIssueDetail(issueKey) {
           <p class="breadcrumb"><a href="#/sprint/${issue.sprint}">${escapeHtml(COPY.phase)} ${issue.sprint}</a> / ${escapeHtml(issue.id)}</p>
           <div class="page-header__row">
             <h1>${escapeHtml(issue.title)}</h1>
-            ${renderEditLink({ tab: 'issues', issue: issue.key, label: `Edit issue ${issue.id}` })}
+            ${renderEditLink({ tab: "issues", issue: issue.key, label: `Edit issue ${issue.id}` })}
           </div>
           ${renderMetaRow(issue)}
         </header>
         <section class="prose">
           <h2>${escapeHtml(COPY.whatWeFound)}</h2>
-          <p>${escapeHtml(issue.problem?.trim() || '')}</p>
+          <p>${escapeHtml(issue.problem?.trim() || "")}</p>
           <h2>${escapeHtml(COPY.whatWeSuggest)}</h2>
-          <p>${escapeHtml(issue.recommendation?.trim() || '')}</p>
+          <p>${escapeHtml(issue.recommendation?.trim() || "")}</p>
         </section>
         ${renderCommentForm(issue)}
       </div>
@@ -486,7 +510,7 @@ function renderEvidenceGallery(filterFile = null) {
       const chips = renderIssueChips(row.issues || []);
       const thumb = renderEvidenceThumb(row.file);
       const editLink = renderEditLink({
-        tab: 'evidence',
+        tab: "evidence",
         file: row.file,
         label: `Edit screenshot ${row.file}`,
       });
@@ -502,15 +526,15 @@ function renderEvidenceGallery(filterFile = null) {
           </div>
         </article>`;
     })
-    .join('');
+    .join("");
 
   const headerEdit = filterFile
     ? renderEditLink({
-        tab: 'evidence',
+        tab: "evidence",
         file: filterFile,
         label: `Edit screenshot ${filterFile}`,
       })
-    : '';
+    : "";
 
   return `
     <div class="page">
@@ -529,18 +553,20 @@ function renderDecisionCard(decision) {
   const saved = state.responses.decisions[decision.id];
   const options = decision.options
     .map((opt) => {
-      const thumbs = (opt.evidence || []).map((e) => renderEvidenceThumb(e.file)).join('');
+      const thumbs = (opt.evidence || [])
+        .map((e) => renderEvidenceThumb(e.file))
+        .join("");
       return `
         <label class="decision-option">
-          <input type="radio" name="choice-${escapeHtml(decision.id)}" value="${escapeHtml(opt.value)}" ${saved?.choice === opt.value ? 'checked' : ''}>
+          <input type="radio" name="choice-${escapeHtml(decision.id)}" value="${escapeHtml(opt.value)}" ${saved?.choice === opt.value ? "checked" : ""}>
           <div class="decision-option__body">
             <strong>${escapeHtml(opt.label)}</strong>
-            ${opt.description ? `<p>${escapeHtml(opt.description)}</p>` : ''}
-            ${thumbs ? `<div class="decision-option__evidence">${thumbs}</div>` : ''}
+            ${opt.description ? `<p>${escapeHtml(opt.description)}</p>` : ""}
+            ${thumbs ? `<div class="decision-option__evidence">${thumbs}</div>` : ""}
           </div>
         </label>`;
     })
-    .join('');
+    .join("");
 
   return `
     <article class="decision-card" id="decision-${escapeHtml(decision.id)}">
@@ -548,7 +574,7 @@ function renderDecisionCard(decision) {
         <h2>${escapeHtml(decision.title)}</h2>
       </header>
       <p>${escapeHtml(decision.question)}</p>
-      ${decision.recommendation ? `<p class="decision-card__rec"><strong>${escapeHtml(COPY.ourSuggestion)}:</strong> ${escapeHtml(decision.recommendation.trim())}</p>` : ''}
+      ${decision.recommendation ? `<p class="decision-card__rec"><strong>${escapeHtml(COPY.ourSuggestion)}:</strong> ${escapeHtml(decision.recommendation.trim())}</p>` : ""}
       <form class="decision-form" data-decision-form="${escapeHtml(decision.id)}">
         <fieldset>
           <legend class="visually-hidden">${escapeHtml(decision.question)}</legend>
@@ -560,7 +586,7 @@ function renderDecisionCard(decision) {
         </label>
         <label class="field">
           <span class="field__label">${escapeHtml(COPY.commentOptional)}</span>
-          <textarea name="text" rows="2" maxlength="2000">${escapeHtml(saved?.text || '')}</textarea>
+          <textarea name="text" rows="2" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
         </label>
         <button type="submit" class="button">${escapeHtml(COPY.saveDecision)}</button>
         ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.youChose)} <strong>${escapeHtml(saved.choice)}</strong>, ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
@@ -575,7 +601,7 @@ function renderDecisions() {
         <h1>${escapeHtml(COPY.decisionsPageTitle)}</h1>
         <p class="lede">${escapeHtml(COPY.decisionsPageLead)}</p>
       </header>
-      <div class="decision-list">${state.decisions.map(renderDecisionCard).join('')}</div>
+      <div class="decision-list">${state.decisions.map(renderDecisionCard).join("")}</div>
     </div>`;
 }
 
@@ -583,20 +609,24 @@ function renderResponses() {
   const decisionRows = Object.entries(state.responses.decisions)
     .map(([id, row]) => {
       const decision = state.decisions.find((d) => d.id === id);
-      return `<tr><td>${escapeHtml(decision?.title || id)}</td><td><strong>${escapeHtml(row.choice)}</strong></td><td>${escapeHtml(row.author || '')}</td><td>${escapeHtml(row.text || '')}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      return `<tr><td>${escapeHtml(decision?.title || id)}</td><td><strong>${escapeHtml(row.choice)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
     })
-    .join('');
+    .join("");
 
-  const STANCE_LABELS = { agree: 'Yes', disagree: 'No', discuss: 'Not sure yet' };
+  const STANCE_LABELS = {
+    agree: "Yes",
+    disagree: "No",
+    discuss: "Not sure yet",
+  };
 
   const commentRows = Object.entries(state.responses.comments)
     .map(([key, row]) => {
       const issue = issueByKey(key);
       const stance = STANCE_LABELS[row.stance] || row.stance;
       const label = issue ? `${issue.id}: ${issue.title}` : key;
-      return `<tr><td>${escapeHtml(label)}</td><td>${escapeHtml(stance)}</td><td>${escapeHtml(row.text || '')}</td><td>${escapeHtml(row.author || '')}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      return `<tr><td>${escapeHtml(label)}</td><td>${escapeHtml(stance)}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
     })
-    .join('');
+    .join("");
 
   return `
     <div class="page">
@@ -628,25 +658,25 @@ function renderResponses() {
 function renderRoute() {
   const { name, params } = state.route;
   switch (name) {
-    case 'overview':
+    case "overview":
       return renderOverview();
-    case 'sprints':
+    case "sprints":
       return renderSprintsIndex();
-    case 'sprint':
+    case "sprint":
       return renderSprint(params.sprintId);
-    case 'issue':
+    case "issue":
       return renderIssueDetail(params.issueKey);
-    case 'issues-by-impact':
-      return renderFilteredIssues('impact', params.impact);
-    case 'issues-by-status':
-      return renderFilteredIssues('status', params.status);
-    case 'evidence':
+    case "issues-by-impact":
+      return renderFilteredIssues("impact", params.impact);
+    case "issues-by-status":
+      return renderFilteredIssues("status", params.status);
+    case "evidence":
       return renderEvidenceGallery();
-    case 'evidence-item':
+    case "evidence-item":
       return renderEvidenceGallery(params.file);
-    case 'decisions':
+    case "decisions":
       return renderDecisions();
-    case 'responses':
+    case "responses":
       return renderResponses();
     default:
       return renderOverview();
@@ -655,13 +685,13 @@ function renderRoute() {
 
 function updateActiveNav() {
   const path = state.route.path;
-  document.querySelectorAll('[data-nav]').forEach((link) => {
-    const href = link.getAttribute('href')?.replace('#', '') || '/';
+  document.querySelectorAll("[data-nav]").forEach((link) => {
+    const href = link.getAttribute("href")?.replace("#", "") || "/";
     const active =
       href === path ||
-      (href === '/' && (path === '/' || path === '/overview')) ||
-      (href !== '/' && path.startsWith(href));
-    link.classList.toggle('is-active', active);
+      (href === "/" && (path === "/" || path === "/overview")) ||
+      (href !== "/" && path.startsWith(href));
+    link.classList.toggle("is-active", active);
   });
 }
 
@@ -679,7 +709,7 @@ function parseEvidenceGallery(button) {
     return null;
   }
   return raw
-    .split(',')
+    .split(",")
     .map((file) => file.trim())
     .filter((file) => evidenceByFile(file));
 }
@@ -691,14 +721,15 @@ function resetLightboxGallery() {
 
 function updateLightboxNav() {
   const hasGallery = lightboxGallery.files.length > 1;
-  lightboxStage.classList.toggle('is-gallery', hasGallery);
+  lightboxStage.classList.toggle("is-gallery", hasGallery);
   lightboxPrev.hidden = !hasGallery;
   lightboxNext.hidden = !hasGallery;
   if (!hasGallery) {
     return;
   }
   lightboxPrev.disabled = lightboxGallery.index <= 0;
-  lightboxNext.disabled = lightboxGallery.index >= lightboxGallery.files.length - 1;
+  lightboxNext.disabled =
+    lightboxGallery.index >= lightboxGallery.files.length - 1;
 }
 
 function renderLightboxFile(file) {
@@ -707,8 +738,8 @@ function renderLightboxFile(file) {
     return false;
   }
   lightboxTitle.textContent = row.page || file;
-  if (row.type === 'video') {
-    lightboxBody.innerHTML = `<video controls autoplay src="${escapeHtml(mediaUrl(file))}" ${row.poster ? `poster="${escapeHtml(mediaUrl(row.poster))}"` : ''}></video>`;
+  if (row.type === "video") {
+    lightboxBody.innerHTML = `<video controls autoplay src="${escapeHtml(mediaUrl(file))}" ${row.poster ? `poster="${escapeHtml(mediaUrl(row.poster))}"` : ""}></video>`;
   } else {
     lightboxBody.innerHTML = `<img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(row.page || file)}">`;
   }
@@ -732,7 +763,7 @@ function openLightbox(file, galleryFiles = null) {
     resetLightboxGallery();
     return;
   }
-  lightboxFooter.innerHTML = '';
+  lightboxFooter.innerHTML = "";
   updateLightboxNav();
   motion.openLightbox(lightbox);
 }
@@ -752,67 +783,67 @@ function stepLightbox(delta) {
 
 function closeLightbox() {
   motion.closeLightbox(lightbox);
-  lightboxBody.innerHTML = '';
+  lightboxBody.innerHTML = "";
   resetLightboxGallery();
   updateLightboxNav();
 }
 
 function bindPageHandlers() {
-  main.querySelectorAll('[data-open-evidence]').forEach((btn) => {
-    btn.addEventListener('click', () => {
+  main.querySelectorAll("[data-open-evidence]").forEach((btn) => {
+    btn.addEventListener("click", () => {
       const gallery = parseEvidenceGallery(btn);
       openLightbox(btn.dataset.openEvidence, gallery);
     });
   });
 
-  main.querySelectorAll('[data-comment-form]').forEach((form) => {
-    form.addEventListener('submit', async (event) => {
+  main.querySelectorAll("[data-comment-form]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const issueId = form.dataset.commentForm;
       const data = new FormData(form);
-      const author = String(data.get('author') || '');
+      const author = String(data.get("author") || "");
       setAuthor(author);
       const button = form.querySelector('button[type="submit"]');
-      const status = form.querySelector('.save-status');
+      const status = form.querySelector(".save-status");
       try {
         button.disabled = true;
         const result = await saveComment(issueId, {
-          stance: data.get('stance'),
-          text: data.get('text'),
+          stance: data.get("stance"),
+          text: data.get("text"),
           author,
         });
         state.responses.comments[issueId] = result;
         status.textContent = `${COPY.lastSaved} ${new Date(result.updatedAt).toLocaleString()}`;
-        status.classList.add('is-visible');
+        status.classList.add("is-visible");
         motion.pulseSaved(button);
       } catch (error) {
         status.textContent = error.message;
-        status.classList.add('is-visible', 'is-error');
+        status.classList.add("is-visible", "is-error");
       } finally {
         button.disabled = false;
       }
     });
   });
 
-  const phasesOpenAll = main.querySelector('[data-phases-open-all]');
-  const phasesCloseAll = main.querySelector('[data-phases-close-all]');
+  const phasesOpenAll = main.querySelector("[data-phases-open-all]");
+  const phasesCloseAll = main.querySelector("[data-phases-close-all]");
   if (phasesOpenAll) {
-    phasesOpenAll.addEventListener('click', () => {
-      main.querySelectorAll('[data-phase-accordion]').forEach((item) => {
+    phasesOpenAll.addEventListener("click", () => {
+      main.querySelectorAll("[data-phase-accordion]").forEach((item) => {
         item.open = true;
       });
     });
   }
   if (phasesCloseAll) {
-    phasesCloseAll.addEventListener('click', () => {
-      main.querySelectorAll('[data-phase-accordion]').forEach((item) => {
+    phasesCloseAll.addEventListener("click", () => {
+      main.querySelectorAll("[data-phase-accordion]").forEach((item) => {
         item.open = false;
       });
     });
   }
 
-  main.querySelectorAll('[data-decision-form]').forEach((form) => {
-    form.addEventListener('submit', async (event) => {
+  main.querySelectorAll("[data-decision-form]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const decisionId = form.dataset.decisionForm;
       const data = new FormData(form);
@@ -820,24 +851,24 @@ function bindPageHandlers() {
       if (!choice) {
         return;
       }
-      const author = String(data.get('author') || '');
+      const author = String(data.get("author") || "");
       setAuthor(author);
       const button = form.querySelector('button[type="submit"]');
-      const status = form.querySelector('.save-status');
+      const status = form.querySelector(".save-status");
       try {
         button.disabled = true;
         const result = await saveDecision(decisionId, {
           choice,
-          text: data.get('text'),
+          text: data.get("text"),
           author,
         });
         state.responses.decisions[decisionId] = result;
         status.innerHTML = `${escapeHtml(COPY.youChose)} <strong>${escapeHtml(result.choice)}</strong>, ${escapeHtml(new Date(result.updatedAt).toLocaleString())}`;
-        status.classList.add('is-visible');
+        status.classList.add("is-visible");
         motion.pulseSaved(button);
       } catch (error) {
         status.textContent = error.message;
-        status.classList.add('is-visible', 'is-error');
+        status.classList.add("is-visible", "is-error");
       } finally {
         button.disabled = false;
       }
@@ -846,33 +877,35 @@ function bindPageHandlers() {
 }
 
 function bindGlobalHandlers() {
-  lightbox.querySelector('[data-lightbox-close]').addEventListener('click', closeLightbox);
+  lightbox
+    .querySelector("[data-lightbox-close]")
+    .addEventListener("click", closeLightbox);
 
-  lightboxPrev.addEventListener('click', () => stepLightbox(-1));
-  lightboxNext.addEventListener('click', () => stepLightbox(1));
+  lightboxPrev.addEventListener("click", () => stepLightbox(-1));
+  lightboxNext.addEventListener("click", () => stepLightbox(1));
 
-  lightbox.addEventListener('click', (event) => {
+  lightbox.addEventListener("click", (event) => {
     if (event.target === lightbox) {
       closeLightbox();
     }
   });
 
-  document.addEventListener('keydown', (event) => {
+  document.addEventListener("keydown", (event) => {
     if (!lightbox.open) {
       return;
     }
-    if (event.key === 'Escape') {
+    if (event.key === "Escape") {
       closeLightbox();
       return;
     }
     if (lightboxGallery.files.length <= 1) {
       return;
     }
-    if (event.key === 'ArrowLeft') {
+    if (event.key === "ArrowLeft") {
       event.preventDefault();
       stepLightbox(-1);
     }
-    if (event.key === 'ArrowRight') {
+    if (event.key === "ArrowRight") {
       event.preventDefault();
       stepLightbox(1);
     }
@@ -898,7 +931,7 @@ async function init() {
   onRouteChange(() => {
     state.route = parseRoute();
     render();
-    if (typeof main.focus === 'function') {
+    if (typeof main.focus === "function") {
       try {
         main.focus({ preventScroll: true, focusVisible: false });
       } catch {

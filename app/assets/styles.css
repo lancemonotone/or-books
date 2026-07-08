@@ -463,11 +463,22 @@ code {
   overflow: hidden;
 }
 
+.issue-card__content {
+  padding: 1rem 1.25rem;
+}
+
 .issue-card__link {
   display: block;
-  padding: 1rem 1.25rem;
   text-decoration: none;
   color: inherit;
+}
+
+.issue-card__link--summary {
+  margin-block-start: 0.5rem;
+}
+
+.issue-card__content .meta-row {
+  margin-block: 0.5rem;
 }
 
 .issue-card__head {
@@ -488,7 +499,7 @@ code {
 }
 
 .issue-card__summary {
-  margin: 0.5rem 0 0;
+  margin: 0;
   color: var(--color-muted);
   font-size: 0.95rem;
 }
@@ -496,7 +507,7 @@ code {
 .issue-card__evidence {
   display: flex;
   gap: 0.5rem;
-  padding: 0 1rem 1rem;
+  padding: 0 1.25rem 1.25rem;
   overflow-x: auto;
 }
 
