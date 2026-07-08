@@ -1,4 +1,11 @@
-import { inferMediaType, mediaUrl, newIssueKey, suggestIssueId } from './api.js';
+import {
+  appendIssueToPhase,
+  inferMediaType,
+  mediaUrl,
+  moveIssueToPhaseEnd,
+  newIssueKey,
+  reorderIssuesFromDrop,
+} from './api.js';
 import { openIssueComposer } from './issue-composer.js';
 import { openMediaFilePicker, renderMediaChip } from './picker.js';
 
@@ -61,6 +68,7 @@ function phaseTitle(audit, phaseId) {
 }
 
 function groupIssuesByPhase(issues, audit) {
+  const sprintOrder = (audit?.sprints || []).map((sprint) => String(sprint.id));
   const groups = new Map();
 
   for (const issue of issues || []) {
@@ -76,7 +84,6 @@ function groupIssuesByPhase(issues, audit) {
     groups.get(key).issues.push(issue);
   }
 
-  const sprintOrder = (audit?.sprints || []).map((sprint) => String(sprint.id));
   return [...groups.values()].sort((a, b) => {
     const indexA = sprintOrder.indexOf(String(a.id));
     const indexB = sprintOrder.indexOf(String(b.id));
@@ -90,6 +97,172 @@ function groupIssuesByPhase(issues, audit) {
       return -1;
     }
     return indexA - indexB;
+  });
+}
+
+function renderIssueListItem(issue, ui) {
+  return `
+    <li class="editor-list__item" data-issue-item data-issue-key="${escapeAttr(issue.key)}">
+      <button type="button" class="editor-list__drag" data-drag-handle draggable="true" aria-label="Drag to reorder">⠿</button>
+      <button type="button" class="editor-list__btn ${issue.key === ui.selectedIssueKey ? 'is-active' : ''}" data-issue-key="${escapeAttr(issue.key)}">
+        <span class="editor-list__id">${escapeHtml(issue.id)}</span>
+        <span class="editor-list__title">${escapeHtml(issue.title || 'Untitled')}</span>
+      </button>
+    </li>`;
+}
+
+function renderIssueSidebar(issues, audit, ui, phaseFilter) {
+  const filtered = issues.filter((issue) => {
+    if (phaseFilter === 'all') {
+      return true;
+    }
+    return String(issue.sprint) === String(phaseFilter);
+  });
+
+  if (phaseFilter === 'all') {
+    const groups = groupIssuesByPhase(filtered, audit);
+    return `
+      <div class="editor-issue-groups" data-issue-sidebar>
+        ${groups
+          .map(
+            (group) => `
+          <section class="editor-issue-group">
+            <h3 class="editor-issue-group__title">${escapeHtml(group.title)}</h3>
+            <ul class="editor-list editor-list--nested" data-phase-drop-zone="${escapeAttr(String(group.id))}">
+              ${group.issues.map((issue) => renderIssueListItem(issue, ui)).join('')}
+            </ul>
+          </section>`
+          )
+          .join('')}
+      </div>`;
+  }
+
+  return `
+    <ul
+      class="editor-list editor-list--nested"
+      data-issue-sidebar
+      data-single-phase="${escapeAttr(String(phaseFilter))}"
+      data-phase-drop-zone="${escapeAttr(String(phaseFilter))}"
+    >
+      ${filtered.map((issue) => renderIssueListItem(issue, ui)).join('')}
+    </ul>`;
+}
+
+function replaceIssuesArray(issues, nextIssues) {
+  issues.splice(0, issues.length, ...nextIssues);
+}
+
+function bindIssueSidebarDnD(container, { issues, audit, phaseFilter, onReorder }) {
+  if (!container) {
+    return;
+  }
+
+  const allowCrossPhase = phaseFilter === 'all';
+  let draggedKey = null;
+
+  const clearDropState = () => {
+    container.querySelectorAll('.is-dragging, .is-drop-before, .is-drop-after').forEach((node) => {
+      node.classList.remove('is-dragging', 'is-drop-before', 'is-drop-after');
+    });
+  };
+
+  const resolveDropTarget = (target) => {
+    const item = target.closest('[data-issue-item]');
+    if (item) {
+      const zone = item.closest('[data-phase-drop-zone]');
+      const phaseId = allowCrossPhase
+        ? Number(zone?.dataset.phaseDropZone)
+        : Number(container.dataset.singlePhase);
+      return {
+        targetPhaseId: phaseId,
+        insertBeforeKey: item.dataset.issueKey,
+      };
+    }
+
+    const zone = target.closest('[data-phase-drop-zone]');
+    if (zone) {
+      return {
+        targetPhaseId: Number(zone.dataset.phaseDropZone),
+        insertBeforeKey: null,
+      };
+    }
+
+    return null;
+  };
+
+  container.querySelectorAll('[data-drag-handle]').forEach((handle) => {
+    handle.addEventListener('dragstart', (event) => {
+      const item = handle.closest('[data-issue-item]');
+      draggedKey = item?.dataset.issueKey || null;
+      if (!draggedKey) {
+        return;
+      }
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', draggedKey);
+      item?.classList.add('is-dragging');
+    });
+
+    handle.addEventListener('dragend', () => {
+      draggedKey = null;
+      clearDropState();
+    });
+  });
+
+  container.addEventListener('dragover', (event) => {
+    if (!draggedKey) {
+      return;
+    }
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    clearDropState();
+    const item = event.target.closest('[data-issue-item]');
+    if (item && item.dataset.issueKey !== draggedKey) {
+      item.classList.add('is-drop-before');
+      return;
+    }
+    const zone = event.target.closest('[data-phase-drop-zone]');
+    if (zone) {
+      zone.classList.add('is-drop-after');
+    }
+  });
+
+  container.addEventListener('dragleave', (event) => {
+    const left = event.target.closest('[data-issue-item], [data-phase-drop-zone]');
+    if (left && !left.contains(event.relatedTarget)) {
+      left.classList.remove('is-drop-before', 'is-drop-after');
+    }
+  });
+
+  container.addEventListener('drop', (event) => {
+    event.preventDefault();
+    clearDropState();
+    const key = event.dataTransfer.getData('text/plain') || draggedKey;
+    if (!key) {
+      return;
+    }
+
+    const dropTargetInfo = resolveDropTarget(event.target);
+    if (!dropTargetInfo || !Number.isFinite(dropTargetInfo.targetPhaseId)) {
+      return;
+    }
+
+    if (dropTargetInfo.insertBeforeKey === key) {
+      return;
+    }
+
+    if (!allowCrossPhase) {
+      const dragged = issues.find((issue) => issue.key === key);
+      if (!dragged || Number(dragged.sprint) !== dropTargetInfo.targetPhaseId) {
+        return;
+      }
+    }
+
+    const next = reorderIssuesFromDrop(issues, audit, {
+      draggedKey: key,
+      targetPhaseId: dropTargetInfo.targetPhaseId,
+      insertBeforeKey: dropTargetInfo.insertBeforeKey,
+    });
+    onReorder(next);
   });
 }
 
@@ -222,12 +395,6 @@ export function renderIssuesView(
   }
 
   const phaseFilter = ui.issuePhaseFilter || 'all';
-  const filtered = issues.filter((issue) => {
-    if (phaseFilter === 'all') {
-      return true;
-    }
-    return String(issue.sprint) === String(phaseFilter);
-  });
 
   root.innerHTML = `
     <div class="editor-split">
@@ -246,19 +413,7 @@ export function renderIssuesView(
             )
           )
         )}
-        <ul class="editor-list">
-          ${filtered
-            .map(
-              (issue) => `
-            <li>
-              <button type="button" class="editor-list__btn ${issue.key === ui.selectedIssueKey ? 'is-active' : ''}" data-issue-key="${escapeAttr(issue.key)}">
-                <span class="editor-list__id">${escapeHtml(issue.id)}</span>
-                <span class="editor-list__title">${escapeHtml(issue.title || 'Untitled')}</span>
-              </button>
-            </li>`
-            )
-            .join('')}
-        </ul>
+        ${renderIssueSidebar(issues, audit, ui, phaseFilter)}
       </aside>
       <div class="editor-detail" id="issue-detail">
         ${selected ? renderIssueForm(selected, audit, galleryEvidence) : '<p class="editor-lede">Add an issue to get started.</p>'}
@@ -266,12 +421,32 @@ export function renderIssuesView(
     </div>
   `;
 
+  const rerender = () => {
+    renderIssuesView(issues, audit, ui, root, onChange, galleryEvidence, onNavigateToEvidence, onNavigateToIssue);
+  };
+
+  const onReorder = (nextIssues) => {
+    replaceIssuesArray(issues, nextIssues);
+    onChange();
+    rerender();
+  };
+
   root.querySelector('[name="phase-filter"]')?.addEventListener('change', (event) => {
     ui.issuePhaseFilter = event.target.value;
-    renderIssuesView(issues, audit, ui, root, onChange, galleryEvidence, onNavigateToEvidence, onNavigateToIssue);
+    rerender();
+  });
+
+  bindIssueSidebarDnD(root.querySelector('[data-issue-sidebar]'), {
+    issues,
+    audit,
+    phaseFilter,
+    onReorder,
   });
 
   root.querySelectorAll('[data-issue-key]').forEach((button) => {
+    if (button.matches('[data-drag-handle]')) {
+      return;
+    }
     button.addEventListener('click', () => {
       const issueKey = button.dataset.issueKey;
       if (issueKey === ui.selectedIssueKey) {
@@ -283,10 +458,9 @@ export function renderIssuesView(
 
   root.querySelector('[data-action="add-issue"]')?.addEventListener('click', () => {
     const phase = phaseFilter === 'all' ? 1 : Number(phaseFilter);
-    const id = suggestIssueId(phase, issues);
     const issue = {
       key: newIssueKey(),
-      id,
+      id: '0.0',
       sprint: phase,
       title: 'New issue',
       impact: 'medium',
@@ -298,7 +472,8 @@ export function renderIssuesView(
       acceptance: [],
       evidence: [],
     };
-    issues.push(issue);
+    const ordered = appendIssueToPhase(issues, audit, issue);
+    replaceIssuesArray(issues, ordered);
     onChange();
     onNavigateToIssue?.(issue.key);
   });
@@ -307,9 +482,7 @@ export function renderIssuesView(
     return;
   }
 
-  bindIssueForm(selected, issues, galleryEvidence, root, onChange, () => {
-    renderIssuesView(issues, audit, ui, root, onChange, galleryEvidence, onNavigateToEvidence, onNavigateToIssue);
-  }, onNavigateToEvidence);
+  bindIssueForm(selected, issues, audit, galleryEvidence, root, onChange, rerender, onNavigateToEvidence);
 }
 
 function renderIssueForm(issue, audit, galleryEvidence = []) {
@@ -401,7 +574,7 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
   `;
 }
 
-function bindIssueForm(issue, issues, galleryEvidence, root, onChange, rerender, onNavigateToEvidence) {
+function bindIssueForm(issue, issues, audit, galleryEvidence, root, onChange, rerender, onNavigateToEvidence) {
   const detail = root.querySelector('#issue-detail');
   if (!detail) {
     return;
@@ -413,6 +586,17 @@ function bindIssueForm(issue, issues, galleryEvidence, root, onChange, rerender,
       onChange();
     });
     el.addEventListener('change', () => {
+      if (el.name === 'sprint') {
+        const previousPhase = issue.sprint;
+        applyIssueForm(issue, root);
+        if (Number(issue.sprint) !== Number(previousPhase)) {
+          const ordered = moveIssueToPhaseEnd(issues, audit, issue.key, issue.sprint);
+          replaceIssuesArray(issues, ordered);
+        }
+        onChange();
+        rerender();
+        return;
+      }
       applyIssueForm(issue, root);
       onChange();
     });
@@ -726,7 +910,8 @@ function bindEvidenceForm(row, evidence, issues, audit, root, onChange, rerender
       linkedIssueKeys: row.issues || [],
       onOpenIssue: onNavigateToIssue,
       onCreate: (issue) => {
-        issues.push(issue);
+        const ordered = appendIssueToPhase(issues, audit, issue);
+        replaceIssuesArray(issues, ordered);
         row.issues = row.issues || [];
         if (!row.issues.includes(issue.key)) {
           row.issues.push(issue.key);

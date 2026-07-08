@@ -1,4 +1,5 @@
 import {
+  compactIssueIds,
   dumpYaml,
   loadMediaList,
   loadYamlFile,
@@ -536,7 +537,9 @@ deleteIssueButton?.addEventListener('click', async () => {
     return;
   }
 
+  const deletedPhase = issue.sprint;
   state.data.issues.splice(index, 1);
+  compactIssueIds(state.data.issues, state.data.audit, [deletedPhase]);
   state.ui.selectedIssueKey = state.data.issues[0]?.key ?? null;
   onFormChange();
   renderWorkspace();

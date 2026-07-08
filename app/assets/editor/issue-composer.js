@@ -1,4 +1,4 @@
-import { inferMediaType, mediaUrl, newIssueKey, suggestIssueId } from './api.js';
+import { inferMediaType, mediaUrl, newIssueKey } from './api.js';
 
 let dialog;
 let form;
@@ -193,7 +193,7 @@ export function initIssueComposer() {
 
     const issue = {
       key: newIssueKey(),
-      id: suggestIssueId(phase, issuesRef),
+      id: '0.0',
       sprint: phase,
       title,
       impact,

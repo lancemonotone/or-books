@@ -74,6 +74,7 @@ This is not hidden from humans who know the URL. It blocks casual crawlers and d
 2. Sign in with the password.
 3. Use the tabs: **Overview**, **Issues**, **Media**, **Questions**.
 4. Pick an item in the sidebar; changes autosave. Deep-link with `?tab=issues&issue=<key>` (UUID), not the display id.
+5. **Reorder:** drag the ⠿ handle in the Issues sidebar. With **All phases**, drag across phase groups; with a single phase filter, reorder within that phase only. Display ids Compact automatically after reorder, delete, phase change, or new issue.
 
 **Media files:** copy PNG or MP4 files into `media/` on the server (or run `scripts/link-media.sh` locally), then click **Reload** in the editor. Use **Add media** or **Change file** to open the image picker.
 
