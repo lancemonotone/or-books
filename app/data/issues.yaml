@@ -80,7 +80,7 @@
   problem: |
     "See all" and some section titles look like links but nothing happens when you tap them. Real links like "Latest News" don't have "See all" and are not visually distinguishable as links.
   recommendation: |
-    Either make those words real links or style them so they clearly are not clickable.
+    Either make those words real links or style them so they clearly are/not clickable.
   acceptance:
     - Every See all / View all is either a working link or clearly plain text
     - Homepage modules audited and consistent
