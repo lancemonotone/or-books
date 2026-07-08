@@ -65,7 +65,7 @@ function phaseTitle(audit, phaseId) {
     (item) => String(item.id) === String(phaseId),
   );
   if (sprint?.title) {
-    return `Phase ${sprint.id} — ${sprint.title}`;
+    return `Phase ${sprint.id}: ${sprint.title}`;
   }
   return `Phase ${phaseId}`;
 }
@@ -437,7 +437,7 @@ function openEditorLightbox({
 function issueOptions(issues) {
   return issues.map((issue) => ({
     value: issue.key,
-    label: `${issue.id} — ${issue.title}`,
+    label: `${issue.id}: ${issue.title}`,
   }));
 }
 
@@ -771,7 +771,7 @@ function renderIssueForm(issue, audit, galleryEvidence = []) {
               issue.sprint,
               (audit.sprints || []).map((s) => ({
                 value: s.id,
-                label: `Phase ${s.id} — ${s.title}`,
+                label: `Phase ${s.id}: ${s.title}`,
               })),
             ),
           )}
@@ -1023,7 +1023,7 @@ export function renderEvidenceView(
           const existingIndex = evidence.findIndex((row) => row.file === file);
           if (existingIndex >= 0) {
             setEditorStatus(
-              `${file} is already in the gallery — opened that entry.`,
+              `${file} is already in the gallery: opened that entry.`,
             );
             onNavigateToEvidence?.(file);
             return;
@@ -1410,7 +1410,7 @@ function renderDecisionForm(decision, issues) {
       (issue) => `
       <label class="editor-check">
         <input type="checkbox" name="blocks" value="${escapeAttr(issue.key)}" ${(decision.blocks || []).includes(issue.key) ? "checked" : ""}>
-        <span>${escapeHtml(issue.id)} — ${escapeHtml(issue.title)}</span>
+        <span>${escapeHtml(issue.id)}: ${escapeHtml(issue.title)}</span>
       </label>`,
     )
     .join("");

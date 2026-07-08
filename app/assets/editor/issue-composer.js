@@ -1,4 +1,4 @@
-import { inferMediaType, mediaUrl, newIssueKey } from './api.js';
+import { inferMediaType, mediaUrl, newIssueKey } from "./api.js";
 
 let dialog;
 let form;
@@ -8,29 +8,32 @@ let linkedNode;
 let statusNode;
 let onCreate = null;
 let issuesRef = [];
-let mediaFile = '';
+let mediaFile = "";
 
 function escapeHtml(value) {
   return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;');
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
 
 function sprintOptions(audit, selectedPhase) {
   return (audit.sprints || [])
     .map((sprint) => {
-      const selected = Number(sprint.id) === Number(selectedPhase) ? ' selected' : '';
-      return `<option value="${escapeHtml(String(sprint.id))}"${selected}>Phase ${escapeHtml(String(sprint.id))} — ${escapeHtml(sprint.title)}</option>`;
+      const selected =
+        Number(sprint.id) === Number(selectedPhase) ? " selected" : "";
+      return `<option value="${escapeHtml(String(sprint.id))}"${selected}>Phase ${escapeHtml(String(sprint.id))}: ${escapeHtml(sprint.title)}</option>`;
     })
-    .join('');
+    .join("");
 }
 
 function phaseTitle(audit, phaseId) {
-  const sprint = (audit?.sprints || []).find((item) => String(item.id) === String(phaseId));
+  const sprint = (audit?.sprints || []).find(
+    (item) => String(item.id) === String(phaseId),
+  );
   if (sprint?.title) {
-    return `Phase ${sprint.id} — ${sprint.title}`;
+    return `Phase ${sprint.id}: ${sprint.title}`;
   }
   return `Phase ${phaseId}`;
 }
@@ -39,7 +42,7 @@ function groupIssuesByPhase(issues, audit) {
   const groups = new Map();
 
   for (const issue of issues || []) {
-    const phaseId = issue.sprint ?? '?';
+    const phaseId = issue.sprint ?? "?";
     const key = String(phaseId);
     if (!groups.has(key)) {
       groups.set(key, {
@@ -69,12 +72,12 @@ function groupIssuesByPhase(issues, audit) {
 }
 
 function ensureElements() {
-  dialog = document.getElementById('issue-composer');
-  form = document.getElementById('issue-composer-form');
-  closeButton = document.getElementById('issue-composer-close');
-  linkedNode = document.getElementById('issue-composer-linked');
-  previewNode = document.getElementById('issue-composer-preview');
-  statusNode = document.getElementById('issue-composer-status');
+  dialog = document.getElementById("issue-composer");
+  form = document.getElementById("issue-composer-form");
+  closeButton = document.getElementById("issue-composer-close");
+  linkedNode = document.getElementById("issue-composer-linked");
+  previewNode = document.getElementById("issue-composer-preview");
+  statusNode = document.getElementById("issue-composer-status");
 }
 
 function renderLinkedIssues(linkedIssueKeys, allIssues, audit) {
@@ -98,9 +101,9 @@ function renderLinkedIssues(linkedIssueKeys, allIssues, audit) {
               <span class="issue-composer__linked-id">${escapeHtml(issue.id)}</span>
               <span class="issue-composer__linked-title">${escapeHtml(issue.title)}</span>
             </button>
-          </li>`
+          </li>`,
         )
-        .join('');
+        .join("");
 
       return `
         <div class="issue-composer__linked-group">
@@ -108,7 +111,7 @@ function renderLinkedIssues(linkedIssueKeys, allIssues, audit) {
           <ul class="issue-composer__linked-list">${items}</ul>
         </div>`;
     })
-    .join('');
+    .join("");
 
   return `
     <p class="issue-composer__linked-label">Linked issues</p>
@@ -121,8 +124,8 @@ function bindLinkedIssueLinks(onOpenIssue) {
     return;
   }
 
-  linkedNode.querySelectorAll('[data-issue-key]').forEach((button) => {
-    button.addEventListener('click', () => {
+  linkedNode.querySelectorAll("[data-issue-key]").forEach((button) => {
+    button.addEventListener("click", () => {
       const issueKey = button.dataset.issueKey;
       dialog?.close();
       onOpenIssue(issueKey);
@@ -143,7 +146,7 @@ function setComposerStatus(message, isError = false) {
     return;
   }
   statusNode.textContent = message;
-  statusNode.classList.toggle('is-error', isError);
+  statusNode.classList.toggle("is-error", isError);
 }
 
 export function initIssueComposer() {
@@ -152,53 +155,56 @@ export function initIssueComposer() {
     return;
   }
 
-  closeButton?.addEventListener('click', () => {
+  closeButton?.addEventListener("click", () => {
     dialog.close();
   });
 
-  form.querySelector('[data-action="cancel"]')?.addEventListener('click', () => {
-    dialog.close();
-  });
+  form
+    .querySelector('[data-action="cancel"]')
+    ?.addEventListener("click", () => {
+      dialog.close();
+    });
 
-  dialog.addEventListener('close', () => {
+  dialog.addEventListener("close", () => {
     onCreate = null;
     issuesRef = [];
-    mediaFile = '';
+    mediaFile = "";
     form.reset();
-    setComposerStatus('');
+    setComposerStatus("");
     if (previewNode) {
-      previewNode.innerHTML = '';
+      previewNode.innerHTML = "";
     }
     if (linkedNode) {
-      linkedNode.innerHTML = '';
+      linkedNode.innerHTML = "";
     }
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!onCreate) {
       return;
     }
 
     const phase = Number(form.querySelector('[name="sprint"]')?.value || 1);
-    const title = form.querySelector('[name="title"]')?.value?.trim() || '';
-    const problem = form.querySelector('[name="problem"]')?.value?.trim() || '';
-    const recommendation = form.querySelector('[name="recommendation"]')?.value?.trim() || '';
-    const impact = form.querySelector('[name="impact"]')?.value || 'medium';
+    const title = form.querySelector('[name="title"]')?.value?.trim() || "";
+    const problem = form.querySelector('[name="problem"]')?.value?.trim() || "";
+    const recommendation =
+      form.querySelector('[name="recommendation"]')?.value?.trim() || "";
+    const impact = form.querySelector('[name="impact"]')?.value || "medium";
 
     if (!title) {
-      setComposerStatus('Title is required.', true);
+      setComposerStatus("Title is required.", true);
       return;
     }
 
     const issue = {
       key: newIssueKey(),
-      id: '0.0',
+      id: "0.0",
       sprint: phase,
       title,
       impact,
-      effort: 'low',
-      status: 'planned',
+      effort: "low",
+      status: "planned",
       tags: [],
       problem,
       recommendation,
@@ -234,18 +240,18 @@ export function openIssueComposer({
     sprintSelect.innerHTML = sprintOptions(audit, defaultPhase);
   }
 
-  form.querySelector('[name="title"]').value = '';
-  form.querySelector('[name="problem"]').value = '';
-  form.querySelector('[name="recommendation"]').value = '';
-  form.querySelector('[name="impact"]').value = 'medium';
+  form.querySelector('[name="title"]').value = "";
+  form.querySelector('[name="problem"]').value = "";
+  form.querySelector('[name="recommendation"]').value = "";
+  form.querySelector('[name="impact"]').value = "medium";
   setLinkedIssues(linkedIssueKeys, issues, onOpenIssue, audit);
   if (previewNode) {
-    const isVideo = inferMediaType(file) === 'video';
+    const isVideo = inferMediaType(file) === "video";
     previewNode.innerHTML = isVideo
       ? `<video controls preload="metadata" src="${mediaUrl(file)}"></video>`
       : `<img src="${mediaUrl(file)}" alt="">`;
   }
-  setComposerStatus('');
+  setComposerStatus("");
 
   dialog.showModal();
   form.querySelector('[name="title"]')?.focus();

@@ -1,4 +1,4 @@
-/* OR Books Mobile UX Audit — presentation deck */
+/* OR Books Mobile UX Audit: presentation deck */
 
 :root {
   --color-bg: #f7f6f4;
@@ -149,7 +149,9 @@ code {
   padding: 0.35rem 0.6rem;
   border-radius: 6px;
   font-size: 0.92rem;
-  transition: background var(--transition-fast), color var(--transition-fast);
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .site-nav a:hover,
@@ -419,7 +421,9 @@ code {
   text-decoration: none;
   color: inherit;
   box-shadow: var(--shadow);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .sprint-card:hover {
@@ -539,7 +543,9 @@ code {
 
 a.pill {
   text-decoration: none;
-  transition: filter var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    filter var(--transition-fast),
+    box-shadow var(--transition-fast);
 
   &:hover {
     filter: brightness(0.97);
@@ -552,14 +558,38 @@ a.pill {
   }
 }
 
-.pill--critical { background: #fde8e8; color: var(--color-critical); }
-.pill--high { background: #ffedd5; color: var(--color-high); }
-.pill--medium { background: #fef3c7; color: var(--color-medium); }
-.pill--low { background: #e5e7eb; color: var(--color-low); }
-.pill--planned { background: #e5e7eb; color: var(--color-planned); }
-.pill--in_progress { background: #dbeafe; color: var(--color-in-progress); }
-.pill--blocked { background: #ffedd5; color: var(--color-blocked); }
-.pill--complete { background: #d1fae5; color: var(--color-complete); }
+.pill--critical {
+  background: #fde8e8;
+  color: var(--color-critical);
+}
+.pill--high {
+  background: #ffedd5;
+  color: var(--color-high);
+}
+.pill--medium {
+  background: #fef3c7;
+  color: var(--color-medium);
+}
+.pill--low {
+  background: #e5e7eb;
+  color: var(--color-low);
+}
+.pill--planned {
+  background: #e5e7eb;
+  color: var(--color-planned);
+}
+.pill--in_progress {
+  background: #dbeafe;
+  color: var(--color-in-progress);
+}
+.pill--blocked {
+  background: #ffedd5;
+  color: var(--color-blocked);
+}
+.pill--complete {
+  background: #d1fae5;
+  color: var(--color-complete);
+}
 
 .chip-row {
   display: flex;
@@ -801,7 +831,9 @@ a.pill {
   border-radius: var(--radius);
   margin-bottom: 0.5rem;
   cursor: pointer;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
 }
 
 .decision-option:has(:checked) {
@@ -876,7 +908,9 @@ a.pill {
   border-radius: 6px;
   cursor: pointer;
   text-decoration: none;
-  transition: background var(--transition-fast), transform var(--transition-fast);
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .button:hover {
@@ -949,7 +983,9 @@ th {
   box-shadow: 0 20px 50px rgb(0 0 0 / 25%);
   opacity: 0;
   transform: scale(0.98);
-  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .lightbox[open] {
