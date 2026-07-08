@@ -19,6 +19,8 @@ const COPY = {
     `${n} questions need answers before related work can continue.`,
   reviewDecisions: 'Answer the questions',
   allPhases: 'All phases',
+  openAllPhases: 'Open all',
+  closeAllPhases: 'Close all',
   openPhase: 'Open phase',
   whatWeFound: 'Issue Found',
   whatWeSuggest: 'Suggested Fix',
@@ -296,20 +298,40 @@ function renderSprintsIndex() {
     .map((sprint) => {
       const issues = sprintIssues(sprint.id);
       return `
-        <section class="section">
-          <header class="section__head">
-            <div>
-              <h2>${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</h2>
-              <p class="section__subtitle">${escapeHtml(sprint.subtitle)}</p>
+        <details class="phases-accordion__item" data-phase-accordion>
+          <summary class="phases-accordion__summary">
+            <span class="phases-accordion__heading">
+              <span class="phases-accordion__title">${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</span>
+              <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
+            </span>
+            <span class="phases-accordion__meta">${issues.length} ${COPY.suggestions}</span>
+            <span class="phases-accordion__chevron" aria-hidden="true">›</span>
+          </summary>
+          <div class="phases-accordion__panel">
+            <div class="phases-accordion__panel-head">
+              <p class="phases-accordion__lede">${escapeHtml(sprint.description.trim())}</p>
+              <a href="#/sprint/${sprint.id}">${escapeHtml(COPY.openPhase)}</a>
             </div>
-            <a href="#/sprint/${sprint.id}">${escapeHtml(COPY.openPhase)}</a>
-          </header>
-          <div class="issue-list">${issues.map(renderIssueCard).join('')}</div>
-        </section>`;
+            <div class="issue-list">${issues.map(renderIssueCard).join('')}</div>
+          </div>
+        </details>`;
     })
     .join('');
 
-  return `<div class="page"><header class="page-header"><h1>${escapeHtml(COPY.allPhases)}</h1></header>${groups}</div>`;
+  return `
+    <div class="page page--phases">
+      <header class="page-header">
+        <div class="page-header__row">
+          <h1>${escapeHtml(COPY.allPhases)}</h1>
+          <div class="phases-accordion__controls">
+            <button type="button" class="phases-accordion__control" data-phases-open-all>${escapeHtml(COPY.openAllPhases)}</button>
+            <span class="phases-accordion__control-sep" aria-hidden="true">·</span>
+            <button type="button" class="phases-accordion__control" data-phases-close-all>${escapeHtml(COPY.closeAllPhases)}</button>
+          </div>
+        </div>
+      </header>
+      <div class="phases-accordion">${groups}</div>
+    </div>`;
 }
 
 function renderSprint(sprintId) {
@@ -738,6 +760,23 @@ function bindPageHandlers() {
       }
     });
   });
+
+  const phasesOpenAll = main.querySelector('[data-phases-open-all]');
+  const phasesCloseAll = main.querySelector('[data-phases-close-all]');
+  if (phasesOpenAll) {
+    phasesOpenAll.addEventListener('click', () => {
+      main.querySelectorAll('[data-phase-accordion]').forEach((item) => {
+        item.open = true;
+      });
+    });
+  }
+  if (phasesCloseAll) {
+    phasesCloseAll.addEventListener('click', () => {
+      main.querySelectorAll('[data-phase-accordion]').forEach((item) => {
+        item.open = false;
+      });
+    });
+  }
 
   main.querySelectorAll('[data-decision-form]').forEach((form) => {
     form.addEventListener('submit', async (event) => {
