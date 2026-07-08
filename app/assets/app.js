@@ -58,6 +58,8 @@ const COPY = {
   loadError: "Could not load review data",
   phaseNotFound: "Phase not found.",
   issueNotFound: "Issue not found.",
+  previousIssue: "Previous issue",
+  nextIssue: "Next issue",
   filterNotFound: "No issues match this filter.",
   urgencyFilterTitle: (label) => `Urgency: ${label}`,
   statusFilterTitle: (label) => `Status: ${label}`,
@@ -142,6 +144,49 @@ function sprintIssues(sprintId) {
   return state.issues.filter(
     (item) => String(item.sprint) === String(sprintId),
   );
+}
+
+function compareIssueIds(a, b) {
+  const [aPhase = 0, aNum = 0] = String(a.id).split(".").map(Number);
+  const [bPhase = 0, bNum = 0] = String(b.id).split(".").map(Number);
+  if (aPhase !== bPhase) {
+    return aPhase - bPhase;
+  }
+  return aNum - bNum;
+}
+
+function orderedSprintIssues(sprintId) {
+  return [...sprintIssues(sprintId)].sort(compareIssueIds);
+}
+
+function issueNeighbors(issueKey) {
+  const issue = issueByKey(issueKey);
+  if (!issue) {
+    return { prev: null, next: null };
+  }
+
+  const phaseIssues = orderedSprintIssues(issue.sprint);
+  const index = phaseIssues.findIndex((item) => item.key === issueKey);
+  if (index < 0) {
+    return { prev: null, next: null };
+  }
+
+  return {
+    prev: index > 0 ? phaseIssues[index - 1] : null,
+    next: index < phaseIssues.length - 1 ? phaseIssues[index + 1] : null,
+  };
+}
+
+function renderIssueNav(issueKey) {
+  const { prev, next } = issueNeighbors(issueKey);
+  const prevControl = prev
+    ? `<a class="issue-nav__link" href="#/issue/${escapeHtml(prev.key)}" aria-label="${escapeHtml(COPY.previousIssue)}: ${escapeHtml(prev.id)} ${escapeHtml(prev.title)}">‹</a>`
+    : `<span class="issue-nav__link is-disabled" aria-hidden="true">‹</span>`;
+  const nextControl = next
+    ? `<a class="issue-nav__link" href="#/issue/${escapeHtml(next.key)}" aria-label="${escapeHtml(COPY.nextIssue)}: ${escapeHtml(next.id)} ${escapeHtml(next.title)}">›</a>`
+    : `<span class="issue-nav__link is-disabled" aria-hidden="true">›</span>`;
+
+  return `<nav class="issue-nav" aria-label="Issues in this phase">${prevControl}${nextControl}</nav>`;
 }
 
 function issuesByImpact(impact) {
@@ -502,7 +547,10 @@ function renderIssueDetail(issueKey) {
     <div class="page page--split">
       <div class="page__primary">
         <header class="page-header">
-          <p class="breadcrumb"><a href="#/sprint/${issue.sprint}">${escapeHtml(COPY.phase)} ${issue.sprint}</a> / ${escapeHtml(issue.id)}</p>
+          <div class="page-header__top">
+            <p class="breadcrumb"><a href="#/sprint/${issue.sprint}">${escapeHtml(COPY.phase)} ${issue.sprint}</a> / ${escapeHtml(issue.id)}</p>
+            ${renderIssueNav(issueKey)}
+          </div>
           <div class="page-header__row">
             <h1>${escapeHtml(issue.title)}</h1>
             ${renderEditLink({ tab: "issues", issue: issue.key, label: `Edit issue ${issue.id}` })}
