@@ -80,6 +80,7 @@ const lightboxBody = document.getElementById('lightbox-body');
 const lightboxFooter = document.getElementById('lightbox-footer');
 const lightboxPrev = lightbox.querySelector('[data-lightbox-prev]');
 const lightboxNext = lightbox.querySelector('[data-lightbox-next]');
+const lightboxStage = lightbox.querySelector('.lightbox__stage');
 
 const lightboxGallery = {
   files: [],
@@ -635,6 +636,7 @@ function resetLightboxGallery() {
 
 function updateLightboxNav() {
   const hasGallery = lightboxGallery.files.length > 1;
+  lightboxStage.classList.toggle('is-gallery', hasGallery);
   lightboxPrev.hidden = !hasGallery;
   lightboxNext.hidden = !hasGallery;
   if (!hasGallery) {
