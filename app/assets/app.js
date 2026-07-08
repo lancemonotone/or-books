@@ -577,7 +577,8 @@ function renderEvidenceGallery(filterFile = null) {
 }
 
 function renderDecisionCard(decision) {
-  const saved = state.responses.decisions[decision.id];
+  const decisionKey = decision.key;
+  const saved = state.responses.decisions[decisionKey];
   const options = decision.options
     .map((opt) => {
       const thumbs = (opt.evidence || [])
@@ -585,7 +586,7 @@ function renderDecisionCard(decision) {
         .join("");
       return `
         <label class="decision-option">
-          <input type="radio" name="choice-${escapeHtml(decision.id)}" value="${escapeHtml(opt.value)}" ${saved?.choice === opt.value ? "checked" : ""}>
+          <input type="radio" name="choice-${escapeHtml(decisionKey)}" value="${escapeHtml(opt.value)}" ${saved?.choice === opt.value ? "checked" : ""}>
           <div class="decision-option__body">
             <strong>${escapeHtml(opt.label)}</strong>
             ${opt.description ? `<p>${escapeHtml(opt.description)}</p>` : ""}
@@ -596,13 +597,13 @@ function renderDecisionCard(decision) {
     .join("");
 
   return `
-    <article class="decision-card" id="decision-${escapeHtml(decision.id)}">
+    <article class="decision-card" id="decision-${escapeHtml(decisionKey)}">
       <header>
         <h2>${escapeHtml(decision.title)}</h2>
       </header>
       <p>${escapeHtml(decision.question)}</p>
       ${decision.recommendation ? `<p class="decision-card__rec"><strong>${escapeHtml(COPY.ourSuggestion)}:</strong> ${escapeHtml(decision.recommendation.trim())}</p>` : ""}
-      <form class="decision-form" data-decision-form="${escapeHtml(decision.id)}">
+      <form class="decision-form" data-decision-form="${escapeHtml(decisionKey)}">
         <fieldset>
           <legend class="visually-hidden">${escapeHtml(decision.question)}</legend>
           ${options}
@@ -635,7 +636,7 @@ function renderDecisions() {
 function renderResponses() {
   const decisionRows = Object.entries(state.responses.decisions)
     .map(([id, row]) => {
-      const decision = state.decisions.find((d) => d.id === id);
+      const decision = state.decisions.find((d) => d.key === id);
       return `<tr><td>${escapeHtml(decision?.title || id)}</td><td><strong>${escapeHtml(row.choice)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join("");

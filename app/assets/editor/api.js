@@ -33,10 +33,14 @@ export function dumpYaml(data, file = '') {
   }
 
   if (file === 'decisions' && Array.isArray(data)) {
-    payload = data.map((decision) => ({
-      ...decision,
-      blocks: (decision.blocks || []).map(String),
-    }));
+    payload = data.map((decision) => {
+      const { id, key, blocks, ...rest } = decision;
+      return {
+        key: String(key),
+        ...rest,
+        blocks: (blocks || []).map(String),
+      };
+    });
   }
 
   return yaml.dump(payload, { lineWidth: -1, noRefs: true });
@@ -95,6 +99,29 @@ export function syncEvidenceIssueLinks(issues, evidence) {
   for (const row of evidence) {
     const linked = fileToIssues.get(row.file);
     row.issues = linked ? [...linked].sort() : [];
+  }
+}
+
+export function syncIssueEvidenceFromGallery(issues, evidence) {
+  for (const row of evidence) {
+    if (!row?.file) {
+      continue;
+    }
+
+    const linkedKeys = new Set((row.issues || []).map(String));
+
+    for (const issue of issues) {
+      const issueKey = String(issue.key);
+      const evidenceItems = issue.evidence || [];
+      const index = evidenceItems.findIndex((item) => item?.file === row.file);
+      const isLinked = linkedKeys.has(issueKey);
+
+      if (isLinked && index < 0) {
+        issue.evidence = [...evidenceItems, { file: row.file }];
+      } else if (!isLinked && index >= 0) {
+        issue.evidence = evidenceItems.filter((item) => item?.file !== row.file);
+      }
+    }
   }
 }
 
@@ -289,9 +316,29 @@ export function reorderIssuesFromDrop(issues, audit, { draggedKey, targetPhaseId
   return flattenIssuesFromGroups(issues, audit, groups);
 }
 
+function uuidV4FromBytes(bytes) {
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = [...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
+function uuidV4FromMathRandom() {
+  const bytes = new Uint8Array(16);
+  for (let index = 0; index < bytes.length; index += 1) {
+    bytes[index] = Math.trunc(Math.random() * 256);
+  }
+  return uuidV4FromBytes(bytes);
+}
+
 export function newIssueKey() {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
   }
-  throw new Error('crypto.randomUUID is required to create Issue keys.');
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    return uuidV4FromBytes(bytes);
+  }
+  return uuidV4FromMathRandom();
 }

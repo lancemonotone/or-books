@@ -176,7 +176,7 @@ Notes are assigned to a phase with the `sprint` field in `issues.yaml`. The phas
 Open `data/decisions.yaml`:
 
 ```yaml
-- id: carousel-style
+- key: 51411d72-c195-47a1-8036-96c9314de4e8
   title: Slider controls (dots or arrows)
   blocks:
     - "d1a5bef1-69b2-4ff5-8bf2-61efc6b31212"   # Issue keys
@@ -193,6 +193,8 @@ Open `data/decisions.yaml`:
 ```
 
 `blocks` lists Issue **keys** linked to this question. Linked questions appear on those issue pages in the presentation. Set the linked note's `status: blocked` when it depends on the answer.
+
+Each question needs a stable **`key`** (UUID). The editor assigns one when you add a question; it is not shown to the client. Client answers are stored under that key in `data/responses/decisions.json`.
 
 ### Typical workflow
 

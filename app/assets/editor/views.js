@@ -6,6 +6,7 @@ import {
   moveIssueToPhaseEnd,
   newIssueKey,
   reorderIssuesFromDrop,
+  syncIssueEvidenceFromGallery,
 } from "./api.js";
 import { openIssueComposer } from "./issue-composer.js";
 import { openMediaFilePicker, renderMediaChip } from "./picker.js";
@@ -1182,7 +1183,12 @@ function bindEvidenceForm(
     });
     el.addEventListener("change", () => {
       applyEvidenceForm(row, root);
-      onChange();
+      if (el.name === "issues") {
+        syncIssueEvidenceFromGallery(issues, evidence);
+        onChange("issues");
+      } else {
+        onChange();
+      }
       if (el.name === "type") {
         rerender();
       }
@@ -1272,6 +1278,7 @@ function bindEvidenceForm(
   detail.querySelectorAll("[data-open-issue]").forEach((button) => {
     button.addEventListener("click", () => {
       applyEvidenceForm(row, root);
+      syncIssueEvidenceFromGallery(issues, evidence);
       onNavigateToIssue?.(button.dataset.openIssue);
     });
   });
@@ -1314,11 +1321,11 @@ export function renderDecisionsView(
   onNavigateToIssue,
 ) {
   const selected =
-    decisions.find((item) => item.id === ui.selectedDecisionId) ||
+    decisions.find((item) => item.key === ui.selectedDecisionKey) ||
     decisions[0] ||
     null;
   if (selected) {
-    ui.selectedDecisionId = selected.id;
+    ui.selectedDecisionKey = selected.key;
   }
 
   root.innerHTML = `
@@ -1333,8 +1340,8 @@ export function renderDecisionsView(
             .map(
               (item) => `
             <li>
-              <button type="button" class="editor-list__btn ${item.id === ui.selectedDecisionId ? "is-active" : ""}" data-decision-id="${escapeAttr(item.id)}">
-                <span class="editor-list__title">${escapeHtml(item.title || item.id)}</span>
+              <button type="button" class="editor-list__btn ${item.key === ui.selectedDecisionKey ? "is-active" : ""}" data-decision-key="${escapeAttr(item.key)}">
+                <span class="editor-list__title">${escapeHtml(item.title || "Untitled question")}</span>
               </button>
             </li>`,
             )
@@ -1347,12 +1354,12 @@ export function renderDecisionsView(
     </div>
   `;
 
-  root.querySelectorAll("[data-decision-id]").forEach((button) => {
+  root.querySelectorAll("[data-decision-key]").forEach((button) => {
     button.addEventListener("click", () => {
       if (selected) {
         applyDecisionForm(selected, root);
       }
-      ui.selectedDecisionId = button.dataset.decisionId;
+      ui.selectedDecisionKey = button.dataset.decisionKey;
       onChange();
       renderDecisionsView(
         decisions,
@@ -1370,16 +1377,16 @@ export function renderDecisionsView(
   root
     .querySelector('[data-action="add-decision"]')
     ?.addEventListener("click", () => {
-      const id = `question-${decisions.length + 1}`;
+      const key = newIssueKey();
       decisions.push({
-        id,
+        key,
         title: "New question",
         blocks: [],
         question: "",
         recommendation: "",
         options: [],
       });
-      ui.selectedDecisionId = id;
+      ui.selectedDecisionKey = key;
       onChange();
       renderDecisionsView(
         decisions,
@@ -1488,8 +1495,7 @@ function renderDecisionForm(decision, issues, audit) {
         <h2>${escapeHtml(decision.title || "Question")}</h2>
         <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="delete-decision">Delete question</button>
       </div>
-      <div class="editor-grid editor-grid--2">
-        ${field("Question id", input("id", decision.id || ""))}
+      <div class="editor-grid">
         ${field("Short title", input("title", decision.title || ""))}
       </div>
       ${field("Question shown to client", textarea("question", decision.question || "", 3))}
@@ -1549,7 +1555,7 @@ function bindDecisionForm(
   detail
     .querySelector('[data-action="delete-decision"]')
     ?.addEventListener("click", () => {
-      if (!window.confirm(`Delete question ${decision.id}?`)) {
+      if (!window.confirm(`Delete question “${decision.title || "Untitled"}”?`)) {
         return;
       }
       const index = decisions.indexOf(decision);
@@ -1694,7 +1700,6 @@ function applyDecisionForm(decision, root) {
     return;
   }
 
-  decision.id = form.querySelector('[name="id"]')?.value ?? decision.id;
   decision.title = form.querySelector('[name="title"]')?.value ?? "";
   decision.question = form.querySelector('[name="question"]')?.value ?? "";
   decision.recommendation =
@@ -1758,7 +1763,7 @@ export function applyActiveForm(state) {
 
   if (tab === "decisions") {
     const decision = state.data.decisions.find(
-      (item) => item.id === state.ui.selectedDecisionId,
+      (item) => item.key === state.ui.selectedDecisionKey,
     );
     if (decision) {
       applyDecisionForm(decision, root);

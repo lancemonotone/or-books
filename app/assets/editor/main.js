@@ -7,6 +7,7 @@ import {
   saveYamlFile,
   syncAuditStats,
   syncEvidenceIssueLinks,
+  syncIssueEvidenceFromGallery,
 } from './api.js';
 import { cancelAutosave, flushAutosave, initAutosave, scheduleAutosave } from './autosave.js';
 import { initPicker, setPickerFiles } from './picker.js';
@@ -50,7 +51,7 @@ const state = {
   ui: {
     selectedIssueKey: null,
     selectedEvidenceIndex: 0,
-    selectedDecisionId: null,
+    selectedDecisionKey: null,
     issuePhaseFilter: 'all',
     pinnedIssueScrollKey: null,
   },
@@ -324,6 +325,12 @@ function filesToPersist() {
     filesToSave.add('evidence');
   }
 
+  if (state.dirty.evidence) {
+    syncIssueEvidenceFromGallery(state.data.issues, state.data.evidence);
+    filesToSave.add('issues');
+    filesToSave.add('evidence');
+  }
+
   if (tab === 'issues') {
     syncEvidenceIssueLinks(state.data.issues, state.data.evidence);
     filesToSave.add('evidence');
@@ -389,7 +396,7 @@ async function loadAllData() {
     decisions: decisions || [],
   };
   state.ui.selectedIssueKey = state.data.issues[0]?.key ?? null;
-  state.ui.selectedDecisionId = state.data.decisions[0]?.id ?? null;
+  state.ui.selectedDecisionKey = state.data.decisions[0]?.key ?? null;
   state.ui.selectedEvidenceIndex = 0;
   syncAuditStats(state.data.audit, state.data.issues, state.data.evidence, state.data.decisions);
   setPickerFiles(media);
@@ -421,9 +428,9 @@ function applyEditorDeepLink() {
   }
 
   if (tab === 'decisions') {
-    const decisionId = params.get('decision');
-    if (decisionId && state.data.decisions.some((item) => item.id === decisionId)) {
-      state.ui.selectedDecisionId = decisionId;
+    const decisionKey = params.get('decision');
+    if (decisionKey && state.data.decisions.some((item) => item.key === decisionKey)) {
+      state.ui.selectedDecisionKey = decisionKey;
     }
   }
 }

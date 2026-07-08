@@ -73,7 +73,7 @@ if (!Array.isArray(decisions)) {
 
 for (const decision of decisions) {
   decision.blocks = (decision.blocks || []).map((id) =>
-    mapRef(id, idToKey, keySet, `decision ${decision.id} blocks`)
+    mapRef(id, idToKey, keySet, `decision ${decision.key || decision.title} blocks`)
   );
 }
 

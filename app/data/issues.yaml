@@ -165,6 +165,19 @@
   evidence:
     - file: 123119.mp4
     - file: 161238.png
+- key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
+  id: '1.9'
+  sprint: 1
+  title: Rights Catalogs page
+  impact: medium
+  effort: low
+  status: planned
+  tags: []
+  problem: ''
+  recommendation: ''
+  acceptance: []
+  evidence:
+    - file: 125507.png
 - key: d9a285fd-c112-4962-be45-5bbb594dc1d3
   id: '2.1'
   sprint: 2

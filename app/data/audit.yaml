@@ -6,7 +6,7 @@ summary: |
 stats:
   screenshots: 36
   recordings: 4
-  issues: 27
+  issues: 28
   decisions: 4
 sprints:
   - id: 1
