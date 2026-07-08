@@ -92,7 +92,7 @@
   page: Global footer
   issues:
     - 535334f1-38be-42ea-9a71-735525922eeb
-    - 8c2911bc-50d4-471b-8045-8fce90267a90
+  url: https://orbooks.com/
 - file: 123519.png
   type: image
   page: 'Our Authors: filter and grid'
@@ -102,8 +102,10 @@
   url: https://orbooks.com/authors/
 - file: 123547.mp4
   type: video
-  page: Screen recording (pending review)
-  issues: []
+  page: Author Spinner
+  issues:
+    - 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
+  url: https://orbooks.com/authors/
 - file: 123704.png
   type: image
   page: 'Our Authors: grid scroll'
@@ -114,13 +116,13 @@
   type: image
   page: Catalog list + Featured Title
   issues:
-    - 5d04c117-9701-492c-beea-4056113fbdf2
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
 - file: 123809.png
   type: image
   page: 'Featured Title: Red Card'
   issues:
     - 5d04c117-9701-492c-beea-4056113fbdf2
+  url: https://orbooks.com/catalog/
 - file: 123828.png
   type: image
   page: About
@@ -135,8 +137,10 @@
   url: https://orbooks.com/about/
 - file: 123929.mp4
   type: video
-  page: Screen recording (pending review)
-  issues: []
+  page: Button Animation About Page
+  issues:
+    - 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
+  url: https://orbooks.com/about/
 - file: 123949.png
   type: image
   page: Contact Us
@@ -147,7 +151,8 @@
   type: image
   page: Contact form + footer
   issues:
-    - 8c2911bc-50d4-471b-8045-8fce90267a90
+    - 83a326b9-4988-4d2d-bcc4-d1ea3b064e98
+  url: https://orbooks.com/contact-us/
 - file: 125307.png
   type: image
   page: 'Booksellers: mixed email formats'
@@ -158,7 +163,9 @@
 - file: 125329.png
   type: image
   page: In Bookstores
-  issues: []
+  issues:
+    - f94186fe-383f-4e7f-9d60-fa99b3468ebe
+  url: https://orbooks.com/
 - file: 125454.png
   type: image
   page: Rights Enquiries
@@ -177,6 +184,7 @@
   page: Mailchimp bookseller signup
   issues:
     - 22f6409d-b5e4-46b1-8086-f2839495505e
+  url: https://orbooks.us2.list-manage.com/subscribe?u=6180a1909cdc59a9df25c1a94&id=70480d4b0a
 - file: 125607.png
   type: image
   page: 'Authors: Featured + directory'
@@ -193,12 +201,16 @@
 - file: 125703.png
   type: image
   page: Privacy notice TOC
-  issues: []
+  issues:
+    - 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
+    - b59b43f9-981e-4656-8535-9eee882dcebc
+  url: https://orbooks.com/privacy-policy-guidelines/
 - file: 125733.png
   type: image
   page: Privacy CCPA table
   issues:
     - 6f242823-63e3-4b9c-b49d-4ecf1336c282
+  url: https://orbooks.com/privacy-policy-guidelines/
 - file: 125756.png
   type: image
   page: Privacy Policy & Guidelines
@@ -274,5 +286,6 @@
   type: image
   page: Home Page Featured Title Module
   issues:
+    - 5d04c117-9701-492c-beea-4056113fbdf2
     - d64c6362-1054-468f-a9cb-3f1feb2473ab
   url: https://orbooks.com/

@@ -232,7 +232,84 @@
     - No unexpected new tab or window opens for that module
   evidence:
     - file: 174154.png
-      caption: Homepage Featured Title module
+- key: 83a326b9-4988-4d2d-bcc4-d1ea3b064e98
+  id: '1.13'
+  sprint: 1
+  title: Remove the math captcha from the contact form
+  impact: medium
+  status: planned
+  tags:
+    - forms
+    - contact
+  problem: |
+    The Contact Us form asks visitors to solve a math question and complete reCAPTCHA before submitting. Two verification steps on a phone is unnecessary friction, and the math answer field is small and easy to miss.
+  recommendation: |
+    Drop the math question and keep a single bot check (reCAPTCHA). If spam becomes a problem, address it with one method—not both.
+  acceptance:
+    - Contact form no longer shows a math captcha question
+    - Form still protects against spam with one verification step
+    - Submit flow works on mobile without the extra field
+  evidence:
+    - file: 124005.png
+      caption: Contact form math question and reCAPTCHA
+- key: 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
+  id: '1.14'
+  sprint: 1
+  title: Center the author alphabet spinner
+  impact: medium
+  status: planned
+  tags:
+    - authors
+    - layout
+  problem: |
+    On Our Authors, the alphabet letter spinner sits off center on the page. The control looks misaligned next to the author grid and feels uneven when swiping through letters on a phone.
+  recommendation: |
+    Center the spinner horizontally with the page content and the author grid below it. Keep the active letter and track aligned as users move through the alphabet.
+  acceptance:
+    - Alphabet spinner is horizontally centered at typical mobile widths
+    - Spinner track lines up with the author grid beneath it
+    - Alignment stays consistent while swiping between letters
+  evidence:
+    - file: 123547.mp4
+      caption: Our Authors alphabet spinner alignment
+- key: 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
+  id: '1.15'
+  sprint: 1
+  title: Fix the broken link in the privacy table of contents
+  impact: high
+  status: planned
+  tags:
+    - legal
+    - navigation
+  problem: |
+    On the privacy notice page, table-of-contents item 4 is plain black text while every other entry is a blue link. Visitors may think section 4 is missing or not clickable.
+  recommendation: |
+    Make item 4 a working link with the same styling as the other TOC entries, or fix the markup or CSS that is stripping its link treatment.
+  acceptance:
+    - Privacy TOC item 4 matches the link style of items 1–3 and 5–8
+    - Tapping item 4 jumps to the correct section on mobile
+  evidence:
+    - file: 125703.png
+      caption: Privacy notice TOC item 4 not linked
+- key: f94186fe-383f-4e7f-9d60-fa99b3468ebe
+  id: '1.16'
+  sprint: 1
+  title: Scale the In Bookstores images on mobile
+  impact: medium
+  status: planned
+  tags:
+    - layout
+    - images
+  problem: |
+    On the In Bookstores section, the stock photo below the heading fills almost the entire phone screen. Little else is visible before scrolling, so the section feels oversized compared with other homepage modules.
+  recommendation: |
+    Limit image height on small screens so the heading, illustration, and a reasonable slice of the photo fit in the first screenful. Match the visual weight of other promotional blocks on the site.
+  acceptance:
+    - In Bookstores imagery does not dominate the full viewport on typical phone widths
+    - Section heading remains visible with the image scaled proportionally
+  evidence:
+    - file: 125329.png
+      caption: In Bookstores section on mobile
 - key: d9a285fd-c112-4962-be45-5bbb594dc1d3
   id: '2.1'
   sprint: 2
@@ -459,8 +536,8 @@
   acceptance:
     - Featured block has visible section label in same position on all templates
   evidence:
-    - file: 123739.png
     - file: 123809.png
+    - file: 174154.png
 - key: 6f242823-63e3-4b9c-b49d-4ecf1336c282
   id: '2.13'
   sprint: 2
@@ -482,14 +559,14 @@
 - key: f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
   id: '2.14'
   sprint: 2
-  title: Improve Featured Author text on mobile
+  title: Improve Featured Author Slider Items on mobile
   impact: medium
   status: planned
   tags:
     - typography
     - authors
   problem: |
-    The bio text in Featured Author is small and hard to read. The section heading does not match other headings on the site.
+    The text in the Featured Author sliders is small and hard to read. The section heading does not match other headings on the site.
   recommendation: |
     Increase bio text size and match the section heading to the rest of the site.
   acceptance:
@@ -497,7 +574,6 @@
     - Featured Author heading matches site sans hierarchy
   evidence:
     - file: 125607.png
-      caption: Featured Author section
 - key: 22f6409d-b5e4-46b1-8086-f2839495505e
   id: '2.15'
   sprint: 2
@@ -520,23 +596,27 @@
       caption: External signup form
     - file: 125307.png
       caption: Booksellers page
-- key: 1c49d1b5-8643-4e29-9bc3-f3ad0f35ee4f
-  id: '3.1'
-  sprint: 3
-  title: Use the same arrow on all accordions
+- key: b59b43f9-981e-4656-8535-9eee882dcebc
+  id: '2.16'
+  sprint: 2
+  title: Make the privacy table of contents easier to scan
   impact: medium
   status: planned
   tags:
-    - components
+    - legal
+    - typography
   problem: |
-    Expand and collapse arrows differ from one accordion to the next.
+    Privacy notice TOC entries are set in all caps with long section titles. On a phone the list is hard to skim and every line looks the same weight.
   recommendation: |
-    Use one arrow icon everywhere an accordion appears.
+    Use sentence case (or title case) for TOC labels and keep line length comfortable on narrow screens.
   acceptance:
-    - All accordions use the same chevron icon and rotation behavior
-  evidence: []
+    - Privacy TOC links are not set in all caps
+    - Section titles remain readable without horizontal scrolling on typical phone widths
+  evidence:
+    - file: 125703.png
+      caption: Privacy notice TOC all-caps links
 - key: 016b1384-309d-48ba-a585-398783c97dd6
-  id: '3.2'
+  id: '3.1'
   sprint: 3
   title: Make small tap targets easier to hit
   impact: high
@@ -555,28 +635,8 @@
       caption: Pricing options
     - file: 123519.png
       caption: Alphabet filter
-- key: 8c2911bc-50d4-471b-8045-8fce90267a90
-  id: '3.3'
-  sprint: 3
-  title: Match footer social icons to the header
-  impact: low
-  status: planned
-  tags:
-    - footer
-    - icons
-  problem: |
-    Social icons in the footer do not match the style of icons in the header.
-  recommendation: |
-    Use the same icon sizing and spacing as the header buttons.
-  acceptance:
-    - Footer social icons share header icon container spec
-  evidence:
-    - file: 123434.png
-      caption: Footer
-    - file: 124005.png
-      caption: Contact footer
 - key: 535334f1-38be-42ea-9a71-735525922eeb
-  id: '3.4'
+  id: '3.2'
   sprint: 3
   title: Center the cookie preferences bar with the footer
   impact: low
@@ -594,7 +654,7 @@
     - file: 123434.png
       caption: Footer alignment
 - key: 12737e6f-b52c-4f53-97b6-50c68e98a871
-  id: '3.5'
+  id: '3.3'
   sprint: 3
   title: Keep accordion titles steady on hover
   impact: low
@@ -613,7 +673,7 @@
     - file: 122948.mp4
       caption: Author page accordion titles
 - key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
-  id: '3.6'
+  id: '3.4'
   sprint: 3
   title: Remove distracting motion on buttons
   impact: low
@@ -631,3 +691,4 @@
   evidence:
     - file: 123119.mp4
     - file: 173459.mp4
+    - file: 123929.mp4
