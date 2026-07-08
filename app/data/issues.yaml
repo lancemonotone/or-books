@@ -214,6 +214,25 @@
   evidence:
     - file: 171653.png
       caption: Run Zohran Run book page on mobile
+- key: d64c6362-1054-468f-a9cb-3f1feb2473ab
+  id: '1.12'
+  sprint: 1
+  title: Keep Featured Title links in the same tab
+  impact: medium
+  status: planned
+  tags:
+    - navigation
+    - widgets
+  problem: |
+    On the homepage, tapping the Featured Title module opens the book in a new browser tab. That breaks the normal flow of browsing the site on a phone and can feel like leaving the site by accident.
+  recommendation: |
+    Open Featured Title links in the same tab, like other in-site book links.
+  acceptance:
+    - Tapping Featured Title on the homepage navigates in the current tab
+    - No unexpected new tab or window opens for that module
+  evidence:
+    - file: 174154.png
+      caption: Homepage Featured Title module
 - key: d9a285fd-c112-4962-be45-5bbb594dc1d3
   id: '2.1'
   sprint: 2
