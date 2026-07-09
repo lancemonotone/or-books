@@ -257,12 +257,25 @@ function renderEvidencePageLink(row, className = "") {
   return `<a class="${escapeHtml(classes)}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
 }
 
+function isVideoEvidence(row) {
+  if (!row) {
+    return false;
+  }
+  return (
+    row.type === "video" ||
+    String(row.file || "")
+      .toLowerCase()
+      .endsWith(".mp4")
+  );
+}
+
 function evidenceThumbCaption(row) {
   return evidencePageUrl(row) || row.page || "";
 }
 
 function renderVideoPreviewMarkup(file, alt = "") {
-  return `<video preload="metadata" muted playsinline src="${escapeHtml(mediaUrl(file))}" aria-label="${escapeHtml(alt)}"></video>`;
+  const src = `${mediaUrl(file)}#t=0.1`;
+  return `<video preload="metadata" muted playsinline src="${escapeHtml(src)}" aria-label="${escapeHtml(alt)}"></video>`;
 }
 
 function renderEvidenceThumb(file, galleryFiles = null) {
@@ -273,7 +286,7 @@ function renderEvidenceThumb(file, galleryFiles = null) {
   const galleryAttr = evidenceGalleryAttr(galleryFiles);
   const label = row.page || file;
   const caption = evidenceThumbCaption(row);
-  if (row.type === "video") {
+  if (isVideoEvidence(row)) {
     return `
       <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
         ${renderVideoPreviewMarkup(file, label)}
@@ -547,7 +560,7 @@ function renderIssueDetail(issueKey) {
         label: `Edit screenshot ${item.file}`,
         className: "edit-link--overlay",
       });
-      if (row?.type === "video") {
+      if (isVideoEvidence(row)) {
         return `
           <figure class="media-block">
             ${editLink}
@@ -843,7 +856,7 @@ function renderLightboxFile(file) {
     return false;
   }
   lightboxTitle.textContent = row.page || file;
-  if (row.type === "video") {
+  if (isVideoEvidence(row)) {
     lightboxBody.innerHTML = `<video controls autoplay src="${escapeHtml(mediaUrl(file))}"></video>`;
   } else {
     lightboxBody.innerHTML = `<img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(row.page || file)}">`;
@@ -894,6 +907,24 @@ function closeLightbox() {
   lightboxBody.innerHTML = "";
   resetLightboxGallery();
   updateLightboxNav();
+}
+
+function primeVideoThumbs(root = main) {
+  root.querySelectorAll(".evidence-thumb--video video, .media-block__image--video video").forEach((video) => {
+    const seekToFrame = () => {
+      try {
+        if (video.readyState >= 1) {
+          video.currentTime = 0.1;
+        }
+      } catch {
+        /* ignore seek errors on short clips */
+      }
+    };
+
+    video.addEventListener("loadeddata", seekToFrame, { once: true });
+    video.addEventListener("loadedmetadata", seekToFrame, { once: true });
+    video.load();
+  });
 }
 
 function bindPageHandlers() {
@@ -955,6 +986,9 @@ function bindPageHandlers() {
   main.querySelectorAll("details[data-phase-id]").forEach((item) => {
     item.addEventListener("toggle", () => {
       syncOverviewPhaseUrl();
+      if (item.open) {
+        primeVideoThumbs(item);
+      }
     });
   });
 
@@ -990,6 +1024,8 @@ function bindPageHandlers() {
       }
     });
   });
+
+  primeVideoThumbs();
 }
 
 function bindGlobalHandlers() {

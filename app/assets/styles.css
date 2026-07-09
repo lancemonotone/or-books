@@ -392,8 +392,11 @@ code {
 }
 
 .phases-accordion__subtitle {
+  margin-block-start: 0.2rem;
   color: var(--color-muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .phases-accordion__desc {
@@ -818,7 +821,12 @@ a.pill {
 }
 
 .gallery-card .evidence-thumb {
-  width: 5rem;
+  inline-size: 5rem;
+  align-self: start;
+}
+
+.gallery-card .evidence-thumb--video video {
+  min-block-size: 4.5rem;
 }
 
 .gallery-card__head {
