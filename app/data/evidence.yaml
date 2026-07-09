@@ -288,3 +288,9 @@
     - 5d04c117-9701-492c-beea-4056113fbdf2
     - d64c6362-1054-468f-a9cb-3f1feb2473ab
   url: https://orbooks.com/
+- file: 110356.png
+  type: image
+  page: Privacy Policy
+  issues:
+    - c392e399-8c2d-4c2e-9896-56b81e76b2d0
+  url: https://orbooks.com/privacy-policy-guidelines/

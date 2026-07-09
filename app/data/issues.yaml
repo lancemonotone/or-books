@@ -361,6 +361,7 @@
     - file: 123739.png
     - file: 123249.png
     - file: 123310.png
+    - file: 110356.png
 - key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
   id: '2.4'
   sprint: 2
@@ -372,15 +373,12 @@
     - authors
   problem: |
     Author photos in the grid are cropped differently. Some look stretched or cut off awkwardly.
-  recommendation: |
-    Crop every author image to the same proportions. Handle missing photos cleanly.
+  recommendation: Crop every author image to the same proportions. Handle missing photos cleanly. This can be done manually (more control), or via stylesheet rules (e.g., automatic square crop).
   acceptance:
     - All author grid images share one crop ratio
   evidence:
     - file: 123519.png
-      caption: Authors grid
     - file: 123704.png
-      caption: Authors grid scrolled
 - key: 7952f11e-1b30-41a0-b128-5f54fdf49928
   id: '2.5'
   sprint: 2

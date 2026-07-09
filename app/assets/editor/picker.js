@@ -106,7 +106,7 @@ export function initPicker() {
 }
 
 export function setPickerFiles(list) {
-  files = list;
+  files = [...list].sort((a, b) => (b.mtime ?? 0) - (a.mtime ?? 0));
 }
 
 export function openMediaPicker({
@@ -126,11 +126,18 @@ export function openMediaPicker({
   dialog.showModal();
 }
 
-/** Pick or replace a media file. Gallery entries stay selectable; pass blockedFiles to prevent duplicates. */
-export function openMediaFilePicker({ type = 'all', blockedFiles = [], callback } = {}) {
+/** Pick or replace a media file. Set allowGallery false + galleryFiles to grey out library entries. */
+export function openMediaFilePicker({
+  type = 'all',
+  blockedFiles = [],
+  galleryFiles = [],
+  allowGallery = true,
+  callback,
+} = {}) {
   openMediaPicker({
     type,
-    allowGallery: true,
+    allowGallery,
+    galleryFiles,
     blockedFiles,
     callback,
   });

@@ -515,10 +515,20 @@ code {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow: hidden;
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: start;
+  }
 }
 
 .issue-card__content {
   padding: 1rem 1.25rem;
+
+  @media (min-width: 768px) {
+    padding: 1.25rem 1rem 1.25rem 1.25rem;
+  }
 }
 
 .issue-card__link {
@@ -563,6 +573,25 @@ code {
   gap: 0.5rem;
   padding: 0 1.25rem 1.25rem;
   overflow-x: auto;
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding: 1.25rem 1.25rem 1.25rem 0.5rem;
+    overflow-x: visible;
+    align-content: start;
+    align-self: stretch;
+    direction: rtl;
+  }
+}
+
+.issue-card__evidence .evidence-thumb {
+  @media (min-width: 768px) {
+    inline-size: 100%;
+    flex: unset;
+    direction: ltr;
+  }
 }
 
 /* Pills & chips */

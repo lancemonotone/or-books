@@ -914,7 +914,8 @@ function bindIssueForm(
         .map((item) => item.file)
         .filter(Boolean);
       openMediaFilePicker({
-        blockedFiles: linkedFiles,
+        allowGallery: false,
+        galleryFiles: linkedFiles,
         callback: (file) => {
           issue.evidence = issue.evidence || [];
           if (issue.evidence.some((item) => item.file === file)) {
@@ -934,7 +935,8 @@ function bindIssueForm(
       applyIssueForm(issue, root);
       const index = Number(button.dataset.index);
       openMediaFilePicker({
-        blockedFiles: (issue.evidence || [])
+        allowGallery: false,
+        galleryFiles: (issue.evidence || [])
           .filter((_, itemIndex) => itemIndex !== index)
           .map((item) => item.file)
           .filter(Boolean),
@@ -1061,6 +1063,8 @@ export function renderEvidenceView(
     .querySelector('[data-action="add-evidence-row"]')
     ?.addEventListener("click", () => {
       openMediaFilePicker({
+        allowGallery: false,
+        galleryFiles: evidence.map((row) => row.file).filter(Boolean),
         callback: (file) => {
           const existingIndex = evidence.findIndex((row) => row.file === file);
           if (existingIndex >= 0) {
@@ -1278,7 +1282,8 @@ function bindEvidenceForm(
     .querySelector('[data-action="pick-file"]')
     ?.addEventListener("click", () => {
       openMediaFilePicker({
-        blockedFiles: evidence
+        allowGallery: false,
+        galleryFiles: evidence
           .filter((item) => item !== row)
           .map((item) => item.file)
           .filter(Boolean),

@@ -40,9 +40,10 @@ foreach (scandir($mediaDir) ?: [] as $name) {
     $files[] = [
         'name' => $name,
         'type' => $type,
+        'mtime' => filemtime($path) ?: 0,
     ];
 }
 
-usort($files, static fn(array $a, array $b): int => strcmp($a['name'], $b['name']));
+usort($files, static fn(array $a, array $b): int => $b['mtime'] <=> $a['mtime']);
 
 respond_json(200, ['files' => $files]);
