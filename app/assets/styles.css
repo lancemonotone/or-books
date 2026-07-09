@@ -570,22 +570,23 @@ code {
   overflow-x: auto;
 
   @media (min-width: 768px) {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-content: start;
     padding: 1.25rem 1.25rem 1.25rem 0.5rem;
     overflow-x: visible;
-    align-content: start;
     align-self: stretch;
-    direction: rtl;
   }
 }
 
 .issue-card__evidence .evidence-thumb {
+  flex: 0 0 auto;
+  width: 4.5rem;
+
   @media (min-width: 768px) {
-    inline-size: 100%;
-    flex: unset;
-    direction: ltr;
+    flex: 0 0 calc((100% - 1.5rem) / 4);
+    inline-size: calc((100% - 1.5rem) / 4);
+    max-inline-size: calc((100% - 1.5rem) / 4);
   }
 }
 
