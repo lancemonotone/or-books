@@ -26,6 +26,9 @@ const COPY = {
   reviewDecisions: "Answer the questions",
   openAllPhases: "Open all",
   closeAllPhases: "Close all",
+  evidenceNoUrl: "No page URL",
+  evidenceGroupCount: (n) => `${n} ${n === 1 ? "item" : "items"}`,
+  decisionCount: (n) => `${n} ${n === 1 ? "question" : "questions"}`,
   whatWeFound: "Issue Found",
   whatWeSuggest: "Suggested Fix",
   screenshotsHeading: "Screenshots",
@@ -243,9 +246,48 @@ function issueEvidenceFiles(issue) {
     .filter((file) => evidenceByFile(file));
 }
 
+function normalizeEvidenceUrl(url) {
+  return String(url || "").trim();
+}
+
 function evidencePageUrl(row) {
-  const url = String(row?.url || "").trim();
+  const url = normalizeEvidenceUrl(row?.url);
   return url || null;
+}
+
+function evidenceGroupKey(row) {
+  const url = evidencePageUrl(row);
+  if (!url) {
+    return "";
+  }
+  return url.replace(/\/+$/, "") || url;
+}
+
+function groupEvidenceByUrl(items) {
+  const groups = new Map();
+
+  for (const row of items) {
+    const key = evidenceGroupKey(row);
+    if (!groups.has(key)) {
+      groups.set(key, {
+        key,
+        label: key ? normalizeEvidenceUrl(row.url) : COPY.evidenceNoUrl,
+        href: key || null,
+        items: [],
+      });
+    }
+    groups.get(key).items.push(row);
+  }
+
+  return [...groups.values()].sort((a, b) => {
+    if (!a.key) {
+      return 1;
+    }
+    if (!b.key) {
+      return -1;
+    }
+    return a.label.localeCompare(b.label, undefined, { sensitivity: "base" });
+  });
 }
 
 function renderEvidencePageLink(row, className = "") {
@@ -278,14 +320,18 @@ function renderVideoPreviewMarkup(file, alt = "") {
   return `<video preload="metadata" muted playsinline src="${escapeHtml(src)}" aria-label="${escapeHtml(alt)}"></video>`;
 }
 
-function renderEvidenceThumb(file, galleryFiles = null) {
+function renderEvidenceThumb(file, galleryFiles = null, options = {}) {
   const row = evidenceByFile(file);
   if (!row) {
     return "";
   }
+  const captionMode = options.captionMode || "url";
   const galleryAttr = evidenceGalleryAttr(galleryFiles);
   const label = row.page || file;
-  const caption = evidenceThumbCaption(row);
+  const caption =
+    captionMode === "page"
+      ? row.page || ""
+      : evidenceThumbCaption(row);
   if (isVideoEvidence(row)) {
     return `
       <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
@@ -616,111 +662,206 @@ function renderIssueDetail(issueKey) {
     </div>`;
 }
 
-function renderEvidenceGallery(filterFile = null) {
-  const items = filterFile
-    ? state.evidence.filter((e) => e.file === filterFile)
-    : state.evidence;
+function renderGalleryCard(row, { galleryFiles = null } = {}) {
+  const files = galleryFiles || [row.file];
+  const chips = renderIssueChips(row.issues || []);
+  const thumb = renderEvidenceThumb(row.file, files, { captionMode: "url" });
+  const editLink = renderEditLink({
+    tab: "evidence",
+    file: row.file,
+    label: `Edit screenshot ${row.file}`,
+  });
 
-  const grid = items
-    .map((row) => {
-      const chips = renderIssueChips(row.issues || []);
-      const thumb = renderEvidenceThumb(row.file);
-      const editLink = renderEditLink({
-        tab: "evidence",
-        file: row.file,
-        label: `Edit screenshot ${row.file}`,
-      });
-      const pageLink = renderEvidencePageLink(row, "gallery-card__page-link");
-      return `
-        <article class="gallery-card">
-          ${thumb}
-          <div class="gallery-card__body">
-            <div class="gallery-card__head">
-              <h2>${escapeHtml(row.page || row.file)}</h2>
-              ${editLink}
-            </div>
-            ${pageLink}
-            <div class="chip-row">${chips || `<span class="muted">${escapeHtml(COPY.noIssuesLinked)}</span>`}</div>
+  return `
+    <article class="gallery-card">
+      ${thumb}
+      <div class="gallery-card__body">
+        <div class="gallery-card__head">
+          <h2>${escapeHtml(row.page || row.file)}</h2>
+          ${editLink}
+        </div>
+        <div class="chip-row">${chips || `<span class="muted">${escapeHtml(COPY.noIssuesLinked)}</span>`}</div>
+      </div>
+    </article>`;
+}
+
+function renderEvidenceGallery(filterFile = null) {
+  if (filterFile) {
+    const row = state.evidence.find((item) => item.file === filterFile);
+    if (!row) {
+      return `<div class="page"><p>${escapeHtml(COPY.filterNotFound)}</p></div>`;
+    }
+
+    return `
+      <div class="page">
+        <header class="page-header">
+          <div class="page-header__row">
+            <h1>${escapeHtml(COPY.screenshotsGallery)}</h1>
+            ${renderEditLink({
+              tab: "evidence",
+              file: filterFile,
+              label: `Edit screenshot ${filterFile}`,
+            })}
           </div>
-        </article>`;
+          <p class="lede">${escapeHtml(COPY.screenshotsLead)}</p>
+        </header>
+        <div class="gallery-grid">${renderGalleryCard(row)}</div>
+      </div>`;
+  }
+
+  const groups = groupEvidenceByUrl(state.evidence);
+  const accordion = groups
+    .map((group) => {
+      const galleryFiles = group.items.map((item) => item.file);
+      const title = `<span class="evidence-accordion__url">${escapeHtml(group.label)}</span>`;
+
+      return `
+        <details class="phases-accordion__item evidence-accordion__item" data-evidence-group="${escapeHtml(group.key || "none")}">
+          <summary class="phases-accordion__summary">
+            <span class="phases-accordion__heading">
+              <span class="phases-accordion__title evidence-accordion__heading">${title}</span>
+            </span>
+            <span class="phases-accordion__meta">${escapeHtml(COPY.evidenceGroupCount(group.items.length))}</span>
+            <span class="phases-accordion__chevron" aria-hidden="true">›</span>
+          </summary>
+          <div class="phases-accordion__panel">
+            <div class="gallery-grid">${group.items.map((row) => renderGalleryCard(row, { galleryFiles })).join("")}</div>
+          </div>
+        </details>`;
     })
     .join("");
 
-  const headerEdit = filterFile
-    ? renderEditLink({
-        tab: "evidence",
-        file: filterFile,
-        label: `Edit screenshot ${filterFile}`,
-      })
-    : "";
-
   return `
-    <div class="page">
+    <div class="page page--evidence">
       <header class="page-header">
         <div class="page-header__row">
           <h1>${escapeHtml(COPY.screenshotsGallery)}</h1>
-          ${headerEdit}
+          <div class="phases-accordion__controls">
+            <button type="button" class="phases-accordion__control" data-evidence-open-all>${escapeHtml(COPY.openAllPhases)}</button>
+            <span class="phases-accordion__control-sep" aria-hidden="true">·</span>
+            <button type="button" class="phases-accordion__control" data-evidence-close-all>${escapeHtml(COPY.closeAllPhases)}</button>
+          </div>
         </div>
         <p class="lede">${escapeHtml(COPY.screenshotsLead)}</p>
       </header>
-      <div class="gallery-grid">${grid}</div>
+      <div class="phases-accordion evidence-accordion">${accordion}</div>
     </div>`;
+}
+
+function decisionEvidenceFiles(decision) {
+  const seen = new Set();
+  const files = [];
+  for (const option of decision.options || []) {
+    for (const item of option.evidence || []) {
+      if (item?.file && !seen.has(item.file)) {
+        seen.add(item.file);
+        files.push(item.file);
+      }
+    }
+  }
+  return files;
+}
+
+function groupDecisionsByPhase() {
+  return (state.audit?.sprints || [])
+    .map((sprint) => {
+      const decisions = state.decisions.filter((decision) =>
+        (decision.blocks || []).some((key) => {
+          const issue = issueByKey(key);
+          return issue && String(issue.sprint) === String(sprint.id);
+        }),
+      );
+      return { sprint, decisions };
+    })
+    .filter((group) => group.decisions.length > 0);
 }
 
 function renderDecisionCard(decision) {
   const decisionKey = decision.key;
   const saved = state.responses.decisions[decisionKey];
-  const options = decision.options
+  const evidenceFiles = decisionEvidenceFiles(decision);
+  const options = (decision.options || [])
     .map((opt) => {
-      const thumbs = (opt.evidence || [])
-        .map((e) => renderEvidenceThumb(e.file))
-        .join("");
       return `
         <label class="decision-option">
           <input type="radio" name="choice-${escapeHtml(decisionKey)}" value="${escapeHtml(opt.value)}" ${saved?.choice === opt.value ? "checked" : ""}>
           <div class="decision-option__body">
             <strong>${escapeHtml(opt.label)}</strong>
             ${opt.description ? `<p>${escapeHtml(opt.description)}</p>` : ""}
-            ${thumbs ? `<div class="decision-option__evidence">${thumbs}</div>` : ""}
           </div>
         </label>`;
     })
     .join("");
 
+  const evidenceHtml = evidenceFiles.length
+    ? `<div class="issue-card__evidence">${evidenceFiles.map((file) => renderEvidenceThumb(file, evidenceFiles)).join("")}</div>`
+    : "";
+
   return `
-    <article class="decision-card" id="decision-${escapeHtml(decisionKey)}">
-      <header>
-        <h2>${escapeHtml(decision.title)}</h2>
-      </header>
-      <p>${escapeHtml(decision.question)}</p>
-      ${decision.recommendation ? `<p class="decision-card__rec"><strong>${escapeHtml(COPY.ourSuggestion)}:</strong> ${escapeHtml(decision.recommendation.trim())}</p>` : ""}
-      <form class="decision-form" data-decision-form="${escapeHtml(decisionKey)}">
-        <fieldset>
-          <legend class="visually-hidden">${escapeHtml(decision.question)}</legend>
-          ${options}
-        </fieldset>
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-          <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor())}" required maxlength="80">
-        </label>
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.commentOptional)}</span>
-          <textarea name="text" rows="2" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
-        </label>
-        <button type="submit" class="button">${escapeHtml(COPY.saveDecision)}</button>
-        ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.youChose)} <strong>${escapeHtml(saved.choice)}</strong>, ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
-      </form>
+    <article class="issue-card decision-card" id="decision-${escapeHtml(decisionKey)}">
+      <div class="issue-card__content">
+        <div class="issue-card__head">
+          <h2 class="issue-card__title">${escapeHtml(decision.title)}</h2>
+        </div>
+        ${(decision.blocks || []).length ? `<div class="meta-row decision-card__blocks">${renderIssueChips(decision.blocks)}</div>` : ""}
+        <p class="issue-card__summary">${escapeHtml(decision.question)}</p>
+        ${decision.recommendation ? `<p class="decision-card__rec"><strong>${escapeHtml(COPY.ourSuggestion)}:</strong> ${escapeHtml(decision.recommendation.trim())}</p>` : ""}
+        <form class="decision-form" data-decision-form="${escapeHtml(decisionKey)}">
+          <fieldset class="decision-options">
+            <legend class="visually-hidden">${escapeHtml(decision.question)}</legend>
+            ${options}
+          </fieldset>
+          <label class="field">
+            <span class="field__label">${escapeHtml(COPY.yourName)}</span>
+            <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor())}" required maxlength="80">
+          </label>
+          <label class="field">
+            <span class="field__label">${escapeHtml(COPY.commentOptional)}</span>
+            <textarea name="text" rows="2" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
+          </label>
+          <button type="submit" class="button">${escapeHtml(COPY.saveDecision)}</button>
+          ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.youChose)} <strong>${escapeHtml(saved.choice)}</strong>, ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
+        </form>
+      </div>
+      ${evidenceHtml}
     </article>`;
 }
 
 function renderDecisions() {
+  const groups = groupDecisionsByPhase();
+  const accordion = groups
+    .map(({ sprint, decisions }) => {
+      return `
+        <details class="phases-accordion__item decisions-accordion__item" data-decision-phase="${escapeHtml(String(sprint.id))}">
+          <summary class="phases-accordion__summary">
+            <span class="phases-accordion__heading">
+              <span class="phases-accordion__title">${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</span>
+              <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
+            </span>
+            <span class="phases-accordion__meta">${escapeHtml(COPY.decisionCount(decisions.length))}</span>
+            <span class="phases-accordion__chevron" aria-hidden="true">›</span>
+          </summary>
+          <div class="phases-accordion__panel">
+            <div class="issue-list">${decisions.map(renderDecisionCard).join("")}</div>
+          </div>
+        </details>`;
+    })
+    .join("");
+
   return `
-    <div class="page">
+    <div class="page page--decisions">
       <header class="page-header">
-        <h1>${escapeHtml(COPY.decisionsPageTitle)}</h1>
+        <div class="page-header__row">
+          <h1>${escapeHtml(COPY.decisionsPageTitle)}</h1>
+          <div class="phases-accordion__controls">
+            <button type="button" class="phases-accordion__control" data-decisions-open-all>${escapeHtml(COPY.openAllPhases)}</button>
+            <span class="phases-accordion__control-sep" aria-hidden="true">·</span>
+            <button type="button" class="phases-accordion__control" data-decisions-close-all>${escapeHtml(COPY.closeAllPhases)}</button>
+          </div>
+        </div>
         <p class="lede">${escapeHtml(COPY.decisionsPageLead)}</p>
       </header>
-      <div class="decision-list">${state.decisions.map(renderDecisionCard).join("")}</div>
+      <div class="phases-accordion decisions-accordion">${accordion}</div>
     </div>`;
 }
 
@@ -983,9 +1124,61 @@ function bindPageHandlers() {
     });
   }
 
+  const evidenceOpenAll = main.querySelector("[data-evidence-open-all]");
+  const evidenceCloseAll = main.querySelector("[data-evidence-close-all]");
+  if (evidenceOpenAll) {
+    evidenceOpenAll.addEventListener("click", () => {
+      main.querySelectorAll("details[data-evidence-group]").forEach((item) => {
+        item.open = true;
+      });
+      primeVideoThumbs();
+    });
+  }
+  if (evidenceCloseAll) {
+    evidenceCloseAll.addEventListener("click", () => {
+      main.querySelectorAll("details[data-evidence-group]").forEach((item) => {
+        item.open = false;
+      });
+    });
+  }
+
+  const decisionsOpenAll = main.querySelector("[data-decisions-open-all]");
+  const decisionsCloseAll = main.querySelector("[data-decisions-close-all]");
+  if (decisionsOpenAll) {
+    decisionsOpenAll.addEventListener("click", () => {
+      main.querySelectorAll("details[data-decision-phase]").forEach((item) => {
+        item.open = true;
+      });
+      primeVideoThumbs();
+    });
+  }
+  if (decisionsCloseAll) {
+    decisionsCloseAll.addEventListener("click", () => {
+      main.querySelectorAll("details[data-decision-phase]").forEach((item) => {
+        item.open = false;
+      });
+    });
+  }
+
   main.querySelectorAll("details[data-phase-id]").forEach((item) => {
     item.addEventListener("toggle", () => {
       syncOverviewPhaseUrl();
+      if (item.open) {
+        primeVideoThumbs(item);
+      }
+    });
+  });
+
+  main.querySelectorAll("details[data-evidence-group]").forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (item.open) {
+        primeVideoThumbs(item);
+      }
+    });
+  });
+
+  main.querySelectorAll("details[data-decision-phase]").forEach((item) => {
+    item.addEventListener("toggle", () => {
       if (item.open) {
         primeVideoThumbs(item);
       }
