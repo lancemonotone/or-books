@@ -1160,6 +1160,23 @@ th {
   background: var(--color-muted-surface);
 }
 
+.summary-item__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.summary-item__chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.summary-item__title {
+  min-inline-size: 0;
+}
+
 /* Lightbox */
 
 .lightbox {

@@ -8,7 +8,10 @@ import {
 import { parseRoute, onRouteChange } from "./router.js";
 import { motion } from "./motion.js";
 
-const AUTHOR_KEY = "or-audit-author";
+const AUTHOR_KEYS = {
+  comment: "or-audit-author-comment",
+  decision: "or-audit-author-decision",
+};
 
 const COPY = {
   brand: "OR Books",
@@ -198,12 +201,24 @@ function issuesByStatus(status) {
   return state.issues.filter((item) => item.status === status);
 }
 
-function getAuthor() {
-  return localStorage.getItem(AUTHOR_KEY) || "";
+function getAuthor(kind) {
+  const key = AUTHOR_KEYS[kind];
+  if (!key) {
+    return "";
+  }
+  return localStorage.getItem(key) || "";
 }
 
-function setAuthor(name) {
-  localStorage.setItem(AUTHOR_KEY, name.trim());
+function setAuthor(name, kind) {
+  const key = AUTHOR_KEYS[kind];
+  if (!key) {
+    return;
+  }
+  const trimmed = name.trim();
+  if (!trimmed) {
+    return;
+  }
+  localStorage.setItem(key, trimmed);
 }
 
 const EDIT_ICON = `<svg class="edit-link__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
@@ -373,6 +388,14 @@ function renderIssueChips(keys) {
       return `<a class="chip chip--issue" href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a>`;
     })
     .join("");
+}
+
+function renderSummaryItemLabel(keys, title, fallback = "") {
+  const chips = keys.length
+    ? `<span class="summary-item__chips">${renderIssueChips(keys)}</span>`
+    : "";
+  const text = escapeHtml(title || fallback);
+  return `<div class="summary-item__label">${chips}<span class="summary-item__title">${text}</span></div>`;
 }
 
 function renderMetaRow(issue) {
@@ -578,7 +601,7 @@ function renderCommentForm(issue) {
       <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}">
         <label class="field">
           <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-          <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor())}" required maxlength="80">
+          <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor("comment"))}" required maxlength="80">
         </label>
         <fieldset class="stance-fieldset">
           <legend>${escapeHtml(COPY.doYouAgree)}</legend>
@@ -831,7 +854,7 @@ function renderDecisionCard(decision) {
           </fieldset>
           <label class="field">
             <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-            <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor())}" required maxlength="80">
+            <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor("decision"))}" required maxlength="80">
           </label>
           <label class="field">
             <span class="field__label">${escapeHtml(COPY.commentOptional)}</span>
@@ -887,7 +910,12 @@ function renderResponses() {
   const decisionRows = Object.entries(state.responses.decisions)
     .map(([id, row]) => {
       const decision = state.decisions.find((d) => d.key === id);
-      return `<tr><td>${escapeHtml(decision?.title || id)}</td><td><strong>${escapeHtml(row.choice)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      const label = renderSummaryItemLabel(
+        decision?.blocks || [],
+        decision?.title,
+        id,
+      );
+      return `<tr><td>${label}</td><td><strong>${escapeHtml(row.choice)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join("");
 
@@ -901,8 +929,12 @@ function renderResponses() {
     .map(([key, row]) => {
       const issue = issueByKey(key);
       const stance = STANCE_LABELS[row.stance] || row.stance;
-      const label = issue ? `${issue.id}: ${issue.title}` : key;
-      return `<tr><td>${escapeHtml(label)}</td><td>${escapeHtml(stance)}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      const label = renderSummaryItemLabel(
+        issue ? [key] : [],
+        issue?.title,
+        key,
+      );
+      return `<tr><td>${label}</td><td>${escapeHtml(stance)}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join("");
 
@@ -1100,7 +1132,7 @@ function bindPageHandlers() {
       const issueId = form.dataset.commentForm;
       const data = new FormData(form);
       const author = String(data.get("author") || "");
-      setAuthor(author);
+      setAuthor(author, "comment");
       const button = form.querySelector('button[type="submit"]');
       const status = form.querySelector(".save-status");
       try {
@@ -1213,7 +1245,7 @@ function bindPageHandlers() {
         return;
       }
       const author = String(data.get("author") || "");
-      setAuthor(author);
+      setAuthor(author, "decision");
       const button = form.querySelector('button[type="submit"]');
       const status = form.querySelector(".save-status");
       try {
