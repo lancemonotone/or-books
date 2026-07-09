@@ -529,10 +529,12 @@ function renderOverview() {
 
   return `
     <div class="page page--overview">
-      <header class="page-header">
-        <h1>${escapeHtml(state.audit.title)}</h1>
-        <p class="lede">${escapeHtml(state.audit.summary.trim())}</p>
-        <ul class="stat-list">
+      <header class="page-header page-header--split">
+        <div class="page-header__intro">
+          <h1>${escapeHtml(state.audit.title)}</h1>
+          <p class="lede">${escapeHtml(state.audit.summary.trim())}</p>
+        </div>
+        <ul class="stat-list page-header__stats">
           <li><strong>${stats.screenshots}</strong> screenshots</li>
           <li><strong>${stats.recordings}</strong> recordings</li>
           <li><strong>${stats.issues}</strong> issues</li>
