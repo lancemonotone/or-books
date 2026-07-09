@@ -847,24 +847,24 @@ function renderDecisionCard(decision) {
         ${(decision.blocks || []).length ? `<div class="meta-row decision-card__blocks">${renderIssueChips(decision.blocks)}</div>` : ""}
         <p class="issue-card__summary">${escapeHtml(decision.question)}</p>
         ${decision.recommendation ? `<p class="decision-card__rec"><strong>${escapeHtml(COPY.ourSuggestion)}:</strong> ${escapeHtml(decision.recommendation.trim())}</p>` : ""}
-        <form class="decision-form" data-decision-form="${escapeHtml(decisionKey)}">
-          <fieldset class="decision-options">
-            <legend class="visually-hidden">${escapeHtml(decision.question)}</legend>
-            ${options}
-          </fieldset>
-          <label class="field">
-            <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-            <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor("decision"))}" required maxlength="80">
-          </label>
-          <label class="field">
-            <span class="field__label">${escapeHtml(COPY.commentOptional)}</span>
-            <textarea name="text" rows="2" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
-          </label>
-          <button type="submit" class="button">${escapeHtml(COPY.saveDecision)}</button>
-          ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.youChose)} <strong>${escapeHtml(saved.choice)}</strong>, ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
-        </form>
       </div>
       ${evidenceHtml}
+      <form class="decision-form" data-decision-form="${escapeHtml(decisionKey)}">
+        <fieldset class="decision-options">
+          <legend class="visually-hidden">${escapeHtml(decision.question)}</legend>
+          ${options}
+        </fieldset>
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.yourName)}</span>
+          <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor("decision"))}" required maxlength="80">
+        </label>
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.commentOptional)}</span>
+          <textarea name="text" rows="2" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
+        </label>
+        <button type="submit" class="button">${escapeHtml(COPY.saveDecision)}</button>
+        ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.youChose)} <strong>${escapeHtml(saved.choice)}</strong>, ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
+      </form>
     </article>`;
 }
 
