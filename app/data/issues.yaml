@@ -1,22 +1,5 @@
-- key: 280a567f-7694-47ee-8d72-402e68da199d
-  id: '1.1'
-  sprint: 1
-  title: Label or Replace the Subjects icons
-  impact: critical
-  status: planned
-  tags:
-    - navigation
-    - subjects
-  problem: |
-    The Subjects page shows icons only. Without words under them, it is hard to tell what each category is.
-  recommendation: |
-    Add a short label under each icon or replace the icon with text.
-  acceptance:
-    - Every subject icon has a visible text label on mobile
-  evidence:
-    - file: 121022.png
 - key: d64e9880-9bd4-4b26-850b-f04a0b9b341b
-  id: '1.2'
+  id: '1.1'
   sprint: 1
   title: Keep the header visible when searching
   impact: critical
@@ -37,9 +20,492 @@
       caption: Search, first screen
     - file: 121904.png
       caption: Search, second screen, header gone
-- key: 11ab1e09-5807-4688-85ed-437200d2fcce
+- key: 280a567f-7694-47ee-8d72-402e68da199d
+  id: '1.2'
+  sprint: 1
+  title: Label or Replace the Subjects icons
+  impact: critical
+  status: planned
+  tags:
+    - navigation
+    - subjects
+  problem: |
+    The Subjects page shows icons only. Without words under them, it is hard to tell what each category is.
+  recommendation: |
+    Add a short label under each icon or replace the icon with text.
+  acceptance:
+    - Every subject icon has a visible text label on mobile
+  evidence:
+    - file: 121022.png
+- key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
   id: '1.3'
   sprint: 1
+  title: Add a way back from news articles
+  impact: high
+  status: planned
+  tags:
+    - navigation
+    - news
+  problem: |
+    After opening a news or media article there is no obvious way back to the list. You have to scroll to the footer.
+  recommendation: |
+    Put a Back to News link or similar at the top of each article.
+  acceptance:
+    - User returns to news listing in one tap from any article
+  evidence:
+    - file: 123327.png
+      caption: News article
+    - file: 161534.png
+      caption: Media article
+- key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
+  id: '1.4'
+  sprint: 1
+  title: Fix Reading Lists View All page
+  impact: high
+  status: planned
+  tags:
+    - navigation
+    - homepage
+  problem: |
+    View All under Reading Lists goes to a page that shows the same information already on the homepage. There is nothing new there.
+  recommendation: |
+    Add real content on that page (descriptions, filters, etc.) or remove the link and keep the module on the homepage only.
+  acceptance:
+    - View All page adds value beyond the homepage module, or route is removed
+  evidence:
+    - file: 164729.png
+    - file: 165045.png
+- key: 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
+  id: '1.5'
+  sprint: 1
+  title: Fix text that looks like a link but is not
+  impact: high
+  status: planned
+  tags:
+    - navigation
+    - homepage
+  problem: |
+    "See all" and some section titles look like links but nothing happens when you tap them. Real links like "Latest News" don't have "See all" and are not visually distinguishable as links.
+  recommendation: |
+    Either make those words real links or style them so they clearly are/not clickable.
+  acceptance:
+    - Every See all / View all is either a working link or clearly plain text
+    - Homepage modules audited and consistent
+  evidence:
+    - file: 120911.png
+    - file: 121002.png
+- key: f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
+  id: '1.6'
+  sprint: 1
+  title: Link to other pages mentioned in the FAQ
+  impact: high
+  status: planned
+  tags:
+    - content
+    - faq
+  problem: |
+    The FAQ mentions other pages (for example the Booksellers page) as plain text. They are not links.
+  recommendation: |
+    Turn those references into normal links.
+  acceptance:
+    - Every in-copy page reference in FAQ is a tappable link
+  evidence:
+    - file: 125833.png
+- key: 02bb4d06-502d-44db-907c-062d48f5e58c
+  id: '1.7'
+  sprint: 1
+  title: Give the header more room in the open menu
+  impact: medium
+  status: planned
+  tags:
+    - navigation
+    - menu
+  problem: |
+    When the menu is open the overlay is too close to the top and crowds the header compared with other pages.
+  recommendation: |
+    Match the top spacing used elsewhere when the menu is open.
+  acceptance:
+    - Header has consistent clearance when menu overlay is open
+  evidence:
+    - file: 120802.png
+      caption: Menu crowding logo
+- key: d64c6362-1054-468f-a9cb-3f1feb2473ab
+  id: '1.8'
+  sprint: 1
+  title: Keep Featured Title links in the same tab
+  impact: medium
+  status: planned
+  tags:
+    - navigation
+    - widgets
+  problem: |
+    On the homepage, tapping the Featured Title module opens the book in a new browser tab. That breaks the normal flow of browsing the site on a phone and can feel like leaving the site by accident.
+  recommendation: |
+    Open Featured Title links in the same tab, like other in-site book links.
+  acceptance:
+    - Tapping Featured Title on the homepage navigates in the current tab
+    - No unexpected new tab or window opens for that module
+  evidence:
+    - file: 174154.png
+- key: 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
+  id: '1.9'
+  sprint: 1
+  title: Remove repeated labels in the menu
+  impact: medium
+  status: planned
+  tags:
+    - navigation
+    - menu
+  problem: |
+    Submenus repeat the parent category name. It reads twice for no reason.
+  recommendation: |
+    Drop the duplicate heading under each menu group.
+  acceptance:
+    - No submenu label repeats its parent category name
+  evidence:
+    - file: 120802.png
+      caption: Menu overlay
+- key: 5d04c117-9701-492c-beea-4056113fbdf2
+  id: '2.1'
+  sprint: 2
+  title: Label the Featured Title blocks clearly
+  impact: high
+  status: planned
+  tags:
+    - widgets
+    - catalog
+  problem: |
+    Featured Title sections sometimes have a tiny heading under the image, or no heading at all. It is unclear what the block is.
+  recommendation: |
+    Put a clear section title above the block in the same place on every page that uses it.
+  acceptance:
+    - Featured block has visible section label in same position on all templates
+  evidence:
+    - file: 123809.png
+    - file: 174154.png
+- key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
+  id: '2.2'
+  sprint: 2
+  title: Make author photos the same size and shape
+  impact: high
+  status: planned
+  tags:
+    - images
+    - authors
+  problem: |
+    Author photos in the grid are cropped differently. Some look stretched or cut off awkwardly.
+  recommendation: Crop every author image to the same proportions. Handle missing photos cleanly. This can be done manually (more control), or via stylesheet rules (e.g., automatic square crop).
+  acceptance:
+    - All author grid images share one crop ratio
+  evidence:
+    - file: 123519.png
+    - file: 123704.png
+- key: 1003b1bb-4460-4577-97e9-f737dfe9fead
+  id: '2.3'
+  sprint: 2
+  title: Open media articles on the first tap
+  impact: high
+  status: planned
+  tags:
+    - interaction
+    - media
+  problem: |
+    In the In the Media list, tapping an item shows a Read Now button instead of opening the article. It takes a second tap to get there.
+  recommendation: |
+    Let the whole row open the article on the first tap. Drop the overlay button in the middle.
+  acceptance:
+    - First tap on a media row navigates immediately
+    - No intermediate overlay CTA blocking the card
+  evidence:
+    - file: 123119.mp4
+    - file: 161238.png
+- key: b57d706d-de6d-46d7-8e3f-6452f175c362
+  id: '2.4'
+  sprint: 2
+  title: Stop squashing images in media lists
+  impact: high
+  status: planned
+  tags:
+    - images
+    - media
+  problem: |
+    Images in media list cards look vertically squashed. The same image looks correct on the full article page.
+  recommendation: |
+    Use the same image proportions in lists and on article pages.
+  acceptance:
+    - List and detail views use matching image ratio rules
+    - No vertical squash in list cards
+  evidence:
+    - file: 123202.png
+      caption: Squashed list image
+    - file: 123215.png
+      caption: In the Media list
+    - file: 161534.png
+      caption: Article page, correct proportions
+- key: 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
+  id: '2.5'
+  sprint: 2
+  title: Center the author alphabet spinner
+  impact: medium
+  status: planned
+  tags:
+    - authors
+    - layout
+  problem: |
+    On Our Authors, the alphabet letter spinner sits off center on the page. The control looks misaligned next to the author grid and feels uneven when swiping through letters on a phone.
+  recommendation: |
+    Center the spinner horizontally with the page content and the author grid below it. Keep the active letter and track aligned as users move through the alphabet.
+  acceptance:
+    - Alphabet spinner is horizontally centered at typical mobile widths
+    - Spinner track lines up with the author grid beneath it
+    - Alignment stays consistent while swiping between letters
+  evidence:
+    - file: 123547.mp4
+      caption: Our Authors alphabet spinner alignment
+- key: f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
+  id: '2.6'
+  sprint: 2
+  title: Improve Featured Author Slider Items on mobile
+  impact: medium
+  status: planned
+  tags:
+    - typography
+    - authors
+  problem: |
+    The text in the Featured Author sliders is small and hard to read. The section heading does not match other headings on the site.
+  recommendation: |
+    Increase bio text size and match the section heading to the rest of the site.
+  acceptance:
+    - Bio text readable without zooming
+    - Featured Author heading matches site sans hierarchy
+  evidence:
+    - file: 125607.png
+- key: 6eb190a1-cfcd-4029-8261-05027bb3da83
+  id: '2.7'
+  sprint: 2
+  title: Scale the book cover on mobile
+  impact: medium
+  status: planned
+  tags:
+    - layout
+    - book-detail
+  problem: |
+    On book detail pages, the cover image fills most of the phone screen. Readers must scroll before they see the description, format options, or purchase buttons.
+  recommendation: |
+    Limit cover height on small screens so the title, key details, and primary actions appear in the first screenful. Keep a way to view the full cover if needed.
+  acceptance:
+    - Cover does not dominate the first viewport on typical phone widths
+    - Title and at least one primary action are visible without scrolling on first load
+  evidence:
+    - file: 171653.png
+      caption: Run Zohran Run book page on mobile
+- key: f94186fe-383f-4e7f-9d60-fa99b3468ebe
+  id: '2.8'
+  sprint: 2
+  title: Scale the In Bookstores images on mobile
+  impact: medium
+  status: planned
+  tags:
+    - layout
+    - images
+  problem: |
+    On the In Bookstores section, the stock photos below the heading fills almost the entire phone screen. Little else is visible before scrolling, so the section feels oversized compared with other homepage modules.
+  recommendation: |
+    Limit image height on small screens so the heading, illustration, and a reasonable slice of the photo fit in the first screenful. Match the visual weight of other promotional blocks on the site.
+  acceptance:
+    - In Bookstores imagery does not dominate the full viewport on typical phone widths
+    - Section heading remains visible with the image scaled proportionally
+  evidence:
+    - file: 125329.png
+- key: 12737e6f-b52c-4f53-97b6-50c68e98a871
+  id: '2.9'
+  sprint: 2
+  title: Keep accordion titles steady on hover
+  impact: low
+  status: planned
+  tags:
+    - components
+    - interaction
+  problem: |
+    On some pages with accordions (for example author profiles), hovering or tapping a section title makes the text animate or shift. The motion draws attention away from the content and feels out of place.
+  recommendation: |
+    Keep accordion titles visually stable on hover, focus, and tap. If you need feedback, use a subtle change to the arrow or background, not animated title text.
+  acceptance:
+    - Accordion title text does not animate or shift on hover, focus, or tap
+    - Any feedback uses arrow or background only
+  evidence:
+    - file: 122948.mp4
+- key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
+  id: '2.10'
+  sprint: 2
+  title: Remove distracting motion on buttons
+  impact: low
+  status: planned
+  tags:
+    - interaction
+    - media
+  problem: |
+    In the In the Media section on author pages, the Read Now button fades and slides up when it appears. The entrance animation feels unnecessary and makes a simple action look fussy.
+  recommendation: |
+    Show the Read Now control immediately, without a slide or bounce. If any transition is needed, keep it to a brief, subtle fade with no vertical movement.
+  acceptance:
+    - Read Now does not slide or bounce into view on author In the Media items
+    - Button is readable as soon as it appears
+  evidence:
+    - file: 123119.mp4
+    - file: 173459.mp4
+    - file: 123929.mp4
+- key: ad45e92e-3cd0-41a4-a129-f80d2c2908bb
+  id: '3.1'
+  sprint: 3
+  title: Make buttons look consistent
+  impact: high
+  status: planned
+  tags:
+    - buttons
+    - forms
+  problem: Buttons Add to Cart, Submit, View All, View Full Catalog, Subscribe, etc all look different from page to page.
+  recommendation: |
+    Use one button style and one quantity control style across the site.
+  acceptance:
+    - Primary CTAs share geometry, padding, and type treatment
+  evidence:
+    - file: 160840.png
+    - file: 123310.png
+- key: 016b1384-309d-48ba-a585-398783c97dd6
+  id: '3.2'
+  sprint: 3
+  title: Make small tap targets easier to hit
+  impact: high
+  status: planned
+  tags:
+    - accessibility
+    - touch
+  problem: |
+    Pricing options, the author alphabet filter, tag chips, video arrows, and captcha fields are small and fiddly on a phone.
+  recommendation: |
+    Enlarge the tap area without making the page feel cluttered.
+  acceptance:
+    - Interactive controls meet 44×44px minimum touch target
+  evidence:
+    - file: 123519.png
+- key: 22f6409d-b5e4-46b1-8086-f2839495505e
+  id: '3.3'
+  sprint: 3
+  title: Keep bookseller signup on orbooks.com
+  impact: medium
+  status: blocked
+  tags:
+    - forms
+    - mailchimp
+  problem: |
+    The bookseller signup sends people to an external Mailchimp page. They leave the OR Books site. The Booksellers page also has uneven text sizing around the orders email.
+  recommendation: |
+    Host the signup on orbooks.com and still send entries to the same Mailchimp list. See Questions for you for how to build it.
+  acceptance:
+    - Form lives on orbooks.com with site header/footer visible
+    - Submissions reach existing bookseller Mailchimp audience
+    - Booksellers CTA does not point to list-manage.com
+  evidence:
+    - file: 125535.png
+      caption: External signup form
+    - file: 125307.png
+      caption: Booksellers page
+- key: 83a326b9-4988-4d2d-bcc4-d1ea3b064e98
+  id: '3.4'
+  sprint: 3
+  title: Remove the math captcha from the contact form
+  impact: medium
+  status: planned
+  tags:
+    - forms
+    - contact
+  problem: |
+    The Contact Us form asks visitors to solve a math question and complete reCAPTCHA before submitting. Unless there is a compelling reason to include both, two verification steps is unnecessary friction, and the math answer field is small and easy to miss.
+  recommendation: |
+    Drop the math question and keep a single bot check (reCAPTCHA). If spam becomes a problem, address it with one method, not both.
+  acceptance:
+    - Contact form no longer shows a math captcha question
+    - Form still protects against spam with one verification step
+    - Submit flow works on mobile without the extra field
+  evidence:
+    - file: 124005.png
+- key: 7952f11e-1b30-41a0-b128-5f54fdf49928
+  id: '4.1'
+  sprint: 4
+  title: Align the header icons
+  impact: high
+  status: planned
+  tags:
+    - header
+    - icons
+  problem: |
+    The menu, search, and cart icons sit in mismatched boxes. The search icon is not centered in its button.
+  recommendation: |
+    Give all header icons the same size box and center each icon inside it.
+  acceptance:
+    - Search icon centered in hit area on all breakpoints
+    - Menu, search, cart share one container spec
+  evidence:
+    - file: 120802.png
+      caption: Menu open, search icon off-center
+- key: 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
+  id: '4.2'
+  sprint: 4
+  title: Fix the broken link in the privacy table of contents
+  impact: high
+  status: planned
+  tags:
+    - legal
+    - navigation
+  problem: |
+    On the privacy notice page, table-of-contents item 4 is plain black text while every other entry is a blue link. Visitors may think section 4 is missing or not clickable.
+  recommendation: |
+    Make item 4 a working link with the same styling as the other TOC entries, or fix the markup or CSS that is stripping its link treatment.
+  acceptance:
+    - Privacy TOC item 4 matches the link style of items 1–3 and 5–8
+    - Tapping item 4 jumps to the correct section on mobile
+  evidence:
+    - file: 125703.png
+      caption: Privacy notice TOC item 4 not linked
+- key: d9a285fd-c112-4962-be45-5bbb594dc1d3
+  id: '4.3'
+  sprint: 4
+  title: Make headings and titles easier to tell apart
+  impact: high
+  status: planned
+  tags:
+    - typography
+  problem: |
+    Section headings, book titles, and pull quotes are too similar in size and weight. Everything competes for attention.
+  recommendation: |
+    Set clear rules for heading sizes so section titles, book titles, and quotes each have their own level.
+  acceptance:
+    - Section heading vs book title distinguishable at a glance
+  evidence:
+    - file: 120911.png
+    - file: 123249.png
+- key: 6f242823-63e3-4b9c-b49d-4ecf1336c282
+  id: '4.4'
+  sprint: 4
+  title: Make legal tables readable on a phone
+  impact: high
+  status: planned
+  tags:
+    - legal
+    - tables
+  problem: |
+    Tables on the privacy pages do not fit the screen. Content is cut off or hard to scroll sideways.
+  recommendation: |
+    Rework tables for mobile, for example by stacking rows or giving a clear horizontal scroll area.
+  acceptance:
+    - Legal tables readable without losing data on mobile
+  evidence:
+    - file: 125733.png
+      caption: CCPA table
+- key: 11ab1e09-5807-4688-85ed-437200d2fcce
+  id: '4.5'
+  sprint: 4
   title: Show email addresses the same way everywhere
   impact: high
   status: planned
@@ -64,287 +530,9 @@
       caption: Rights Enquiries
     - file: 123949.png
       caption: Contact page
-- key: 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
-  id: '1.4'
-  sprint: 1
-  title: Fix text that looks like a link but is not
-  impact: high
-  status: planned
-  tags:
-    - navigation
-    - homepage
-  problem: |
-    "See all" and some section titles look like links but nothing happens when you tap them. Real links like "Latest News" don't have "See all" and are not visually distinguishable as links.
-  recommendation: |
-    Either make those words real links or style them so they clearly are/not clickable.
-  acceptance:
-    - Every See all / View all is either a working link or clearly plain text
-    - Homepage modules audited and consistent
-  evidence:
-    - file: 120911.png
-    - file: 121002.png
-- key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
-  id: '1.5'
-  sprint: 1
-  title: Fix Reading Lists View All page
-  impact: high
-  status: planned
-  tags:
-    - navigation
-    - homepage
-  problem: |
-    View All under Reading Lists goes to a page that shows the same information already on the homepage. There is nothing new there.
-  recommendation: |
-    Add real content on that page (descriptions, filters, etc.) or remove the link and keep the module on the homepage only.
-  acceptance:
-    - View All page adds value beyond the homepage module, or route is removed
-  evidence:
-    - file: 164729.png
-    - file: 165045.png
-- key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
-  id: '1.6'
-  sprint: 1
-  title: Add a way back from news articles
-  impact: high
-  status: planned
-  tags:
-    - navigation
-    - news
-  problem: |
-    After opening a news or media article there is no obvious way back to the list. You have to scroll to the footer.
-  recommendation: |
-    Put a Back to News link or similar at the top of each article.
-  acceptance:
-    - User returns to news listing in one tap from any article
-  evidence:
-    - file: 123327.png
-      caption: News article
-    - file: 161534.png
-      caption: Media article
-- key: f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
-  id: '1.7'
-  sprint: 1
-  title: Link to other pages mentioned in the FAQ
-  impact: high
-  status: planned
-  tags:
-    - content
-    - faq
-  problem: |
-    The FAQ mentions other pages (for example the Booksellers page) as plain text. They are not links.
-  recommendation: |
-    Turn those references into normal links.
-  acceptance:
-    - Every in-copy page reference in FAQ is a tappable link
-  evidence:
-    - file: 125833.png
-- key: 1003b1bb-4460-4577-97e9-f737dfe9fead
-  id: '1.8'
-  sprint: 1
-  title: Open media articles on the first tap
-  impact: high
-  status: planned
-  tags:
-    - interaction
-    - media
-  problem: |
-    In the In the Media list, tapping an item shows a Read Now button instead of opening the article. It takes a second tap to get there.
-  recommendation: |
-    Let the whole row open the article on the first tap. Drop the overlay button in the middle.
-  acceptance:
-    - First tap on a media row navigates immediately
-    - No intermediate overlay CTA blocking the card
-  evidence:
-    - file: 123119.mp4
-    - file: 161238.png
-- key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
-  id: '1.9'
-  sprint: 1
-  title: Rights Catalogs page
-  impact: medium
-  status: blocked
-  tags:
-    - content
-    - rights
-  problem: |
-    The Rights Catalogs page (/rights-catalogs) is still placeholder copy. The body is Lorem Ipsum, but the page is linked in the site navigation. Visitors can open a page that looks unfinished.
-  recommendation: |
-    Do not leave placeholder text live in the menu. Recommended: hide the page from navigation until real catalog content is ready. See Questions for you to choose hide, populate, or remove.
-  acceptance:
-    - No Lorem Ipsum remains on any public page
-    - Navigation lists Rights Catalogs only if the page has real content (or the page is removed per your answer)
-    - If hidden, the link is removed from menus until content is ready
-  evidence:
-    - file: 125507.png
-- key: 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
-  id: '1.10'
-  sprint: 1
-  title: Fix Rights Enquiries page heading typo
-  impact: low
-  status: planned
-  tags:
-    - content
-    - rights
-  problem: |
-    The Rights Enquiries page heading is misspelled as "RIGHTS ENQUIRES." The page slug is also misspelled as "/rights-enquires/"
-  recommendation: |
-    Change the heading to "Rights Enquiries" everywhere it appears on that page. Ensure the page slug updates.
-  acceptance:
-    - Page heading reads "Rights Enquiries" (not "Enquires")
-    - No other copy on the page repeats the misspelling
-    - Page slug spelled correctly
-  evidence:
-    - file: 125454.png
-- key: 6eb190a1-cfcd-4029-8261-05027bb3da83
-  id: '1.11'
-  sprint: 1
-  title: Scale the book cover on mobile
-  impact: medium
-  status: planned
-  tags:
-    - layout
-    - book-detail
-  problem: |
-    On book detail pages, the cover image fills most of the phone screen. Readers must scroll before they see the description, format options, or purchase buttons.
-  recommendation: |
-    Limit cover height on small screens so the title, key details, and primary actions appear in the first screenful. Keep a way to view the full cover if needed.
-  acceptance:
-    - Cover does not dominate the first viewport on typical phone widths
-    - Title and at least one primary action are visible without scrolling on first load
-  evidence:
-    - file: 171653.png
-      caption: Run Zohran Run book page on mobile
-- key: d64c6362-1054-468f-a9cb-3f1feb2473ab
-  id: '1.12'
-  sprint: 1
-  title: Keep Featured Title links in the same tab
-  impact: medium
-  status: planned
-  tags:
-    - navigation
-    - widgets
-  problem: |
-    On the homepage, tapping the Featured Title module opens the book in a new browser tab. That breaks the normal flow of browsing the site on a phone and can feel like leaving the site by accident.
-  recommendation: |
-    Open Featured Title links in the same tab, like other in-site book links.
-  acceptance:
-    - Tapping Featured Title on the homepage navigates in the current tab
-    - No unexpected new tab or window opens for that module
-  evidence:
-    - file: 174154.png
-- key: 83a326b9-4988-4d2d-bcc4-d1ea3b064e98
-  id: '1.13'
-  sprint: 1
-  title: Remove the math captcha from the contact form
-  impact: medium
-  status: planned
-  tags:
-    - forms
-    - contact
-  problem: |
-    The Contact Us form asks visitors to solve a math question and complete reCAPTCHA before submitting. Unless there is a compelling reason to include both, two verification steps is unnecessary friction, and the math answer field is small and easy to miss.
-  recommendation: |
-    Drop the math question and keep a single bot check (reCAPTCHA). If spam becomes a problem, address it with one method, not both.
-  acceptance:
-    - Contact form no longer shows a math captcha question
-    - Form still protects against spam with one verification step
-    - Submit flow works on mobile without the extra field
-  evidence:
-    - file: 124005.png
-- key: 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
-  id: '1.14'
-  sprint: 1
-  title: Center the author alphabet spinner
-  impact: medium
-  status: planned
-  tags:
-    - authors
-    - layout
-  problem: |
-    On Our Authors, the alphabet letter spinner sits off center on the page. The control looks misaligned next to the author grid and feels uneven when swiping through letters on a phone.
-  recommendation: |
-    Center the spinner horizontally with the page content and the author grid below it. Keep the active letter and track aligned as users move through the alphabet.
-  acceptance:
-    - Alphabet spinner is horizontally centered at typical mobile widths
-    - Spinner track lines up with the author grid beneath it
-    - Alignment stays consistent while swiping between letters
-  evidence:
-    - file: 123547.mp4
-      caption: Our Authors alphabet spinner alignment
-- key: 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
-  id: '1.15'
-  sprint: 1
-  title: Fix the broken link in the privacy table of contents
-  impact: high
-  status: planned
-  tags:
-    - legal
-    - navigation
-  problem: |
-    On the privacy notice page, table-of-contents item 4 is plain black text while every other entry is a blue link. Visitors may think section 4 is missing or not clickable.
-  recommendation: |
-    Make item 4 a working link with the same styling as the other TOC entries, or fix the markup or CSS that is stripping its link treatment.
-  acceptance:
-    - Privacy TOC item 4 matches the link style of items 1–3 and 5–8
-    - Tapping item 4 jumps to the correct section on mobile
-  evidence:
-    - file: 125703.png
-      caption: Privacy notice TOC item 4 not linked
-- key: f94186fe-383f-4e7f-9d60-fa99b3468ebe
-  id: '1.16'
-  sprint: 1
-  title: Scale the In Bookstores images on mobile
-  impact: medium
-  status: planned
-  tags:
-    - layout
-    - images
-  problem: |
-    On the In Bookstores section, the stock photos below the heading fills almost the entire phone screen. Little else is visible before scrolling, so the section feels oversized compared with other homepage modules.
-  recommendation: |
-    Limit image height on small screens so the heading, illustration, and a reasonable slice of the photo fit in the first screenful. Match the visual weight of other promotional blocks on the site.
-  acceptance:
-    - In Bookstores imagery does not dominate the full viewport on typical phone widths
-    - Section heading remains visible with the image scaled proportionally
-  evidence:
-    - file: 125329.png
-- key: d9a285fd-c112-4962-be45-5bbb594dc1d3
-  id: '2.1'
-  sprint: 2
-  title: Make headings and titles easier to tell apart
-  impact: high
-  status: planned
-  tags:
-    - typography
-  problem: |
-    Section headings, book titles, and pull quotes are too similar in size and weight. Everything competes for attention.
-  recommendation: |
-    Set clear rules for heading sizes so section titles, book titles, and quotes each have their own level.
-  acceptance:
-    - Section heading vs book title distinguishable at a glance
-  evidence:
-    - file: 120911.png
-    - file: 123249.png
-- key: ad45e92e-3cd0-41a4-a129-f80d2c2908bb
-  id: '2.2'
-  sprint: 2
-  title: Make buttons look consistent
-  impact: high
-  status: planned
-  tags:
-    - buttons
-    - forms
-  problem: Buttons Add to Cart, Submit, View All, View Full Catalog, Subscribe, etc all look different from page to page.
-  recommendation: |
-    Use one button style and one quantity control style across the site.
-  acceptance:
-    - Primary CTAs share geometry, padding, and type treatment
-  evidence:
-    - file: 160840.png
-    - file: 123310.png
 - key: c392e399-8c2d-4c2e-9896-56b81e76b2d0
-  id: '2.3'
-  sprint: 2
+  id: '4.6'
+  sprint: 4
   title: Even out spacing between sections
   impact: medium
   status: planned
@@ -362,45 +550,9 @@
     - file: 123249.png
     - file: 123310.png
     - file: 110356.png
-- key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
-  id: '2.4'
-  sprint: 2
-  title: Make author photos the same size and shape
-  impact: high
-  status: planned
-  tags:
-    - images
-    - authors
-  problem: |
-    Author photos in the grid are cropped differently. Some look stretched or cut off awkwardly.
-  recommendation: Crop every author image to the same proportions. Handle missing photos cleanly. This can be done manually (more control), or via stylesheet rules (e.g., automatic square crop).
-  acceptance:
-    - All author grid images share one crop ratio
-  evidence:
-    - file: 123519.png
-    - file: 123704.png
-- key: 7952f11e-1b30-41a0-b128-5f54fdf49928
-  id: '2.5'
-  sprint: 2
-  title: Align the header icons
-  impact: high
-  status: planned
-  tags:
-    - header
-    - icons
-  problem: |
-    The menu, search, and cart icons sit in mismatched boxes. The search icon is not centered in its button.
-  recommendation: |
-    Give all header icons the same size box and center each icon inside it.
-  acceptance:
-    - Search icon centered in hit area on all breakpoints
-    - Menu, search, cart share one container spec
-  evidence:
-    - file: 120802.png
-      caption: Menu open, search icon off-center
 - key: 030cf68c-ad0d-4b9f-8c65-f0471faf263b
-  id: '2.6'
-  sprint: 2
+  id: '4.7'
+  sprint: 4
   title: Left-align long paragraphs on mobile
   impact: medium
   status: planned
@@ -418,87 +570,47 @@
       caption: About page
     - file: 125642.png
       caption: Subsidiary Rights page
-- key: 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
-  id: '2.7'
-  sprint: 2
-  title: Remove repeated labels in the menu
+- key: b59b43f9-981e-4656-8535-9eee882dcebc
+  id: '4.8'
+  sprint: 4
+  title: Make the privacy table of contents easier to scan
   impact: medium
   status: planned
   tags:
-    - navigation
-    - menu
+    - legal
+    - typography
   problem: |
-    Submenus repeat the parent category name. It reads twice for no reason.
+    Privacy notice TOC entries are set in all caps with long section titles. On a phone the list is hard to skim and every line looks the same weight.
   recommendation: |
-    Drop the duplicate heading under each menu group.
+    Use sentence case (or title case) for TOC labels and keep line length comfortable on narrow screens.
   acceptance:
-    - No submenu label repeats its parent category name
+    - Privacy TOC links are not set in all caps
+    - Section titles remain readable without horizontal scrolling on typical phone widths
   evidence:
-    - file: 120802.png
-      caption: Menu overlay
-- key: 02bb4d06-502d-44db-907c-062d48f5e58c
-  id: '2.8'
-  sprint: 2
-  title: Give the header more room in the open menu
-  impact: medium
-  status: planned
-  tags:
-    - navigation
-    - menu
-  problem: |
-    When the menu is open the overlay is too close to the top and crowds the header compared with other pages.
-  recommendation: |
-    Match the top spacing used elsewhere when the menu is open.
-  acceptance:
-    - Header has consistent clearance when menu overlay is open
-  evidence:
-    - file: 120802.png
-      caption: Menu crowding logo
-- key: d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
-  id: '2.9'
-  sprint: 2
-  title: Use one slider style across the site
+    - file: 125703.png
+      caption: Privacy notice TOC all-caps links
+- key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
+  id: '4.9'
+  sprint: 4
+  title: Rights Catalogs page
   impact: medium
   status: blocked
   tags:
-    - carousels
-    - homepage
+    - content
+    - rights
   problem: |
-    Some sliders use dots and others use arrow buttons. The homepage mixes both.
+    The Rights Catalogs page (/rights-catalogs) is still placeholder copy. The body is Lorem Ipsum, but the page is linked in the site navigation. Visitors can open a page that looks unfinished.
   recommendation: |
-    Choose dots or arrows and use that everywhere. See Questions for you.
+    Do not leave placeholder text live in the menu. Recommended: hide the page from navigation until real catalog content is ready. See Questions for you to choose hide, populate, or remove.
   acceptance:
-    - One slider navigation pattern used everywhere
+    - No Lorem Ipsum remains on any public page
+    - Navigation lists Rights Catalogs only if the page has real content (or the page is removed per your answer)
+    - If hidden, the link is removed from menus until content is ready
   evidence:
-    - file: 120911.png
-    - file: 123850.png
-    - file: 125607.png
-- key: b57d706d-de6d-46d7-8e3f-6452f175c362
-  id: '2.10'
-  sprint: 2
-  title: Stop squashing images in media lists
-  impact: high
-  status: planned
-  tags:
-    - images
-    - media
-  problem: |
-    Images in media list cards look vertically squashed. The same image looks correct on the full article page.
-  recommendation: |
-    Use the same image proportions in lists and on article pages.
-  acceptance:
-    - List and detail views use matching image ratio rules
-    - No vertical squash in list cards
-  evidence:
-    - file: 123202.png
-      caption: Squashed list image
-    - file: 123215.png
-      caption: In the Media list
-    - file: 161534.png
-      caption: Article page, correct proportions
+    - file: 125507.png
 - key: 1c59053b-b5c4-4f94-8361-422f66dd6614
-  id: '2.11'
-  sprint: 2
+  id: '4.10'
+  sprint: 4
   title: Shorten news bylines on mobile
   impact: medium
   status: planned
@@ -516,124 +628,28 @@
       caption: News byline
     - file: 161534.png
       caption: Media byline
-- key: 5d04c117-9701-492c-beea-4056113fbdf2
-  id: '2.12'
-  sprint: 2
-  title: Label the Featured Title blocks clearly
-  impact: high
-  status: planned
-  tags:
-    - widgets
-    - catalog
-  problem: |
-    Featured Title sections sometimes have a tiny heading under the image, or no heading at all. It is unclear what the block is.
-  recommendation: |
-    Put a clear section title above the block in the same place on every page that uses it.
-  acceptance:
-    - Featured block has visible section label in same position on all templates
-  evidence:
-    - file: 123809.png
-    - file: 174154.png
-- key: 6f242823-63e3-4b9c-b49d-4ecf1336c282
-  id: '2.13'
-  sprint: 2
-  title: Make legal tables readable on a phone
-  impact: high
-  status: planned
-  tags:
-    - legal
-    - tables
-  problem: |
-    Tables on the privacy pages do not fit the screen. Content is cut off or hard to scroll sideways.
-  recommendation: |
-    Rework tables for mobile, for example by stacking rows or giving a clear horizontal scroll area.
-  acceptance:
-    - Legal tables readable without losing data on mobile
-  evidence:
-    - file: 125733.png
-      caption: CCPA table
-- key: f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
-  id: '2.14'
-  sprint: 2
-  title: Improve Featured Author Slider Items on mobile
-  impact: medium
-  status: planned
-  tags:
-    - typography
-    - authors
-  problem: |
-    The text in the Featured Author sliders is small and hard to read. The section heading does not match other headings on the site.
-  recommendation: |
-    Increase bio text size and match the section heading to the rest of the site.
-  acceptance:
-    - Bio text readable without zooming
-    - Featured Author heading matches site sans hierarchy
-  evidence:
-    - file: 125607.png
-- key: 22f6409d-b5e4-46b1-8086-f2839495505e
-  id: '2.15'
-  sprint: 2
-  title: Keep bookseller signup on orbooks.com
+- key: d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
+  id: '4.11'
+  sprint: 4
+  title: Use one slider style across the site
   impact: medium
   status: blocked
   tags:
-    - forms
-    - mailchimp
+    - carousels
+    - homepage
   problem: |
-    The bookseller signup sends people to an external Mailchimp page. They leave the OR Books site. The Booksellers page also has uneven text sizing around the orders email.
+    Some sliders use dots and others use arrow buttons. The homepage mixes both.
   recommendation: |
-    Host the signup on orbooks.com and still send entries to the same Mailchimp list. See Questions for you for how to build it.
+    Choose dots or arrows and use that everywhere. See Questions for you.
   acceptance:
-    - Form lives on orbooks.com with site header/footer visible
-    - Submissions reach existing bookseller Mailchimp audience
-    - Booksellers CTA does not point to list-manage.com
+    - One slider navigation pattern used everywhere
   evidence:
-    - file: 125535.png
-      caption: External signup form
-    - file: 125307.png
-      caption: Booksellers page
-- key: b59b43f9-981e-4656-8535-9eee882dcebc
-  id: '2.16'
-  sprint: 2
-  title: Make the privacy table of contents easier to scan
-  impact: medium
-  status: planned
-  tags:
-    - legal
-    - typography
-  problem: |
-    Privacy notice TOC entries are set in all caps with long section titles. On a phone the list is hard to skim and every line looks the same weight.
-  recommendation: |
-    Use sentence case (or title case) for TOC labels and keep line length comfortable on narrow screens.
-  acceptance:
-    - Privacy TOC links are not set in all caps
-    - Section titles remain readable without horizontal scrolling on typical phone widths
-  evidence:
-    - file: 125703.png
-      caption: Privacy notice TOC all-caps links
-- key: 016b1384-309d-48ba-a585-398783c97dd6
-  id: '3.1'
-  sprint: 3
-  title: Make small tap targets easier to hit
-  impact: high
-  status: planned
-  tags:
-    - accessibility
-    - touch
-  problem: |
-    Pricing options, the author alphabet filter, tag chips, video arrows, and captcha fields are small and fiddly on a phone.
-  recommendation: |
-    Enlarge the tap area without making the page feel cluttered.
-  acceptance:
-    - Interactive controls meet 44×44px minimum touch target
-  evidence:
-    - file: 123310.png
-      caption: Pricing options
-    - file: 123519.png
-      caption: Alphabet filter
+    - file: 120911.png
+    - file: 123850.png
+    - file: 125607.png
 - key: 535334f1-38be-42ea-9a71-735525922eeb
-  id: '3.2'
-  sprint: 3
+  id: '4.12'
+  sprint: 4
   title: Center the cookie preferences bar with the footer
   impact: low
   status: planned
@@ -649,41 +665,22 @@
   evidence:
     - file: 123434.png
       caption: Footer alignment
-- key: 12737e6f-b52c-4f53-97b6-50c68e98a871
-  id: '3.3'
-  sprint: 3
-  title: Keep accordion titles steady on hover
+- key: 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
+  id: '4.13'
+  sprint: 4
+  title: Fix Rights Enquiries page heading typo
   impact: low
   status: planned
   tags:
-    - components
-    - interaction
+    - content
+    - rights
   problem: |
-    On some pages with accordions (for example author profiles), hovering or tapping a section title makes the text animate or shift. The motion draws attention away from the content and feels out of place.
+    The Rights Enquiries page heading is misspelled as "RIGHTS ENQUIRES." The page slug is also misspelled as "/rights-enquires/"
   recommendation: |
-    Keep accordion titles visually stable on hover, focus, and tap. If you need feedback, use a subtle change to the arrow or background, not animated title text.
+    Change the heading to "Rights Enquiries" everywhere it appears on that page. Ensure the page slug updates.
   acceptance:
-    - Accordion title text does not animate or shift on hover, focus, or tap
-    - Any feedback uses arrow or background only
+    - Page heading reads "Rights Enquiries" (not "Enquires")
+    - No other copy on the page repeats the misspelling
+    - Page slug spelled correctly
   evidence:
-    - file: 122948.mp4
-- key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
-  id: '3.4'
-  sprint: 3
-  title: Remove distracting motion on buttons
-  impact: low
-  status: planned
-  tags:
-    - interaction
-    - media
-  problem: |
-    In the In the Media section on author pages, the Read Now button fades and slides up when it appears. The entrance animation feels unnecessary and makes a simple action look fussy.
-  recommendation: |
-    Show the Read Now control immediately, without a slide or bounce. If any transition is needed, keep it to a brief, subtle fade with no vertical movement.
-  acceptance:
-    - Read Now does not slide or bounce into view on author In the Media items
-    - Button is readable as soon as it appears
-  evidence:
-    - file: 123119.mp4
-    - file: 173459.mp4
-    - file: 123929.mp4
+    - file: 125454.png

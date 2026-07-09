@@ -162,7 +162,7 @@ The filename must match a file in `media/`. Both directions help: notes pull ima
 3. Add a row to `data/evidence.yaml`.
 4. Reference it from the relevant note(s) in `issues.yaml`.
 
-For videos, set `type: video` and optional `poster: "123202.png"` in `evidence.yaml`.
+For videos, set `type: video` in `evidence.yaml`.
 
 ### Edit phases (groupings)
 

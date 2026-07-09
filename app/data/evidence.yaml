@@ -47,7 +47,6 @@
 - file: 123119.mp4
   type: video
   page: 'In the Media: Read Now overlay'
-  poster: 161238.png
   issues:
     - 1003b1bb-4460-4577-97e9-f737dfe9fead
     - 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
@@ -75,7 +74,6 @@
   type: image
   page: 'Book detail: purchase options'
   issues:
-    - 016b1384-309d-48ba-a585-398783c97dd6
     - ad45e92e-3cd0-41a4-a129-f80d2c2908bb
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
   url: https://orbooks.com/catalog/run-zohran-run/

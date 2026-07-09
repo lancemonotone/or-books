@@ -10,17 +10,22 @@ stats:
   decisions: 4
 sprints:
   - id: 1
-    subtitle: Do these first
-    title: Urgent fixes
+    subtitle: Find your way
+    title: Getting around
     description: |
-      Layout, search, links that do not work, pages with no way back, and taps that take an extra step. These get in the way of reading and buying.
+      Search, menus, links that do not work, dead ends, and taps that send people the wrong way. These shape how visitors move through the site.
   - id: 2
-    subtitle: Next pass
-    title: Visual consistency
+    subtitle: Browse the catalog
+    title: Books, authors & media
     description: |
-      Headings, buttons, sliders, images, and page sections should look like they belong to the same site. Several pages mix styles right now.
+      Book pages, author directories, media lists, and featured modules. How titles and people are shown and opened on a phone.
   - id: 3
-    subtitle: When time allows
-    title: Small refinements
+    subtitle: Complete the action
+    title: Forms & conversion
     description: |
-      Icon details, easier-to-tap controls, footer alignment, and other polish items.
+      Contact and signup forms, buttons, and controls that are hard to tap. Friction between interest and a completed action.
+  - id: 4
+    subtitle: Look finished
+    title: Trust & polish
+    description: |
+      Legal and rights pages, consistent type and spacing, header and footer details, and other finish work that makes the site feel complete.
