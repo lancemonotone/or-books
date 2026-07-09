@@ -787,7 +787,7 @@ function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
     .map(
       (line, index) => `
       <div class="list-row" data-acceptance-index="${index}">
-        ${input(`acceptance.${index}`, line)}
+        ${textarea(`acceptance.${index}`, line, 2)}
         <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="remove-acceptance" data-index="${index}">Remove</button>
       </div>`,
     )
@@ -1008,7 +1008,7 @@ function applyIssueForm(issue, root) {
   issue.recommendation =
     form.querySelector('[name="recommendation"]')?.value ?? "";
   issue.acceptance = [
-    ...form.querySelectorAll("[data-acceptance-index] input"),
+    ...form.querySelectorAll("[data-acceptance-index] textarea"),
   ].map((el) => el.value);
   issue.evidence = [
     ...form.querySelectorAll(".issue-media-card[data-evidence-index]"),
