@@ -259,6 +259,14 @@ function renderEvidencePageLink(row, className = "") {
   return `<a class="${escapeHtml(classes)}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
 }
 
+function evidenceThumbCaption(row) {
+  return evidencePageUrl(row) || row.page || "";
+}
+
+function renderVideoPreviewMarkup(file, alt = "") {
+  return `<video preload="metadata" muted playsinline src="${escapeHtml(mediaUrl(file))}" aria-label="${escapeHtml(alt)}"></video>`;
+}
+
 function renderEvidenceThumb(file, galleryFiles = null) {
   const row = evidenceByFile(file);
   if (!row) {
@@ -266,19 +274,19 @@ function renderEvidenceThumb(file, galleryFiles = null) {
   }
   const galleryAttr = evidenceGalleryAttr(galleryFiles);
   const label = row.page || file;
+  const caption = evidenceThumbCaption(row);
   if (row.type === "video") {
-    const poster = row.poster ? mediaUrl(row.poster) : "";
     return `
       <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
-        ${poster ? `<img src="${escapeHtml(poster)}" alt="" loading="lazy">` : '<span class="evidence-thumb__placeholder"></span>'}
+        ${renderVideoPreviewMarkup(file, label)}
         <span class="evidence-thumb__play" aria-hidden="true">▶</span>
-        <span class="evidence-thumb__label">${escapeHtml(file.replace(/\.(png|mp4)$/, ""))}</span>
+        ${caption ? `<span class="evidence-thumb__label">${escapeHtml(caption)}</span>` : ""}
       </button>`;
   }
   return `
     <button type="button" class="evidence-thumb" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
       <img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(label)}" loading="lazy">
-      <span class="evidence-thumb__label">${escapeHtml(file.replace(".png", ""))}</span>
+      ${caption ? `<span class="evidence-thumb__label">${escapeHtml(caption)}</span>` : ""}
     </button>`;
 }
 
@@ -525,15 +533,11 @@ function renderIssueDetail(issueKey) {
         className: "edit-link--overlay",
       });
       if (row?.type === "video") {
-        const poster = row.poster ? mediaUrl(row.poster) : "";
-        const previewMarkup = poster
-          ? `<img src="${escapeHtml(poster)}" alt="${escapeHtml(alt)}" loading="lazy">`
-          : `<video preload="metadata" muted playsinline src="${escapeHtml(mediaUrl(item.file))}"></video>`;
         return `
           <figure class="media-block">
             ${editLink}
             <button type="button" class="media-block__image media-block__image--video" data-open-evidence="${escapeHtml(item.file)}"${galleryAttr}>
-              ${previewMarkup}
+              ${renderVideoPreviewMarkup(item.file, alt)}
               <span class="media-block__play" aria-hidden="true">▶</span>
             </button>
             ${footerHtml}
@@ -826,7 +830,7 @@ function renderLightboxFile(file) {
   }
   lightboxTitle.textContent = row.page || file;
   if (row.type === "video") {
-    lightboxBody.innerHTML = `<video controls autoplay src="${escapeHtml(mediaUrl(file))}" ${row.poster ? `poster="${escapeHtml(mediaUrl(row.poster))}"` : ""}></video>`;
+    lightboxBody.innerHTML = `<video controls autoplay src="${escapeHtml(mediaUrl(file))}"></video>`;
   } else {
     lightboxBody.innerHTML = `<img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(row.page || file)}">`;
   }

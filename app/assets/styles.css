@@ -58,6 +58,8 @@ body {
   line-height: 1.55;
   color: var(--color-text);
   background: var(--color-bg);
+  /* text balance pretty */
+  text-wrap: balance;
 }
 
 img,
@@ -715,25 +717,29 @@ a.pill {
   transform: scale(1.04);
 }
 
-.evidence-thumb img {
+.evidence-thumb img,
+.evidence-thumb video {
   width: 100%;
   aspect-ratio: 9 / 16;
   object-fit: cover;
-}
-
-.evidence-thumb__placeholder {
   display: block;
-  aspect-ratio: 9 / 16;
-  background: #d4d0ca;
 }
 
 .evidence-thumb__label {
-  display: block;
-  font-size: 0.65rem;
-  font-family: var(--font-mono);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-size: 0.6rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
   padding: 0.2rem;
   text-align: center;
   background: rgb(255 255 255 / 90%);
+  word-break: break-all;
+  line-height: 1.25;
 }
 
 .evidence-thumb--video .evidence-thumb__play {

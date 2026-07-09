@@ -857,8 +857,7 @@ button.chip {
   gap: 0.5rem;
 }
 
-.evidence-row__actions,
-.poster-field {
+.evidence-row__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;

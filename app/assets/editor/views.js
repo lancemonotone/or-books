@@ -424,7 +424,6 @@ function openEditorLightbox({
   file,
   title = "",
   isVideo = false,
-  poster = "",
 }) {
   const dialog = document.getElementById("editor-lightbox");
   const titleNode = document.getElementById("editor-lightbox-title");
@@ -438,7 +437,7 @@ function openEditorLightbox({
   }
 
   bodyNode.innerHTML = isVideo
-    ? `<video controls autoplay src="${mediaUrl(file)}" ${poster ? `poster="${poster}"` : ""}></video>`
+    ? `<video controls autoplay src="${mediaUrl(file)}"></video>`
     : `<img src="${mediaUrl(file)}" alt="${escapeAttr(title || file)}">`;
 
   if (!dialog.dataset.bound) {
@@ -743,9 +742,8 @@ function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
         String(item.file || "")
           .toLowerCase()
           .endsWith(".mp4");
-      const poster = galleryRow?.poster ? mediaUrl(galleryRow.poster) : "";
       const preview = isVideo
-        ? `<video preload="metadata" src="${mediaUrl(item.file)}" ${poster ? `poster="${poster}"` : ""} muted playsinline></video>`
+        ? `<video preload="metadata" src="${mediaUrl(item.file)}" muted playsinline></video>`
         : `<img src="${mediaUrl(item.file)}" alt="${escapeAttr(title || item.file)}" loading="lazy">`;
       const issueKeys = galleryRow?.issues?.length
         ? galleryRow.issues
@@ -769,7 +767,6 @@ function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
             data-file="${escapeAttr(item.file)}"
             data-title="${escapeAttr(title || item.file)}"
             data-video="${isVideo ? "1" : "0"}"
-            ${poster ? `data-poster="${escapeAttr(poster)}"` : ""}
             aria-label="Open ${escapeAttr(title || item.file)}"
           >${preview}</button>
           <div class="issue-media-card__actions">
@@ -984,7 +981,6 @@ function bindIssueForm(
           file: button.dataset.file,
           title: button.dataset.title || "",
           isVideo: button.dataset.video === "1",
-          poster: button.dataset.poster || "",
         });
       });
     });
@@ -1161,7 +1157,7 @@ function renderEvidenceForm(row, issues, audit) {
           <div class="media-chip media-chip--large">
             ${
               row.type === "video" || row.file.endsWith(".mp4")
-                ? `<video controls preload="metadata" src="${mediaUrl(row.file)}" ${row.poster ? `poster="${mediaUrl(row.poster)}"` : ""}></video>`
+                ? `<video controls preload="metadata" src="${mediaUrl(row.file)}"></video>`
                 : `<img src="${mediaUrl(row.file)}" alt="">`
             }
           </div>
@@ -1173,18 +1169,6 @@ function renderEvidenceForm(row, issues, audit) {
           </div>
           ${field("Image title", input("page", row.page || ""))}
           ${field("Page URL", input("url", row.url || ""))}
-          ${
-            row.type === "video" || row.file.endsWith(".mp4")
-              ? field(
-                  "Poster image",
-                  `<div class="poster-field">
-                    ${row.poster ? renderMediaChip(row.poster) : '<span class="editor-muted">None</span>'}
-                    <button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="pick-poster">Choose poster</button>
-                    ${row.poster ? '<button type="button" class="editor-button editor-button--ghost editor-button--small" data-action="clear-poster">Clear</button>' : ""}
-                  </div>`,
-                )
-              : ""
-          }
           <section class="editor-subsection">
             <div class="editor-subsection__head">
               <h3>Linked issues</h3>
@@ -1294,27 +1278,6 @@ function bindEvidenceForm(
           rerender();
         },
       });
-    });
-
-  detail
-    .querySelector('[data-action="pick-poster"]')
-    ?.addEventListener("click", () => {
-      openMediaFilePicker({
-        type: "image",
-        callback: (file) => {
-          row.poster = file;
-          onChange();
-          rerender();
-        },
-      });
-    });
-
-  detail
-    .querySelector('[data-action="clear-poster"]')
-    ?.addEventListener("click", () => {
-      delete row.poster;
-      onChange();
-      rerender();
     });
 
   detail.querySelectorAll("[data-open-issue]").forEach((button) => {
