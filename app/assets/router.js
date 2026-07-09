@@ -14,7 +14,10 @@ const ROUTES = [
 
 export function parseRoute() {
   const raw = window.location.hash.replace(/^#/, '') || '/';
-  const path = raw.split('?')[0];
+  const queryIndex = raw.indexOf('?');
+  const path = queryIndex >= 0 ? raw.slice(0, queryIndex) : raw;
+  const query = queryIndex >= 0 ? raw.slice(queryIndex + 1) : '';
+  const searchParams = new URLSearchParams(query);
 
   for (const route of ROUTES) {
     const match = path.match(route.pattern);
@@ -25,10 +28,10 @@ export function parseRoute() {
     route.params?.forEach((key, index) => {
       params[key] = decodeURIComponent(match[index + 1]);
     });
-    return { name: route.name, path, params };
+    return { name: route.name, path, params, searchParams };
   }
 
-  return { name: 'overview', path: '/', params: {} };
+  return { name: 'overview', path: '/', params: {}, searchParams };
 }
 
 export function navigate(path) {

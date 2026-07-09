@@ -205,6 +205,8 @@ Each question needs a stable **`key`** (UUID). The editor assigns one when you a
 
 ### Views
 
-`#/` overview · `#/sprint/1` (phase 1) · `#/issue/<key>` (note by UUID; chips still show `1.3`) · `#/evidence` · `#/decisions` · `#/responses`
+`#/` overview (phases accordion; `#/?phases=1` opens phase 1) · `#/issue/<key>` (note by UUID; chips still show `1.3`) · `#/evidence` · `#/decisions` · `#/responses`
+
+Legacy `#/sprints` and `#/sprint/<n>` redirect to overview.
 
 Old `#/issue/1.3` routes are not supported (hard cut).

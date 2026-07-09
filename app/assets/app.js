@@ -24,10 +24,8 @@ const COPY = {
   decisionsLead: (n) =>
     `${n} questions need answers before related work can continue.`,
   reviewDecisions: "Answer the questions",
-  allPhases: "All phases",
   openAllPhases: "Open all",
   closeAllPhases: "Close all",
-  openPhase: "Open phase",
   whatWeFound: "Issue Found",
   whatWeSuggest: "Suggested Fix",
   screenshotsHeading: "Screenshots",
@@ -340,6 +338,64 @@ function renderIssueCard(issue) {
     </article>`;
 }
 
+function parseOpenPhases(searchParams) {
+  const raw = String(searchParams?.get("phases") || "").trim();
+  if (!raw) {
+    return [];
+  }
+  return [...new Set(raw.split(",").map((part) => part.trim()).filter(Boolean))];
+}
+
+function overviewHref(openPhaseIds = []) {
+  const ids = [...new Set(openPhaseIds.map(String))].filter(Boolean);
+  if (!ids.length) {
+    return "#/";
+  }
+  return `#/?phases=${encodeURIComponent(ids.join(","))}`;
+}
+
+function readOpenPhasesFromDom() {
+  return [...main.querySelectorAll("details[data-phase-id][open]")]
+    .map((item) => item.dataset.phaseId)
+    .filter(Boolean);
+}
+
+function syncOverviewPhaseUrl() {
+  if (state.route.name !== "overview") {
+    return;
+  }
+  const target = overviewHref(readOpenPhasesFromDom());
+  if (window.location.hash === target) {
+    return;
+  }
+  history.replaceState(null, "", target);
+  state.route = parseRoute();
+}
+
+function scrollToOpenPhase() {
+  const ids = parseOpenPhases(state.route.searchParams);
+  if (!ids.length) {
+    return;
+  }
+  requestAnimationFrame(() => {
+    const target = main.querySelector(`details[data-phase-id="${ids[0]}"]`);
+    target?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
+function normalizeLegacyRoute(route) {
+  if (route.name === "sprints") {
+    history.replaceState(null, "", "#/");
+    return parseRoute();
+  }
+  if (route.name === "sprint") {
+    const phaseId = route.params.sprintId;
+    history.replaceState(null, "", overviewHref([phaseId]));
+    return parseRoute();
+  }
+  return route;
+}
+
 function overviewStats() {
   return {
     screenshots: state.evidence.filter(
@@ -353,20 +409,46 @@ function overviewStats() {
   };
 }
 
-function renderOverview() {
-  const sprintCards = state.audit.sprints
+function renderPhasesAccordion(openPhaseIds) {
+  const openSet = new Set(openPhaseIds.map(String));
+  const groups = state.audit.sprints
     .map((sprint) => {
-      const count = sprintIssues(sprint.id).length;
+      const issues = sprintIssues(sprint.id);
+      const isOpen = openSet.has(String(sprint.id));
       return `
-        <a class="sprint-card" href="#/sprint/${sprint.id}">
-          <h2>${escapeHtml(COPY.phase)} ${sprint.id}</h2>
-          <p class="sprint-card__subtitle">${escapeHtml(sprint.title)}</p>
-          <p class="sprint-card__count">${count} ${COPY.suggestions}</p>
-          <p class="sprint-card__desc">${escapeHtml(sprint.description.trim())}</p>
-        </a>`;
+        <details class="phases-accordion__item" data-phase-id="${escapeHtml(String(sprint.id))}"${isOpen ? " open" : ""}>
+          <summary class="phases-accordion__summary">
+            <span class="phases-accordion__heading">
+              <span class="phases-accordion__title">${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</span>
+              <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
+              <p class="phases-accordion__desc">${escapeHtml(sprint.description.trim())}</p>
+            </span>
+            <span class="phases-accordion__meta">${issues.length} ${COPY.suggestions}</span>
+            <span class="phases-accordion__chevron" aria-hidden="true">›</span>
+          </summary>
+          <div class="phases-accordion__panel">
+            <div class="issue-list">${issues.map(renderIssueCard).join("")}</div>
+          </div>
+        </details>`;
     })
     .join("");
 
+  return `
+      <section class="section">
+        <div class="section__head">
+          <h2>${escapeHtml(COPY.phases)}</h2>
+          <div class="phases-accordion__controls">
+            <button type="button" class="phases-accordion__control" data-phases-open-all>${escapeHtml(COPY.openAllPhases)}</button>
+            <span class="phases-accordion__control-sep" aria-hidden="true">·</span>
+            <button type="button" class="phases-accordion__control" data-phases-close-all>${escapeHtml(COPY.closeAllPhases)}</button>
+          </div>
+        </div>
+        <div class="phases-accordion">${groups}</div>
+      </section>`;
+}
+
+function renderOverview() {
+  const openPhases = parseOpenPhases(state.route.searchParams);
   const stats = overviewStats();
   const pendingDecisions = stats.decisions;
 
@@ -382,79 +464,12 @@ function renderOverview() {
           <li><strong>${pendingDecisions}</strong> questions</li>
         </ul>
       </header>
-      <section class="section">
-        <div class="section__head">
-          <h2>${escapeHtml(COPY.phases)}</h2>
-          <a href="#/sprints">${escapeHtml(COPY.viewAll)}</a>
-        </div>
-        <div class="sprint-grid">${sprintCards}</div>
-      </section>
+      ${renderPhasesAccordion(openPhases)}
       <section class="section section--callout">
         <h2>${escapeHtml(COPY.decisionsNeeded)}</h2>
         <p>${escapeHtml(COPY.decisionsLead(pendingDecisions))}</p>
         <a class="button" href="#/decisions">${escapeHtml(COPY.reviewDecisions)}</a>
       </section>
-    </div>`;
-}
-
-function renderSprintsIndex() {
-  const groups = state.audit.sprints
-    .map((sprint) => {
-      const issues = sprintIssues(sprint.id);
-      return `
-        <details class="phases-accordion__item" data-phase-accordion>
-          <summary class="phases-accordion__summary">
-            <span class="phases-accordion__heading">
-              <span class="phases-accordion__title">${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</span>
-              <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
-            </span>
-            <span class="phases-accordion__meta">${issues.length} ${COPY.suggestions}</span>
-            <span class="phases-accordion__chevron" aria-hidden="true">›</span>
-          </summary>
-          <div class="phases-accordion__panel">
-            <div class="phases-accordion__panel-head">
-              <p class="phases-accordion__lede">${escapeHtml(sprint.description.trim())}</p>
-              <a href="#/sprint/${sprint.id}">${escapeHtml(COPY.openPhase)}</a>
-            </div>
-            <div class="issue-list">${issues.map(renderIssueCard).join("")}</div>
-          </div>
-        </details>`;
-    })
-    .join("");
-
-  return `
-    <div class="page page--phases">
-      <header class="page-header">
-        <div class="page-header__row">
-          <h1>${escapeHtml(COPY.allPhases)}</h1>
-          <div class="phases-accordion__controls">
-            <button type="button" class="phases-accordion__control" data-phases-open-all>${escapeHtml(COPY.openAllPhases)}</button>
-            <span class="phases-accordion__control-sep" aria-hidden="true">·</span>
-            <button type="button" class="phases-accordion__control" data-phases-close-all>${escapeHtml(COPY.closeAllPhases)}</button>
-          </div>
-        </div>
-      </header>
-      <div class="phases-accordion">${groups}</div>
-    </div>`;
-}
-
-function renderSprint(sprintId) {
-  const sprint = state.audit.sprints.find(
-    (s) => String(s.id) === String(sprintId),
-  );
-  const issues = sprintIssues(sprintId);
-  if (!sprint) {
-    return `<div class="page"><p>${escapeHtml(COPY.phaseNotFound)}</p></div>`;
-  }
-
-  return `
-    <div class="page">
-      <header class="page-header">
-        <p class="breadcrumb"><a href="#/sprints">${escapeHtml(COPY.phases)}</a> / ${escapeHtml(COPY.phase)} ${sprint.id}</p>
-        <h1>${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</h1>
-        <p class="lede">${escapeHtml(sprint.description.trim())}</p>
-      </header>
-      <div class="issue-list">${issues.map(renderIssueCard).join("")}</div>
     </div>`;
 }
 
@@ -470,7 +485,7 @@ function renderFilteredIssues(kind, value) {
   return `
     <div class="page">
       <header class="page-header">
-        <p class="breadcrumb"><a href="#/sprints">${escapeHtml(COPY.phases)}</a></p>
+        <p class="breadcrumb"><a href="#/">${escapeHtml(COPY.overview)}</a></p>
         <h1>${escapeHtml(title)}</h1>
         <p class="lede">${issues.length} ${COPY.suggestions}</p>
       </header>
@@ -563,7 +578,7 @@ function renderIssueDetail(issueKey) {
       <div class="page__primary">
         <header class="page-header">
           <div class="page-header__top">
-            <p class="breadcrumb"><a href="#/sprint/${issue.sprint}">${escapeHtml(COPY.phase)} ${issue.sprint}</a> / ${escapeHtml(issue.id)}</p>
+            <p class="breadcrumb"><a href="${overviewHref([issue.sprint])}">${escapeHtml(COPY.phase)} ${issue.sprint}</a> / ${escapeHtml(issue.id)}</p>
             ${renderIssueNav(issueKey)}
           </div>
           <div class="page-header__row">
@@ -752,9 +767,8 @@ function renderRoute() {
     case "overview":
       return renderOverview();
     case "sprints":
-      return renderSprintsIndex();
     case "sprint":
-      return renderSprint(params.sprintId);
+      return renderOverview();
     case "issue":
       return renderIssueDetail(params.issueKey);
     case "issues-by-impact":
@@ -923,18 +937,26 @@ function bindPageHandlers() {
   const phasesCloseAll = main.querySelector("[data-phases-close-all]");
   if (phasesOpenAll) {
     phasesOpenAll.addEventListener("click", () => {
-      main.querySelectorAll("[data-phase-accordion]").forEach((item) => {
+      main.querySelectorAll("details[data-phase-id]").forEach((item) => {
         item.open = true;
       });
+      syncOverviewPhaseUrl();
     });
   }
   if (phasesCloseAll) {
     phasesCloseAll.addEventListener("click", () => {
-      main.querySelectorAll("[data-phase-accordion]").forEach((item) => {
+      main.querySelectorAll("details[data-phase-id]").forEach((item) => {
         item.open = false;
       });
+      syncOverviewPhaseUrl();
     });
   }
+
+  main.querySelectorAll("details[data-phase-id]").forEach((item) => {
+    item.addEventListener("toggle", () => {
+      syncOverviewPhaseUrl();
+    });
+  });
 
   main.querySelectorAll("[data-decision-form]").forEach((form) => {
     form.addEventListener("submit", async (event) => {
@@ -1023,8 +1045,16 @@ async function init() {
   }
 
   onRouteChange(() => {
-    state.route = parseRoute();
+    state.route = normalizeLegacyRoute(parseRoute());
+    const shouldScrollPhases =
+      state.route.name === "overview" &&
+      parseOpenPhases(state.route.searchParams).length > 0;
     render();
+    if (shouldScrollPhases) {
+      scrollToOpenPhase();
+    } else if (state.route.name === "issue") {
+      window.scrollTo(0, 0);
+    }
     if (typeof main.focus === "function") {
       try {
         main.focus({ preventScroll: true, focusVisible: false });
