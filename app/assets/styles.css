@@ -762,6 +762,7 @@ a.pill {
 }
 
 .media-block__image {
+  position: relative;
   display: block;
   inline-size: 100%;
   border: 0;
@@ -772,6 +773,21 @@ a.pill {
   overflow: hidden;
 }
 
+.media-block__image--video {
+  cursor: pointer;
+}
+
+.media-block__play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  color: #fff;
+  text-shadow: 0 1px 4px rgb(0 0 0 / 50%);
+  pointer-events: none;
+}
+
 .evidence-stack .media-block__image {
   display: flex;
   justify-content: center;
@@ -780,7 +796,7 @@ a.pill {
 }
 
 .evidence-stack .media-block__image img,
-.evidence-stack .media-block video {
+.evidence-stack .media-block__image video {
   inline-size: auto;
   max-inline-size: 100%;
   max-block-size: var(--preview-max-block-size);

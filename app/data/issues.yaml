@@ -186,7 +186,7 @@
     - content
     - rights
   problem: |
-    The Rights Enquiries page heading is misspelled as "RIGHTS ENQUIRES." It is the wrong word and looks unprofessional on a public page. The page slug is also misspelled as "/rights-enquires/"
+    The Rights Enquiries page heading is misspelled as "RIGHTS ENQUIRES." The page slug is also misspelled as "/rights-enquires/"
   recommendation: |
     Change the heading to "Rights Enquiries" everywhere it appears on that page. Ensure the page slug updates.
   acceptance:
@@ -242,7 +242,7 @@
     - forms
     - contact
   problem: |
-    The Contact Us form asks visitors to solve a math question and complete reCAPTCHA before submitting. Two verification steps on a phone is unnecessary friction, and the math answer field is small and easy to miss.
+    The Contact Us form asks visitors to solve a math question and complete reCAPTCHA before submitting. Unless there is a compelling reason to include both, two verification steps is unnecessary friction, and the math answer field is small and easy to miss.
   recommendation: |
     Drop the math question and keep a single bot check (reCAPTCHA). If spam becomes a problem, address it with one method, not both.
   acceptance:
@@ -251,7 +251,6 @@
     - Submit flow works on mobile without the extra field
   evidence:
     - file: 124005.png
-      caption: Contact form math question and reCAPTCHA
 - key: 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
   id: '1.14'
   sprint: 1

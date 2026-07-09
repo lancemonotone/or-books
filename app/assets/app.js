@@ -525,10 +525,17 @@ function renderIssueDetail(issueKey) {
         className: "edit-link--overlay",
       });
       if (row?.type === "video") {
+        const poster = row.poster ? mediaUrl(row.poster) : "";
+        const previewMarkup = poster
+          ? `<img src="${escapeHtml(poster)}" alt="${escapeHtml(alt)}" loading="lazy">`
+          : `<video preload="metadata" muted playsinline src="${escapeHtml(mediaUrl(item.file))}"></video>`;
         return `
           <figure class="media-block">
             ${editLink}
-            <video controls preload="metadata" ${row.poster ? `poster="${escapeHtml(mediaUrl(row.poster))}"` : ""} src="${escapeHtml(mediaUrl(item.file))}"></video>
+            <button type="button" class="media-block__image media-block__image--video" data-open-evidence="${escapeHtml(item.file)}"${galleryAttr}>
+              ${previewMarkup}
+              <span class="media-block__play" aria-hidden="true">▶</span>
+            </button>
             ${footerHtml}
           </figure>`;
       }
