@@ -1,0 +1,67 @@
+/* OR Books — shared design tokens (presentation + editor) */
+
+:root {
+  /* Page & surfaces */
+  --color-bg: #f7f6f4;
+  --color-surface: #ffffff;
+  --color-muted-surface: #ece8e2;
+  --color-code-bg: #eeeae4;
+  --color-disabled-surface: #f3f1ee;
+  --color-surface-translucent: rgb(255 255 255 / 90%);
+
+  /* Text */
+  --color-text: #1a1a1a;
+  --color-muted: #5c5c5c;
+
+  /* Borders & chrome */
+  --color-border: #ddd9d3;
+  --color-accent-border: #e5caca;
+  --color-header: rgb(255 255 255 / 92%);
+  --color-overlay: rgb(0 0 0 / 55%);
+  --color-overlay-subtle: rgb(0 0 0 / 4%);
+
+  /* Brand */
+  --color-accent: #8b1e1e;
+  --color-accent-hover: #6d1818;
+  --color-accent-soft: #f3e8e8;
+  --color-accent-soft-strong: #ead5d5;
+  --color-error: #8b1e1e;
+  --color-on-accent: #ffffff;
+  --color-success: #166534;
+
+  /* Issue status — text */
+  --color-critical: #8b1e1e;
+  --color-high: #b45309;
+  --color-medium: #92680a;
+  --color-low: #4b5563;
+  --color-planned: #374151;
+  --color-in-progress: #1d4ed8;
+  --color-blocked: #7c2d12;
+  --color-complete: #047857;
+
+  /* Issue status — backgrounds */
+  --color-status-critical-bg: #fde8e8;
+  --color-status-high-bg: #ffedd5;
+  --color-status-medium-bg: #fef3c7;
+  --color-status-low-bg: #e5e7eb;
+  --color-status-planned-bg: #e5e7eb;
+  --color-status-in-progress-bg: #dbeafe;
+  --color-status-blocked-bg: #ffedd5;
+  --color-status-complete-bg: #d1fae5;
+
+  /* Editor danger affordances */
+  --color-danger-text: #b91c1c;
+  --color-danger-border: #fecaca;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body: var(--font-sans);
+  --font-mono: ui-monospace, "Cascadia Code", monospace;
+
+  /* Layout */
+  --radius: 10px;
+  --shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  --shadow-dialog: 0 20px 50px rgb(0 0 0 / 25%);
+  --header-h: 3.5rem;
+  --max-width: 72rem;
+}

@@ -1,29 +1,10 @@
 /* OR Books Mobile UX Audit: presentation deck */
 
+@import url("tokens.css");
+
 :root {
-  --color-bg: #f7f6f4;
-  --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-muted: #5c5c5c;
-  --color-border: #ddd9d3;
-  --color-accent: #8b1e1e;
-  --color-accent-soft: #f3e8e8;
-  --color-critical: #8b1e1e;
-  --color-high: #b45309;
-  --color-medium: #92680a;
-  --color-low: #4b5563;
-  --color-planned: #374151;
-  --color-in-progress: #1d4ed8;
-  --color-blocked: #7c2d12;
-  --color-complete: #047857;
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: ui-monospace, "Cascadia Code", monospace;
-  --radius: 10px;
-  --shadow: 0 1px 3px rgb(0 0 0 / 8%);
-  --header-h: 3.5rem;
   --transition-fast: 180ms ease;
   --transition-view: 220ms ease;
-  --max-width: 72rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -80,7 +61,7 @@ a:hover {
 code {
   font-family: var(--font-mono);
   font-size: 0.85em;
-  background: #eeeae4;
+  background: var(--color-code-bg);
   padding: 0.1em 0.35em;
   border-radius: 4px;
 }
@@ -90,7 +71,7 @@ code {
   left: -9999px;
   top: 0;
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
   padding: 0.5rem 1rem;
   z-index: 100;
 }
@@ -116,7 +97,7 @@ code {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgb(255 255 255 / 92%);
+  background: var(--color-header);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--color-border);
 }
@@ -159,7 +140,7 @@ code {
 .site-nav a:hover,
 .site-nav a.is-active {
   color: var(--color-text);
-  background: #ece8e2;
+  background: var(--color-muted-surface);
 }
 
 /* Main */
@@ -215,7 +196,7 @@ code {
 
   &:hover {
     color: var(--color-accent);
-    border-color: #e5caca;
+    border-color: var(--color-accent-border);
     background: var(--color-accent-soft);
     text-decoration: none;
   }
@@ -283,7 +264,7 @@ code {
 
   &:hover {
     color: var(--color-accent);
-    border-color: #e5caca;
+    border-color: var(--color-accent-border);
     background: var(--color-accent-soft);
     text-decoration: none;
   }
@@ -340,7 +321,7 @@ code {
 
 .section--callout {
   background: var(--color-accent-soft);
-  border: 1px solid #e5caca;
+  border: 1px solid var(--color-accent-border);
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
 }
@@ -442,6 +423,7 @@ code {
 .phases-accordion__panel {
   padding: 1rem 1.25rem 1.25rem;
   border-top: 1px solid var(--color-border);
+  background: var(--color-muted-surface);
 }
 
 /* Issue cards */
@@ -559,7 +541,7 @@ code {
   letter-spacing: 0.03em;
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
-  background: #ece8e2;
+  background: var(--color-muted-surface);
 }
 
 a.pill {
@@ -580,35 +562,35 @@ a.pill {
 }
 
 .pill--critical {
-  background: #fde8e8;
+  background: var(--color-status-critical-bg);
   color: var(--color-critical);
 }
 .pill--high {
-  background: #ffedd5;
+  background: var(--color-status-high-bg);
   color: var(--color-high);
 }
 .pill--medium {
-  background: #fef3c7;
+  background: var(--color-status-medium-bg);
   color: var(--color-medium);
 }
 .pill--low {
-  background: #e5e7eb;
+  background: var(--color-status-low-bg);
   color: var(--color-low);
 }
 .pill--planned {
-  background: #e5e7eb;
+  background: var(--color-status-planned-bg);
   color: var(--color-planned);
 }
 .pill--in_progress {
-  background: #dbeafe;
+  background: var(--color-status-in-progress-bg);
   color: var(--color-in-progress);
 }
 .pill--blocked {
-  background: #ffedd5;
+  background: var(--color-status-blocked-bg);
   color: var(--color-blocked);
 }
 .pill--complete {
-  background: #d1fae5;
+  background: var(--color-status-complete-bg);
   color: var(--color-complete);
 }
 
@@ -623,7 +605,7 @@ a.pill {
   font-size: 0.8rem;
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
-  background: #ece8e2;
+  background: var(--color-muted-surface);
   text-decoration: none;
   color: var(--color-text);
 }
@@ -648,7 +630,7 @@ a.pill {
   border-radius: 6px;
   overflow: hidden;
   padding: 0;
-  background: #ece8e2;
+  background: var(--color-muted-surface);
   cursor: pointer;
   transition: transform var(--transition-fast);
 }
@@ -677,7 +659,7 @@ a.pill {
   text-decoration: none;
   padding: 0.2rem;
   text-align: center;
-  background: rgb(255 255 255 / 90%);
+  background: var(--color-surface-translucent);
   word-break: break-all;
   line-height: 1.25;
 }
@@ -688,7 +670,7 @@ a.pill {
   display: grid;
   place-items: center;
   font-size: 1.25rem;
-  color: #fff;
+  color: var(--color-on-accent);
   text-shadow: 0 1px 4px rgb(0 0 0 / 50%);
   pointer-events: none;
 }
@@ -742,7 +724,7 @@ a.pill {
   inline-size: 100%;
   border: 0;
   padding: 0;
-  background: #ece8e2;
+  background: var(--color-muted-surface);
   cursor: zoom-in;
   border-radius: var(--radius);
   overflow: hidden;
@@ -758,7 +740,7 @@ a.pill {
   display: grid;
   place-items: center;
   font-size: clamp(1.5rem, 5vw, 2.25rem);
-  color: #fff;
+  color: var(--color-on-accent);
   text-shadow: 0 1px 4px rgb(0 0 0 / 50%);
   pointer-events: none;
 }
@@ -936,7 +918,7 @@ a.pill {
   padding: 0.5rem 0.65rem;
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 .stance-fieldset {
@@ -965,7 +947,7 @@ a.pill {
   display: inline-block;
   border: 0;
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
   font: inherit;
   font-weight: 600;
   padding: 0.55rem 1rem;
@@ -978,11 +960,11 @@ a.pill {
 }
 
 .button:hover {
-  background: #6d1818;
+  background: var(--color-accent-hover);
 }
 
 .button.is-saved {
-  background: #166534;
+  background: var(--color-success);
 }
 
 .button:disabled {
@@ -1028,7 +1010,7 @@ td {
 }
 
 th {
-  background: #ece8e2;
+  background: var(--color-muted-surface);
 }
 
 /* Lightbox */
@@ -1044,7 +1026,7 @@ th {
   border: 0;
   border-radius: var(--radius);
   background: var(--color-surface);
-  box-shadow: 0 20px 50px rgb(0 0 0 / 25%);
+  box-shadow: var(--shadow-dialog);
   opacity: 0;
   transform: scale(0.98);
   transition:
@@ -1058,7 +1040,7 @@ th {
 }
 
 .lightbox::backdrop {
-  background: rgb(0 0 0 / 55%);
+  background: var(--color-overlay);
   backdrop-filter: blur(2px);
 }
 
