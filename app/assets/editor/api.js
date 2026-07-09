@@ -129,8 +129,57 @@ export function mediaUrl(name) {
   return `../media/${encodeURIComponent(name)}`;
 }
 
+export function videoPreviewUrl(name) {
+  return `${mediaUrl(name)}#t=0.1`;
+}
+
+function escapeMediaAttr(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+export function videoThumbMarkup(name, alt = "") {
+  const src = escapeMediaAttr(videoPreviewUrl(name));
+  const label = escapeMediaAttr(alt || name);
+  return `<video data-video-thumb preload="metadata" muted playsinline src="${src}" aria-label="${label}"></video>`;
+}
+
+export function primeVideoThumbs(root = document) {
+  root.querySelectorAll("video[data-video-thumb]").forEach((video) => {
+    const seekToFrame = () => {
+      try {
+        if (video.readyState >= 1) {
+          video.currentTime = 0.1;
+        }
+      } catch {
+        /* ignore seek errors on short clips */
+      }
+    };
+
+    video.addEventListener("loadeddata", seekToFrame, { once: true });
+    video.addEventListener("loadedmetadata", seekToFrame, { once: true });
+    video.load();
+  });
+}
+
 export function inferMediaType(filename) {
   return filename.toLowerCase().endsWith('.mp4') ? 'video' : 'image';
+}
+
+export function isValidHttpUrl(value) {
+  const raw = String(value || '').trim();
+  if (!raw) {
+    return false;
+  }
+  try {
+    const parsed = new URL(raw);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
 }
 
 export function suggestIssueId(phase, issues) {

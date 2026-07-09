@@ -183,6 +183,7 @@
   evidence:
     - file: 123809.png
     - file: 174154.png
+    - file: 123739.png
 - key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
   id: '2.2'
   sprint: 2

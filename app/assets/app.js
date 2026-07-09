@@ -250,6 +250,19 @@ function normalizeEvidenceUrl(url) {
   return String(url || "").trim();
 }
 
+function isValidHttpUrl(value) {
+  const raw = normalizeEvidenceUrl(value);
+  if (!raw) {
+    return false;
+  }
+  try {
+    const parsed = new URL(raw);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function evidencePageUrl(row) {
   const url = normalizeEvidenceUrl(row?.url);
   return url || null;
@@ -295,8 +308,11 @@ function renderEvidencePageLink(row, className = "") {
   if (!url) {
     return "";
   }
-  const classes = ["evidence-page-link", className].filter(Boolean).join(" ");
-  return `<a class="${escapeHtml(classes)}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
+  const extraClass = className ? ` ${escapeHtml(className)}` : "";
+  if (!isValidHttpUrl(url)) {
+    return `<span class="evidence-url-text${extraClass}">${escapeHtml(url)}</span>`;
+  }
+  return `<a class="evidence-page-link${extraClass}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
 }
 
 function isVideoEvidence(row) {

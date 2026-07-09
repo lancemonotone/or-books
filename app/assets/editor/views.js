@@ -2,11 +2,14 @@ import {
   appendIssueToPhase,
   compactIssueIds,
   inferMediaType,
+  isValidHttpUrl,
   mediaUrl,
   moveIssueToPhaseEnd,
   newIssueKey,
+  primeVideoThumbs,
   reorderIssuesFromDrop,
   syncIssueEvidenceFromGallery,
+  videoThumbMarkup,
 } from "./api.js";
 import { openIssueComposer } from "./issue-composer.js";
 import { openMediaFilePicker, renderMediaChip } from "./picker.js";
@@ -69,6 +72,9 @@ function renderEditorEvidencePageLink(row) {
   const url = String(row?.url || "").trim();
   if (!url) {
     return "";
+  }
+  if (!isValidHttpUrl(url)) {
+    return `<span class="evidence-url-text media-block__page-link">${escapeHtml(url)}</span>`;
   }
   return `<a class="evidence-page-link media-block__page-link" href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a>`;
 }
@@ -743,7 +749,7 @@ function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
           .toLowerCase()
           .endsWith(".mp4");
       const preview = isVideo
-        ? `<video preload="metadata" src="${mediaUrl(item.file)}" muted playsinline></video>`
+        ? `${videoThumbMarkup(item.file, title || item.file)}<span class="editor-video-play" aria-hidden="true">▶</span>`
         : `<img src="${mediaUrl(item.file)}" alt="${escapeAttr(title || item.file)}" loading="lazy">`;
       const issueKeys = galleryRow?.issues?.length
         ? galleryRow.issues
@@ -762,7 +768,7 @@ function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
         <div class="issue-media-card__frame">
           <button
             type="button"
-            class="issue-media-card__preview media-block__image"
+            class="issue-media-card__preview media-block__image${isVideo ? " issue-media-card__preview--video" : ""}"
             data-action="preview-evidence"
             data-file="${escapeAttr(item.file)}"
             data-title="${escapeAttr(title || item.file)}"
@@ -984,6 +990,8 @@ function bindIssueForm(
         });
       });
     });
+
+  primeVideoThumbs(detail);
 }
 
 function applyIssueForm(issue, root) {
@@ -1691,6 +1699,8 @@ function bindDecisionForm(
       onNavigateToIssue?.(button.dataset.openIssue);
     });
   });
+
+  primeVideoThumbs(detail);
 }
 
 function applyDecisionForm(decision, root) {

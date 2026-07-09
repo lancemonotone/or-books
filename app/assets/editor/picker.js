@@ -1,4 +1,4 @@
-import { mediaUrl } from './api.js';
+import { mediaUrl, videoThumbMarkup, primeVideoThumbs } from './api.js';
 
 let dialog;
 let grid;
@@ -38,10 +38,13 @@ function renderGrid(query = '') {
     .map((file) => {
       const inGallery = galleryFileSet.has(file.name);
       const isBlocked = inGallery || blockedFileSet.has(file.name);
-      const thumb =
-        file.type === 'video'
-          ? `<span class="media-picker__video" aria-hidden="true">▶</span>`
-          : `<img src="${mediaUrl(file.name)}" alt="" loading="lazy">`;
+      const isVideo = file.type === 'video';
+      const thumbClass = isVideo
+        ? 'media-picker__thumb media-picker__thumb--video'
+        : 'media-picker__thumb';
+      const thumb = isVideo
+        ? `${videoThumbMarkup(file.name)}<span class="editor-video-play" aria-hidden="true">▶</span>`
+        : `<img src="${mediaUrl(file.name)}" alt="" loading="lazy">`;
       const badge = inGallery
         ? '<span class="media-picker__badge" aria-hidden="true">✓</span>'
         : '';
@@ -49,7 +52,7 @@ function renderGrid(query = '') {
       if (isBlocked) {
         return `
         <div class="media-picker__item media-picker__item--disabled" aria-disabled="true"${inGallery ? ' title="Already in gallery"' : ''}>
-          <span class="media-picker__thumb">${thumb}</span>
+          <span class="${thumbClass}">${thumb}</span>
           ${badge}
           <span class="media-picker__name">${escapeHtml(file.name)}</span>
         </div>`;
@@ -57,7 +60,7 @@ function renderGrid(query = '') {
 
       return `
         <button type="button" class="media-picker__item" data-file="${escapeAttr(file.name)}">
-          <span class="media-picker__thumb">${thumb}</span>
+          <span class="${thumbClass}">${thumb}</span>
           <span class="media-picker__name">${escapeHtml(file.name)}</span>
         </button>`;
     })
@@ -72,6 +75,8 @@ function renderGrid(query = '') {
       dialog.close();
     });
   });
+
+  primeVideoThumbs(grid);
 }
 
 function escapeHtml(value) {
@@ -149,13 +154,14 @@ export function renderMediaChip(filename, caption = '') {
   }
 
   const isVideo = filename.toLowerCase().endsWith('.mp4');
+  const thumbClass = isVideo ? 'media-chip__thumb media-chip__thumb--video' : 'media-chip__thumb';
   const thumb = isVideo
-    ? '<span class="media-chip__video" aria-hidden="true">▶</span>'
+    ? `${videoThumbMarkup(filename)}<span class="editor-video-play editor-video-play--chip" aria-hidden="true">▶</span>`
     : `<img src="${mediaUrl(filename)}" alt="" loading="lazy">`;
 
   return `
     <span class="media-chip">
-      <span class="media-chip__thumb">${thumb}</span>
+      <span class="${thumbClass}">${thumb}</span>
       <span class="media-chip__meta">
         <strong>${escapeHtml(filename)}</strong>
         ${caption ? `<span>${escapeHtml(caption)}</span>` : ''}

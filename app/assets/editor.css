@@ -525,6 +525,14 @@ code {
   color: var(--color-accent);
 }
 
+.evidence-url-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  word-break: break-all;
+}
+
 .chip-row {
   display: flex;
   flex-wrap: wrap;
@@ -916,8 +924,68 @@ button.chip {
   object-fit: cover;
 }
 
-.media-chip__video {
-  font-size: 1.2rem;
+.media-chip__thumb--video,
+.media-picker__thumb--video {
+  position: relative;
+}
+
+.media-chip__thumb video,
+.media-picker__thumb video {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.issue-media-card__preview--video {
+  position: relative;
+}
+
+.editor-video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--color-accent);
+  line-height: 1;
+  pointer-events: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.media-picker__thumb .editor-video-play {
+  inline-size: 2rem;
+  block-size: 2rem;
+  font-size: 1rem;
+  padding: 0.28rem 0.24rem 0.28rem 0.34rem;
+}
+
+.editor-video-play--chip {
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  font-size: 0.75rem;
+  padding: 0.22rem 0.2rem 0.22rem 0.28rem;
+}
+
+.issue-media-card__preview .editor-video-play {
+  inline-size: clamp(2.4rem, 8vw, 3.4rem);
+  block-size: clamp(2.4rem, 8vw, 3.4rem);
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  padding: clamp(0.35rem, 1vw, 0.5rem) clamp(0.3rem, 0.9vw, 0.45rem)
+    clamp(0.35rem, 1vw, 0.5rem) clamp(0.42rem, 1.1vw, 0.58rem);
+}
+
+.media-picker__item:hover .editor-video-play,
+.issue-media-card__preview--video:hover .editor-video-play,
+.issue-media-card__preview--video:focus-visible .editor-video-play {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-accent-glow);
 }
 
 .media-chip__meta {
@@ -1024,6 +1092,7 @@ button.chip {
 }
 
 .media-picker__thumb {
+  position: relative;
   display: grid;
   place-items: center;
   aspect-ratio: 9 / 16;
@@ -1036,10 +1105,6 @@ button.chip {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
-}
-
-.media-picker__video {
-  font-size: 1.5rem;
 }
 
 .media-picker__name {
