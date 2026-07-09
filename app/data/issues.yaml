@@ -663,7 +663,7 @@
     - components
     - interaction
   problem: |
-    On some pages with accordions (for example author profiles), hovering or tapping a section title makes the text animate or shift. The motion draws attention away from the content and feels out of place for a publisher site.
+    On some pages with accordions (for example author profiles), hovering or tapping a section title makes the text animate or shift. The motion draws attention away from the content and feels out of place.
   recommendation: |
     Keep accordion titles visually stable on hover, focus, and tap. If you need feedback, use a subtle change to the arrow or background—not animated title text.
   acceptance:
@@ -671,7 +671,6 @@
     - Any feedback uses arrow or background only
   evidence:
     - file: 122948.mp4
-      caption: Author page accordion titles
 - key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
   id: '3.4'
   sprint: 3
