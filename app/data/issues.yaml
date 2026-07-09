@@ -1,5 +1,5 @@
 - key: 280a567f-7694-47ee-8d72-402e68da199d
-  id: "1.1"
+  id: '1.1'
   sprint: 1
   title: Label or Replace the Subjects icons
   impact: critical
@@ -16,7 +16,7 @@
   evidence:
     - file: 121022.png
 - key: d64e9880-9bd4-4b26-850b-f04a0b9b341b
-  id: "1.2"
+  id: '1.2'
   sprint: 1
   title: Keep the header visible when searching
   impact: critical
@@ -38,7 +38,7 @@
     - file: 121904.png
       caption: Search, second screen, header gone
 - key: 11ab1e09-5807-4688-85ed-437200d2fcce
-  id: "1.3"
+  id: '1.3'
   sprint: 1
   title: Show email addresses the same way everywhere
   impact: high
@@ -65,7 +65,7 @@
     - file: 123949.png
       caption: Contact page
 - key: 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
-  id: "1.4"
+  id: '1.4'
   sprint: 1
   title: Fix text that looks like a link but is not
   impact: high
@@ -84,7 +84,7 @@
     - file: 120911.png
     - file: 121002.png
 - key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
-  id: "1.5"
+  id: '1.5'
   sprint: 1
   title: Fix Reading Lists View All page
   impact: high
@@ -102,7 +102,7 @@
     - file: 164729.png
     - file: 165045.png
 - key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
-  id: "1.6"
+  id: '1.6'
   sprint: 1
   title: Add a way back from news articles
   impact: high
@@ -122,7 +122,7 @@
     - file: 161534.png
       caption: Media article
 - key: f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
-  id: "1.7"
+  id: '1.7'
   sprint: 1
   title: Link to other pages mentioned in the FAQ
   impact: high
@@ -139,7 +139,7 @@
   evidence:
     - file: 125833.png
 - key: 1003b1bb-4460-4577-97e9-f737dfe9fead
-  id: "1.8"
+  id: '1.8'
   sprint: 1
   title: Open media articles on the first tap
   impact: high
@@ -158,7 +158,7 @@
     - file: 123119.mp4
     - file: 161238.png
 - key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
-  id: "1.9"
+  id: '1.9'
   sprint: 1
   title: Rights Catalogs page
   impact: medium
@@ -177,7 +177,7 @@
   evidence:
     - file: 125507.png
 - key: 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
-  id: "1.10"
+  id: '1.10'
   sprint: 1
   title: Fix Rights Enquiries page heading typo
   impact: low
@@ -196,7 +196,7 @@
   evidence:
     - file: 125454.png
 - key: 6eb190a1-cfcd-4029-8261-05027bb3da83
-  id: "1.11"
+  id: '1.11'
   sprint: 1
   title: Scale the book cover on mobile
   impact: medium
@@ -215,7 +215,7 @@
     - file: 171653.png
       caption: Run Zohran Run book page on mobile
 - key: d64c6362-1054-468f-a9cb-3f1feb2473ab
-  id: "1.12"
+  id: '1.12'
   sprint: 1
   title: Keep Featured Title links in the same tab
   impact: medium
@@ -233,7 +233,7 @@
   evidence:
     - file: 174154.png
 - key: 83a326b9-4988-4d2d-bcc4-d1ea3b064e98
-  id: "1.13"
+  id: '1.13'
   sprint: 1
   title: Remove the math captcha from the contact form
   impact: medium
@@ -253,7 +253,7 @@
     - file: 124005.png
       caption: Contact form math question and reCAPTCHA
 - key: 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
-  id: "1.14"
+  id: '1.14'
   sprint: 1
   title: Center the author alphabet spinner
   impact: medium
@@ -273,7 +273,7 @@
     - file: 123547.mp4
       caption: Our Authors alphabet spinner alignment
 - key: 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
-  id: "1.15"
+  id: '1.15'
   sprint: 1
   title: Fix the broken link in the privacy table of contents
   impact: high
@@ -292,7 +292,7 @@
     - file: 125703.png
       caption: Privacy notice TOC item 4 not linked
 - key: f94186fe-383f-4e7f-9d60-fa99b3468ebe
-  id: "1.16"
+  id: '1.16'
   sprint: 1
   title: Scale the In Bookstores images on mobile
   impact: medium
@@ -301,7 +301,7 @@
     - layout
     - images
   problem: |
-    On the In Bookstores section, the stock photo below the heading fills almost the entire phone screen. Little else is visible before scrolling, so the section feels oversized compared with other homepage modules.
+    On the In Bookstores section, the stock photos below the heading fills almost the entire phone screen. Little else is visible before scrolling, so the section feels oversized compared with other homepage modules.
   recommendation: |
     Limit image height on small screens so the heading, illustration, and a reasonable slice of the photo fit in the first screenful. Match the visual weight of other promotional blocks on the site.
   acceptance:
@@ -309,9 +309,8 @@
     - Section heading remains visible with the image scaled proportionally
   evidence:
     - file: 125329.png
-      caption: In Bookstores section on mobile
 - key: d9a285fd-c112-4962-be45-5bbb594dc1d3
-  id: "2.1"
+  id: '2.1'
   sprint: 2
   title: Make headings and titles easier to tell apart
   impact: high
@@ -328,7 +327,7 @@
     - file: 120911.png
     - file: 123249.png
 - key: ad45e92e-3cd0-41a4-a129-f80d2c2908bb
-  id: "2.2"
+  id: '2.2'
   sprint: 2
   title: Make buttons look consistent
   impact: high
@@ -345,7 +344,7 @@
     - file: 160840.png
     - file: 123310.png
 - key: c392e399-8c2d-4c2e-9896-56b81e76b2d0
-  id: "2.3"
+  id: '2.3'
   sprint: 2
   title: Even out spacing between sections
   impact: medium
@@ -364,7 +363,7 @@
     - file: 123249.png
     - file: 123310.png
 - key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
-  id: "2.4"
+  id: '2.4'
   sprint: 2
   title: Make author photos the same size and shape
   impact: high
@@ -384,7 +383,7 @@
     - file: 123704.png
       caption: Authors grid scrolled
 - key: 7952f11e-1b30-41a0-b128-5f54fdf49928
-  id: "2.5"
+  id: '2.5'
   sprint: 2
   title: Align the header icons
   impact: high
@@ -403,7 +402,7 @@
     - file: 120802.png
       caption: Menu open, search icon off-center
 - key: 030cf68c-ad0d-4b9f-8c65-f0471faf263b
-  id: "2.6"
+  id: '2.6'
   sprint: 2
   title: Left-align long paragraphs on mobile
   impact: medium
@@ -423,7 +422,7 @@
     - file: 125642.png
       caption: Subsidiary Rights page
 - key: 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
-  id: "2.7"
+  id: '2.7'
   sprint: 2
   title: Remove repeated labels in the menu
   impact: medium
@@ -441,7 +440,7 @@
     - file: 120802.png
       caption: Menu overlay
 - key: 02bb4d06-502d-44db-907c-062d48f5e58c
-  id: "2.8"
+  id: '2.8'
   sprint: 2
   title: Give the header more room in the open menu
   impact: medium
@@ -459,7 +458,7 @@
     - file: 120802.png
       caption: Menu crowding logo
 - key: d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
-  id: "2.9"
+  id: '2.9'
   sprint: 2
   title: Use one slider style across the site
   impact: medium
@@ -478,7 +477,7 @@
     - file: 123850.png
     - file: 125607.png
 - key: b57d706d-de6d-46d7-8e3f-6452f175c362
-  id: "2.10"
+  id: '2.10'
   sprint: 2
   title: Stop squashing images in media lists
   impact: high
@@ -501,7 +500,7 @@
     - file: 161534.png
       caption: Article page, correct proportions
 - key: 1c59053b-b5c4-4f94-8361-422f66dd6614
-  id: "2.11"
+  id: '2.11'
   sprint: 2
   title: Shorten news bylines on mobile
   impact: medium
@@ -521,7 +520,7 @@
     - file: 161534.png
       caption: Media byline
 - key: 5d04c117-9701-492c-beea-4056113fbdf2
-  id: "2.12"
+  id: '2.12'
   sprint: 2
   title: Label the Featured Title blocks clearly
   impact: high
@@ -539,7 +538,7 @@
     - file: 123809.png
     - file: 174154.png
 - key: 6f242823-63e3-4b9c-b49d-4ecf1336c282
-  id: "2.13"
+  id: '2.13'
   sprint: 2
   title: Make legal tables readable on a phone
   impact: high
@@ -557,7 +556,7 @@
     - file: 125733.png
       caption: CCPA table
 - key: f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
-  id: "2.14"
+  id: '2.14'
   sprint: 2
   title: Improve Featured Author Slider Items on mobile
   impact: medium
@@ -575,7 +574,7 @@
   evidence:
     - file: 125607.png
 - key: 22f6409d-b5e4-46b1-8086-f2839495505e
-  id: "2.15"
+  id: '2.15'
   sprint: 2
   title: Keep bookseller signup on orbooks.com
   impact: medium
@@ -597,7 +596,7 @@
     - file: 125307.png
       caption: Booksellers page
 - key: b59b43f9-981e-4656-8535-9eee882dcebc
-  id: "2.16"
+  id: '2.16'
   sprint: 2
   title: Make the privacy table of contents easier to scan
   impact: medium
@@ -616,7 +615,7 @@
     - file: 125703.png
       caption: Privacy notice TOC all-caps links
 - key: 016b1384-309d-48ba-a585-398783c97dd6
-  id: "3.1"
+  id: '3.1'
   sprint: 3
   title: Make small tap targets easier to hit
   impact: high
@@ -636,7 +635,7 @@
     - file: 123519.png
       caption: Alphabet filter
 - key: 535334f1-38be-42ea-9a71-735525922eeb
-  id: "3.2"
+  id: '3.2'
   sprint: 3
   title: Center the cookie preferences bar with the footer
   impact: low
@@ -654,7 +653,7 @@
     - file: 123434.png
       caption: Footer alignment
 - key: 12737e6f-b52c-4f53-97b6-50c68e98a871
-  id: "3.3"
+  id: '3.3'
   sprint: 3
   title: Keep accordion titles steady on hover
   impact: low
@@ -672,7 +671,7 @@
   evidence:
     - file: 122948.mp4
 - key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
-  id: "3.4"
+  id: '3.4'
   sprint: 3
   title: Remove distracting motion on buttons
   impact: low
