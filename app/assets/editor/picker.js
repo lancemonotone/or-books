@@ -1,4 +1,4 @@
-import { mediaUrl, videoThumbMarkup, primeVideoThumbs } from './api.js';
+import { mediaUrl, videoThumbMarkup, primeVideoThumbs, loadMediaList } from './api.js';
 
 let dialog;
 let grid;
@@ -114,7 +114,7 @@ export function setPickerFiles(list) {
   files = [...list].sort((a, b) => (b.mtime ?? 0) - (a.mtime ?? 0));
 }
 
-export function openMediaPicker({
+export async function openMediaPicker({
   type = 'all',
   callback,
   galleryFiles = [],
@@ -127,8 +127,17 @@ export function openMediaPicker({
   galleryFileSet = allowGallery ? new Set() : new Set(galleryFiles);
   blockedFileSet = new Set(blockedFiles);
   searchInput.value = '';
-  renderGrid();
+  grid.innerHTML = '<p class="media-picker__empty">Loading…</p>';
   dialog.showModal();
+
+  try {
+    const list = await loadMediaList();
+    setPickerFiles(list);
+  } catch {
+    // Keep any previously cached list so the picker still works if refresh fails.
+  }
+
+  renderGrid();
 }
 
 /** Pick or replace a media file. Set allowGallery false + galleryFiles to grey out library entries. */
@@ -139,7 +148,7 @@ export function openMediaFilePicker({
   allowGallery = true,
   callback,
 } = {}) {
-  openMediaPicker({
+  return openMediaPicker({
     type,
     allowGallery,
     galleryFiles,

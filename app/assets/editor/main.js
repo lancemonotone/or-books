@@ -23,7 +23,6 @@ const editorStatus = document.getElementById('editor-status');
 const saveIndicator = document.getElementById('save-indicator');
 const saveIndicatorText = document.getElementById('save-indicator-text');
 const workspace = document.getElementById('workspace');
-const reloadButton = document.getElementById('reload-button');
 const logoutButton = document.getElementById('logout-button');
 const viewIssueLink = document.getElementById('view-issue-link');
 const deleteIssueButton = document.getElementById('delete-issue-button');
@@ -529,27 +528,6 @@ tabButtons.forEach((button) => {
   });
 });
 
-async function handleReload() {
-  if (isDirty()) {
-    const saved = await flushAutosave();
-    if (!saved && isDirty() && !window.confirm('Could not save. Discard changes and reload?')) {
-      return;
-    }
-  }
-  cancelAutosave();
-  setStatus(editorStatus, 'Reloading…');
-  try {
-    const media = await loadMediaList();
-    setPickerFiles(media);
-    await loadAllData();
-    renderWorkspace();
-    setSaveIndicator('idle');
-    setStatus(editorStatus, 'Reloaded.');
-  } catch (error) {
-    setStatus(editorStatus, error.message, true);
-  }
-}
-
 async function handleDeleteIssue() {
   if (state.activeTab !== 'issues' || !state.ui.selectedIssueKey) {
     return;
@@ -592,12 +570,6 @@ function bindEditorToolbar() {
       return;
     }
 
-    if (event.target.closest('#reload-button')) {
-      event.preventDefault();
-      await handleReload();
-      return;
-    }
-
     if (event.target.closest('#delete-issue-button')) {
       event.preventDefault();
       await handleDeleteIssue();
@@ -606,8 +578,6 @@ function bindEditorToolbar() {
 }
 
 bindEditorToolbar();
-
-reloadButton?.addEventListener('click', handleReload);
 
 deleteIssueButton?.addEventListener('click', handleDeleteIssue);
 
