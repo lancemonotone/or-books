@@ -30,32 +30,37 @@ try {
     $record = normalize_comment_record($existing);
 
     if ($action === 'stance') {
-        $stance = trim((string) ($body['stance'] ?? ''));
-        $allowedStances = ['agree', 'disagree', 'discuss'];
-        if (!in_array($stance, $allowedStances, true)) {
-            respond_json(422, ['error' => 'Invalid stance.']);
-        }
-
+        $stance = parse_stance_value($body['stance'] ?? '');
         $author = sanitize_author($body['author'] ?? '');
         $text = sanitize_text($body['text'] ?? '');
-        $now = gmdate('c');
+        $openingText = opening_message_text($stance, $text);
 
+        if ($openingText === '') {
+            respond_json(422, ['error' => 'Choose an agree option or add a note.']);
+        }
+
+        $now = gmdate('c');
         $record['stance'] = $stance;
         $record['author'] = $author;
         $record['updatedAt'] = $now;
 
-        if ($text !== '') {
-            $messages = $record['messages'];
-            $last = $messages !== [] ? $messages[array_key_last($messages)] : null;
+        $messages = $record['messages'];
+        if ($messages === []) {
+            $messages[] = make_message($author, $openingText, $now);
+        } elseif ($text !== '') {
+            $last = $messages[array_key_last($messages)];
             if ($last && authors_match($last['author'], $author)) {
                 $messages[array_key_last($messages)]['text'] = $text;
                 $messages[array_key_last($messages)]['updatedAt'] = $now;
             } else {
                 $messages[] = make_message($author, $text, $now);
             }
-            $record['messages'] = array_values($messages);
-            $record['text'] = $text;
         }
+
+        $record['messages'] = array_values($messages);
+        $record['text'] = $messages !== []
+            ? $messages[array_key_last($messages)]['text']
+            : $openingText;
 
         $all[$issueId] = $record;
         save_comments($all);
@@ -90,9 +95,6 @@ try {
         if ($messageId === '') {
             respond_json(422, ['error' => 'messageId is required.']);
         }
-        if ($text === '') {
-            respond_json(422, ['error' => 'Message text is required.']);
-        }
 
         $messages = $record['messages'];
         if ($messages === []) {
@@ -109,6 +111,42 @@ try {
         }
 
         $now = gmdate('c');
+        $isOpening = count($messages) === 1;
+
+        if ($isOpening && array_key_exists('stance', $body)) {
+            $stance = parse_stance_value($body['stance'] ?? '');
+            $openingText = opening_message_text($stance, $text);
+
+            if ($openingText === '') {
+                unset($all[$issueId]);
+                save_comments($all);
+                respond_json(200, [
+                    'stance' => '',
+                    'text' => '',
+                    'author' => '',
+                    'updatedAt' => $now,
+                    'messages' => [],
+                    'cleared' => true,
+                ]);
+            }
+
+            $messages[0]['text'] = $openingText;
+            $messages[0]['updatedAt'] = $now;
+            $record['stance'] = $stance;
+            $record['messages'] = array_values($messages);
+            $record['text'] = $openingText;
+            $record['updatedAt'] = $now;
+            $record['author'] = $author;
+
+            $all[$issueId] = $record;
+            save_comments($all);
+            respond_json(200, $record);
+        }
+
+        if ($text === '') {
+            respond_json(422, ['error' => 'Message text is required.']);
+        }
+
         $messages[$lastIndex]['text'] = $text;
         $messages[$lastIndex]['updatedAt'] = $now;
         $record['messages'] = array_values($messages);

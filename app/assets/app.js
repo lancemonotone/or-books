@@ -15,8 +15,8 @@ import { parseRoute, onRouteChange } from "./router.js";
 import { motion } from "./motion.js";
 
 const AUTHOR_KEYS = {
-  comment: "or-audit-author-comment",
-  decision: "or-audit-author-decision",
+  comment: "or-audit-author",
+  decision: "or-audit-author",
 };
 
 const COPY = {
@@ -44,24 +44,31 @@ const COPY = {
   screenshotsGallery: "Screenshots and videos",
   screenshotsLead: "Screenshots and recordings, linked to the issues below.",
   yourFeedback: "Your feedback",
+  postingAs: "Posting as",
   conversation: "Conversation",
   conversationLead: "Feedback and replies on this issue.",
   yourReply: "Your reply",
+  firstNotePlaceholder: "Add a note (optional)…",
   replyPlaceholder: "Write a reply…",
-  sendReply: "Send reply",
+  sendReply: "Send",
   editMessage: "Edit",
-  saveEdit: "Save edit",
+  saveEdit: "Save",
   cancelEdit: "Cancel",
   noMessagesYet: "No messages yet.",
   signIn: "Sign in",
   signOut: "Sign out",
   authLead: "Enter the review password to continue.",
   yourName: "Your name",
+  nameNew: "Someone new…",
+  nameNewPlaceholder: "Type a name",
+  nameSelect: "Select a name",
   doYouAgree: "Do you agree?",
+  stanceNone: "No choice",
   agree: "Yes",
   disagree: "No",
   discuss: "Not sure yet",
   commentsOptional: "Comments (optional)",
+  noteOptional: "Note (optional)",
   saveFeedback: "Save",
   saveDecision: "Save answer",
   commentOptional: "Comment (optional)",
@@ -228,18 +235,17 @@ function issuesByStatus(status) {
 }
 
 function getAuthor(kind) {
-  const key = AUTHOR_KEYS[kind];
-  if (!key) {
-    return "";
-  }
-  return localStorage.getItem(key) || "";
+  const key = AUTHOR_KEYS[kind] || AUTHOR_KEYS.comment;
+  return (
+    localStorage.getItem(key) ||
+    localStorage.getItem("or-audit-author-comment") ||
+    localStorage.getItem("or-audit-author-decision") ||
+    ""
+  );
 }
 
-function setAuthor(name, kind) {
-  const key = AUTHOR_KEYS[kind];
-  if (!key) {
-    return;
-  }
+function setAuthor(name, kind = "comment") {
+  const key = AUTHOR_KEYS[kind] || AUTHOR_KEYS.comment;
   const trimmed = name.trim();
   if (!trimmed) {
     return;
@@ -251,119 +257,312 @@ function authorsMatch(a, b) {
   return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
 }
 
-function commentMessages(issueKey) {
-  const row = state.responses.comments[issueKey];
-  return Array.isArray(row?.messages) ? row.messages : [];
-}
-
-function canEditMessage(message, messages, author) {
-  if (!message || !author || messages.length === 0) {
-    return false;
-  }
-  const last = messages[messages.length - 1];
-  return last.id === message.id && authorsMatch(last.author, author);
-}
-
 const STANCE_LABELS = {
   agree: "Yes",
   disagree: "No",
   discuss: "Not sure yet",
 };
 
-function renderConversation(issue) {
-  const row = state.responses.comments[issue.key];
-  const messages = commentMessages(issue.key);
-  const me = getAuthor("comment");
+function normalizeCommentClient(row) {
+  if (!row || typeof row !== "object") {
+    return null;
+  }
+  const stance = String(row.stance || "").trim();
+  const stanceLabel = stance ? STANCE_LABELS[stance] || stance : "";
+  const author = String(row.author || "").trim();
+  const updatedAt = String(row.updatedAt || "");
+  let messages = Array.isArray(row.messages)
+    ? row.messages.filter((message) => message && String(message.text || "").trim() !== "")
+    : [];
+
+  if (messages.length === 0 && stance) {
+    const text = String(row.text || "").trim() || stanceLabel;
+    messages = [
+      {
+        id: `legacy-${stance}-${updatedAt || "opening"}`,
+        author: author || "Unknown",
+        text,
+        createdAt: updatedAt,
+        updatedAt,
+      },
+    ];
+  }
+
+  return {
+    ...row,
+    stance,
+    author,
+    updatedAt,
+    messages,
+    text: messages.length ? messages[messages.length - 1].text : String(row.text || ""),
+  };
+}
+
+function commentRecord(issueKey) {
+  return normalizeCommentClient(state.responses.comments[issueKey]);
+}
+
+function commentMessages(issueKey) {
+  return commentRecord(issueKey)?.messages || [];
+}
+
+function canEditMessage(message, messages) {
+  if (!message || messages.length === 0) {
+    return false;
+  }
+  const last = messages[messages.length - 1];
+  return last.id === message.id;
+}
+
+function collectKnownAuthors() {
+  const names = new Set();
+  for (const row of Object.values(state.responses.comments || {})) {
+    if (!row || typeof row !== "object") {
+      continue;
+    }
+    const author = String(row.author || "").trim();
+    if (author) {
+      names.add(author);
+    }
+    for (const message of row.messages || []) {
+      const msgAuthor = String(message?.author || "").trim();
+      if (msgAuthor) {
+        names.add(msgAuthor);
+      }
+    }
+  }
+  for (const row of Object.values(state.responses.decisions || {})) {
+    const author = String(row?.author || "").trim();
+    if (author) {
+      names.add(author);
+    }
+  }
+  return [...names].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+}
+
+function renderAuthorPicker(selected = "", { id = "" } = {}) {
+  const known = collectKnownAuthors();
+  const selectedName = String(selected || "").trim();
+  const isKnown = selectedName && known.some((name) => authorsMatch(name, selectedName));
+  const useNew = Boolean(selectedName && !isKnown);
+  const selectId = id ? `author-select-${id}` : "";
+  const options = [
+    `<option value="" ${!selectedName && !useNew ? "selected" : ""}>${escapeHtml(COPY.nameSelect)}</option>`,
+    ...known.map(
+      (name) =>
+        `<option value="${escapeHtml(name)}" ${!useNew && authorsMatch(name, selectedName) ? "selected" : ""}>${escapeHtml(name)}</option>`,
+    ),
+    `<option value="__new__" ${useNew ? "selected" : ""}>${escapeHtml(COPY.nameNew)}</option>`,
+  ];
+
+  return `
+    <div class="author-picker" data-author-picker>
+      <label class="field">
+        <span class="field__label">${escapeHtml(COPY.yourName)}</span>
+        <select class="author-picker__select" data-author-select ${selectId ? `id="${escapeHtml(selectId)}"` : ""}>
+          ${options.join("")}
+        </select>
+      </label>
+      <label class="field author-picker__new" data-author-new-wrap ${useNew ? "" : "hidden"}>
+        <span class="visually-hidden">${escapeHtml(COPY.nameNewPlaceholder)}</span>
+        <input type="text" data-author-new maxlength="80" autocomplete="name" placeholder="${escapeHtml(COPY.nameNewPlaceholder)}" value="${useNew ? escapeHtml(selectedName) : ""}">
+      </label>
+      <input type="hidden" name="author" data-author-value value="${escapeHtml(useNew || isKnown ? selectedName : "")}">
+    </div>`;
+}
+
+function syncAuthorPicker(picker) {
+  if (!picker) {
+    return "";
+  }
+  const select = picker.querySelector("[data-author-select]");
+  const newWrap = picker.querySelector("[data-author-new-wrap]");
+  const newInput = picker.querySelector("[data-author-new]");
+  const hidden = picker.querySelector("[data-author-value]");
+  if (!select || !hidden) {
+    return "";
+  }
+
+  const mode = select.value;
+  if (mode === "__new__") {
+    if (newWrap) {
+      newWrap.hidden = false;
+    }
+    const name = String(newInput?.value || "").trim();
+    hidden.value = name;
+    if (newInput) {
+      newInput.required = true;
+    }
+    return name;
+  }
+
+  if (newWrap) {
+    newWrap.hidden = true;
+  }
+  if (newInput) {
+    newInput.required = false;
+    newInput.value = "";
+  }
+  hidden.value = mode;
+  return mode;
+}
+
+function bindAuthorPickers(root = main) {
+  root.querySelectorAll("[data-author-picker]").forEach((picker) => {
+    syncAuthorPicker(picker);
+    const select = picker.querySelector("[data-author-select]");
+    const newInput = picker.querySelector("[data-author-new]");
+    select?.addEventListener("change", () => {
+      syncAuthorPicker(picker);
+      if (select.value === "__new__") {
+        picker.querySelector("[data-author-new]")?.focus();
+      }
+    });
+    newInput?.addEventListener("input", () => {
+      syncAuthorPicker(picker);
+    });
+  });
+}
+
+function renderStanceFieldset(selected = "", { name = "stance" } = {}) {
+  const current = String(selected || "");
+  const options = [
+    { value: "", label: COPY.stanceNone },
+    { value: "agree", label: COPY.agree },
+    { value: "disagree", label: COPY.disagree },
+    { value: "discuss", label: COPY.discuss },
+  ];
+  return `
+    <fieldset class="stance-fieldset">
+      <legend>${escapeHtml(COPY.doYouAgree)}</legend>
+      ${options
+        .map(
+          (opt) =>
+            `<label><input type="radio" name="${escapeHtml(name)}" value="${escapeHtml(opt.value)}" ${current === opt.value ? "checked" : ""}> ${escapeHtml(opt.label)}</label>`,
+        )
+        .join("")}
+    </fieldset>`;
+}
+
+function noteTextForOpening(message, stanceLabel) {
+  const text = String(message?.text || "").trim();
+  if (!text) {
+    return "";
+  }
+  if (stanceLabel && text === stanceLabel) {
+    return "";
+  }
+  return text;
+}
+
+function buildOpeningEditForm(message, stance) {
+  const stanceLabel = stance ? STANCE_LABELS[stance] || stance : "";
+  const noteValue = noteTextForOpening(message, stanceLabel);
+  return `
+    <form class="thread-msg__edit-form" data-edit-form="${escapeHtml(message.id)}" data-edit-opening="true">
+      ${renderStanceFieldset(stance || "")}
+      <label class="field">
+        <span class="field__label">${escapeHtml(COPY.noteOptional)}</span>
+        <textarea name="text" rows="2" maxlength="2000" placeholder="${escapeHtml(COPY.firstNotePlaceholder)}">${escapeHtml(noteValue)}</textarea>
+      </label>
+      <input type="hidden" name="author" value="${escapeHtml(message.author)}">
+      <div class="thread-msg__edit-actions">
+        <button type="submit" class="button">${escapeHtml(COPY.saveEdit)}</button>
+        <button type="button" class="button button--ghost" data-cancel-edit>${escapeHtml(COPY.cancelEdit)}</button>
+      </div>
+      <p class="save-status" role="status"></p>
+    </form>`;
+}
+
+function buildReplyEditForm(message) {
+  return `
+    <form class="thread-msg__edit-form" data-edit-form="${escapeHtml(message.id)}">
+      <label class="field">
+        <span class="visually-hidden">${escapeHtml(COPY.yourReply)}</span>
+        <textarea name="text" rows="2" maxlength="2000" required>${escapeHtml(message.text)}</textarea>
+      </label>
+      <input type="hidden" name="author" value="${escapeHtml(message.author)}">
+      <div class="thread-msg__edit-actions">
+        <button type="submit" class="button">${escapeHtml(COPY.saveEdit)}</button>
+        <button type="button" class="button button--ghost" data-cancel-edit>${escapeHtml(COPY.cancelEdit)}</button>
+      </div>
+      <p class="save-status" role="status"></p>
+    </form>`;
+}
+
+function renderThreadMessages(issue) {
+  const row = commentRecord(issue.key);
+  const messages = row?.messages || [];
   const stanceLabel = row?.stance ? STANCE_LABELS[row.stance] || row.stance : "";
 
-  const messageHtml = messages.length
-    ? messages
+  if (!messages.length) {
+    return "";
+  }
+
+  return `
+    <div class="thread__list">
+      ${messages
         .map((message, index) => {
-          const editable = canEditMessage(message, messages, me);
+          const editable = canEditMessage(message, messages);
           const when = message.updatedAt || message.createdAt;
+          const isStanceOnly =
+            index === 0 &&
+            stanceLabel &&
+            String(message.text || "").trim() === stanceLabel;
           const stancePill =
             index === 0 && stanceLabel
               ? `<span class="thread-msg__stance">${escapeHtml(stanceLabel)}</span>`
               : "";
           return `
-            <article class="thread-msg" data-message-id="${escapeHtml(message.id)}">
+            <article class="thread-msg" data-message-id="${escapeHtml(message.id)}" data-opening="${index === 0 && messages.length === 1 ? "true" : "false"}" data-stance="${escapeHtml(row?.stance || "")}">
               <header class="thread-msg__head">
                 <span class="thread-msg__author">${escapeHtml(message.author)}</span>
                 ${stancePill}
                 <time class="thread-msg__time" datetime="${escapeHtml(when || "")}">${escapeHtml(when ? new Date(when).toLocaleString() : "")}</time>
+                ${
+                  editable
+                    ? `<button type="button" class="thread-msg__edit" data-edit-message="${escapeHtml(message.id)}">${escapeHtml(COPY.editMessage)}</button>`
+                    : ""
+                }
               </header>
-              <div class="thread-msg__body" data-message-body>${escapeHtml(message.text)}</div>
               ${
-                editable
-                  ? `<button type="button" class="thread-msg__edit" data-edit-message="${escapeHtml(message.id)}">${escapeHtml(COPY.editMessage)}</button>
-                     <form class="thread-msg__edit-form" data-edit-form="${escapeHtml(message.id)}" hidden>
-                       <label class="field">
-                         <span class="field__label">${escapeHtml(COPY.yourReply)}</span>
-                         <textarea name="text" rows="3" maxlength="2000" required>${escapeHtml(message.text)}</textarea>
-                       </label>
-                       <div class="thread-msg__edit-actions">
-                         <button type="submit" class="button">${escapeHtml(COPY.saveEdit)}</button>
-                         <button type="button" class="button button--ghost" data-cancel-edit>${escapeHtml(COPY.cancelEdit)}</button>
-                       </div>
-                       <p class="save-status" role="status"></p>
-                     </form>`
-                  : ""
+                isStanceOnly
+                  ? ""
+                  : `<div class="thread-msg__body" data-message-body>${escapeHtml(message.text)}</div>`
               }
+              <div data-edit-slot></div>
             </article>`;
         })
-        .join("")
-    : `<p class="thread__empty">${escapeHtml(COPY.noMessagesYet)}</p>`;
-
-  return `
-    <section class="thread" id="conversation">
-      <h2>${escapeHtml(COPY.conversation)}</h2>
-      <p class="lede thread__lede">${escapeHtml(COPY.conversationLead)}</p>
-      <div class="thread__list">${messageHtml}</div>
-      <form class="thread__reply" data-reply-form="${escapeHtml(issue.key)}">
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-          <input type="text" name="author" value="${escapeHtml(me)}" required maxlength="80">
-        </label>
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.yourReply)}</span>
-          <textarea name="text" rows="3" maxlength="2000" required placeholder="${escapeHtml(COPY.replyPlaceholder)}"></textarea>
-        </label>
-        <button type="submit" class="button">${escapeHtml(COPY.sendReply)}</button>
-        <p class="save-status" role="status"></p>
-      </form>
-    </section>`;
+        .join("")}
+    </div>`;
 }
 
 function renderCommentForm(issue) {
-  const saved = state.responses.comments[issue.key];
-  const hasThread = commentMessages(issue.key).length > 0;
-  const seedText = hasThread ? "" : saved?.text || "";
+  const saved = commentRecord(issue.key);
+  const messages = saved?.messages || [];
+  const isFirst = messages.length === 0;
+  const remembered = getAuthor("comment");
+
+  const stanceBlock = isFirst ? renderStanceFieldset("") : "";
+
   return `
     <section class="feedback-panel" id="feedback">
       <h2>${escapeHtml(COPY.yourFeedback)}</h2>
-      <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}">
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-          <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor("comment"))}" required maxlength="80">
-        </label>
-        <fieldset class="stance-fieldset">
-          <legend>${escapeHtml(COPY.doYouAgree)}</legend>
-          <label><input type="radio" name="stance" value="agree" ${saved?.stance === "agree" ? "checked" : ""} required> ${escapeHtml(COPY.agree)}</label>
-          <label><input type="radio" name="stance" value="disagree" ${saved?.stance === "disagree" ? "checked" : ""}> ${escapeHtml(COPY.disagree)}</label>
-          <label><input type="radio" name="stance" value="discuss" ${saved?.stance === "discuss" ? "checked" : ""}> ${escapeHtml(COPY.discuss)}</label>
-        </fieldset>
-        ${
-          hasThread
-            ? ""
-            : `<label class="field">
-          <span class="field__label">${escapeHtml(COPY.commentsOptional)}</span>
-          <textarea name="text" rows="3" maxlength="2000">${escapeHtml(seedText)}</textarea>
-        </label>`
-        }
-        <button type="submit" class="button">${escapeHtml(COPY.saveFeedback)}</button>
-        ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.lastSaved)} ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
+      ${renderThreadMessages(issue)}
+      <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}" data-feedback-mode="${isFirst ? "first" : "reply"}">
+        ${stanceBlock}
+        <div class="feedback-composer">
+          ${renderAuthorPicker(remembered, { id: `issue-${issue.key}` })}
+          <label class="field">
+            <span class="visually-hidden">${escapeHtml(COPY.yourReply)}</span>
+            <textarea name="text" rows="2" maxlength="2000" ${isFirst ? "" : "required"} placeholder="${escapeHtml(isFirst ? COPY.firstNotePlaceholder : COPY.replyPlaceholder)}"></textarea>
+          </label>
+          <div class="feedback-form__actions">
+            <button type="submit" class="button">${escapeHtml(isFirst ? COPY.saveFeedback : COPY.sendReply)}</button>
+            ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.lastSaved)} ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
+          </div>
+        </div>
       </form>
-      ${renderConversation(issue)}
     </section>`;
 }
 
@@ -974,16 +1173,17 @@ function renderDecisionCard(decision) {
           <legend class="visually-hidden">${escapeHtml(decision.question)}</legend>
           ${options}
         </fieldset>
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-          <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor("decision"))}" required maxlength="80">
-        </label>
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.commentOptional)}</span>
-          <textarea name="text" rows="2" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
-        </label>
-        <button type="submit" class="button">${escapeHtml(COPY.saveDecision)}</button>
-        ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.youChose)} <strong>${escapeHtml(saved.choice)}</strong>, ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
+        <div class="feedback-composer">
+          ${renderAuthorPicker(saved?.author || getAuthor("decision"), { id: `decision-${decisionKey}` })}
+          <label class="field">
+            <span class="field__label">${escapeHtml(COPY.commentOptional)}</span>
+            <textarea name="text" rows="2" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
+          </label>
+          <div class="feedback-form__actions">
+            <button type="submit" class="button">${escapeHtml(COPY.saveDecision)}</button>
+            ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.youChose)} <strong>${escapeHtml(saved.choice)}</strong>, ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
+          </div>
+        </div>
       </form>
     </article>`;
 }
@@ -1167,6 +1367,11 @@ async function loadAppData() {
   state.evidence = content.evidence;
   state.decisions = content.decisions;
   state.responses = await loadResponses();
+  const normalizedComments = {};
+  for (const [key, row] of Object.entries(state.responses.comments || {})) {
+    normalizedComments[key] = normalizeCommentClient(row) || row;
+  }
+  state.responses.comments = normalizedComments;
   state.ready = true;
   showAppShell();
   if (state.audit?.title) {
@@ -1323,49 +1528,38 @@ function bindPageHandlers() {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const issueId = form.dataset.commentForm;
-      const data = new FormData(form);
-      const author = String(data.get("author") || "");
+      const mode = form.dataset.feedbackMode || "first";
+      const picker = form.querySelector("[data-author-picker]");
+      const author = syncAuthorPicker(picker);
+      if (!author) {
+        const status = form.querySelector(".save-status");
+        status.textContent = "Choose or enter a name.";
+        status.classList.add("is-visible", "is-error");
+        return;
+      }
       setAuthor(author, "comment");
+      const data = new FormData(form);
       const button = form.querySelector('button[type="submit"]');
       const status = form.querySelector(".save-status");
       try {
         button.disabled = true;
-        const result = await saveComment(issueId, {
-          stance: data.get("stance"),
-          text: data.get("text"),
-          author,
-        });
-        state.responses.comments[issueId] = result;
+        let result;
+        if (mode === "reply") {
+          result = await postCommentReply(issueId, {
+            text: data.get("text"),
+            author,
+          });
+        } else {
+          result = await saveComment(issueId, {
+            stance: data.get("stance"),
+            text: data.get("text"),
+            author,
+          });
+        }
+        state.responses.comments[issueId] = normalizeCommentClient(result) || result;
         status.textContent = `${COPY.lastSaved} ${new Date(result.updatedAt).toLocaleString()}`;
         status.classList.add("is-visible");
         status.classList.remove("is-error");
-        motion.pulseSaved(button);
-        render();
-      } catch (error) {
-        status.textContent = error.message;
-        status.classList.add("is-visible", "is-error");
-      } finally {
-        button.disabled = false;
-      }
-    });
-  });
-
-  main.querySelectorAll("[data-reply-form]").forEach((form) => {
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const issueId = form.dataset.replyForm;
-      const data = new FormData(form);
-      const author = String(data.get("author") || "");
-      setAuthor(author, "comment");
-      const button = form.querySelector('button[type="submit"]');
-      const status = form.querySelector(".save-status");
-      try {
-        button.disabled = true;
-        const result = await postCommentReply(issueId, {
-          text: data.get("text"),
-          author,
-        });
-        state.responses.comments[issueId] = result;
         motion.pulseSaved(button);
         render();
       } catch (error) {
@@ -1381,60 +1575,90 @@ function bindPageHandlers() {
     button.addEventListener("click", () => {
       const id = button.dataset.editMessage;
       const article = button.closest(".thread-msg");
-      const editForm = article?.querySelector(`[data-edit-form="${id}"]`);
+      const slot = article?.querySelector("[data-edit-slot]");
       const body = article?.querySelector("[data-message-body]");
-      if (!editForm) {
+      if (!article || !slot) {
         return;
       }
-      editForm.hidden = false;
+      const message = {
+        id,
+        author: article.querySelector(".thread-msg__author")?.textContent || "",
+        text: body?.textContent || article.dataset.stanceLabel || "",
+      };
+      const stance = article.dataset.stance || "";
+      const stanceLabel = stance ? STANCE_LABELS[stance] || stance : "";
+      if (!body && stanceLabel) {
+        message.text = stanceLabel;
+      }
+      const isOpening = article.dataset.opening === "true";
+      slot.innerHTML = isOpening
+        ? buildOpeningEditForm(message, stance)
+        : buildReplyEditForm({
+            ...message,
+            text: body?.textContent || message.text,
+          });
       button.hidden = true;
       if (body) {
         body.hidden = true;
       }
+      bindEditForm(slot.querySelector("[data-edit-form]"));
     });
   });
 
-  main.querySelectorAll("[data-cancel-edit]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const editForm = button.closest("[data-edit-form]");
-      const article = button.closest(".thread-msg");
-      const editButton = article?.querySelector("[data-edit-message]");
-      const body = article?.querySelector("[data-message-body]");
-      if (editForm) {
-        editForm.hidden = true;
-      }
-      if (editButton) {
-        editButton.hidden = false;
-      }
-      if (body) {
-        body.hidden = false;
-      }
-    });
-  });
+  function closeEditSlot(article) {
+    if (!article) {
+      return;
+    }
+    const slot = article.querySelector("[data-edit-slot]");
+    const editButton = article.querySelector("[data-edit-message]");
+    const body = article.querySelector("[data-message-body]");
+    if (slot) {
+      slot.innerHTML = "";
+    }
+    if (editButton) {
+      editButton.hidden = false;
+    }
+    if (body) {
+      body.hidden = false;
+    }
+  }
 
-  main.querySelectorAll("[data-edit-form]").forEach((form) => {
+  function bindEditForm(form) {
+    if (!form) {
+      return;
+    }
+    form.querySelector("[data-cancel-edit]")?.addEventListener("click", () => {
+      closeEditSlot(form.closest(".thread-msg"));
+    });
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const messageId = form.dataset.editForm;
-      const article = form.closest(".thread-msg");
-      const thread = form.closest(".thread");
-      const replyForm = thread?.querySelector("[data-reply-form]");
-      const issueId = replyForm?.dataset.replyForm;
+      const panel = form.closest(".feedback-panel");
+      const commentForm = panel?.querySelector("[data-comment-form]");
+      const issueId = commentForm?.dataset.commentForm;
       if (!issueId) {
         return;
       }
       const data = new FormData(form);
-      const author = getAuthor("comment");
+      const author = String(data.get("author") || "");
       const button = form.querySelector('button[type="submit"]');
       const status = form.querySelector(".save-status");
+      const payload = {
+        messageId,
+        text: data.get("text") || "",
+        author,
+      };
+      if (form.dataset.editOpening === "true") {
+        payload.stance = data.has("stance") ? String(data.get("stance") || "") : "";
+      }
       try {
         button.disabled = true;
-        const result = await editCommentMessage(issueId, {
-          messageId,
-          text: data.get("text"),
-          author,
-        });
-        state.responses.comments[issueId] = result;
+        const result = await editCommentMessage(issueId, payload);
+        if (result.cleared) {
+          delete state.responses.comments[issueId];
+        } else {
+          state.responses.comments[issueId] = normalizeCommentClient(result) || result;
+        }
         render();
       } catch (error) {
         status.textContent = error.message;
@@ -1443,7 +1667,9 @@ function bindPageHandlers() {
         button.disabled = false;
       }
     });
-  });
+  }
+
+  bindAuthorPickers(main);
 
   const phasesOpenAll = main.querySelector("[data-phases-open-all]");
   const phasesCloseAll = main.querySelector("[data-phases-close-all]");
@@ -1534,7 +1760,14 @@ function bindPageHandlers() {
       if (!choice) {
         return;
       }
-      const author = String(data.get("author") || "");
+      const picker = form.querySelector("[data-author-picker]");
+      const author = syncAuthorPicker(picker);
+      if (!author) {
+        const status = form.querySelector(".save-status");
+        status.textContent = "Choose or enter a name.";
+        status.classList.add("is-visible", "is-error");
+        return;
+      }
       setAuthor(author, "decision");
       const button = form.querySelector('button[type="submit"]');
       const status = form.querySelector(".save-status");
@@ -1548,6 +1781,7 @@ function bindPageHandlers() {
         state.responses.decisions[decisionId] = result;
         status.innerHTML = `${escapeHtml(COPY.youChose)} <strong>${escapeHtml(result.choice)}</strong>, ${escapeHtml(new Date(result.updatedAt).toLocaleString())}`;
         status.classList.add("is-visible");
+        status.classList.remove("is-error");
         motion.pulseSaved(button);
       } catch (error) {
         status.textContent = error.message;
