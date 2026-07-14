@@ -3,6 +3,12 @@ import {
   loadResponses,
   saveComment,
   saveDecision,
+  postCommentReply,
+  editCommentMessage,
+  fetchAuth,
+  login,
+  logout,
+  setCsrfToken,
   mediaUrl,
 } from "./api.js";
 import { parseRoute, onRouteChange } from "./router.js";
@@ -38,6 +44,18 @@ const COPY = {
   screenshotsGallery: "Screenshots and videos",
   screenshotsLead: "Screenshots and recordings, linked to the issues below.",
   yourFeedback: "Your feedback",
+  conversation: "Conversation",
+  conversationLead: "Feedback and replies on this issue.",
+  yourReply: "Your reply",
+  replyPlaceholder: "Write a reply…",
+  sendReply: "Send reply",
+  editMessage: "Edit",
+  saveEdit: "Save edit",
+  cancelEdit: "Cancel",
+  noMessagesYet: "No messages yet.",
+  signIn: "Sign in",
+  signOut: "Sign out",
+  authLead: "Enter the review password to continue.",
   yourName: "Your name",
   doYouAgree: "Do you agree?",
   agree: "Yes",
@@ -67,6 +85,7 @@ const COPY = {
   filterNotFound: "No issues match this filter.",
   priorityFilterTitle: (label) => `Priority: ${label}`,
   statusFilterTitle: (label) => `Status: ${label}`,
+  replyCount: (n) => `${n} ${n === 1 ? "reply" : "replies"}`,
 };
 
 const PRIORITY_LABELS = {
@@ -90,9 +109,16 @@ const state = {
   decisions: [],
   responses: { comments: {}, decisions: {} },
   route: parseRoute(),
+  ready: false,
 };
 
 const main = document.getElementById("main");
+const siteHeader = document.getElementById("site-header");
+const authPanel = document.getElementById("auth-panel");
+const authBlocked = document.getElementById("auth-blocked");
+const loginForm = document.getElementById("login-form");
+const loginStatus = document.getElementById("login-status");
+const logoutButton = document.getElementById("logout-button");
 const lightbox = document.getElementById("lightbox");
 const lightboxTitle = document.getElementById("lightbox-title");
 const lightboxBody = document.getElementById("lightbox-body");
@@ -219,6 +245,126 @@ function setAuthor(name, kind) {
     return;
   }
   localStorage.setItem(key, trimmed);
+}
+
+function authorsMatch(a, b) {
+  return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+}
+
+function commentMessages(issueKey) {
+  const row = state.responses.comments[issueKey];
+  return Array.isArray(row?.messages) ? row.messages : [];
+}
+
+function canEditMessage(message, messages, author) {
+  if (!message || !author || messages.length === 0) {
+    return false;
+  }
+  const last = messages[messages.length - 1];
+  return last.id === message.id && authorsMatch(last.author, author);
+}
+
+const STANCE_LABELS = {
+  agree: "Yes",
+  disagree: "No",
+  discuss: "Not sure yet",
+};
+
+function renderConversation(issue) {
+  const row = state.responses.comments[issue.key];
+  const messages = commentMessages(issue.key);
+  const me = getAuthor("comment");
+  const stanceLabel = row?.stance ? STANCE_LABELS[row.stance] || row.stance : "";
+
+  const messageHtml = messages.length
+    ? messages
+        .map((message, index) => {
+          const editable = canEditMessage(message, messages, me);
+          const when = message.updatedAt || message.createdAt;
+          const stancePill =
+            index === 0 && stanceLabel
+              ? `<span class="thread-msg__stance">${escapeHtml(stanceLabel)}</span>`
+              : "";
+          return `
+            <article class="thread-msg" data-message-id="${escapeHtml(message.id)}">
+              <header class="thread-msg__head">
+                <span class="thread-msg__author">${escapeHtml(message.author)}</span>
+                ${stancePill}
+                <time class="thread-msg__time" datetime="${escapeHtml(when || "")}">${escapeHtml(when ? new Date(when).toLocaleString() : "")}</time>
+              </header>
+              <div class="thread-msg__body" data-message-body>${escapeHtml(message.text)}</div>
+              ${
+                editable
+                  ? `<button type="button" class="thread-msg__edit" data-edit-message="${escapeHtml(message.id)}">${escapeHtml(COPY.editMessage)}</button>
+                     <form class="thread-msg__edit-form" data-edit-form="${escapeHtml(message.id)}" hidden>
+                       <label class="field">
+                         <span class="field__label">${escapeHtml(COPY.yourReply)}</span>
+                         <textarea name="text" rows="3" maxlength="2000" required>${escapeHtml(message.text)}</textarea>
+                       </label>
+                       <div class="thread-msg__edit-actions">
+                         <button type="submit" class="button">${escapeHtml(COPY.saveEdit)}</button>
+                         <button type="button" class="button button--ghost" data-cancel-edit>${escapeHtml(COPY.cancelEdit)}</button>
+                       </div>
+                       <p class="save-status" role="status"></p>
+                     </form>`
+                  : ""
+              }
+            </article>`;
+        })
+        .join("")
+    : `<p class="thread__empty">${escapeHtml(COPY.noMessagesYet)}</p>`;
+
+  return `
+    <section class="thread" id="conversation">
+      <h2>${escapeHtml(COPY.conversation)}</h2>
+      <p class="lede thread__lede">${escapeHtml(COPY.conversationLead)}</p>
+      <div class="thread__list">${messageHtml}</div>
+      <form class="thread__reply" data-reply-form="${escapeHtml(issue.key)}">
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.yourName)}</span>
+          <input type="text" name="author" value="${escapeHtml(me)}" required maxlength="80">
+        </label>
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.yourReply)}</span>
+          <textarea name="text" rows="3" maxlength="2000" required placeholder="${escapeHtml(COPY.replyPlaceholder)}"></textarea>
+        </label>
+        <button type="submit" class="button">${escapeHtml(COPY.sendReply)}</button>
+        <p class="save-status" role="status"></p>
+      </form>
+    </section>`;
+}
+
+function renderCommentForm(issue) {
+  const saved = state.responses.comments[issue.key];
+  const hasThread = commentMessages(issue.key).length > 0;
+  const seedText = hasThread ? "" : saved?.text || "";
+  return `
+    <section class="feedback-panel" id="feedback">
+      <h2>${escapeHtml(COPY.yourFeedback)}</h2>
+      <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}">
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.yourName)}</span>
+          <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor("comment"))}" required maxlength="80">
+        </label>
+        <fieldset class="stance-fieldset">
+          <legend>${escapeHtml(COPY.doYouAgree)}</legend>
+          <label><input type="radio" name="stance" value="agree" ${saved?.stance === "agree" ? "checked" : ""} required> ${escapeHtml(COPY.agree)}</label>
+          <label><input type="radio" name="stance" value="disagree" ${saved?.stance === "disagree" ? "checked" : ""}> ${escapeHtml(COPY.disagree)}</label>
+          <label><input type="radio" name="stance" value="discuss" ${saved?.stance === "discuss" ? "checked" : ""}> ${escapeHtml(COPY.discuss)}</label>
+        </fieldset>
+        ${
+          hasThread
+            ? ""
+            : `<label class="field">
+          <span class="field__label">${escapeHtml(COPY.commentsOptional)}</span>
+          <textarea name="text" rows="3" maxlength="2000">${escapeHtml(seedText)}</textarea>
+        </label>`
+        }
+        <button type="submit" class="button">${escapeHtml(COPY.saveFeedback)}</button>
+        ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.lastSaved)} ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
+      </form>
+      ${renderConversation(issue)}
+    </section>`;
 }
 
 const EDIT_ICON = `<svg class="edit-link__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
@@ -593,32 +739,6 @@ function renderFilteredIssues(kind, value) {
     </div>`;
 }
 
-function renderCommentForm(issue) {
-  const saved = state.responses.comments[issue.key];
-  return `
-    <section class="feedback-panel" id="feedback">
-      <h2>${escapeHtml(COPY.yourFeedback)}</h2>
-      <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}">
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-          <input type="text" name="author" value="${escapeHtml(saved?.author || getAuthor("comment"))}" required maxlength="80">
-        </label>
-        <fieldset class="stance-fieldset">
-          <legend>${escapeHtml(COPY.doYouAgree)}</legend>
-          <label><input type="radio" name="stance" value="agree" ${saved?.stance === "agree" ? "checked" : ""} required> ${escapeHtml(COPY.agree)}</label>
-          <label><input type="radio" name="stance" value="disagree" ${saved?.stance === "disagree" ? "checked" : ""}> ${escapeHtml(COPY.disagree)}</label>
-          <label><input type="radio" name="stance" value="discuss" ${saved?.stance === "discuss" ? "checked" : ""}> ${escapeHtml(COPY.discuss)}</label>
-        </fieldset>
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.commentsOptional)}</span>
-          <textarea name="text" rows="3" maxlength="2000">${escapeHtml(saved?.text || "")}</textarea>
-        </label>
-        <button type="submit" class="button">${escapeHtml(COPY.saveFeedback)}</button>
-        ${saved ? `<p class="save-status is-visible">${escapeHtml(COPY.lastSaved)} ${escapeHtml(new Date(saved.updatedAt).toLocaleString())}</p>` : '<p class="save-status" role="status"></p>'}
-      </form>
-    </section>`;
-}
-
 function renderIssueDetail(issueKey) {
   const issue = issueByKey(issueKey);
   if (!issue) {
@@ -919,12 +1039,6 @@ function renderResponses() {
     })
     .join("");
 
-  const STANCE_LABELS = {
-    agree: "Yes",
-    disagree: "No",
-    discuss: "Not sure yet",
-  };
-
   const commentRows = Object.entries(state.responses.comments)
     .map(([key, row]) => {
       const issue = issueByKey(key);
@@ -934,7 +1048,12 @@ function renderResponses() {
         issue?.title,
         key,
       );
-      return `<tr><td>${label}</td><td><strong>${escapeHtml(stance)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      const messages = Array.isArray(row.messages) ? row.messages : [];
+      const commentCell =
+        messages.length > 1
+          ? `${escapeHtml(row.text || "")} <span class="muted">(${escapeHtml(COPY.replyCount(messages.length))})</span>`
+          : escapeHtml(row.text || "");
+      return `<tr><td>${label}</td><td><strong>${escapeHtml(stance)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${commentCell}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join("");
 
@@ -1005,10 +1124,84 @@ function updateActiveNav() {
 }
 
 function render() {
+  if (!state.ready) {
+    return;
+  }
   motion.viewTransition(() => {
     main.innerHTML = renderRoute();
     updateActiveNav();
     bindPageHandlers();
+  });
+}
+
+function showAuthPanel() {
+  document.body.classList.add("is-locked");
+  authPanel.hidden = false;
+  authBlocked.hidden = true;
+  siteHeader.hidden = true;
+  main.hidden = true;
+  state.ready = false;
+}
+
+function showBlockedPanel() {
+  document.body.classList.add("is-locked");
+  authPanel.hidden = true;
+  authBlocked.hidden = false;
+  siteHeader.hidden = true;
+  main.hidden = true;
+  state.ready = false;
+}
+
+function showAppShell() {
+  document.body.classList.remove("is-locked");
+  authPanel.hidden = true;
+  authBlocked.hidden = true;
+  siteHeader.hidden = false;
+  main.hidden = false;
+}
+
+async function loadAppData() {
+  const content = await loadContent();
+  state.audit = content.audit;
+  state.issues = content.issues;
+  state.evidence = content.evidence;
+  state.decisions = content.decisions;
+  state.responses = await loadResponses();
+  state.ready = true;
+  showAppShell();
+  if (state.audit?.title) {
+    document.title = `${COPY.brand}: ${state.audit.title}`;
+  }
+}
+
+function bindAuthHandlers() {
+  loginForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(loginForm);
+    const status = loginStatus;
+    try {
+      status.textContent = "Signing in…";
+      status.classList.add("is-visible");
+      status.classList.remove("is-error");
+      await login(String(data.get("password") || ""), String(data.get("website") || ""));
+      loginForm.reset();
+      await loadAppData();
+      state.route = normalizeLegacyRoute(parseRoute());
+      render();
+    } catch (error) {
+      status.textContent = error.message;
+      status.classList.add("is-visible", "is-error");
+    }
+  });
+
+  logoutButton?.addEventListener("click", async () => {
+    try {
+      await logout();
+    } catch {
+      /* still lock UI */
+    }
+    showAuthPanel();
+    main.innerHTML = "";
   });
 }
 
@@ -1145,7 +1338,104 @@ function bindPageHandlers() {
         state.responses.comments[issueId] = result;
         status.textContent = `${COPY.lastSaved} ${new Date(result.updatedAt).toLocaleString()}`;
         status.classList.add("is-visible");
+        status.classList.remove("is-error");
         motion.pulseSaved(button);
+        render();
+      } catch (error) {
+        status.textContent = error.message;
+        status.classList.add("is-visible", "is-error");
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+
+  main.querySelectorAll("[data-reply-form]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const issueId = form.dataset.replyForm;
+      const data = new FormData(form);
+      const author = String(data.get("author") || "");
+      setAuthor(author, "comment");
+      const button = form.querySelector('button[type="submit"]');
+      const status = form.querySelector(".save-status");
+      try {
+        button.disabled = true;
+        const result = await postCommentReply(issueId, {
+          text: data.get("text"),
+          author,
+        });
+        state.responses.comments[issueId] = result;
+        motion.pulseSaved(button);
+        render();
+      } catch (error) {
+        status.textContent = error.message;
+        status.classList.add("is-visible", "is-error");
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+
+  main.querySelectorAll("[data-edit-message]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.editMessage;
+      const article = button.closest(".thread-msg");
+      const editForm = article?.querySelector(`[data-edit-form="${id}"]`);
+      const body = article?.querySelector("[data-message-body]");
+      if (!editForm) {
+        return;
+      }
+      editForm.hidden = false;
+      button.hidden = true;
+      if (body) {
+        body.hidden = true;
+      }
+    });
+  });
+
+  main.querySelectorAll("[data-cancel-edit]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const editForm = button.closest("[data-edit-form]");
+      const article = button.closest(".thread-msg");
+      const editButton = article?.querySelector("[data-edit-message]");
+      const body = article?.querySelector("[data-message-body]");
+      if (editForm) {
+        editForm.hidden = true;
+      }
+      if (editButton) {
+        editButton.hidden = false;
+      }
+      if (body) {
+        body.hidden = false;
+      }
+    });
+  });
+
+  main.querySelectorAll("[data-edit-form]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const messageId = form.dataset.editForm;
+      const article = form.closest(".thread-msg");
+      const thread = form.closest(".thread");
+      const replyForm = thread?.querySelector("[data-reply-form]");
+      const issueId = replyForm?.dataset.replyForm;
+      if (!issueId) {
+        return;
+      }
+      const data = new FormData(form);
+      const author = getAuthor("comment");
+      const button = form.querySelector('button[type="submit"]');
+      const status = form.querySelector(".save-status");
+      try {
+        button.disabled = true;
+        const result = await editCommentMessage(issueId, {
+          messageId,
+          text: data.get("text"),
+          author,
+        });
+        state.responses.comments[issueId] = result;
+        render();
       } catch (error) {
         status.textContent = error.message;
         status.classList.add("is-visible", "is-error");
@@ -1310,20 +1600,12 @@ function bindGlobalHandlers() {
 async function init() {
   document.title = COPY.brand;
   bindGlobalHandlers();
-
-  try {
-    const content = await loadContent();
-    state.audit = content.audit;
-    state.issues = content.issues;
-    state.evidence = content.evidence;
-    state.decisions = content.decisions;
-    state.responses = await loadResponses();
-  } catch (error) {
-    main.innerHTML = `<div class="page"><h1>${escapeHtml(COPY.loadError)}</h1><p>${escapeHtml(error.message)}</p></div>`;
-    return;
-  }
+  bindAuthHandlers();
 
   onRouteChange(() => {
+    if (!state.ready) {
+      return;
+    }
     state.route = normalizeLegacyRoute(parseRoute());
     const shouldScrollPhases =
       state.route.name === "overview" &&
@@ -1342,6 +1624,29 @@ async function init() {
       }
     }
   });
+
+  try {
+    const auth = await fetchAuth();
+    if (auth.csrf) {
+      setCsrfToken(auth.csrf);
+    }
+    if (!auth.authenticated) {
+      showAuthPanel();
+      return;
+    }
+    await loadAppData();
+    render();
+  } catch (error) {
+    if (String(error.message || "").includes("not configured")) {
+      showBlockedPanel();
+      return;
+    }
+    showAuthPanel();
+    if (loginStatus) {
+      loginStatus.textContent = error.message;
+      loginStatus.classList.add("is-visible", "is-error");
+    }
+  }
 }
 
 init();

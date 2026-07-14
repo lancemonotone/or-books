@@ -42,9 +42,11 @@ Saving feedback requires PHP on the deployed host.
 5. Copy `api/config.example.php` to `api/config.php` and set `editor_password`.
 6. Optional: add HTTP Basic Auth in `.htaccess` for another layer.
 
+The review app and content editor share the same password and session. **Nothing in the review UI loads without sign-in.** YAML/JSON under `data/` are blocked from direct HTTP access and served only through authenticated APIs.
+
 ## Content editor
 
-URL: **`/audit/edit/`** (not linked from the client presentation).
+URL: **`/audit/edit/`** (linked from the signed-in review nav).
 
 ### Setup
 
@@ -52,21 +54,22 @@ URL: **`/audit/edit/`** (not linked from the client presentation).
 2. Set `editor_password` to a long random string.
 3. Ensure PHP can write to `data/*.yaml`.
 
-Leave `editor_password` empty to disable the editor.
+Leave `editor_password` empty to disable the review app and editor (both require it).
 
 ### Security (basic)
 
 | Layer | What it does |
 |-------|----------------|
-| Password | Required to sign in; stored in `config.php` only |
-| Session cookie | HttpOnly, SameSite=Strict |
-| CSRF token | Required on save and sign-out |
+| Password | Required to open the review app and editor; stored in `config.php` only |
+| Session cookie | HttpOnly, SameSite=Strict; shared by review + editor |
+| CSRF token | Required on saves, replies, and sign-out |
 | Honeypot field | Hidden field bots often fill; request rejected |
 | Login lockout | 8 failed attempts, 15 minute cooldown |
+| `data/.htaccess` | Denies direct download of YAML/JSON |
 | `robots.txt` | Asks crawlers not to index `/edit/` or editor API |
 | `noindex` meta | On the editor page itself |
 
-This is not hidden from humans who know the URL. It blocks casual crawlers and drive-by bots, not a determined attacker. Use HTTP Basic Auth on `/edit/` if you want more.
+This is not hidden from humans who know the URL. It blocks casual crawlers and drive-by bots, not a determined attacker. Use HTTP Basic Auth on `/audit/` if you want more.
 
 ### Using the editor
 

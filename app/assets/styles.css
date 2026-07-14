@@ -124,23 +124,86 @@ code {
   display: flex;
   gap: 0.35rem;
   flex-wrap: wrap;
+  align-items: center;
+
+  & a,
+  & .site-nav__button {
+    text-decoration: none;
+    color: var(--color-muted);
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+  & a:hover,
+  & a.is-active,
+  & .site-nav__button:hover {
+    color: var(--color-text);
+    background: var(--color-muted-surface);
+  }
+
+  & .site-nav__button {
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+  }
 }
 
-.site-nav a {
-  text-decoration: none;
-  color: var(--color-muted);
-  padding: 0.35rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.92rem;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast);
+/* Auth gate */
+
+.auth-panel {
+  min-block-size: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+
+  &[hidden] {
+    display: none;
+  }
+
+  & .auth-panel__card {
+    inline-size: min(100%, 24rem);
+    padding: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius, 8px);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-dialog, none);
+  }
+
+  & .auth-panel__lede {
+    color: var(--color-muted);
+    margin-block: 0.5rem 1.25rem;
+  }
+
+  & .auth-form {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  & .auth-honeypot {
+    position: absolute;
+    left: -9999px;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    & .auth-panel__card {
+      padding: 2rem;
+    }
+  }
 }
 
-.site-nav a:hover,
-.site-nav a.is-active {
-  color: var(--color-text);
-  background: var(--color-muted-surface);
+body.is-locked {
+  & .site-header,
+  & .site-main {
+    display: none;
+  }
 }
 
 /* Main */
@@ -1139,6 +1202,100 @@ a.pill {
   border-top: 1px solid var(--color-border);
 }
 
+.thread {
+  margin-block-start: 2rem;
+  padding-block-start: 1.5rem;
+  border-block-start: 1px solid var(--color-border);
+
+  & .thread__lede {
+    margin-block-start: 0.35rem;
+  }
+
+  & .thread__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-block: 1.25rem;
+  }
+
+  & .thread__empty {
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  & .thread__reply {
+    display: grid;
+    gap: 0.75rem;
+  }
+}
+
+.thread-msg {
+  --thread-pad: 0.75rem;
+
+  padding: var(--thread-pad);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+
+  & .thread-msg__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.75rem;
+    margin-block-end: 0.5rem;
+  }
+
+  & .thread-msg__author {
+    font-weight: 600;
+  }
+
+  & .thread-msg__stance {
+    font-size: 0.8rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  & .thread-msg__time {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-inline-start: auto;
+  }
+
+  & .thread-msg__body {
+    white-space: pre-wrap;
+  }
+
+  & .thread-msg__edit {
+    margin-block-start: 0.5rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-accent);
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  & .thread-msg__edit-form {
+    margin-block-start: 0.75rem;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  & .thread-msg__edit-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    --thread-pad: 1rem;
+  }
+}
+
 .button {
   display: inline-block;
   border: 0;
@@ -1153,19 +1310,29 @@ a.pill {
   transition:
     background var(--transition-fast),
     transform var(--transition-fast);
-}
 
-.button:hover {
-  background: var(--color-accent-hover);
-}
+  &:hover {
+    background: var(--color-accent-hover);
+  }
 
-.button.is-saved {
-  background: var(--color-success);
-}
+  &.is-saved {
+    background: var(--color-success);
+  }
 
-.button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.button--ghost {
+    background: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+
+    &:hover {
+      background: var(--color-muted-surface);
+    }
+  }
 }
 
 .save-status {
@@ -1268,7 +1435,6 @@ a.pill {
 .lightbox {
   --lightbox-toolbar-block: 2.75rem;
 
-  display: flex;
   flex-direction: column;
   width: min(92vw, 480px);
   max-block-size: 92vh;
@@ -1282,11 +1448,16 @@ a.pill {
   transition:
     opacity var(--transition-fast),
     transform var(--transition-fast);
-}
 
-.lightbox[open] {
-  opacity: 1;
-  transform: scale(1);
+  &:not([open]) {
+    display: none;
+  }
+
+  &[open] {
+    display: flex;
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .lightbox::backdrop {
