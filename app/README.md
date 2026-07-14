@@ -104,7 +104,7 @@ Open `data/issues.yaml`. Each item looks like this:
   id: "1.2"                                       # display label only (phase.sequence)
   sprint: 1
   title: Label or Replace the Subjects icons
-  impact: critical
+  priority: critical
   status: planned
   tags: [navigation, subjects]
   problem: >
@@ -119,7 +119,7 @@ Open `data/issues.yaml`. Each item looks like this:
 
 Every note needs a stable **`key`** (UUID). Chips, URLs, evidence links, decision blocks, comments, and editor deep links all use **`key`**. The **`id`** (`1.2`) is the human label only—do not put it in lasting references.
 
-Change `title`, `problem`, or `recommendation` for client-facing copy. Change `impact` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`, `complete`) for the pills on each card.
+Change `title`, `problem`, or `recommendation` for client-facing copy. Change `priority` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`, `complete`) for the pills on each card.
 
 `tags` and `acceptance` stay in the file for your own planning. They are **not** shown in the presentation app.
 

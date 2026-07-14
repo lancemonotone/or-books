@@ -482,6 +482,13 @@ const ISSUE_STATUS_OPTIONS = [
   { value: "complete", label: "Complete" },
 ];
 
+const ISSUE_PRIORITY_OPTIONS = [
+  { value: "critical", label: "Most urgent" },
+  { value: "high", label: "Important" },
+  { value: "medium", label: "Moderate" },
+  { value: "low", label: "Minor" },
+];
+
 export function renderAuditView(audit, root, onChange) {
   const sprints = audit.sprints || [];
 
@@ -700,7 +707,7 @@ export function renderIssuesView(
         id: "0.0",
         sprint: phase,
         title: "New issue",
-        impact: "medium",
+        priority: "medium",
         status: "planned",
         tags: [],
         problem: "",
@@ -817,7 +824,7 @@ function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
         </div>
         ${field("Title", input("title", issue.title || ""))}
         <div class="editor-grid editor-grid--2">
-          ${field("Urgency", select("impact", issue.impact, ["critical", "high", "medium", "low"]))}
+          ${field("Priority", select("priority", issue.priority, ISSUE_PRIORITY_OPTIONS))}
           ${field("Status", select("status", issue.status, ISSUE_STATUS_OPTIONS))}
         </div>
         ${field("Tags (comma separated)", input("tags", (issue.tags || []).join(", ")))}
@@ -1004,7 +1011,7 @@ function applyIssueForm(issue, root) {
     form.querySelector('[name="sprint"]')?.value || issue.sprint,
   );
   issue.title = form.querySelector('[name="title"]')?.value ?? "";
-  issue.impact = form.querySelector('[name="impact"]')?.value ?? "medium";
+  issue.priority = form.querySelector('[name="priority"]')?.value ?? "medium";
   issue.status = form.querySelector('[name="status"]')?.value ?? "planned";
   issue.tags = (form.querySelector('[name="tags"]')?.value || "")
     .split(",")

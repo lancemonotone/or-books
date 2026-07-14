@@ -65,11 +65,11 @@ const COPY = {
   previousIssue: "Previous issue",
   nextIssue: "Next issue",
   filterNotFound: "No issues match this filter.",
-  urgencyFilterTitle: (label) => `Urgency: ${label}`,
+  priorityFilterTitle: (label) => `Priority: ${label}`,
   statusFilterTitle: (label) => `Status: ${label}`,
 };
 
-const IMPACT_LABELS = {
+const PRIORITY_LABELS = {
   critical: "Most urgent",
   high: "Important",
   medium: "Moderate",
@@ -114,8 +114,8 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
-function impactLabel(impact) {
-  return IMPACT_LABELS[impact] || impact;
+function priorityLabel(priority) {
+  return PRIORITY_LABELS[priority] || priority;
 }
 
 function statusLabel(status) {
@@ -193,8 +193,8 @@ function renderIssueNav(issueKey) {
   return `<nav class="issue-nav" aria-label="Issues in this phase">${prevControl}${nextControl}</nav>`;
 }
 
-function issuesByImpact(impact) {
-  return state.issues.filter((item) => item.impact === impact);
+function issuesByPriority(priority) {
+  return state.issues.filter((item) => item.priority === priority);
 }
 
 function issuesByStatus(status) {
@@ -401,7 +401,7 @@ function renderSummaryItemLabel(keys, title, fallback = "") {
 function renderMetaRow(issue) {
   return `
     <div class="meta-row">
-      <a class="pill pill--${escapeHtml(issue.impact)}" href="#/issues/impact/${escapeHtml(issue.impact)}">${escapeHtml(impactLabel(issue.impact))}</a>
+      <a class="pill pill--${escapeHtml(issue.priority)}" href="#/issues/priority/${escapeHtml(issue.priority)}">${escapeHtml(priorityLabel(issue.priority))}</a>
       <a class="pill pill--status pill--${escapeHtml(issue.status)}" href="#/issues/status/${escapeHtml(issue.status)}">${escapeHtml(statusLabel(issue.status))}</a>
     </div>`;
 }
@@ -575,11 +575,11 @@ function renderOverview() {
 
 function renderFilteredIssues(kind, value) {
   const issues =
-    kind === "impact" ? issuesByImpact(value) : issuesByStatus(value);
-  const label = kind === "impact" ? impactLabel(value) : statusLabel(value);
+    kind === "priority" ? issuesByPriority(value) : issuesByStatus(value);
+  const label = kind === "priority" ? priorityLabel(value) : statusLabel(value);
   const title =
-    kind === "impact"
-      ? COPY.urgencyFilterTitle(label)
+    kind === "priority"
+      ? COPY.priorityFilterTitle(label)
       : COPY.statusFilterTitle(label);
 
   return `
@@ -975,8 +975,8 @@ function renderRoute() {
       return renderOverview();
     case "issue":
       return renderIssueDetail(params.issueKey);
-    case "issues-by-impact":
-      return renderFilteredIssues("impact", params.impact);
+    case "issues-by-priority":
+      return renderFilteredIssues("priority", params.priority);
     case "issues-by-status":
       return renderFilteredIssues("status", params.status);
     case "evidence":

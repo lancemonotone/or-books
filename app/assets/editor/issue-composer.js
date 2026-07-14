@@ -190,7 +190,7 @@ export function initIssueComposer() {
     const problem = form.querySelector('[name="problem"]')?.value?.trim() || "";
     const recommendation =
       form.querySelector('[name="recommendation"]')?.value?.trim() || "";
-    const impact = form.querySelector('[name="impact"]')?.value || "medium";
+    const priority = form.querySelector('[name="priority"]')?.value || "medium";
 
     if (!title) {
       setComposerStatus("Title is required.", true);
@@ -202,7 +202,7 @@ export function initIssueComposer() {
       id: "0.0",
       sprint: phase,
       title,
-      impact,
+      priority,
       status: "planned",
       tags: [],
       problem,
@@ -242,7 +242,7 @@ export function openIssueComposer({
   form.querySelector('[name="title"]').value = "";
   form.querySelector('[name="problem"]').value = "";
   form.querySelector('[name="recommendation"]').value = "";
-  form.querySelector('[name="impact"]').value = "medium";
+  form.querySelector('[name="priority"]').value = "medium";
   setLinkedIssues(linkedIssueKeys, issues, onOpenIssue, audit);
   if (previewNode) {
     if (!file) {

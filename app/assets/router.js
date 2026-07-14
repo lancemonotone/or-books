@@ -4,7 +4,7 @@ const ROUTES = [
   { pattern: /^\/sprints$/, name: 'sprints' },
   { pattern: /^\/sprint\/(\d+)$/, name: 'sprint', params: ['sprintId'] },
   { pattern: /^\/issue\/([^/]+)$/, name: 'issue', params: ['issueKey'] },
-  { pattern: /^\/issues\/impact\/([^/]+)$/, name: 'issues-by-impact', params: ['impact'] },
+  { pattern: /^\/issues\/priority\/([^/]+)$/, name: 'issues-by-priority', params: ['priority'] },
   { pattern: /^\/issues\/status\/([^/]+)$/, name: 'issues-by-status', params: ['status'] },
   { pattern: /^\/evidence$/, name: 'evidence' },
   { pattern: /^\/evidence\/([^/]+)$/, name: 'evidence-item', params: ['file'] },
