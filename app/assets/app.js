@@ -934,7 +934,7 @@ function renderResponses() {
         issue?.title,
         key,
       );
-      return `<tr><td>${label}</td><td>${escapeHtml(stance)}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      return `<tr><td>${label}</td><td><strong>${escapeHtml(stance)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join("");
 
@@ -957,7 +957,7 @@ function renderResponses() {
         <h2>Feedback on issues</h2>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Issue</th><th>Reply</th><th>Comment</th><th>Name</th><th>Date</th></tr></thead>
+            <thead><tr><th>Issue</th><th>Reply</th><th>Name</th><th>Comment</th><th>Date</th></tr></thead>
             <tbody>${commentRows || `<tr><td colspan="5">${escapeHtml(COPY.noFeedbackYet)}</td></tr>`}</tbody>
           </table>
         </div>

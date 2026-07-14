@@ -680,6 +680,7 @@ a.pill {
   background: var(--color-muted-surface);
   text-decoration: none;
   color: var(--color-text);
+  white-space: nowrap;
 }
 
 .chip--issue {
@@ -1187,25 +1188,62 @@ a.pill {
 
 .table-wrap {
   overflow-x: auto;
-}
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-  background: var(--color-surface);
-}
+  & table {
+    inline-size: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    background: var(--color-surface);
+  }
 
-th,
-td {
-  border: 1px solid var(--color-border);
-  padding: 0.5rem 0.65rem;
-  text-align: left;
-  vertical-align: top;
-}
+  & th,
+  & td {
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 0.65rem;
+    text-align: start;
+    vertical-align: top;
+  }
 
-th {
-  background: var(--color-muted-surface);
+  & th {
+    background: var(--color-muted-surface);
+  }
+
+  /* Question/Issue | Answer/Reply | Name | Comment | Date */
+  & th:nth-child(1),
+  & td:nth-child(1) {
+    inline-size: 28%;
+  }
+
+  & th:nth-child(2),
+  & td:nth-child(2) {
+    inline-size: 7rem;
+    white-space: nowrap;
+  }
+
+  & th:nth-child(3),
+  & td:nth-child(3) {
+    inline-size: 7rem;
+  }
+
+  & th:nth-child(4),
+  & td:nth-child(4) {
+    overflow-wrap: anywhere;
+  }
+
+  & th:nth-child(5),
+  & td:nth-child(5) {
+    inline-size: 11rem;
+    white-space: nowrap;
+  }
+
+  & .summary-item__label {
+    flex-wrap: nowrap;
+  }
+
+  & .summary-item__chips {
+    flex-shrink: 0;
+  }
 }
 
 .summary-item__label {
