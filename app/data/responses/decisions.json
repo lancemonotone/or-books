@@ -1,1 +1,26 @@
-{}
+{
+    "d913f0d1-1835-4d4e-bcdb-3b5fe17a5540": {
+        "choice": "embed",
+        "text": "[P3]",
+        "author": "Antara",
+        "updatedAt": "2026-07-14T15:06:12+00:00"
+    },
+    "6fb3cd97-f3c1-4712-8101-bc94cabdd8f9": {
+        "choice": "mailto",
+        "text": "",
+        "author": "Antara",
+        "updatedAt": "2026-07-14T12:39:18+00:00"
+    },
+    "02f9a2fb-0d0f-4205-a4cc-b9cda47fd2c6": {
+        "choice": "populate",
+        "text": "We will provide catalog PDFs that can be embedded. No text needed.\n\n[P3]",
+        "author": "Antara",
+        "updatedAt": "2026-07-14T15:15:19+00:00"
+    },
+    "51411d72-c195-47a1-8036-96c9314de4e8": {
+        "choice": "dots",
+        "text": "",
+        "author": "Antara",
+        "updatedAt": "2026-07-14T15:20:55+00:00"
+    }
+}
