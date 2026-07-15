@@ -128,6 +128,10 @@ export function saveDecision(decisionId, payload) {
   return postJson('api/save-decision.php', { decisionId, ...payload });
 }
 
+export function saveIssuePriority(issueKey, priority) {
+  return postJson('api/save-issue-priority.php', { issueKey, priority });
+}
+
 export function mediaUrl(file) {
   return `media/${file}`;
 }

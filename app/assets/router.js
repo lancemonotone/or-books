@@ -6,6 +6,7 @@ const ROUTES = [
   { pattern: /^\/issue\/([^/]+)$/, name: 'issue', params: ['issueKey'] },
   { pattern: /^\/issues\/priority\/([^/]+)$/, name: 'issues-by-priority', params: ['priority'] },
   { pattern: /^\/issues\/status\/([^/]+)$/, name: 'issues-by-status', params: ['status'] },
+  { pattern: /^\/issues\/tag\/([^/]+)$/, name: 'issues-by-tag', params: ['tag'] },
   { pattern: /^\/evidence$/, name: 'evidence' },
   { pattern: /^\/evidence\/([^/]+)$/, name: 'evidence-item', params: ['file'] },
   { pattern: /^\/decisions$/, name: 'decisions' },

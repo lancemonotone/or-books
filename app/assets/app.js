@@ -3,6 +3,7 @@ import {
   loadResponses,
   saveComment,
   saveDecision,
+  saveIssuePriority,
   postCommentReply,
   editCommentMessage,
   fetchAuth,
@@ -59,9 +60,9 @@ const COPY = {
   signOut: "Sign out",
   authLead: "Enter the review password to continue.",
   yourName: "Your name",
-  nameNew: "Someone new…",
-  nameNewPlaceholder: "Type a name",
-  nameSelect: "Select a name",
+  nameNew: "Add",
+  namePlaceholder: "Select or type a name",
+  nameClear: "Clear name",
   doYouAgree: "Do you agree?",
   stanceNone: "No choice",
   agree: "Yes",
@@ -92,6 +93,7 @@ const COPY = {
   filterNotFound: "No issues match this filter.",
   priorityFilterTitle: (label) => `Priority: ${label}`,
   statusFilterTitle: (label) => `Status: ${label}`,
+  tagFilterTitle: (label) => `Tag: ${label}`,
   replyCount: (n) => `${n} ${n === 1 ? "reply" : "replies"}`,
 };
 
@@ -101,6 +103,8 @@ const PRIORITY_LABELS = {
   medium: "Moderate",
   low: "Minor",
 };
+
+const PRIORITY_OPTIONS = ["critical", "high", "medium", "low"];
 
 const STATUS_LABELS = {
   planned: "Planned",
@@ -234,6 +238,16 @@ function issuesByStatus(status) {
   return state.issues.filter((item) => item.status === status);
 }
 
+function issuesByTag(tag) {
+  const needle = String(tag || "").trim().toLowerCase();
+  if (!needle) {
+    return [];
+  }
+  return state.issues.filter((item) =>
+    (item.tags || []).some((entry) => String(entry).trim().toLowerCase() === needle),
+  );
+}
+
 function getAuthor(kind) {
   const key = AUTHOR_KEYS[kind] || AUTHOR_KEYS.comment;
   return (
@@ -320,11 +334,12 @@ function collectKnownAuthors() {
     if (!row || typeof row !== "object") {
       continue;
     }
-    const author = String(row.author || "").trim();
+    const normalized = normalizeCommentClient(row) || row;
+    const author = String(normalized.author || "").trim();
     if (author) {
       names.add(author);
     }
-    for (const message of row.messages || []) {
+    for (const message of normalized.messages || []) {
       const msgAuthor = String(message?.author || "").trim();
       if (msgAuthor) {
         names.add(msgAuthor);
@@ -341,87 +356,283 @@ function collectKnownAuthors() {
 }
 
 function renderAuthorPicker(selected = "", { id = "" } = {}) {
-  const known = collectKnownAuthors();
   const selectedName = String(selected || "").trim();
-  const isKnown = selectedName && known.some((name) => authorsMatch(name, selectedName));
-  const useNew = Boolean(selectedName && !isKnown);
-  const selectId = id ? `author-select-${id}` : "";
-  const options = [
-    `<option value="" ${!selectedName && !useNew ? "selected" : ""}>${escapeHtml(COPY.nameSelect)}</option>`,
-    ...known.map(
-      (name) =>
-        `<option value="${escapeHtml(name)}" ${!useNew && authorsMatch(name, selectedName) ? "selected" : ""}>${escapeHtml(name)}</option>`,
-    ),
-    `<option value="__new__" ${useNew ? "selected" : ""}>${escapeHtml(COPY.nameNew)}</option>`,
-  ];
+  const listId = id ? `author-list-${id}` : `author-list-${Math.random().toString(36).slice(2, 9)}`;
+  const inputId = id ? `author-input-${id}` : "";
+  const hasValue = Boolean(selectedName);
 
   return `
-    <div class="author-picker" data-author-picker>
-      <label class="field">
+    <div class="combobox" data-author-picker>
+      <label class="field" ${inputId ? `for="${escapeHtml(inputId)}"` : ""}>
         <span class="field__label">${escapeHtml(COPY.yourName)}</span>
-        <select class="author-picker__select" data-author-select ${selectId ? `id="${escapeHtml(selectId)}"` : ""}>
-          ${options.join("")}
-        </select>
+        <div class="combobox__control">
+          <input
+            type="text"
+            class="combobox__input"
+            ${inputId ? `id="${escapeHtml(inputId)}"` : ""}
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="${escapeHtml(listId)}"
+            aria-autocomplete="list"
+            aria-haspopup="listbox"
+            data-author-input
+            value="${escapeHtml(selectedName)}"
+            maxlength="80"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="${escapeHtml(COPY.namePlaceholder)}"
+          >
+          <button
+            type="button"
+            class="combobox__clear"
+            data-author-clear
+            aria-label="${escapeHtml(COPY.nameClear)}"
+            ${hasValue ? "" : "hidden"}
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+          <ul
+            class="combobox__list"
+            id="${escapeHtml(listId)}"
+            role="listbox"
+            data-author-list
+            hidden
+          ></ul>
+        </div>
       </label>
-      <label class="field author-picker__new" data-author-new-wrap ${useNew ? "" : "hidden"}>
-        <span class="visually-hidden">${escapeHtml(COPY.nameNewPlaceholder)}</span>
-        <input type="text" data-author-new maxlength="80" autocomplete="name" placeholder="${escapeHtml(COPY.nameNewPlaceholder)}" value="${useNew ? escapeHtml(selectedName) : ""}">
-      </label>
-      <input type="hidden" name="author" data-author-value value="${escapeHtml(useNew || isKnown ? selectedName : "")}">
+      <input type="hidden" name="author" data-author-value value="${escapeHtml(selectedName)}">
     </div>`;
+}
+
+function syncAuthorClearButton(picker) {
+  const input = picker?.querySelector("[data-author-input]");
+  const clear = picker?.querySelector("[data-author-clear]");
+  if (!input || !clear) {
+    return;
+  }
+  clear.hidden = !String(input.value || "").trim();
 }
 
 function syncAuthorPicker(picker) {
   if (!picker) {
     return "";
   }
-  const select = picker.querySelector("[data-author-select]");
-  const newWrap = picker.querySelector("[data-author-new-wrap]");
-  const newInput = picker.querySelector("[data-author-new]");
+  const input = picker.querySelector("[data-author-input]");
   const hidden = picker.querySelector("[data-author-value]");
-  if (!select || !hidden) {
-    return "";
-  }
-
-  const mode = select.value;
-  if (mode === "__new__") {
-    if (newWrap) {
-      newWrap.hidden = false;
-    }
-    const name = String(newInput?.value || "").trim();
+  const name = String(input?.value || hidden?.value || "").trim();
+  if (hidden) {
     hidden.value = name;
-    if (newInput) {
-      newInput.required = true;
-    }
-    return name;
   }
+  if (input) {
+    input.value = name;
+  }
+  syncAuthorClearButton(picker);
+  return name;
+}
 
-  if (newWrap) {
-    newWrap.hidden = true;
+function closeAuthorCombobox(picker) {
+  const input = picker?.querySelector("[data-author-input]");
+  const list = picker?.querySelector("[data-author-list]");
+  const hidden = picker?.querySelector("[data-author-value]");
+  if (!input || !list) {
+    return;
   }
-  if (newInput) {
-    newInput.required = false;
-    newInput.value = "";
+  if (hidden) {
+    hidden.value = String(input.value || "").trim();
   }
-  hidden.value = mode;
-  return mode;
+  list.hidden = true;
+  list.innerHTML = "";
+  input.setAttribute("aria-expanded", "false");
+  input.removeAttribute("aria-activedescendant");
+  picker._authorActiveIndex = -1;
+  picker._authorOptions = [];
+  picker._authorFiltering = false;
+  syncAuthorClearButton(picker);
 }
 
 function bindAuthorPickers(root = main) {
   root.querySelectorAll("[data-author-picker]").forEach((picker) => {
-    syncAuthorPicker(picker);
-    const select = picker.querySelector("[data-author-select]");
-    const newInput = picker.querySelector("[data-author-new]");
-    select?.addEventListener("change", () => {
-      syncAuthorPicker(picker);
-      if (select.value === "__new__") {
-        picker.querySelector("[data-author-new]")?.focus();
+    const input = picker.querySelector("[data-author-input]");
+    const list = picker.querySelector("[data-author-list]");
+    const hidden = picker.querySelector("[data-author-value]");
+    const clear = picker.querySelector("[data-author-clear]");
+    if (!input || !list || !hidden) {
+      return;
+    }
+
+    picker._authorActiveIndex = -1;
+    picker._authorOptions = [];
+    picker._authorFiltering = false;
+
+    const setActive = (index) => {
+      picker._authorActiveIndex = index;
+      [...list.querySelectorAll('[role="option"]')].forEach((option, i) => {
+        const active = i === picker._authorActiveIndex;
+        option.classList.toggle("is-active", active);
+        option.setAttribute("aria-selected", active ? "true" : "false");
+        if (active) {
+          input.setAttribute("aria-activedescendant", option.id);
+          option.scrollIntoView({ block: "nearest" });
+        }
+      });
+      if (picker._authorActiveIndex < 0) {
+        input.removeAttribute("aria-activedescendant");
+      }
+    };
+
+    const choose = (value) => {
+      const name = String(value || "").trim();
+      input.value = name;
+      hidden.value = name;
+      picker._authorFiltering = false;
+      closeAuthorCombobox(picker);
+    };
+
+    const renderOptions = () => {
+      const query = String(input.value || "").trim();
+      const known = collectKnownAuthors();
+      const filtering = Boolean(picker._authorFiltering);
+      const filtered =
+        filtering && query
+          ? known.filter((name) => name.toLowerCase().includes(query.toLowerCase()))
+          : known;
+      const exact = known.some((name) => authorsMatch(name, query));
+      const items = filtered.map((name) => ({
+        value: name,
+        label: name,
+        create: false,
+      }));
+      if (filtering && query && !exact) {
+        items.push({
+          value: query,
+          label: `${COPY.nameNew} “${query}”`,
+          create: true,
+        });
+      }
+
+      picker._authorOptions = items;
+      if (!items.length) {
+        list.innerHTML = `<li class="combobox__empty" role="presentation">${escapeHtml(COPY.namePlaceholder)}</li>`;
+      } else {
+        list.innerHTML = items
+          .map((item, index) => {
+            const optionId = `${list.id}-opt-${index}`;
+            return `<li
+              id="${escapeHtml(optionId)}"
+              class="combobox__option${item.create ? " is-create" : ""}"
+              role="option"
+              data-value="${escapeHtml(item.value)}"
+              aria-selected="false"
+            >${escapeHtml(item.label)}</li>`;
+          })
+          .join("");
+      }
+
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      const currentIndex = query
+        ? items.findIndex((item) => authorsMatch(item.value, query))
+        : -1;
+      setActive(currentIndex >= 0 ? currentIndex : items.length ? 0 : -1);
+    };
+
+    input.addEventListener("focus", () => {
+      picker._authorFiltering = false;
+      renderOptions();
+    });
+
+    input.addEventListener("input", () => {
+      hidden.value = String(input.value || "").trim();
+      picker._authorFiltering = true;
+      syncAuthorClearButton(picker);
+      renderOptions();
+    });
+
+    input.addEventListener("keydown", (event) => {
+      const options = picker._authorOptions || [];
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (list.hidden) {
+          picker._authorFiltering = false;
+          renderOptions();
+          return;
+        }
+        if (!options.length) {
+          return;
+        }
+        setActive((picker._authorActiveIndex + 1) % options.length);
+        return;
+      }
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (list.hidden) {
+          picker._authorFiltering = false;
+          renderOptions();
+          return;
+        }
+        if (!options.length) {
+          return;
+        }
+        setActive((picker._authorActiveIndex - 1 + options.length) % options.length);
+        return;
+      }
+      if (event.key === "Enter") {
+        if (!list.hidden && picker._authorActiveIndex >= 0 && options[picker._authorActiveIndex]) {
+          event.preventDefault();
+          choose(options[picker._authorActiveIndex].value);
+        }
+        return;
+      }
+      if (event.key === "Escape") {
+        if (!list.hidden) {
+          event.preventDefault();
+          closeAuthorCombobox(picker);
+        }
+        return;
+      }
+      if (event.key === "Tab") {
+        closeAuthorCombobox(picker);
       }
     });
-    newInput?.addEventListener("input", () => {
-      syncAuthorPicker(picker);
+
+    list.addEventListener("mousedown", (event) => {
+      const option = event.target.closest("[data-value]");
+      if (!option) {
+        return;
+      }
+      event.preventDefault();
+      choose(option.dataset.value);
     });
+
+    if (clear) {
+      clear.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+      clear.addEventListener("click", (event) => {
+        event.preventDefault();
+        input.value = "";
+        hidden.value = "";
+        picker._authorFiltering = false;
+        syncAuthorClearButton(picker);
+        input.focus();
+        renderOptions();
+      });
+    }
+
+    syncAuthorClearButton(picker);
   });
+
+  if (!document.documentElement.dataset.authorComboboxBound) {
+    document.addEventListener("click", (event) => {
+      document.querySelectorAll("[data-author-picker]").forEach((picker) => {
+        if (!picker.contains(event.target)) {
+          closeAuthorCombobox(picker);
+        }
+      });
+    });
+    document.documentElement.dataset.authorComboboxBound = "1";
+  }
 }
 
 function renderStanceFieldset(selected = "", { name = "stance" } = {}) {
@@ -541,7 +752,6 @@ function renderCommentForm(issue) {
   const saved = commentRecord(issue.key);
   const messages = saved?.messages || [];
   const isFirst = messages.length === 0;
-  const remembered = getAuthor("comment");
 
   const stanceBlock = isFirst ? renderStanceFieldset("") : "";
 
@@ -552,7 +762,7 @@ function renderCommentForm(issue) {
       <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}" data-feedback-mode="${isFirst ? "first" : "reply"}">
         ${stanceBlock}
         <div class="feedback-composer">
-          ${renderAuthorPicker(remembered, { id: `issue-${issue.key}` })}
+          ${renderAuthorPicker("", { id: `issue-${issue.key}` })}
           <label class="field">
             <span class="visually-hidden">${escapeHtml(COPY.yourReply)}</span>
             <textarea name="text" rows="2" maxlength="2000" ${isFirst ? "" : "required"} placeholder="${escapeHtml(isFirst ? COPY.firstNotePlaceholder : COPY.replyPlaceholder)}"></textarea>
@@ -743,12 +953,53 @@ function renderSummaryItemLabel(keys, title, fallback = "") {
   return `<div class="summary-item__label">${chips}<span class="summary-item__title">${text}</span></div>`;
 }
 
-function renderMetaRow(issue) {
+function renderTagChips(tags = []) {
+  return (tags || [])
+    .map((tag) => String(tag || "").trim())
+    .filter(Boolean)
+    .map(
+      (tag) =>
+        `<a class="chip chip--tag" href="#/issues/tag/${encodeURIComponent(tag)}">${escapeHtml(tag)}</a>`,
+    )
+    .join("");
+}
+
+function renderPriorityControl(issue, { editable = false } = {}) {
+  const priority = String(issue.priority || "");
+  if (!editable) {
+    return `<a class="pill pill--${escapeHtml(priority)}" href="#/issues/priority/${escapeHtml(priority)}">${escapeHtml(priorityLabel(priority))}</a>`;
+  }
+
+  const options = PRIORITY_OPTIONS.map((value) => {
+    const selected = value === priority ? " selected" : "";
+    return `<option value="${escapeHtml(value)}"${selected}>${escapeHtml(priorityLabel(value))}</option>`;
+  }).join("");
+
+  return `
+    <label class="priority-control">
+      <span class="visually-hidden">Priority</span>
+      <select
+        class="priority-control__select pill pill--${escapeHtml(priority)}"
+        data-issue-priority="${escapeHtml(issue.key)}"
+        aria-label="Priority"
+      >${options}</select>
+    </label>`;
+}
+
+function renderMetaRow(issue, { editablePriority = false } = {}) {
   return `
     <div class="meta-row">
-      <a class="pill pill--${escapeHtml(issue.priority)}" href="#/issues/priority/${escapeHtml(issue.priority)}">${escapeHtml(priorityLabel(issue.priority))}</a>
+      ${renderPriorityControl(issue, { editable: editablePriority })}
       <a class="pill pill--status pill--${escapeHtml(issue.status)}" href="#/issues/status/${escapeHtml(issue.status)}">${escapeHtml(statusLabel(issue.status))}</a>
     </div>`;
+}
+
+function renderIssueTags(issue) {
+  const tags = renderTagChips(issue.tags);
+  if (!tags) {
+    return "";
+  }
+  return `<div class="chip-row issue-tags">${tags}</div>`;
 }
 
 function renderIssueCard(issue) {
@@ -919,13 +1170,20 @@ function renderOverview() {
 }
 
 function renderFilteredIssues(kind, value) {
-  const issues =
-    kind === "priority" ? issuesByPriority(value) : issuesByStatus(value);
-  const label = kind === "priority" ? priorityLabel(value) : statusLabel(value);
-  const title =
-    kind === "priority"
-      ? COPY.priorityFilterTitle(label)
-      : COPY.statusFilterTitle(label);
+  let issues = [];
+  let title = "";
+  if (kind === "priority") {
+    issues = issuesByPriority(value);
+    title = COPY.priorityFilterTitle(priorityLabel(value));
+  } else if (kind === "status") {
+    issues = issuesByStatus(value);
+    title = COPY.statusFilterTitle(statusLabel(value));
+  } else if (kind === "tag") {
+    issues = issuesByTag(value);
+    title = COPY.tagFilterTitle(value);
+  } else {
+    title = COPY.filterNotFound;
+  }
 
   return `
     <div class="page">
@@ -1004,13 +1262,14 @@ function renderIssueDetail(issueKey) {
             <h1>${escapeHtml(issue.title)}</h1>
             ${renderEditLink({ tab: "issues", issue: issue.key, label: `Edit issue ${issue.id}` })}
           </div>
-          ${renderMetaRow(issue)}
+          ${renderMetaRow(issue, { editablePriority: true })}
         </header>
         <section class="prose">
           <h2>${escapeHtml(COPY.whatWeFound)}</h2>
           <p>${escapeHtml(issue.problem?.trim() || "")}</p>
           <h2>${escapeHtml(COPY.whatWeSuggest)}</h2>
           <p>${escapeHtml(issue.recommendation?.trim() || "")}</p>
+          ${renderIssueTags(issue)}
         </section>
         ${linkedDecisionsHtml ? `<section class="issue-decisions">${linkedDecisionsHtml}</section>` : ""}
         ${renderCommentForm(issue)}
@@ -1226,6 +1485,36 @@ function renderDecisions() {
     </div>`;
 }
 
+function renderCommentSummaryCell(row) {
+  const normalized = normalizeCommentClient(row) || row;
+  const messages = Array.isArray(normalized.messages) ? normalized.messages : [];
+  const firstText = String(messages[0]?.text || normalized.text || "").trim();
+
+  if (messages.length <= 1) {
+    return escapeHtml(firstText);
+  }
+
+  const preview = escapeHtml(firstText);
+  const count = escapeHtml(COPY.replyCount(messages.length));
+  const list = messages
+    .map((message) => {
+      const author = escapeHtml(String(message.author || "").trim() || "Unknown");
+      const text = escapeHtml(String(message.text || "").trim());
+      return `<li class="summary-thread__item"><span class="summary-thread__author">${author}</span> ${text}</li>`;
+    })
+    .join("");
+
+  return `
+    <details class="summary-thread">
+      <summary class="summary-thread__summary">
+        <span class="summary-thread__preview">${preview}</span>
+        <span class="muted summary-thread__count">(${count})</span>
+        <span class="summary-thread__arrow" aria-hidden="true"></span>
+      </summary>
+      <ol class="summary-thread__list">${list}</ol>
+    </details>`;
+}
+
 function renderResponses() {
   const decisionRows = Object.entries(state.responses.decisions)
     .map(([id, row]) => {
@@ -1242,18 +1531,16 @@ function renderResponses() {
   const commentRows = Object.entries(state.responses.comments)
     .map(([key, row]) => {
       const issue = issueByKey(key);
-      const stance = STANCE_LABELS[row.stance] || row.stance;
+      const normalized = normalizeCommentClient(row) || row;
+      const stance = STANCE_LABELS[normalized.stance] || normalized.stance;
       const label = renderSummaryItemLabel(
         issue ? [key] : [],
         issue?.title,
         key,
       );
-      const messages = Array.isArray(row.messages) ? row.messages : [];
-      const commentCell =
-        messages.length > 1
-          ? `${escapeHtml(row.text || "")} <span class="muted">(${escapeHtml(COPY.replyCount(messages.length))})</span>`
-          : escapeHtml(row.text || "");
-      return `<tr><td>${label}</td><td><strong>${escapeHtml(stance)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${commentCell}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      const commentCell = renderCommentSummaryCell(normalized);
+      const author = String(normalized.messages?.[0]?.author || normalized.author || "").trim();
+      return `<tr><td>${label}</td><td><strong>${escapeHtml(stance)}</strong></td><td>${escapeHtml(author)}</td><td>${commentCell}</td><td>${escapeHtml(new Date(normalized.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join("");
 
@@ -1298,6 +1585,8 @@ function renderRoute() {
       return renderFilteredIssues("priority", params.priority);
     case "issues-by-status":
       return renderFilteredIssues("status", params.status);
+    case "issues-by-tag":
+      return renderFilteredIssues("tag", params.tag);
     case "evidence":
       return renderEvidenceGallery();
     case "evidence-item":
@@ -1670,6 +1959,31 @@ function bindPageHandlers() {
   }
 
   bindAuthorPickers(main);
+
+  main.querySelectorAll("[data-issue-priority]").forEach((select) => {
+    select.addEventListener("change", async () => {
+      const issueKey = select.dataset.issuePriority;
+      const priority = select.value;
+      const previous = state.issues.find((item) => item.key === issueKey)?.priority;
+      select.className = `priority-control__select pill pill--${priority}`;
+      select.disabled = true;
+      try {
+        await saveIssuePriority(issueKey, priority);
+        const issue = state.issues.find((item) => item.key === issueKey);
+        if (issue) {
+          issue.priority = priority;
+        }
+      } catch (error) {
+        if (previous) {
+          select.value = previous;
+          select.className = `priority-control__select pill pill--${previous}`;
+        }
+        window.alert(error.message || "Could not save priority.");
+      } finally {
+        select.disabled = false;
+      }
+    });
+  });
 
   const phasesOpenAll = main.querySelector("[data-phases-open-all]");
   const phasesCloseAll = main.querySelector("[data-phases-close-all]");

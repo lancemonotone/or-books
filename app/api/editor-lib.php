@@ -221,8 +221,16 @@ function editor_write_yaml(string $file, string $content): void {
         respond_json(500, ['error' => 'Could not write data file.']);
     }
 
-    if (!rename($tmp, $path)) {
-        @unlink($tmp);
-        respond_json(500, ['error' => 'Could not save data file.']);
+    // Windows: rename() onto an existing path often fails with "Access is denied".
+    // Replace via unlink + rename when the atomic overwrite fails.
+    if (!@rename($tmp, $path)) {
+        if (file_exists($path) && !@unlink($path)) {
+            @unlink($tmp);
+            respond_json(500, ['error' => 'Could not save data file.']);
+        }
+        if (!@rename($tmp, $path)) {
+            @unlink($tmp);
+            respond_json(500, ['error' => 'Could not save data file.']);
+        }
     }
 }
