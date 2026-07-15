@@ -42,9 +42,28 @@ Saving feedback requires PHP on the deployed host.
 5. Copy `api/config.example.php` to `api/config.php` and set `editor_password`.
 6. Optional: add HTTP Basic Auth in `.htaccess` for another layer.
 
+The review app and content editor share the same password and session. **Nothing in the review UI loads without sign-in.** YAML/JSON under `data/` are blocked from direct HTTP access and served only through authenticated APIs.
+
+## Settings
+
+Signed-in **Settings** (gear in the header):
+
+- Client / project name (header brand and titles)
+- Appearance: light / dark / system (saved in the browser)
+- Notification on/off, client & developer teams (each person = name used in the app + email + update frequency)
+
+Deploy secrets stay in `api/config.php`:
+
+- `app_public_url` — base URL for links inside notification emails
+- `notify.from` — From header for PHP `mail()`
+- `notify.flush_secret` — required by the digest cron endpoint
+- `notify.enabled` — hard off for the host
+
+Digest cron (hourly/daily teams): hit `api/notify-flush.php?secret=YOUR_FLUSH_SECRET` on a schedule (every 15–60 minutes is fine). PHP `mail()` must work on the host; a stronger provider can replace it later.
+
 ## Content editor
 
-URL: **`/audit/edit/`** (not linked from the client presentation).
+URL: **`/audit/edit/`** (linked from the signed-in review nav).
 
 ### Setup
 
@@ -52,21 +71,22 @@ URL: **`/audit/edit/`** (not linked from the client presentation).
 2. Set `editor_password` to a long random string.
 3. Ensure PHP can write to `data/*.yaml`.
 
-Leave `editor_password` empty to disable the editor.
+Leave `editor_password` empty to disable the review app and editor (both require it).
 
 ### Security (basic)
 
 | Layer | What it does |
 |-------|----------------|
-| Password | Required to sign in; stored in `config.php` only |
-| Session cookie | HttpOnly, SameSite=Strict |
-| CSRF token | Required on save and sign-out |
+| Password | Required to open the review app and editor; stored in `config.php` only |
+| Session cookie | HttpOnly, SameSite=Strict; shared by review + editor |
+| CSRF token | Required on saves, replies, and sign-out |
 | Honeypot field | Hidden field bots often fill; request rejected |
 | Login lockout | 8 failed attempts, 15 minute cooldown |
+| `data/.htaccess` | Denies direct download of YAML/JSON |
 | `robots.txt` | Asks crawlers not to index `/edit/` or editor API |
 | `noindex` meta | On the editor page itself |
 
-This is not hidden from humans who know the URL. It blocks casual crawlers and drive-by bots, not a determined attacker. Use HTTP Basic Auth on `/edit/` if you want more.
+This is not hidden from humans who know the URL. It blocks casual crawlers and drive-by bots, not a determined attacker. Use HTTP Basic Auth on `/audit/` if you want more.
 
 ### Using the editor
 
@@ -76,7 +96,7 @@ This is not hidden from humans who know the URL. It blocks casual crawlers and d
 4. Pick an item in the sidebar; changes autosave. Deep-link with `?tab=issues&issue=<key>` (UUID), not the display id.
 5. **Reorder:** drag the ⠿ handle in the Issues sidebar. With **All phases**, drag across phase groups; with a single phase filter, reorder within that phase only. Display ids Compact automatically after reorder, delete, phase change, or new issue.
 
-**Media files:** copy PNG or MP4 files into `media/` on the server (or run `scripts/link-media.sh` locally), then click **Reload** in the editor. Use **Add media** or **Change file** to open the image picker.
+**Media files:** copy PNG or MP4 files into `media/` on the server (or run `scripts/link-media.sh` locally). Use **Add media** or **Change file** to open the image picker — it refreshes the file list when it opens.
 
 When you save **Issues**, **Media**, or **Questions**, overview counts in `audit.yaml` are recalculated automatically. The presentation app also counts live from the data files.
 
@@ -104,7 +124,7 @@ Open `data/issues.yaml`. Each item looks like this:
   id: "1.2"                                       # display label only (phase.sequence)
   sprint: 1
   title: Label or Replace the Subjects icons
-  impact: critical
+  priority: critical
   status: planned
   tags: [navigation, subjects]
   problem: >
@@ -119,7 +139,7 @@ Open `data/issues.yaml`. Each item looks like this:
 
 Every note needs a stable **`key`** (UUID). Chips, URLs, evidence links, decision blocks, comments, and editor deep links all use **`key`**. The **`id`** (`1.2`) is the human label only—do not put it in lasting references.
 
-Change `title`, `problem`, or `recommendation` for client-facing copy. Change `impact` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`, `complete`) for the pills on each card.
+Change `title`, `problem`, or `recommendation` for client-facing copy. Change `priority` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`, `complete`) for the pills on each card.
 
 `tags` and `acceptance` stay in the file for your own planning. They are **not** shown in the presentation app.
 
@@ -162,7 +182,7 @@ The filename must match a file in `media/`. Both directions help: notes pull ima
 3. Add a row to `data/evidence.yaml`.
 4. Reference it from the relevant note(s) in `issues.yaml`.
 
-For videos, set `type: video` and optional `poster: "123202.png"` in `evidence.yaml`.
+For videos, set `type: video` in `evidence.yaml`.
 
 ### Edit phases (groupings)
 
@@ -205,6 +225,8 @@ Each question needs a stable **`key`** (UUID). The editor assigns one when you a
 
 ### Views
 
-`#/` overview · `#/sprint/1` (phase 1) · `#/issue/<key>` (note by UUID; chips still show `1.3`) · `#/evidence` · `#/decisions` · `#/responses`
+`#/` overview (phases accordion; `#/?phases=1` opens phase 1) · `#/issue/<key>` (note by UUID; chips still show `1.3`) · `#/evidence` · `#/decisions` · `#/responses`
+
+Legacy `#/sprints` and `#/sprint/<n>` redirect to overview.
 
 Old `#/issue/1.3` routes are not supported (hard cut).
