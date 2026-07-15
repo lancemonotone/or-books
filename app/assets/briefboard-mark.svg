@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="110 100 200 200" role="img" aria-label="BriefBoard">
+  <title>BriefBoard</title>
+  <g stroke="#1e293b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path
+      d="M 160 150
+         C 210 153, 260 158, 305 165
+         C 303 210, 298 255, 290 295
+         C 240 292, 195 288, 155 280
+         C 158 240, 160 195, 160 150 Z"
+      fill="#3b82f6"
+    />
+    <path
+      d="M 145 125
+         C 195 128, 245 133, 290 140
+         C 288 185, 283 230, 275 270
+         C 225 267, 180 263, 140 255
+         C 143 215, 145 170, 145 125 Z"
+      fill="#f59e0b"
+    />
+    <path
+      d="M 125 105
+         C 175 102, 225 107, 275 115
+         C 273 155, 271 190, 265 225
+         L 235 255
+         C 190 250, 150 245, 115 235
+         C 118 195, 122 150, 125 105 Z"
+      fill="#4ade80"
+    />
+    <path
+      d="M 265 225
+         L 235 225
+         C 235 255, 235 255, 235 255
+         Z"
+      fill="#15803d"
+    />
+    <path d="M 235 255 L 265 225" fill="none" stroke="#1e293b" stroke-width="10" />
+    <path d="M 155 165 Q 165 152 175 165" fill="none" stroke="#1e293b" stroke-width="9" />
+    <path d="M 215 165 Q 225 152 235 165" fill="none" stroke="#1e293b" stroke-width="9" />
+    <path d="M 162 192 Q 195 225 228 192" fill="none" stroke="#1e293b" stroke-width="10" />
+  </g>
+</svg>

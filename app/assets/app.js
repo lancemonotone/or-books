@@ -23,6 +23,10 @@ const AUTHOR_KEYS = {
 };
 
 const THEME_KEY = "or-audit-theme";
+const BOOT_ENTER_MS = 700;
+const BOOT_LABEL_DELAY_MS = 500;
+const BOOT_HOLD_MS = 1500;
+const BOOT_EXIT_MS = 550;
 
 const COPY = {
   overview: "Overview",
@@ -207,11 +211,55 @@ function applyTheme(pref = getThemePref()) {
 
 const main = document.getElementById("main");
 const siteHeader = document.getElementById("site-header");
+const bootSplash = document.getElementById("boot-splash");
 const authPanel = document.getElementById("auth-panel");
 const authBlocked = document.getElementById("auth-blocked");
 const loginForm = document.getElementById("login-form");
 const loginStatus = document.getElementById("login-status");
 const logoutButton = document.getElementById("logout-button");
+const bootStartedAt = performance.now();
+let bootEnded = false;
+
+function prefersReducedMotion() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
+}
+
+async function sleep(ms) {
+  if (ms <= 0) {
+    return;
+  }
+  await new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+async function endBoot() {
+  if (bootEnded) {
+    return;
+  }
+  bootEnded = true;
+
+  if (bootSplash && !bootSplash.hidden) {
+    bootSplash.classList.add("is-leaving");
+    const exitMs = prefersReducedMotion() ? 0 : BOOT_EXIT_MS;
+    await sleep(exitMs);
+    bootSplash.hidden = true;
+    bootSplash.setAttribute("aria-busy", "false");
+  }
+
+  document.body.classList.remove("is-booting");
+}
+
+/** Wait until mark + title have finished entering, then hold settled splash. */
+async function waitForSplashHold() {
+  const enterMs = prefersReducedMotion()
+    ? 0
+    : BOOT_LABEL_DELAY_MS + BOOT_ENTER_MS;
+  const untilEnterDone = Math.max(0, enterMs - (performance.now() - bootStartedAt));
+  await sleep(untilEnterDone);
+  const holdMs = prefersReducedMotion() ? 0 : BOOT_HOLD_MS;
+  await sleep(holdMs);
+}
 const lightbox = document.getElementById("lightbox");
 const lightboxTitle = document.getElementById("lightbox-title");
 const lightboxBody = document.getElementById("lightbox-body");
@@ -1867,7 +1915,8 @@ function render() {
   });
 }
 
-function showAuthPanel() {
+async function showAuthPanel() {
+  await endBoot();
   document.body.classList.add("is-locked");
   authPanel.hidden = false;
   authBlocked.hidden = true;
@@ -1876,7 +1925,8 @@ function showAuthPanel() {
   state.ready = false;
 }
 
-function showBlockedPanel() {
+async function showBlockedPanel() {
+  await endBoot();
   document.body.classList.add("is-locked");
   authPanel.hidden = true;
   authBlocked.hidden = false;
@@ -1885,7 +1935,8 @@ function showBlockedPanel() {
   state.ready = false;
 }
 
-function showAppShell() {
+async function showAppShell() {
+  await endBoot();
   document.body.classList.remove("is-locked");
   authPanel.hidden = true;
   authBlocked.hidden = true;
@@ -1907,8 +1958,8 @@ async function loadAppData() {
       clientName: "",
       notifyEnabled: false,
       teams: {
-        client: { frequency: "immediate", members: [] },
-        developer: { frequency: "immediate", members: [] },
+        client: { members: [] },
+        developer: { members: [] },
       },
     };
   }
@@ -1918,7 +1969,6 @@ async function loadAppData() {
   }
   state.responses.comments = normalizedComments;
   state.ready = true;
-  showAppShell();
   applyBrand();
   applyTheme();
 }
@@ -1935,6 +1985,7 @@ function bindAuthHandlers() {
       await login(String(data.get("password") || ""), String(data.get("website") || ""));
       loginForm.reset();
       await loadAppData();
+      await showAppShell();
       state.route = normalizeLegacyRoute(parseRoute());
       render();
     } catch (error) {
@@ -1949,7 +2000,7 @@ function bindAuthHandlers() {
     } catch {
       /* still lock UI */
     }
-    showAuthPanel();
+    await showAuthPanel();
     main.innerHTML = "";
   });
 }
@@ -2487,17 +2538,21 @@ async function init() {
       setCsrfToken(auth.csrf);
     }
     if (!auth.authenticated) {
-      showAuthPanel();
+      await waitForSplashHold();
+      await showAuthPanel();
       return;
     }
     await loadAppData();
+    await waitForSplashHold();
+    await showAppShell();
     render();
   } catch (error) {
+    await waitForSplashHold();
     if (String(error.message || "").includes("not configured")) {
-      showBlockedPanel();
+      await showBlockedPanel();
       return;
     }
-    showAuthPanel();
+    await showAuthPanel();
     if (loginStatus) {
       loginStatus.textContent = error.message;
       loginStatus.classList.add("is-visible", "is-error");

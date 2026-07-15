@@ -320,7 +320,132 @@ code {
   }
 }
 
-/* Auth gate */
+/* Boot splash + auth gate */
+
+.boot-splash {
+  --splash-mark-size: min(63vw, 18rem);
+  --splash-motion-distance: 0.4rem;
+  --splash-in-duration: 0.7s;
+  --splash-out-duration: 0.55s;
+  --splash-label-in-delay: 0.5s;
+  --splash-ease-in: cubic-bezier(0.16, 1, 0.3, 1);
+  --splash-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--color-bg);
+  color: var(--color-text);
+
+  &[hidden] {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    --splash-mark-size: min(43.2vw, 21.6rem);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    --splash-motion-distance: 0;
+    --splash-in-duration: 0.01ms;
+    --splash-out-duration: 0.01ms;
+    --splash-label-in-delay: 0ms;
+  }
+}
+
+.boot-splash__inner {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  inline-size: min(100%, 28rem);
+  padding-inline: 1rem;
+}
+
+.boot-splash__mark {
+  display: block;
+  inline-size: var(--splash-mark-size);
+  block-size: auto;
+  aspect-ratio: 1;
+  border-radius: 0;
+  box-shadow: none;
+  animation: boot-splash-mark-in var(--splash-in-duration) var(--splash-ease-in) both;
+}
+
+.boot-splash.is-leaving .boot-splash__mark {
+  animation: boot-splash-mark-out var(--splash-out-duration) var(--splash-ease-out) forwards;
+}
+
+.boot-splash__label {
+  margin: 0;
+  color: var(--color-text);
+  font-family: Fredoka, "Nunito", system-ui, sans-serif;
+  font-size: clamp(1.85rem, 8.5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: boot-splash-label-in var(--splash-in-duration) var(--splash-ease-in) var(--splash-label-in-delay) both;
+}
+
+.boot-splash.is-leaving .boot-splash__label {
+  animation: boot-splash-label-out var(--splash-out-duration) var(--splash-ease-out) forwards;
+}
+
+@keyframes boot-splash-mark-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--splash-motion-distance));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes boot-splash-mark-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(var(--splash-motion-distance));
+  }
+}
+
+@keyframes boot-splash-label-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes boot-splash-label-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+body.is-booting {
+  & .auth-panel,
+  & .site-header,
+  & .site-main {
+    visibility: hidden;
+  }
+}
 
 .auth-panel {
   min-block-size: 100vh;
