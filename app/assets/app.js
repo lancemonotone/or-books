@@ -4,6 +4,8 @@ import {
   saveComment,
   saveDecision,
   saveIssuePriority,
+  saveSettings,
+  loadSettings,
   postCommentReply,
   editCommentMessage,
   fetchAuth,
@@ -20,9 +22,37 @@ const AUTHOR_KEYS = {
   decision: "or-audit-author",
 };
 
+const THEME_KEY = "or-audit-theme";
+const BOOT_ENTER_MS = 700;
+const BOOT_LABEL_DELAY_MS = 500;
+const BOOT_HOLD_MS = 1500;
+const BOOT_EXIT_MS = 550;
+
 const COPY = {
-  brand: "OR Books",
   overview: "Overview",
+  settings: "Settings",
+  settingsLead: "Project name, appearance, and notification teams.",
+  clientName: "Client / project name",
+  appearance: "Appearance",
+  themeLight: "Light",
+  themeDark: "Dark",
+  themeSystem: "System",
+  notifications: "Notifications",
+  notifyEnabled: "Send email notifications",
+  clientTeam: "Client team",
+  developerTeam: "Developer team",
+  clientTeamShort: "Client",
+  developerTeamShort: "Developer",
+  teamMemberName: "Name in the app",
+  teamMemberEmail: "Email",
+  teamAddMember: "Add person",
+  teamRemoveMember: "Remove person",
+  teamFrequency: "Update frequency",
+  frequencyImmediate: "Immediate",
+  frequencyHourly: "Hourly digest",
+  frequencyDaily: "Daily digest",
+  saveSettings: "Save settings",
+  settingsSaved: "Settings saved.",
   phases: "Phases",
   phase: "Phase",
   screenshots: "Screenshots",
@@ -60,9 +90,10 @@ const COPY = {
   signOut: "Sign out",
   authLead: "Enter the review password to continue.",
   yourName: "Your name",
-  nameNew: "Add",
-  namePlaceholder: "Select or type a name",
+  namePlaceholder: "Select a name",
   nameClear: "Clear name",
+  nameRequired: "Select your name from the list.",
+  nameEmptyList: "Add people under Settings first.",
   doYouAgree: "Do you agree?",
   stanceNone: "No choice",
   agree: "Yes",
@@ -119,17 +150,124 @@ const state = {
   evidence: [],
   decisions: [],
   responses: { comments: {}, decisions: {} },
+  settings: {
+    clientName: "",
+    notifyEnabled: false,
+    teams: {
+      client: { members: [] },
+      developer: { members: [] },
+    },
+  },
   route: parseRoute(),
   ready: false,
 };
 
+function clientName() {
+  return String(state.settings?.clientName || "").trim();
+}
+
+function applyBrand() {
+  const name = clientName();
+  document.querySelectorAll("[data-brand]").forEach((el) => {
+    el.textContent = name;
+  });
+  const auditTitle = state.audit?.title ? String(state.audit.title).trim() : "";
+  if (name && auditTitle) {
+    document.title = `${name}: ${auditTitle}`;
+  } else if (auditTitle) {
+    document.title = auditTitle;
+  } else if (name) {
+    document.title = name;
+  } else {
+    document.title = "Review";
+  }
+}
+
+function getThemePref() {
+  try {
+    return localStorage.getItem(THEME_KEY) || "system";
+  } catch {
+    return "system";
+  }
+}
+
+function resolvedTheme(pref = getThemePref()) {
+  if (pref === "dark" || pref === "light") {
+    return pref;
+  }
+  if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
+    return "dark";
+  }
+  return "light";
+}
+
+function applyTheme(pref = getThemePref()) {
+  const next = ["light", "dark", "system"].includes(pref) ? pref : "system";
+  try {
+    localStorage.setItem(THEME_KEY, next);
+  } catch {
+    /* ignore */
+  }
+  document.documentElement.dataset.themePref = next;
+  document.documentElement.dataset.theme = resolvedTheme(next);
+}
+
 const main = document.getElementById("main");
 const siteHeader = document.getElementById("site-header");
+const bootSplash = document.getElementById("boot-splash");
 const authPanel = document.getElementById("auth-panel");
 const authBlocked = document.getElementById("auth-blocked");
 const loginForm = document.getElementById("login-form");
 const loginStatus = document.getElementById("login-status");
 const logoutButton = document.getElementById("logout-button");
+const bootStartedAt = performance.now();
+let bootEnded = false;
+
+function prefersReducedMotion() {
+  return (
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true
+  );
+}
+
+async function sleep(ms) {
+  if (ms <= 0) {
+    return;
+  }
+  await new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+async function endBoot() {
+  if (bootEnded) {
+    return;
+  }
+  bootEnded = true;
+
+  if (bootSplash && !bootSplash.hidden) {
+    bootSplash.classList.add("is-leaving");
+    const exitMs = prefersReducedMotion() ? 0 : BOOT_EXIT_MS;
+    await sleep(exitMs);
+    bootSplash.hidden = true;
+    bootSplash.setAttribute("aria-busy", "false");
+  }
+
+  document.body.classList.remove("is-booting");
+}
+
+/** Wait until mark + title have finished entering, then hold settled splash. */
+async function waitForSplashHold() {
+  const enterMs = prefersReducedMotion()
+    ? 0
+    : BOOT_LABEL_DELAY_MS + BOOT_ENTER_MS;
+  const untilEnterDone = Math.max(
+    0,
+    enterMs - (performance.now() - bootStartedAt),
+  );
+  await sleep(untilEnterDone);
+  const holdMs = prefersReducedMotion() ? 0 : BOOT_HOLD_MS;
+  await sleep(holdMs);
+}
 const lightbox = document.getElementById("lightbox");
 const lightboxTitle = document.getElementById("lightbox-title");
 const lightboxBody = document.getElementById("lightbox-body");
@@ -239,12 +377,16 @@ function issuesByStatus(status) {
 }
 
 function issuesByTag(tag) {
-  const needle = String(tag || "").trim().toLowerCase();
+  const needle = String(tag || "")
+    .trim()
+    .toLowerCase();
   if (!needle) {
     return [];
   }
   return state.issues.filter((item) =>
-    (item.tags || []).some((entry) => String(entry).trim().toLowerCase() === needle),
+    (item.tags || []).some(
+      (entry) => String(entry).trim().toLowerCase() === needle,
+    ),
   );
 }
 
@@ -268,7 +410,14 @@ function setAuthor(name, kind = "comment") {
 }
 
 function authorsMatch(a, b) {
-  return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+  return (
+    String(a || "")
+      .trim()
+      .toLowerCase() ===
+    String(b || "")
+      .trim()
+      .toLowerCase()
+  );
 }
 
 const STANCE_LABELS = {
@@ -286,7 +435,9 @@ function normalizeCommentClient(row) {
   const author = String(row.author || "").trim();
   const updatedAt = String(row.updatedAt || "");
   let messages = Array.isArray(row.messages)
-    ? row.messages.filter((message) => message && String(message.text || "").trim() !== "")
+    ? row.messages.filter(
+        (message) => message && String(message.text || "").trim() !== "",
+      )
     : [];
 
   if (messages.length === 0 && stance) {
@@ -308,7 +459,9 @@ function normalizeCommentClient(row) {
     author,
     updatedAt,
     messages,
-    text: messages.length ? messages[messages.length - 1].text : String(row.text || ""),
+    text: messages.length
+      ? messages[messages.length - 1].text
+      : String(row.text || ""),
   };
 }
 
@@ -328,36 +481,58 @@ function canEditMessage(message, messages) {
   return last.id === message.id;
 }
 
+function collectAuthorsByTeam() {
+  return ["client", "developer"].map((teamKey) => {
+    const members = state.settings?.teams?.[teamKey]?.members;
+    const names = [];
+    if (Array.isArray(members)) {
+      for (const member of members) {
+        const name = String(member?.name || "").trim();
+        if (name && !names.some((existing) => authorsMatch(existing, name))) {
+          names.push(name);
+        }
+      }
+    }
+    names.sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: "base" }),
+    );
+    return {
+      teamKey,
+      label:
+        teamKey === "client" ? COPY.clientTeamShort : COPY.developerTeamShort,
+      names,
+    };
+  });
+}
+
 function collectKnownAuthors() {
-  const names = new Set();
-  for (const row of Object.values(state.responses.comments || {})) {
-    if (!row || typeof row !== "object") {
-      continue;
-    }
-    const normalized = normalizeCommentClient(row) || row;
-    const author = String(normalized.author || "").trim();
-    if (author) {
-      names.add(author);
-    }
-    for (const message of normalized.messages || []) {
-      const msgAuthor = String(message?.author || "").trim();
-      if (msgAuthor) {
-        names.add(msgAuthor);
+  const names = [];
+  for (const group of collectAuthorsByTeam()) {
+    for (const name of group.names) {
+      if (!names.some((existing) => authorsMatch(existing, name))) {
+        names.push(name);
       }
     }
   }
-  for (const row of Object.values(state.responses.decisions || {})) {
-    const author = String(row?.author || "").trim();
-    if (author) {
-      names.add(author);
-    }
+  return names;
+}
+
+function resolveKnownAuthor(name) {
+  const query = String(name || "").trim();
+  if (!query) {
+    return "";
   }
-  return [...names].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+  const matched = collectKnownAuthors().find((known) =>
+    authorsMatch(known, query),
+  );
+  return matched || "";
 }
 
 function renderAuthorPicker(selected = "", { id = "" } = {}) {
-  const selectedName = String(selected || "").trim();
-  const listId = id ? `author-list-${id}` : `author-list-${Math.random().toString(36).slice(2, 9)}`;
+  const selectedName = resolveKnownAuthor(selected);
+  const listId = id
+    ? `author-list-${id}`
+    : `author-list-${Math.random().toString(36).slice(2, 9)}`;
   const inputId = id ? `author-input-${id}` : "";
   const hasValue = Boolean(selectedName);
 
@@ -419,7 +594,7 @@ function syncAuthorPicker(picker) {
   }
   const input = picker.querySelector("[data-author-input]");
   const hidden = picker.querySelector("[data-author-value]");
-  const name = String(input?.value || hidden?.value || "").trim();
+  const name = resolveKnownAuthor(input?.value || hidden?.value || "");
   if (hidden) {
     hidden.value = name;
   }
@@ -437,8 +612,10 @@ function closeAuthorCombobox(picker) {
   if (!input || !list) {
     return;
   }
+  const name = resolveKnownAuthor(input.value || hidden?.value || "");
+  input.value = name;
   if (hidden) {
-    hidden.value = String(input.value || "").trim();
+    hidden.value = name;
   }
   list.hidden = true;
   list.innerHTML = "";
@@ -481,7 +658,7 @@ function bindAuthorPickers(root = main) {
     };
 
     const choose = (value) => {
-      const name = String(value || "").trim();
+      const name = resolveKnownAuthor(value);
       input.value = name;
       hidden.value = name;
       picker._authorFiltering = false;
@@ -490,42 +667,47 @@ function bindAuthorPickers(root = main) {
 
     const renderOptions = () => {
       const query = String(input.value || "").trim();
+      const groups = collectAuthorsByTeam();
       const known = collectKnownAuthors();
       const filtering = Boolean(picker._authorFiltering);
-      const filtered =
-        filtering && query
-          ? known.filter((name) => name.toLowerCase().includes(query.toLowerCase()))
-          : known;
-      const exact = known.some((name) => authorsMatch(name, query));
-      const items = filtered.map((name) => ({
-        value: name,
-        label: name,
-        create: false,
-      }));
-      if (filtering && query && !exact) {
-        items.push({
-          value: query,
-          label: `${COPY.nameNew} “${query}”`,
-          create: true,
-        });
+      const items = [];
+      const parts = [];
+
+      for (const group of groups) {
+        const names =
+          filtering && query
+            ? group.names.filter((name) =>
+                name.toLowerCase().includes(query.toLowerCase()),
+              )
+            : group.names;
+        if (!names.length) {
+          continue;
+        }
+        parts.push(
+          `<li class="combobox__group" role="presentation">${escapeHtml(group.label)}</li>`,
+        );
+        for (const name of names) {
+          const optionIndex = items.length;
+          const optionId = `${list.id}-opt-${optionIndex}`;
+          items.push({ value: name, label: name });
+          parts.push(`<li
+              id="${escapeHtml(optionId)}"
+              class="combobox__option"
+              role="option"
+              data-value="${escapeHtml(name)}"
+              aria-selected="false"
+            >${escapeHtml(name)}</li>`);
+        }
       }
 
       picker._authorOptions = items;
       if (!items.length) {
-        list.innerHTML = `<li class="combobox__empty" role="presentation">${escapeHtml(COPY.namePlaceholder)}</li>`;
+        const emptyCopy = known.length
+          ? COPY.namePlaceholder
+          : COPY.nameEmptyList;
+        list.innerHTML = `<li class="combobox__empty" role="presentation">${escapeHtml(emptyCopy)}</li>`;
       } else {
-        list.innerHTML = items
-          .map((item, index) => {
-            const optionId = `${list.id}-opt-${index}`;
-            return `<li
-              id="${escapeHtml(optionId)}"
-              class="combobox__option${item.create ? " is-create" : ""}"
-              role="option"
-              data-value="${escapeHtml(item.value)}"
-              aria-selected="false"
-            >${escapeHtml(item.label)}</li>`;
-          })
-          .join("");
+        list.innerHTML = parts.join("");
       }
 
       list.hidden = false;
@@ -573,11 +755,17 @@ function bindAuthorPickers(root = main) {
         if (!options.length) {
           return;
         }
-        setActive((picker._authorActiveIndex - 1 + options.length) % options.length);
+        setActive(
+          (picker._authorActiveIndex - 1 + options.length) % options.length,
+        );
         return;
       }
       if (event.key === "Enter") {
-        if (!list.hidden && picker._authorActiveIndex >= 0 && options[picker._authorActiveIndex]) {
+        if (
+          !list.hidden &&
+          picker._authorActiveIndex >= 0 &&
+          options[picker._authorActiveIndex]
+        ) {
           event.preventDefault();
           choose(options[picker._authorActiveIndex].value);
         }
@@ -704,7 +892,9 @@ function buildReplyEditForm(message) {
 function renderThreadMessages(issue) {
   const row = commentRecord(issue.key);
   const messages = row?.messages || [];
-  const stanceLabel = row?.stance ? STANCE_LABELS[row.stance] || row.stance : "";
+  const stanceLabel = row?.stance
+    ? STANCE_LABELS[row.stance] || row.stance
+    : "";
 
   if (!messages.length) {
     return "";
@@ -762,7 +952,7 @@ function renderCommentForm(issue) {
       <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}" data-feedback-mode="${isFirst ? "first" : "reply"}">
         ${stanceBlock}
         <div class="feedback-composer">
-          ${renderAuthorPicker("", { id: `issue-${issue.key}` })}
+          ${renderAuthorPicker(getAuthor("comment"), { id: `issue-${issue.key}` })}
           <label class="field">
             <span class="visually-hidden">${escapeHtml(COPY.yourReply)}</span>
             <textarea name="text" rows="2" maxlength="2000" ${isFirst ? "" : "required"} placeholder="${escapeHtml(isFirst ? COPY.firstNotePlaceholder : COPY.replyPlaceholder)}"></textarea>
@@ -915,9 +1105,7 @@ function renderEvidenceThumb(file, galleryFiles = null, options = {}) {
   const galleryAttr = evidenceGalleryAttr(galleryFiles);
   const label = row.page || file;
   const caption =
-    captionMode === "page"
-      ? row.page || ""
-      : evidenceThumbCaption(row);
+    captionMode === "page" ? row.page || "" : evidenceThumbCaption(row);
   if (isVideoEvidence(row)) {
     return `
       <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
@@ -1037,7 +1225,14 @@ function parseOpenPhases(searchParams) {
   if (!raw) {
     return [];
   }
-  return [...new Set(raw.split(",").map((part) => part.trim()).filter(Boolean))];
+  return [
+    ...new Set(
+      raw
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean),
+    ),
+  ];
 }
 
 function overviewHref(openPhaseIds = []) {
@@ -1217,7 +1412,9 @@ function renderIssueDetail(issueKey) {
         : "";
       const pageLink = renderEvidencePageLink(row, "media-block__page-link");
       const footerParts = [pageLink, chipsHtml].filter(Boolean).join("");
-      const footerHtml = footerParts ? `<figcaption>${footerParts}</figcaption>` : "";
+      const footerHtml = footerParts
+        ? `<figcaption>${footerParts}</figcaption>`
+        : "";
       const editLink = renderEditLink({
         tab: "evidence",
         file: item.file,
@@ -1487,7 +1684,9 @@ function renderDecisions() {
 
 function renderCommentSummaryCell(row) {
   const normalized = normalizeCommentClient(row) || row;
-  const messages = Array.isArray(normalized.messages) ? normalized.messages : [];
+  const messages = Array.isArray(normalized.messages)
+    ? normalized.messages
+    : [];
   const firstText = String(messages[0]?.text || normalized.text || "").trim();
 
   if (messages.length <= 1) {
@@ -1498,7 +1697,9 @@ function renderCommentSummaryCell(row) {
   const count = escapeHtml(COPY.replyCount(messages.length));
   const list = messages
     .map((message) => {
-      const author = escapeHtml(String(message.author || "").trim() || "Unknown");
+      const author = escapeHtml(
+        String(message.author || "").trim() || "Unknown",
+      );
       const text = escapeHtml(String(message.text || "").trim());
       return `<li class="summary-thread__item"><span class="summary-thread__author">${author}</span> ${text}</li>`;
     })
@@ -1539,7 +1740,9 @@ function renderResponses() {
         key,
       );
       const commentCell = renderCommentSummaryCell(normalized);
-      const author = String(normalized.messages?.[0]?.author || normalized.author || "").trim();
+      const author = String(
+        normalized.messages?.[0]?.author || normalized.author || "",
+      ).trim();
       return `<tr><td>${label}</td><td><strong>${escapeHtml(stance)}</strong></td><td>${escapeHtml(author)}</td><td>${commentCell}</td><td>${escapeHtml(new Date(normalized.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join("");
@@ -1571,6 +1774,181 @@ function renderResponses() {
     </div>`;
 }
 
+function frequencyOptions(selected = "immediate") {
+  const current = ["immediate", "hourly", "daily"].includes(selected)
+    ? selected
+    : "immediate";
+  return `
+    <option value="immediate"${current === "immediate" ? " selected" : ""}>${escapeHtml(COPY.frequencyImmediate)}</option>
+    <option value="hourly"${current === "hourly" ? " selected" : ""}>${escapeHtml(COPY.frequencyHourly)}</option>
+    <option value="daily"${current === "daily" ? " selected" : ""}>${escapeHtml(COPY.frequencyDaily)}</option>`;
+}
+
+function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
+  const frequency = member.frequency || "immediate";
+  const actionControl = showRemove
+    ? `<button
+        type="button"
+        class="settings-member__remove"
+        data-remove-member
+        aria-label="${escapeHtml(COPY.teamRemoveMember)}"
+        title="${escapeHtml(COPY.teamRemoveMember)}"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>`
+    : `<span class="settings-member__action-empty" aria-hidden="true"></span>`;
+  return `
+    <div class="settings-member" data-member-row>
+      <div class="settings-member__cell">
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.teamMemberName)}</span>
+          <input type="text" name="${escapeHtml(teamKey)}-name[]" maxlength="80" value="${escapeHtml(member.name || "")}" autocomplete="name">
+        </label>
+      </div>
+      <div class="settings-member__cell">
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.teamMemberEmail)}</span>
+          <input type="email" name="${escapeHtml(teamKey)}-email[]" maxlength="200" value="${escapeHtml(member.email || "")}" autocomplete="email">
+        </label>
+      </div>
+      <div class="settings-member__cell">
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.teamFrequency)}</span>
+          <select name="${escapeHtml(teamKey)}-frequency[]">${frequencyOptions(frequency)}</select>
+        </label>
+      </div>
+      <div class="settings-member__cell settings-member__cell--action">
+        <span class="field__label" aria-hidden="true">&nbsp;</span>
+        ${actionControl}
+      </div>
+    </div>`;
+}
+
+function renderTeamFields(teamKey, team) {
+  const members =
+    Array.isArray(team?.members) && team.members.length
+      ? team.members
+      : [{ name: "", email: "", frequency: "immediate" }];
+  return `
+    <fieldset class="settings-fieldset" data-team="${escapeHtml(teamKey)}">
+      <legend>${escapeHtml(teamKey === "client" ? COPY.clientTeam : COPY.developerTeam)}</legend>
+      <div class="settings-members" data-members="${escapeHtml(teamKey)}">
+        ${members
+          .map((member, index) =>
+            renderTeamMemberRow(teamKey, member, { showRemove: index > 0 }),
+          )
+          .join("")}
+      </div>
+      <button type="button" class="settings-members__add" data-add-member="${escapeHtml(teamKey)}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        <span>${escapeHtml(COPY.teamAddMember)}</span>
+      </button>
+    </fieldset>`;
+}
+
+function readTeamMembersFromForm(form, teamKey) {
+  const names = [
+    ...form.querySelectorAll(`input[name="${teamKey}-name[]"]`),
+  ].map((el) => el.value.trim());
+  const emails = [
+    ...form.querySelectorAll(`input[name="${teamKey}-email[]"]`),
+  ].map((el) => el.value.trim());
+  const frequencies = [
+    ...form.querySelectorAll(`select[name="${teamKey}-frequency[]"]`),
+  ].map((el) => el.value);
+  const members = [];
+  const count = Math.max(names.length, emails.length, frequencies.length);
+  for (let i = 0; i < count; i++) {
+    const name = names[i] || "";
+    const email = emails[i] || "";
+    const frequency = frequencies[i] || "immediate";
+    if (!name || !email) {
+      continue;
+    }
+    members.push({ name, email, frequency });
+  }
+  return members;
+}
+
+function bindTeamMemberRepeaters(root = main) {
+  root.querySelectorAll("[data-add-member]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const teamKey = button.dataset.addMember;
+      const list = root.querySelector(`[data-members="${teamKey}"]`);
+      if (!list) {
+        return;
+      }
+      list.insertAdjacentHTML(
+        "beforeend",
+        renderTeamMemberRow(
+          teamKey,
+          { name: "", email: "", frequency: "immediate" },
+          { showRemove: true },
+        ),
+      );
+      const row = list.querySelector("[data-member-row]:last-child");
+      row?.querySelector("input")?.focus();
+    });
+  });
+
+  root.querySelectorAll("[data-members]").forEach((list) => {
+    list.addEventListener("click", (event) => {
+      const remove = event.target.closest("[data-remove-member]");
+      if (!remove) {
+        return;
+      }
+      const row = remove.closest("[data-member-row]");
+      if (!row || row === list.querySelector("[data-member-row]")) {
+        return;
+      }
+      row.remove();
+    });
+  });
+}
+
+function renderSettings() {
+  const settings = state.settings || {};
+  const theme = getThemePref();
+  return `
+    <div class="page">
+      <header class="page-header">
+        <h1>${escapeHtml(COPY.settings)}</h1>
+        <p class="lede">${escapeHtml(COPY.settingsLead)}</p>
+      </header>
+      <form class="settings-form" data-settings-form>
+        <section class="section settings-section">
+          <h2>Project</h2>
+          <label class="field">
+            <span class="field__label">${escapeHtml(COPY.clientName)}</span>
+            <input type="text" name="clientName" maxlength="120" value="${escapeHtml(settings.clientName || "")}">
+          </label>
+        </section>
+        <section class="section settings-section">
+          <h2>${escapeHtml(COPY.appearance)}</h2>
+          <fieldset class="settings-theme">
+            <legend class="visually-hidden">${escapeHtml(COPY.appearance)}</legend>
+            <label class="settings-theme__option"><input type="radio" name="theme" value="light"${theme === "light" ? " checked" : ""}> ${escapeHtml(COPY.themeLight)}</label>
+            <label class="settings-theme__option"><input type="radio" name="theme" value="dark"${theme === "dark" ? " checked" : ""}> ${escapeHtml(COPY.themeDark)}</label>
+            <label class="settings-theme__option"><input type="radio" name="theme" value="system"${theme === "system" ? " checked" : ""}> ${escapeHtml(COPY.themeSystem)}</label>
+          </fieldset>
+        </section>
+        <section class="section settings-section">
+          <h2>${escapeHtml(COPY.notifications)}</h2>
+          <label class="settings-check">
+            <input type="checkbox" name="notifyEnabled"${settings.notifyEnabled ? " checked" : ""}>
+            <span>${escapeHtml(COPY.notifyEnabled)}</span>
+          </label>
+          ${renderTeamFields("client", settings.teams?.client)}
+          ${renderTeamFields("developer", settings.teams?.developer)}
+        </section>
+        <div class="feedback-form__actions">
+          <button type="submit" class="button">${escapeHtml(COPY.saveSettings)}</button>
+          <p class="save-status" role="status"></p>
+        </div>
+      </form>
+    </div>`;
+}
+
 function renderRoute() {
   const { name, params } = state.route;
   switch (name) {
@@ -1595,6 +1973,8 @@ function renderRoute() {
       return renderDecisions();
     case "responses":
       return renderResponses();
+    case "settings":
+      return renderSettings();
     default:
       return renderOverview();
   }
@@ -1623,7 +2003,8 @@ function render() {
   });
 }
 
-function showAuthPanel() {
+async function showAuthPanel() {
+  await endBoot();
   document.body.classList.add("is-locked");
   authPanel.hidden = false;
   authBlocked.hidden = true;
@@ -1632,7 +2013,8 @@ function showAuthPanel() {
   state.ready = false;
 }
 
-function showBlockedPanel() {
+async function showBlockedPanel() {
+  await endBoot();
   document.body.classList.add("is-locked");
   authPanel.hidden = true;
   authBlocked.hidden = false;
@@ -1641,7 +2023,8 @@ function showBlockedPanel() {
   state.ready = false;
 }
 
-function showAppShell() {
+async function showAppShell() {
+  await endBoot();
   document.body.classList.remove("is-locked");
   authPanel.hidden = true;
   authBlocked.hidden = true;
@@ -1656,16 +2039,26 @@ async function loadAppData() {
   state.evidence = content.evidence;
   state.decisions = content.decisions;
   state.responses = await loadResponses();
+  try {
+    state.settings = await loadSettings();
+  } catch {
+    state.settings = state.settings || {
+      clientName: "",
+      notifyEnabled: false,
+      teams: {
+        client: { members: [] },
+        developer: { members: [] },
+      },
+    };
+  }
   const normalizedComments = {};
   for (const [key, row] of Object.entries(state.responses.comments || {})) {
     normalizedComments[key] = normalizeCommentClient(row) || row;
   }
   state.responses.comments = normalizedComments;
   state.ready = true;
-  showAppShell();
-  if (state.audit?.title) {
-    document.title = `${COPY.brand}: ${state.audit.title}`;
-  }
+  applyBrand();
+  applyTheme();
 }
 
 function bindAuthHandlers() {
@@ -1677,9 +2070,13 @@ function bindAuthHandlers() {
       status.textContent = "Signing in…";
       status.classList.add("is-visible");
       status.classList.remove("is-error");
-      await login(String(data.get("password") || ""), String(data.get("website") || ""));
+      await login(
+        String(data.get("password") || ""),
+        String(data.get("website") || ""),
+      );
       loginForm.reset();
       await loadAppData();
+      await showAppShell();
       state.route = normalizeLegacyRoute(parseRoute());
       render();
     } catch (error) {
@@ -1694,7 +2091,7 @@ function bindAuthHandlers() {
     } catch {
       /* still lock UI */
     }
-    showAuthPanel();
+    await showAuthPanel();
     main.innerHTML = "";
   });
 }
@@ -1788,21 +2185,25 @@ function closeLightbox() {
 }
 
 function primeVideoThumbs(root = main) {
-  root.querySelectorAll(".evidence-thumb--video video, .media-block__image--video video").forEach((video) => {
-    const seekToFrame = () => {
-      try {
-        if (video.readyState >= 1) {
-          video.currentTime = 0.1;
+  root
+    .querySelectorAll(
+      ".evidence-thumb--video video, .media-block__image--video video",
+    )
+    .forEach((video) => {
+      const seekToFrame = () => {
+        try {
+          if (video.readyState >= 1) {
+            video.currentTime = 0.1;
+          }
+        } catch {
+          /* ignore seek errors on short clips */
         }
-      } catch {
-        /* ignore seek errors on short clips */
-      }
-    };
+      };
 
-    video.addEventListener("loadeddata", seekToFrame, { once: true });
-    video.addEventListener("loadedmetadata", seekToFrame, { once: true });
-    video.load();
-  });
+      video.addEventListener("loadeddata", seekToFrame, { once: true });
+      video.addEventListener("loadedmetadata", seekToFrame, { once: true });
+      video.load();
+    });
 }
 
 function bindPageHandlers() {
@@ -1822,7 +2223,7 @@ function bindPageHandlers() {
       const author = syncAuthorPicker(picker);
       if (!author) {
         const status = form.querySelector(".save-status");
-        status.textContent = "Choose or enter a name.";
+        status.textContent = COPY.nameRequired;
         status.classList.add("is-visible", "is-error");
         return;
       }
@@ -1845,7 +2246,8 @@ function bindPageHandlers() {
             author,
           });
         }
-        state.responses.comments[issueId] = normalizeCommentClient(result) || result;
+        state.responses.comments[issueId] =
+          normalizeCommentClient(result) || result;
         status.textContent = `${COPY.lastSaved} ${new Date(result.updatedAt).toLocaleString()}`;
         status.classList.add("is-visible");
         status.classList.remove("is-error");
@@ -1938,7 +2340,9 @@ function bindPageHandlers() {
         author,
       };
       if (form.dataset.editOpening === "true") {
-        payload.stance = data.has("stance") ? String(data.get("stance") || "") : "";
+        payload.stance = data.has("stance")
+          ? String(data.get("stance") || "")
+          : "";
       }
       try {
         button.disabled = true;
@@ -1946,7 +2350,8 @@ function bindPageHandlers() {
         if (result.cleared) {
           delete state.responses.comments[issueId];
         } else {
-          state.responses.comments[issueId] = normalizeCommentClient(result) || result;
+          state.responses.comments[issueId] =
+            normalizeCommentClient(result) || result;
         }
         render();
       } catch (error) {
@@ -1960,11 +2365,59 @@ function bindPageHandlers() {
 
   bindAuthorPickers(main);
 
+  const settingsForm = main.querySelector("[data-settings-form]");
+  if (settingsForm) {
+    bindTeamMemberRepeaters(settingsForm);
+    settingsForm.querySelectorAll('input[name="theme"]').forEach((input) => {
+      input.addEventListener("change", () => {
+        if (input.checked) {
+          applyTheme(input.value);
+        }
+      });
+    });
+    settingsForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const data = new FormData(settingsForm);
+      const status = settingsForm.querySelector(".save-status");
+      const button = settingsForm.querySelector('button[type="submit"]');
+      const theme = String(data.get("theme") || "system");
+      applyTheme(theme);
+      const payload = {
+        clientName: String(data.get("clientName") || "").trim(),
+        notifyEnabled: data.get("notifyEnabled") === "on",
+        teams: {
+          client: {
+            members: readTeamMembersFromForm(settingsForm, "client"),
+          },
+          developer: {
+            members: readTeamMembersFromForm(settingsForm, "developer"),
+          },
+        },
+      };
+      try {
+        button.disabled = true;
+        status.textContent = "";
+        status.classList.remove("is-error");
+        state.settings = await saveSettings(payload);
+        applyBrand();
+        status.textContent = COPY.settingsSaved;
+        status.classList.add("is-visible");
+      } catch (error) {
+        status.textContent = error.message;
+        status.classList.add("is-visible", "is-error");
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+
   main.querySelectorAll("[data-issue-priority]").forEach((select) => {
     select.addEventListener("change", async () => {
       const issueKey = select.dataset.issuePriority;
       const priority = select.value;
-      const previous = state.issues.find((item) => item.key === issueKey)?.priority;
+      const previous = state.issues.find(
+        (item) => item.key === issueKey,
+      )?.priority;
       select.className = `priority-control__select pill pill--${priority}`;
       select.disabled = true;
       try {
@@ -2078,7 +2531,7 @@ function bindPageHandlers() {
       const author = syncAuthorPicker(picker);
       if (!author) {
         const status = form.querySelector(".save-status");
-        status.textContent = "Choose or enter a name.";
+        status.textContent = COPY.nameRequired;
         status.classList.add("is-visible", "is-error");
         return;
       }
@@ -2146,9 +2599,18 @@ function bindGlobalHandlers() {
 }
 
 async function init() {
-  document.title = COPY.brand;
+  applyTheme();
+  document.title = "Review";
   bindGlobalHandlers();
   bindAuthHandlers();
+
+  window
+    .matchMedia?.("(prefers-color-scheme: dark)")
+    ?.addEventListener?.("change", () => {
+      if (getThemePref() === "system") {
+        applyTheme("system");
+      }
+    });
 
   onRouteChange(() => {
     if (!state.ready) {
@@ -2179,17 +2641,21 @@ async function init() {
       setCsrfToken(auth.csrf);
     }
     if (!auth.authenticated) {
-      showAuthPanel();
+      await waitForSplashHold();
+      await showAuthPanel();
       return;
     }
     await loadAppData();
+    await waitForSplashHold();
+    await showAppShell();
     render();
   } catch (error) {
+    await waitForSplashHold();
     if (String(error.message || "").includes("not configured")) {
-      showBlockedPanel();
+      await showBlockedPanel();
       return;
     }
-    showAuthPanel();
+    await showAuthPanel();
     if (loginStatus) {
       loginStatus.textContent = error.message;
       loginStatus.classList.add("is-visible", "is-error");

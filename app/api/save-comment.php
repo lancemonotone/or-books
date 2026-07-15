@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/editor-lib.php';
 require_once __DIR__ . '/comments-lib.php';
+require_once __DIR__ . '/notify-lib.php';
 
 editor_start_session();
 editor_require_auth();
@@ -64,6 +65,11 @@ try {
 
         $all[$issueId] = $record;
         save_comments($all);
+        try {
+            notify_comment_event($issueId, $author, $record);
+        } catch (Throwable $notifyError) {
+            error_log('notify_comment_event: ' . $notifyError->getMessage());
+        }
         respond_json(200, $record);
     }
 
@@ -85,6 +91,11 @@ try {
 
         $all[$issueId] = $record;
         save_comments($all);
+        try {
+            notify_comment_event($issueId, $author, $record);
+        } catch (Throwable $notifyError) {
+            error_log('notify_comment_event: ' . $notifyError->getMessage());
+        }
         respond_json(200, $record);
     }
 
@@ -140,6 +151,11 @@ try {
 
             $all[$issueId] = $record;
             save_comments($all);
+            try {
+                notify_comment_event($issueId, $author, $record);
+            } catch (Throwable $notifyError) {
+                error_log('notify_comment_event: ' . $notifyError->getMessage());
+            }
             respond_json(200, $record);
         }
 
@@ -155,6 +171,11 @@ try {
 
         $all[$issueId] = $record;
         save_comments($all);
+        try {
+            notify_comment_event($issueId, $author, $record);
+        } catch (Throwable $notifyError) {
+            error_log('notify_comment_event: ' . $notifyError->getMessage());
+        }
         respond_json(200, $record);
     }
 

@@ -11,6 +11,7 @@ const ROUTES = [
   { pattern: /^\/evidence\/([^/]+)$/, name: 'evidence-item', params: ['file'] },
   { pattern: /^\/decisions$/, name: 'decisions' },
   { pattern: /^\/responses$/, name: 'responses' },
+  { pattern: /^\/settings$/, name: 'settings' },
 ];
 
 export function parseRoute() {

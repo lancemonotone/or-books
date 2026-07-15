@@ -1,0 +1,34 @@
+{
+    "clientName": "OR Books",
+    "notifyEnabled": true,
+    "teams": {
+        "client": {
+            "members": [
+                {
+                    "name": "Antara",
+                    "email": "client1@gmail.com",
+                    "frequency": "immediate"
+                },
+                {
+                    "name": "Client 2",
+                    "email": "client2@gmail.com",
+                    "frequency": "hourly"
+                }
+            ]
+        },
+        "developer": {
+            "members": [
+                {
+                    "name": "Dev 1",
+                    "email": "dev1@gmail.com",
+                    "frequency": "immediate"
+                },
+                {
+                    "name": "Dev 2",
+                    "email": "dev2@gmail.com",
+                    "frequency": "daily"
+                }
+            ]
+        }
+    }
+}

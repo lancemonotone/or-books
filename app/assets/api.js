@@ -132,6 +132,14 @@ export function saveIssuePriority(issueKey, priority) {
   return postJson('api/save-issue-priority.php', { issueKey, priority });
 }
 
+export function loadSettings() {
+  return requestJson('api/settings.php');
+}
+
+export function saveSettings(payload) {
+  return postJson('api/settings.php', payload);
+}
+
 export function mediaUrl(file) {
   return `media/${file}`;
 }

@@ -44,6 +44,23 @@ Saving feedback requires PHP on the deployed host.
 
 The review app and content editor share the same password and session. **Nothing in the review UI loads without sign-in.** YAML/JSON under `data/` are blocked from direct HTTP access and served only through authenticated APIs.
 
+## Settings
+
+Signed-in **Settings** (gear in the header):
+
+- Client / project name (header brand and titles)
+- Appearance: light / dark / system (saved in the browser)
+- Notification on/off, client & developer teams (each person = name used in the app + email + update frequency). Those names are the options in the “Your name” picker on issues and Questions.
+
+Deploy secrets stay in `api/config.php`:
+
+- `app_public_url` — base URL for links inside notification emails
+- `notify.from` — From header for PHP `mail()`
+- `notify.flush_secret` — required by the digest cron endpoint
+- `notify.enabled` — hard off for the host
+
+Digest cron (hourly/daily teams): hit `api/notify-flush.php?secret=YOUR_FLUSH_SECRET` on a schedule (every 15–60 minutes is fine). PHP `mail()` must work on the host; a stronger provider can replace it later.
+
 ## Content editor
 
 URL: **`/audit/edit/`** (linked from the signed-in review nav).
