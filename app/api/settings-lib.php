@@ -16,11 +16,9 @@ function default_settings(): array
         'notifyEnabled' => false,
         'teams' => [
             'client' => [
-                'frequency' => 'immediate',
                 'members' => [],
             ],
             'developer' => [
-                'frequency' => 'immediate',
                 'members' => [],
             ],
         ],
@@ -62,6 +60,7 @@ function normalize_team_members(array $team): array
             $members[] = [
                 'name' => $name,
                 'email' => $email,
+                'frequency' => normalize_frequency((string) ($row['frequency'] ?? 'immediate')),
             ];
         }
     }
@@ -80,6 +79,7 @@ function normalize_team_members(array $team): array
             $members[] = [
                 'name' => $name,
                 'email' => $email,
+                'frequency' => 'immediate',
             ];
         }
     }
@@ -89,21 +89,7 @@ function normalize_team_members(array $team): array
 
 function normalize_team(array $team): array
 {
-    $frequency = normalize_frequency((string) ($team['frequency'] ?? 'immediate'));
-
-    // Migrate saved members that stored per-person frequency before team-level field.
-    if (!array_key_exists('frequency', $team) && is_array($team['members'] ?? null)) {
-        foreach ($team['members'] as $row) {
-            if (!is_array($row) || !array_key_exists('frequency', $row)) {
-                continue;
-            }
-            $frequency = normalize_frequency((string) $row['frequency']);
-            break;
-        }
-    }
-
     return [
-        'frequency' => $frequency,
         'members' => normalize_team_members($team),
     ];
 }
@@ -137,26 +123,47 @@ function save_settings(array $settings): void
 }
 
 /**
- * @return list<array{name:string,email:string}>
+ * @return list<array{name:string,email:string,frequency:string}>
  */
 function team_members(array $team): array
 {
     return is_array($team['members'] ?? null) ? $team['members'] : [];
 }
 
-function team_frequency(array $team): string
+/**
+ * @return list<string>
+ */
+function team_member_emails_by_frequency(array $team, string $frequency): array
 {
-    return normalize_frequency((string) ($team['frequency'] ?? 'immediate'));
+    $frequency = normalize_frequency($frequency);
+    $emails = [];
+    foreach (team_members($team) as $member) {
+        if (!is_array($member)) {
+            continue;
+        }
+        if (normalize_frequency((string) ($member['frequency'] ?? 'immediate')) !== $frequency) {
+            continue;
+        }
+        $email = trim((string) ($member['email'] ?? ''));
+        if ($email !== '' && !in_array($email, $emails, true)) {
+            $emails[] = $email;
+        }
+    }
+    return $emails;
 }
 
 /**
  * @return list<string>
  */
-function team_all_emails(array $team): array
+function team_digest_emails(array $team): array
 {
     $emails = [];
     foreach (team_members($team) as $member) {
         if (!is_array($member)) {
+            continue;
+        }
+        $freq = normalize_frequency((string) ($member['frequency'] ?? 'immediate'));
+        if ($freq === 'immediate') {
             continue;
         }
         $email = trim((string) ($member['email'] ?? ''));

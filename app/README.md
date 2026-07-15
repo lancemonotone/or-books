@@ -50,7 +50,7 @@ Signed-in **Settings** (gear in the header):
 
 - Client / project name (header brand and titles)
 - Appearance: light / dark / system (saved in the browser)
-- Notification on/off, client & developer teams (name + email per person; one update frequency per team)
+- Notification on/off, client & developer teams (each person = name used in the app + email + update frequency)
 
 Deploy secrets stay in `api/config.php`:
 

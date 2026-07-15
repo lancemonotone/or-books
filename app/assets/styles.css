@@ -217,11 +217,6 @@ code {
   cursor: pointer;
 }
 
-.settings-team-frequency {
-  max-inline-size: 18rem;
-  margin-block-end: 0.75rem;
-}
-
 .settings-members {
   display: grid;
   gap: 0.65rem;
@@ -236,7 +231,7 @@ code {
   align-items: stretch;
 
   @media (min-width: 768px) {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) var(--member-control-size);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(7.5rem, 0.9fr) var(--member-control-size);
   }
 }
 
