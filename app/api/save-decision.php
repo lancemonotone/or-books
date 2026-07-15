@@ -45,5 +45,10 @@ try {
     respond_json(500, ['error' => 'Could not save decision.']);
 }
 
-notify_decision_event($decisionId, $record);
+try {
+    notify_decision_event($decisionId, $record);
+} catch (Throwable $notifyError) {
+    error_log('notify_decision_event: ' . $notifyError->getMessage());
+}
+
 respond_json(200, $record);

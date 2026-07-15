@@ -65,7 +65,11 @@ try {
 
         $all[$issueId] = $record;
         save_comments($all);
-        notify_comment_event($issueId, $author, $record);
+        try {
+            notify_comment_event($issueId, $author, $record);
+        } catch (Throwable $notifyError) {
+            error_log('notify_comment_event: ' . $notifyError->getMessage());
+        }
         respond_json(200, $record);
     }
 
@@ -87,7 +91,11 @@ try {
 
         $all[$issueId] = $record;
         save_comments($all);
-        notify_comment_event($issueId, $author, $record);
+        try {
+            notify_comment_event($issueId, $author, $record);
+        } catch (Throwable $notifyError) {
+            error_log('notify_comment_event: ' . $notifyError->getMessage());
+        }
         respond_json(200, $record);
     }
 
@@ -143,7 +151,11 @@ try {
 
             $all[$issueId] = $record;
             save_comments($all);
-            notify_comment_event($issueId, $author, $record);
+            try {
+                notify_comment_event($issueId, $author, $record);
+            } catch (Throwable $notifyError) {
+                error_log('notify_comment_event: ' . $notifyError->getMessage());
+            }
             respond_json(200, $record);
         }
 
@@ -159,7 +171,11 @@ try {
 
         $all[$issueId] = $record;
         save_comments($all);
-        notify_comment_event($issueId, $author, $record);
+        try {
+            notify_comment_event($issueId, $author, $record);
+        } catch (Throwable $notifyError) {
+            error_log('notify_comment_event: ' . $notifyError->getMessage());
+        }
         respond_json(200, $record);
     }
 

@@ -147,8 +147,8 @@ const state = {
     clientName: "",
     notifyEnabled: false,
     teams: {
-      client: { members: [] },
-      developer: { members: [] },
+      client: { frequency: "immediate", members: [] },
+      developer: { frequency: "immediate", members: [] },
     },
   },
   route: parseRoute(),
@@ -1662,7 +1662,6 @@ function frequencyOptions(selected = "immediate") {
 }
 
 function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
-  const frequency = member.frequency || "immediate";
   const actionControl = showRemove
     ? `<button
         type="button"
@@ -1688,12 +1687,6 @@ function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
           <input type="email" name="${escapeHtml(teamKey)}-email[]" maxlength="200" value="${escapeHtml(member.email || "")}" autocomplete="email">
         </label>
       </div>
-      <div class="settings-member__cell">
-        <label class="field">
-          <span class="field__label">${escapeHtml(COPY.teamFrequency)}</span>
-          <select name="${escapeHtml(teamKey)}-frequency[]">${frequencyOptions(frequency)}</select>
-        </label>
-      </div>
       <div class="settings-member__cell settings-member__cell--action">
         <span class="field__label" aria-hidden="true">&nbsp;</span>
         ${actionControl}
@@ -1702,12 +1695,19 @@ function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
 }
 
 function renderTeamFields(teamKey, team) {
+  const frequency = ["immediate", "hourly", "daily"].includes(team?.frequency)
+    ? team.frequency
+    : "immediate";
   const members = Array.isArray(team?.members) && team.members.length
     ? team.members
-    : [{ name: "", email: "", frequency: "immediate" }];
+    : [{ name: "", email: "" }];
   return `
     <fieldset class="settings-fieldset" data-team="${escapeHtml(teamKey)}">
       <legend>${escapeHtml(teamKey === "client" ? COPY.clientTeam : COPY.developerTeam)}</legend>
+      <label class="field settings-team-frequency">
+        <span class="field__label">${escapeHtml(COPY.teamFrequency)}</span>
+        <select name="${escapeHtml(teamKey)}-frequency">${frequencyOptions(frequency)}</select>
+      </label>
       <div class="settings-members" data-members="${escapeHtml(teamKey)}">
         ${members
           .map((member, index) => renderTeamMemberRow(teamKey, member, { showRemove: index > 0 }))
@@ -1723,17 +1723,15 @@ function renderTeamFields(teamKey, team) {
 function readTeamMembersFromForm(form, teamKey) {
   const names = [...form.querySelectorAll(`input[name="${teamKey}-name[]"]`)].map((el) => el.value.trim());
   const emails = [...form.querySelectorAll(`input[name="${teamKey}-email[]"]`)].map((el) => el.value.trim());
-  const frequencies = [...form.querySelectorAll(`select[name="${teamKey}-frequency[]"]`)].map((el) => el.value);
   const members = [];
-  const count = Math.max(names.length, emails.length, frequencies.length);
+  const count = Math.max(names.length, emails.length);
   for (let i = 0; i < count; i++) {
     const name = names[i] || "";
     const email = emails[i] || "";
-    const frequency = frequencies[i] || "immediate";
     if (!name || !email) {
       continue;
     }
-    members.push({ name, email, frequency });
+    members.push({ name, email });
   }
   return members;
 }
@@ -1748,7 +1746,7 @@ function bindTeamMemberRepeaters(root = main) {
       }
       list.insertAdjacentHTML(
         "beforeend",
-        renderTeamMemberRow(teamKey, { name: "", email: "", frequency: "immediate" }, { showRemove: true }),
+        renderTeamMemberRow(teamKey, { name: "", email: "" }, { showRemove: true }),
       );
       const row = list.querySelector("[data-member-row]:last-child");
       row?.querySelector("input")?.focus();
@@ -1907,8 +1905,8 @@ async function loadAppData() {
       clientName: "",
       notifyEnabled: false,
       teams: {
-        client: { members: [] },
-        developer: { members: [] },
+        client: { frequency: "immediate", members: [] },
+        developer: { frequency: "immediate", members: [] },
       },
     };
   }
@@ -2237,9 +2235,11 @@ function bindPageHandlers() {
         notifyEnabled: data.get("notifyEnabled") === "on",
         teams: {
           client: {
+            frequency: String(data.get("client-frequency") || "immediate"),
             members: readTeamMembersFromForm(settingsForm, "client"),
           },
           developer: {
+            frequency: String(data.get("developer-frequency") || "immediate"),
             members: readTeamMembersFromForm(settingsForm, "developer"),
           },
         },

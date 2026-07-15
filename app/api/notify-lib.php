@@ -370,16 +370,19 @@ function notify_record_event(array $event): void
             return;
         }
 
-        $immediate = team_member_emails_by_frequency($team, 'immediate');
-        if ($immediate !== []) {
-            $rendered = notify_render_email($event, $settings);
-            notify_send_mail($immediate, $rendered['subject'], $rendered['html']);
+        $frequency = team_frequency($team);
+        $emails = team_all_emails($team);
+        if ($emails === []) {
+            return;
         }
 
-        $digestEmails = team_digest_emails($team);
-        if ($digestEmails !== []) {
-            notify_enqueue($event, $targetTeam, $digestEmails);
+        if ($frequency === 'immediate') {
+            $rendered = notify_render_email($event, $settings);
+            notify_send_mail($emails, $rendered['subject'], $rendered['html']);
+            return;
         }
+
+        notify_enqueue($event, $targetTeam, $emails);
     } catch (Throwable $e) {
         error_log('notify_record_event: ' . $e->getMessage());
     }
@@ -428,13 +431,17 @@ function notify_flush_due(): array
             continue;
         }
 
+        $frequency = team_frequency($team);
+        if ($frequency === 'immediate') {
+            continue;
+        }
+
         foreach (team_members($team) as $member) {
             if (!is_array($member)) {
                 continue;
             }
             $email = trim((string) ($member['email'] ?? ''));
-            $frequency = normalize_frequency((string) ($member['frequency'] ?? 'immediate'));
-            if ($email === '' || $frequency === 'immediate') {
+            if ($email === '') {
                 continue;
             }
             $stateKey = strtolower($email);
