@@ -41,6 +41,8 @@ const COPY = {
   notifyEnabled: "Send email notifications",
   clientTeam: "Client team",
   developerTeam: "Developer team",
+  clientTeamShort: "Client",
+  developerTeamShort: "Developer",
   teamMemberName: "Name in the app",
   teamMemberEmail: "Email",
   teamAddMember: "Add person",
@@ -88,9 +90,10 @@ const COPY = {
   signOut: "Sign out",
   authLead: "Enter the review password to continue.",
   yourName: "Your name",
-  nameNew: "Add",
-  namePlaceholder: "Select or type a name",
+  namePlaceholder: "Select a name",
   nameClear: "Clear name",
+  nameRequired: "Select your name from the list.",
+  nameEmptyList: "Add people under Settings first.",
   doYouAgree: "Do you agree?",
   stanceNone: "No choice",
   agree: "Yes",
@@ -221,7 +224,9 @@ const bootStartedAt = performance.now();
 let bootEnded = false;
 
 function prefersReducedMotion() {
-  return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
+  return (
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true
+  );
 }
 
 async function sleep(ms) {
@@ -255,7 +260,10 @@ async function waitForSplashHold() {
   const enterMs = prefersReducedMotion()
     ? 0
     : BOOT_LABEL_DELAY_MS + BOOT_ENTER_MS;
-  const untilEnterDone = Math.max(0, enterMs - (performance.now() - bootStartedAt));
+  const untilEnterDone = Math.max(
+    0,
+    enterMs - (performance.now() - bootStartedAt),
+  );
   await sleep(untilEnterDone);
   const holdMs = prefersReducedMotion() ? 0 : BOOT_HOLD_MS;
   await sleep(holdMs);
@@ -369,12 +377,16 @@ function issuesByStatus(status) {
 }
 
 function issuesByTag(tag) {
-  const needle = String(tag || "").trim().toLowerCase();
+  const needle = String(tag || "")
+    .trim()
+    .toLowerCase();
   if (!needle) {
     return [];
   }
   return state.issues.filter((item) =>
-    (item.tags || []).some((entry) => String(entry).trim().toLowerCase() === needle),
+    (item.tags || []).some(
+      (entry) => String(entry).trim().toLowerCase() === needle,
+    ),
   );
 }
 
@@ -398,7 +410,14 @@ function setAuthor(name, kind = "comment") {
 }
 
 function authorsMatch(a, b) {
-  return String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+  return (
+    String(a || "")
+      .trim()
+      .toLowerCase() ===
+    String(b || "")
+      .trim()
+      .toLowerCase()
+  );
 }
 
 const STANCE_LABELS = {
@@ -416,7 +435,9 @@ function normalizeCommentClient(row) {
   const author = String(row.author || "").trim();
   const updatedAt = String(row.updatedAt || "");
   let messages = Array.isArray(row.messages)
-    ? row.messages.filter((message) => message && String(message.text || "").trim() !== "")
+    ? row.messages.filter(
+        (message) => message && String(message.text || "").trim() !== "",
+      )
     : [];
 
   if (messages.length === 0 && stance) {
@@ -438,7 +459,9 @@ function normalizeCommentClient(row) {
     author,
     updatedAt,
     messages,
-    text: messages.length ? messages[messages.length - 1].text : String(row.text || ""),
+    text: messages.length
+      ? messages[messages.length - 1].text
+      : String(row.text || ""),
   };
 }
 
@@ -458,36 +481,58 @@ function canEditMessage(message, messages) {
   return last.id === message.id;
 }
 
+function collectAuthorsByTeam() {
+  return ["client", "developer"].map((teamKey) => {
+    const members = state.settings?.teams?.[teamKey]?.members;
+    const names = [];
+    if (Array.isArray(members)) {
+      for (const member of members) {
+        const name = String(member?.name || "").trim();
+        if (name && !names.some((existing) => authorsMatch(existing, name))) {
+          names.push(name);
+        }
+      }
+    }
+    names.sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: "base" }),
+    );
+    return {
+      teamKey,
+      label:
+        teamKey === "client" ? COPY.clientTeamShort : COPY.developerTeamShort,
+      names,
+    };
+  });
+}
+
 function collectKnownAuthors() {
-  const names = new Set();
-  for (const row of Object.values(state.responses.comments || {})) {
-    if (!row || typeof row !== "object") {
-      continue;
-    }
-    const normalized = normalizeCommentClient(row) || row;
-    const author = String(normalized.author || "").trim();
-    if (author) {
-      names.add(author);
-    }
-    for (const message of normalized.messages || []) {
-      const msgAuthor = String(message?.author || "").trim();
-      if (msgAuthor) {
-        names.add(msgAuthor);
+  const names = [];
+  for (const group of collectAuthorsByTeam()) {
+    for (const name of group.names) {
+      if (!names.some((existing) => authorsMatch(existing, name))) {
+        names.push(name);
       }
     }
   }
-  for (const row of Object.values(state.responses.decisions || {})) {
-    const author = String(row?.author || "").trim();
-    if (author) {
-      names.add(author);
-    }
+  return names;
+}
+
+function resolveKnownAuthor(name) {
+  const query = String(name || "").trim();
+  if (!query) {
+    return "";
   }
-  return [...names].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+  const matched = collectKnownAuthors().find((known) =>
+    authorsMatch(known, query),
+  );
+  return matched || "";
 }
 
 function renderAuthorPicker(selected = "", { id = "" } = {}) {
-  const selectedName = String(selected || "").trim();
-  const listId = id ? `author-list-${id}` : `author-list-${Math.random().toString(36).slice(2, 9)}`;
+  const selectedName = resolveKnownAuthor(selected);
+  const listId = id
+    ? `author-list-${id}`
+    : `author-list-${Math.random().toString(36).slice(2, 9)}`;
   const inputId = id ? `author-input-${id}` : "";
   const hasValue = Boolean(selectedName);
 
@@ -549,7 +594,7 @@ function syncAuthorPicker(picker) {
   }
   const input = picker.querySelector("[data-author-input]");
   const hidden = picker.querySelector("[data-author-value]");
-  const name = String(input?.value || hidden?.value || "").trim();
+  const name = resolveKnownAuthor(input?.value || hidden?.value || "");
   if (hidden) {
     hidden.value = name;
   }
@@ -567,8 +612,10 @@ function closeAuthorCombobox(picker) {
   if (!input || !list) {
     return;
   }
+  const name = resolveKnownAuthor(input.value || hidden?.value || "");
+  input.value = name;
   if (hidden) {
-    hidden.value = String(input.value || "").trim();
+    hidden.value = name;
   }
   list.hidden = true;
   list.innerHTML = "";
@@ -611,7 +658,7 @@ function bindAuthorPickers(root = main) {
     };
 
     const choose = (value) => {
-      const name = String(value || "").trim();
+      const name = resolveKnownAuthor(value);
       input.value = name;
       hidden.value = name;
       picker._authorFiltering = false;
@@ -620,42 +667,47 @@ function bindAuthorPickers(root = main) {
 
     const renderOptions = () => {
       const query = String(input.value || "").trim();
+      const groups = collectAuthorsByTeam();
       const known = collectKnownAuthors();
       const filtering = Boolean(picker._authorFiltering);
-      const filtered =
-        filtering && query
-          ? known.filter((name) => name.toLowerCase().includes(query.toLowerCase()))
-          : known;
-      const exact = known.some((name) => authorsMatch(name, query));
-      const items = filtered.map((name) => ({
-        value: name,
-        label: name,
-        create: false,
-      }));
-      if (filtering && query && !exact) {
-        items.push({
-          value: query,
-          label: `${COPY.nameNew} “${query}”`,
-          create: true,
-        });
+      const items = [];
+      const parts = [];
+
+      for (const group of groups) {
+        const names =
+          filtering && query
+            ? group.names.filter((name) =>
+                name.toLowerCase().includes(query.toLowerCase()),
+              )
+            : group.names;
+        if (!names.length) {
+          continue;
+        }
+        parts.push(
+          `<li class="combobox__group" role="presentation">${escapeHtml(group.label)}</li>`,
+        );
+        for (const name of names) {
+          const optionIndex = items.length;
+          const optionId = `${list.id}-opt-${optionIndex}`;
+          items.push({ value: name, label: name });
+          parts.push(`<li
+              id="${escapeHtml(optionId)}"
+              class="combobox__option"
+              role="option"
+              data-value="${escapeHtml(name)}"
+              aria-selected="false"
+            >${escapeHtml(name)}</li>`);
+        }
       }
 
       picker._authorOptions = items;
       if (!items.length) {
-        list.innerHTML = `<li class="combobox__empty" role="presentation">${escapeHtml(COPY.namePlaceholder)}</li>`;
+        const emptyCopy = known.length
+          ? COPY.namePlaceholder
+          : COPY.nameEmptyList;
+        list.innerHTML = `<li class="combobox__empty" role="presentation">${escapeHtml(emptyCopy)}</li>`;
       } else {
-        list.innerHTML = items
-          .map((item, index) => {
-            const optionId = `${list.id}-opt-${index}`;
-            return `<li
-              id="${escapeHtml(optionId)}"
-              class="combobox__option${item.create ? " is-create" : ""}"
-              role="option"
-              data-value="${escapeHtml(item.value)}"
-              aria-selected="false"
-            >${escapeHtml(item.label)}</li>`;
-          })
-          .join("");
+        list.innerHTML = parts.join("");
       }
 
       list.hidden = false;
@@ -703,11 +755,17 @@ function bindAuthorPickers(root = main) {
         if (!options.length) {
           return;
         }
-        setActive((picker._authorActiveIndex - 1 + options.length) % options.length);
+        setActive(
+          (picker._authorActiveIndex - 1 + options.length) % options.length,
+        );
         return;
       }
       if (event.key === "Enter") {
-        if (!list.hidden && picker._authorActiveIndex >= 0 && options[picker._authorActiveIndex]) {
+        if (
+          !list.hidden &&
+          picker._authorActiveIndex >= 0 &&
+          options[picker._authorActiveIndex]
+        ) {
           event.preventDefault();
           choose(options[picker._authorActiveIndex].value);
         }
@@ -834,7 +892,9 @@ function buildReplyEditForm(message) {
 function renderThreadMessages(issue) {
   const row = commentRecord(issue.key);
   const messages = row?.messages || [];
-  const stanceLabel = row?.stance ? STANCE_LABELS[row.stance] || row.stance : "";
+  const stanceLabel = row?.stance
+    ? STANCE_LABELS[row.stance] || row.stance
+    : "";
 
   if (!messages.length) {
     return "";
@@ -892,7 +952,7 @@ function renderCommentForm(issue) {
       <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}" data-feedback-mode="${isFirst ? "first" : "reply"}">
         ${stanceBlock}
         <div class="feedback-composer">
-          ${renderAuthorPicker("", { id: `issue-${issue.key}` })}
+          ${renderAuthorPicker(getAuthor("comment"), { id: `issue-${issue.key}` })}
           <label class="field">
             <span class="visually-hidden">${escapeHtml(COPY.yourReply)}</span>
             <textarea name="text" rows="2" maxlength="2000" ${isFirst ? "" : "required"} placeholder="${escapeHtml(isFirst ? COPY.firstNotePlaceholder : COPY.replyPlaceholder)}"></textarea>
@@ -1045,9 +1105,7 @@ function renderEvidenceThumb(file, galleryFiles = null, options = {}) {
   const galleryAttr = evidenceGalleryAttr(galleryFiles);
   const label = row.page || file;
   const caption =
-    captionMode === "page"
-      ? row.page || ""
-      : evidenceThumbCaption(row);
+    captionMode === "page" ? row.page || "" : evidenceThumbCaption(row);
   if (isVideoEvidence(row)) {
     return `
       <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
@@ -1167,7 +1225,14 @@ function parseOpenPhases(searchParams) {
   if (!raw) {
     return [];
   }
-  return [...new Set(raw.split(",").map((part) => part.trim()).filter(Boolean))];
+  return [
+    ...new Set(
+      raw
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean),
+    ),
+  ];
 }
 
 function overviewHref(openPhaseIds = []) {
@@ -1347,7 +1412,9 @@ function renderIssueDetail(issueKey) {
         : "";
       const pageLink = renderEvidencePageLink(row, "media-block__page-link");
       const footerParts = [pageLink, chipsHtml].filter(Boolean).join("");
-      const footerHtml = footerParts ? `<figcaption>${footerParts}</figcaption>` : "";
+      const footerHtml = footerParts
+        ? `<figcaption>${footerParts}</figcaption>`
+        : "";
       const editLink = renderEditLink({
         tab: "evidence",
         file: item.file,
@@ -1617,7 +1684,9 @@ function renderDecisions() {
 
 function renderCommentSummaryCell(row) {
   const normalized = normalizeCommentClient(row) || row;
-  const messages = Array.isArray(normalized.messages) ? normalized.messages : [];
+  const messages = Array.isArray(normalized.messages)
+    ? normalized.messages
+    : [];
   const firstText = String(messages[0]?.text || normalized.text || "").trim();
 
   if (messages.length <= 1) {
@@ -1628,7 +1697,9 @@ function renderCommentSummaryCell(row) {
   const count = escapeHtml(COPY.replyCount(messages.length));
   const list = messages
     .map((message) => {
-      const author = escapeHtml(String(message.author || "").trim() || "Unknown");
+      const author = escapeHtml(
+        String(message.author || "").trim() || "Unknown",
+      );
       const text = escapeHtml(String(message.text || "").trim());
       return `<li class="summary-thread__item"><span class="summary-thread__author">${author}</span> ${text}</li>`;
     })
@@ -1669,7 +1740,9 @@ function renderResponses() {
         key,
       );
       const commentCell = renderCommentSummaryCell(normalized);
-      const author = String(normalized.messages?.[0]?.author || normalized.author || "").trim();
+      const author = String(
+        normalized.messages?.[0]?.author || normalized.author || "",
+      ).trim();
       return `<tr><td>${label}</td><td><strong>${escapeHtml(stance)}</strong></td><td>${escapeHtml(author)}</td><td>${commentCell}</td><td>${escapeHtml(new Date(normalized.updatedAt).toLocaleString())}</td></tr>`;
     })
     .join("");
@@ -1702,7 +1775,9 @@ function renderResponses() {
 }
 
 function frequencyOptions(selected = "immediate") {
-  const current = ["immediate", "hourly", "daily"].includes(selected) ? selected : "immediate";
+  const current = ["immediate", "hourly", "daily"].includes(selected)
+    ? selected
+    : "immediate";
   return `
     <option value="immediate"${current === "immediate" ? " selected" : ""}>${escapeHtml(COPY.frequencyImmediate)}</option>
     <option value="hourly"${current === "hourly" ? " selected" : ""}>${escapeHtml(COPY.frequencyHourly)}</option>
@@ -1750,15 +1825,18 @@ function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
 }
 
 function renderTeamFields(teamKey, team) {
-  const members = Array.isArray(team?.members) && team.members.length
-    ? team.members
-    : [{ name: "", email: "", frequency: "immediate" }];
+  const members =
+    Array.isArray(team?.members) && team.members.length
+      ? team.members
+      : [{ name: "", email: "", frequency: "immediate" }];
   return `
     <fieldset class="settings-fieldset" data-team="${escapeHtml(teamKey)}">
       <legend>${escapeHtml(teamKey === "client" ? COPY.clientTeam : COPY.developerTeam)}</legend>
       <div class="settings-members" data-members="${escapeHtml(teamKey)}">
         ${members
-          .map((member, index) => renderTeamMemberRow(teamKey, member, { showRemove: index > 0 }))
+          .map((member, index) =>
+            renderTeamMemberRow(teamKey, member, { showRemove: index > 0 }),
+          )
           .join("")}
       </div>
       <button type="button" class="settings-members__add" data-add-member="${escapeHtml(teamKey)}">
@@ -1769,9 +1847,15 @@ function renderTeamFields(teamKey, team) {
 }
 
 function readTeamMembersFromForm(form, teamKey) {
-  const names = [...form.querySelectorAll(`input[name="${teamKey}-name[]"]`)].map((el) => el.value.trim());
-  const emails = [...form.querySelectorAll(`input[name="${teamKey}-email[]"]`)].map((el) => el.value.trim());
-  const frequencies = [...form.querySelectorAll(`select[name="${teamKey}-frequency[]"]`)].map((el) => el.value);
+  const names = [
+    ...form.querySelectorAll(`input[name="${teamKey}-name[]"]`),
+  ].map((el) => el.value.trim());
+  const emails = [
+    ...form.querySelectorAll(`input[name="${teamKey}-email[]"]`),
+  ].map((el) => el.value.trim());
+  const frequencies = [
+    ...form.querySelectorAll(`select[name="${teamKey}-frequency[]"]`),
+  ].map((el) => el.value);
   const members = [];
   const count = Math.max(names.length, emails.length, frequencies.length);
   for (let i = 0; i < count; i++) {
@@ -1796,7 +1880,11 @@ function bindTeamMemberRepeaters(root = main) {
       }
       list.insertAdjacentHTML(
         "beforeend",
-        renderTeamMemberRow(teamKey, { name: "", email: "", frequency: "immediate" }, { showRemove: true }),
+        renderTeamMemberRow(
+          teamKey,
+          { name: "", email: "", frequency: "immediate" },
+          { showRemove: true },
+        ),
       );
       const row = list.querySelector("[data-member-row]:last-child");
       row?.querySelector("input")?.focus();
@@ -1982,7 +2070,10 @@ function bindAuthHandlers() {
       status.textContent = "Signing in…";
       status.classList.add("is-visible");
       status.classList.remove("is-error");
-      await login(String(data.get("password") || ""), String(data.get("website") || ""));
+      await login(
+        String(data.get("password") || ""),
+        String(data.get("website") || ""),
+      );
       loginForm.reset();
       await loadAppData();
       await showAppShell();
@@ -2094,21 +2185,25 @@ function closeLightbox() {
 }
 
 function primeVideoThumbs(root = main) {
-  root.querySelectorAll(".evidence-thumb--video video, .media-block__image--video video").forEach((video) => {
-    const seekToFrame = () => {
-      try {
-        if (video.readyState >= 1) {
-          video.currentTime = 0.1;
+  root
+    .querySelectorAll(
+      ".evidence-thumb--video video, .media-block__image--video video",
+    )
+    .forEach((video) => {
+      const seekToFrame = () => {
+        try {
+          if (video.readyState >= 1) {
+            video.currentTime = 0.1;
+          }
+        } catch {
+          /* ignore seek errors on short clips */
         }
-      } catch {
-        /* ignore seek errors on short clips */
-      }
-    };
+      };
 
-    video.addEventListener("loadeddata", seekToFrame, { once: true });
-    video.addEventListener("loadedmetadata", seekToFrame, { once: true });
-    video.load();
-  });
+      video.addEventListener("loadeddata", seekToFrame, { once: true });
+      video.addEventListener("loadedmetadata", seekToFrame, { once: true });
+      video.load();
+    });
 }
 
 function bindPageHandlers() {
@@ -2128,7 +2223,7 @@ function bindPageHandlers() {
       const author = syncAuthorPicker(picker);
       if (!author) {
         const status = form.querySelector(".save-status");
-        status.textContent = "Choose or enter a name.";
+        status.textContent = COPY.nameRequired;
         status.classList.add("is-visible", "is-error");
         return;
       }
@@ -2151,7 +2246,8 @@ function bindPageHandlers() {
             author,
           });
         }
-        state.responses.comments[issueId] = normalizeCommentClient(result) || result;
+        state.responses.comments[issueId] =
+          normalizeCommentClient(result) || result;
         status.textContent = `${COPY.lastSaved} ${new Date(result.updatedAt).toLocaleString()}`;
         status.classList.add("is-visible");
         status.classList.remove("is-error");
@@ -2244,7 +2340,9 @@ function bindPageHandlers() {
         author,
       };
       if (form.dataset.editOpening === "true") {
-        payload.stance = data.has("stance") ? String(data.get("stance") || "") : "";
+        payload.stance = data.has("stance")
+          ? String(data.get("stance") || "")
+          : "";
       }
       try {
         button.disabled = true;
@@ -2252,7 +2350,8 @@ function bindPageHandlers() {
         if (result.cleared) {
           delete state.responses.comments[issueId];
         } else {
-          state.responses.comments[issueId] = normalizeCommentClient(result) || result;
+          state.responses.comments[issueId] =
+            normalizeCommentClient(result) || result;
         }
         render();
       } catch (error) {
@@ -2316,7 +2415,9 @@ function bindPageHandlers() {
     select.addEventListener("change", async () => {
       const issueKey = select.dataset.issuePriority;
       const priority = select.value;
-      const previous = state.issues.find((item) => item.key === issueKey)?.priority;
+      const previous = state.issues.find(
+        (item) => item.key === issueKey,
+      )?.priority;
       select.className = `priority-control__select pill pill--${priority}`;
       select.disabled = true;
       try {
@@ -2430,7 +2531,7 @@ function bindPageHandlers() {
       const author = syncAuthorPicker(picker);
       if (!author) {
         const status = form.querySelector(".save-status");
-        status.textContent = "Choose or enter a name.";
+        status.textContent = COPY.nameRequired;
         status.classList.add("is-visible", "is-error");
         return;
       }
@@ -2503,11 +2604,13 @@ async function init() {
   bindGlobalHandlers();
   bindAuthHandlers();
 
-  window.matchMedia?.("(prefers-color-scheme: dark)")?.addEventListener?.("change", () => {
-    if (getThemePref() === "system") {
-      applyTheme("system");
-    }
-  });
+  window
+    .matchMedia?.("(prefers-color-scheme: dark)")
+    ?.addEventListener?.("change", () => {
+      if (getThemePref() === "system") {
+        applyTheme("system");
+      }
+    });
 
   onRouteChange(() => {
     if (!state.ready) {

@@ -1,0 +1,62 @@
+{
+    "events": [
+        {
+            "type": "comment",
+            "issueKey": "22f6409d-b5e4-46b1-8086-f2839495505e",
+            "issueId": "2.15",
+            "issueTitle": "Keep bookseller signup on orbooks.com\r",
+            "tags": [
+                "forms\r",
+                "mailchimp\r"
+            ],
+            "author": "Dev 1",
+            "messages": [
+                {
+                    "author": "Antara",
+                    "text": "Yes"
+                },
+                {
+                    "author": "Dev 1",
+                    "text": "This sounds good."
+                }
+            ],
+            "id": "f332db86eb1568a7",
+            "targetTeam": "client",
+            "pendingEmails": [
+                "client2@gmail.com"
+            ],
+            "createdAt": "2026-07-15T22:04:02+00:00"
+        },
+        {
+            "type": "comment",
+            "issueKey": "22f6409d-b5e4-46b1-8086-f2839495505e",
+            "issueId": "2.15",
+            "issueTitle": "Keep bookseller signup on orbooks.com\r",
+            "tags": [
+                "forms\r",
+                "mailchimp\r"
+            ],
+            "author": "Antara",
+            "messages": [
+                {
+                    "author": "Antara",
+                    "text": "Yes"
+                },
+                {
+                    "author": "Dev 1",
+                    "text": "This sounds good."
+                },
+                {
+                    "author": "Antara",
+                    "text": "Really??"
+                }
+            ],
+            "id": "ab210821e0380ac0",
+            "targetTeam": "developer",
+            "pendingEmails": [
+                "dev2@gmail.com"
+            ],
+            "createdAt": "2026-07-15T22:06:16+00:00"
+        }
+    ]
+}

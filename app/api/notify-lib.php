@@ -221,9 +221,6 @@ function notify_render_email(array $event, array $settings): array
         $label = trim($issueId . ($issueTitle !== '' ? ' — ' . $issueTitle : ''));
         $subject = '[' . $prefix . '] ' . ($label !== '' ? $label : 'Issue update');
         $chips = notify_render_chip($issueId) . notify_render_chip($issueTitle);
-        foreach ($event['tags'] ?? [] as $tag) {
-            $chips .= notify_render_chip((string) $tag);
-        }
         $messages = is_array($event['messages'] ?? null) ? $event['messages'] : [];
         $bodyInner = '<p style="margin:0 0 12px;font-size:14px;"><strong>'
             . notify_escape((string) ($event['author'] ?? ''))
@@ -234,7 +231,7 @@ function notify_render_email(array $event, array $settings): array
 
     $body = ($chips !== '' ? '<div style="margin:0 0 12px;">' . $chips . '</div>' : '')
         . $bodyInner
-        . '<p style="margin:20px 0 0;"><a href="' . notify_escape($link) . '" style="display:inline-block;padding:10px 14px;border-radius:6px;background:#8b1e1e;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;">Open in review app</a></p>';
+        . '<p style="margin:20px 0 0;"><a href="' . notify_escape($link) . '" style="display:inline-block;padding:10px 14px;border-radius:6px;background:#8b1e1e;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;">Open in Briefboard</a></p>';
 
     $html = '<!DOCTYPE html><html><body style="margin:0;padding:24px;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1a1a1a;background:#ffffff;">'
         . '<div style="max-width:560px;margin:0 auto;">'
