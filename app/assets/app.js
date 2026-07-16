@@ -148,6 +148,7 @@ const COPY = {
   estimatesRemaining: "Remaining",
   estimatesGrand: "Grand total",
   estimatesDeferred: "Deferred",
+  estimatesDeferredCount: (n) => `${n} ${n === 1 ? "issue" : "issues"}`,
   estimatesDeferredNote: "Not included in totals",
   estimatesNoIssues: "No issues yet.",
   estimatesEstimateHours: "Estimate hours",
@@ -287,6 +288,7 @@ function markAuthedSession() {
 }
 
 function clearAuthedSession() {
+  state.hourlyRate = null;
   try {
     sessionStorage.removeItem(AUTH_SESSION_HINT);
   } catch {
@@ -2471,7 +2473,7 @@ function renderEstimatesPage() {
       ${renderEstimatesBucketStrip(summary)}
       <aside class="estimates-deferred">
         <h2 class="estimates-deferred__title">${escapeHtml(COPY.estimatesDeferred)}</h2>
-        <p class="estimates-deferred__note">${escapeHtml(COPY.estimatesDeferredNote)}</p>
+        <p class="estimates-deferred__note">${escapeHtml(COPY.estimatesDeferredCount(deferred.count))} · ${escapeHtml(COPY.estimatesDeferredNote)}</p>
         <dl class="estimates-deferred__metrics">
           <div class="estimates-deferred__metric">
             <dt>${escapeHtml(COPY.estimatesEstimateHours)}</dt>

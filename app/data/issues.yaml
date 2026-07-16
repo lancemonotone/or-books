@@ -4,8 +4,6 @@
   title: Keep the header visible when searching
   priority: critical
   status: planned
-  hours: 2.5
-  actual_hours: 1
   tags:
     - search
     - navigation
@@ -341,7 +339,6 @@
   title: Use one slider style across the site
   priority: medium
   status: deferred
-  hours: 5
   tags:
     - carousels
     - homepage
