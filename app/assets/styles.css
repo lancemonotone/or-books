@@ -473,6 +473,20 @@ body.is-booting {
   }
 }
 
+html[data-skip-splash] {
+  & .boot-splash {
+    display: none !important;
+  }
+
+  & body.is-booting {
+    & .auth-panel,
+    & .site-header,
+    & .site-main {
+      visibility: visible;
+    }
+  }
+}
+
 .auth-panel {
   min-block-size: 100vh;
   display: grid;
@@ -630,9 +644,17 @@ body.is-locked {
 }
 
 .breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.9rem;
   color: var(--color-muted);
   margin: 0;
+
+  & .breadcrumb__sep {
+    color: var(--color-muted);
+  }
 }
 
 .page-header__top {
@@ -762,11 +784,19 @@ body.is-locked {
 }
 
 .phases-accordion__item {
+  --phase-accent: transparent;
+
   border: 1px solid var(--color-border);
+  border-inline-start-width: 3px;
+  border-inline-start-color: var(--phase-accent);
   border-radius: var(--radius);
   background: var(--color-surface);
   box-shadow: var(--shadow);
   overflow: hidden;
+}
+
+html[data-theme="dark"] .phases-accordion__item {
+  border-inline-start-color: var(--phase-accent-dark, var(--phase-accent));
 }
 
 .phases-accordion__summary {
@@ -791,6 +821,10 @@ body.is-locked {
 }
 
 .phases-accordion__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.3;
@@ -851,7 +885,7 @@ body.is-locked {
   @media (min-width: 768px) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    align-items: start;
+    align-items: stretch;
   }
 }
 
@@ -866,9 +900,14 @@ body.is-locked {
 .issue-card:not(.decision-card) .issue-card__content {
   display: grid;
   grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto 1fr auto;
   column-gap: 0.75rem;
   row-gap: 0.5rem;
   align-items: start;
+
+  @media (min-width: 768px) {
+    block-size: 100%;
+  }
 }
 
 .issue-card__link {
@@ -925,10 +964,28 @@ body.is-locked {
   grid-column: 2;
 }
 
-.issue-card__id {
+.issue-card__id.pill {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.chip--issue {
+  font-family: var(--font-mono);
+  background: var(--color-muted-surface);
   color: var(--color-muted);
+
+  &.chip--phase {
+    background: var(--phase-bg, var(--color-muted-surface));
+    color: var(--phase-fg, var(--color-muted));
+  }
+}
+
+html[data-theme="dark"] .chip--issue.chip--phase {
+  background: var(--phase-bg-dark, var(--phase-bg, var(--color-muted-surface)));
+  color: var(--phase-fg-dark, var(--phase-fg, var(--color-muted)));
 }
 
 .issue-card__title {
@@ -943,6 +1000,11 @@ body.is-locked {
 }
 
 .issue-card:not(.decision-card) .issue-card__summary {
+  grid-column: 2;
+  align-self: stretch;
+}
+
+.issue-card:not(.decision-card) .issue-card__content .issue-tags {
   grid-column: 2;
 }
 
@@ -1049,6 +1111,16 @@ a.pill {
   color: var(--color-complete);
 }
 
+.pill--phase {
+  background: var(--phase-bg, var(--color-muted-surface));
+  color: var(--phase-fg, var(--color-muted));
+}
+
+html[data-theme="dark"] .pill--phase {
+  background: var(--phase-bg-dark, var(--phase-bg, var(--color-muted-surface)));
+  color: var(--phase-fg-dark, var(--phase-fg, var(--color-muted)));
+}
+
 .chip-row {
   display: flex;
   flex-wrap: wrap;
@@ -1064,11 +1136,6 @@ a.pill {
   text-decoration: none;
   color: var(--color-text);
   white-space: nowrap;
-}
-
-.chip--issue {
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
 }
 
 .chip--tag {
@@ -1874,14 +1941,22 @@ a.pill {
 
   & .combobox__option.is-disabled {
     color: var(--color-muted);
-    background: color-mix(in srgb, var(--color-muted-surface) 70%, var(--color-text) 8%);
+    background: color-mix(
+      in srgb,
+      var(--color-muted-surface) 70%,
+      var(--color-text) 8%
+    );
     cursor: default;
     pointer-events: none;
   }
 
   & .combobox__option.is-disabled.is-active,
   & .combobox__option.is-disabled:hover {
-    background: color-mix(in srgb, var(--color-muted-surface) 70%, var(--color-text) 8%);
+    background: color-mix(
+      in srgb,
+      var(--color-muted-surface) 70%,
+      var(--color-text) 8%
+    );
   }
 
   & .combobox__option-mark {

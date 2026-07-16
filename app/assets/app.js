@@ -237,6 +237,26 @@ const logoutButton = document.getElementById("logout-button");
 const bootStartedAt = performance.now();
 let bootEnded = false;
 
+const AUTH_SESSION_HINT = "or-audit-authed";
+
+function markAuthedSession() {
+  try {
+    sessionStorage.setItem(AUTH_SESSION_HINT, "1");
+  } catch {
+    /* ignore */
+  }
+  document.documentElement.dataset.skipSplash = "1";
+}
+
+function clearAuthedSession() {
+  try {
+    sessionStorage.removeItem(AUTH_SESSION_HINT);
+  } catch {
+    /* ignore */
+  }
+  delete document.documentElement.dataset.skipSplash;
+}
+
 function prefersReducedMotion() {
   return (
     window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true
@@ -250,6 +270,17 @@ async function sleep(ms) {
   await new Promise((resolve) => {
     window.setTimeout(resolve, ms);
   });
+}
+
+/** Hide splash immediately — no branded enter/hold/exit (same idea as editor). */
+function skipBootSplash() {
+  bootEnded = true;
+  if (bootSplash) {
+    bootSplash.hidden = true;
+    bootSplash.classList.remove("is-leaving");
+    bootSplash.setAttribute("aria-busy", "false");
+  }
+  document.body.classList.remove("is-booting");
 }
 
 async function endBoot() {
@@ -309,6 +340,54 @@ function priorityLabel(priority) {
 
 function statusLabel(status) {
   return STATUS_LABELS[status] || status;
+}
+
+/** Cool hues only (no priority reds). Consecutive phases take opposite ends, then advance inward. */
+function phaseColorVars(sprintId) {
+  const parsed = Number(sprintId);
+  const index = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+  // Teal → cyan → azure → blue → indigo → green → sky → violet-blue
+  const phaseHues = [165, 195, 225, 255, 140, 210, 240, 280];
+  const len = phaseHues.length;
+  const slot = (index - 1) % len;
+  // 0 → start, 1 → end, 2 → start+1, 3 → end-1, …
+  const hueIndex =
+    slot % 2 === 0 ? slot / 2 : len - 1 - Math.floor(slot / 2);
+  const hue = phaseHues[hueIndex];
+  return {
+    "--phase-fg": `hsl(${hue} 52% 34%)`,
+    "--phase-bg": `hsl(${hue} 48% 92%)`,
+    "--phase-fg-dark": `hsl(${hue} 70% 78%)`,
+    "--phase-bg-dark": `hsl(${hue} 32% 18%)`,
+    "--phase-accent": `hsl(${hue} 52% 42%)`,
+    "--phase-accent-dark": `hsl(${hue} 65% 60%)`,
+  };
+}
+
+function phaseStyleAttr(sprintId) {
+  return Object.entries(phaseColorVars(sprintId))
+    .map(([name, value]) => `${name}:${value}`)
+    .join(";");
+}
+
+function phasePillLabel(sprintId) {
+  const sprint = (state.audit?.sprints || []).find(
+    (item) => String(item.id) === String(sprintId),
+  );
+  if (sprint?.title && /uncategorized/i.test(String(sprint.title))) {
+    return sprint.title;
+  }
+  return `${COPY.phase} ${sprintId}`;
+}
+
+function renderPhasePill(sprintId, { linked = true } = {}) {
+  const label = escapeHtml(phasePillLabel(sprintId));
+  const style = phaseStyleAttr(sprintId);
+  const className = "pill pill--phase";
+  if (!linked) {
+    return `<span class="${className}" style="${style}">${label}</span>`;
+  }
+  return `<a class="${className}" style="${style}" href="${overviewHref([sprintId])}">${label}</a>`;
 }
 
 function issueByKey(key) {
@@ -1203,7 +1282,8 @@ function renderIssueChips(keys) {
       if (!issue) {
         return "";
       }
-      return `<a class="chip chip--issue" href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a>`;
+      const phaseId = issue.sprint ?? String(issue.id).split(".")[0];
+      return `<a class="chip chip--issue chip--phase" style="${phaseStyleAttr(phaseId)}" href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a>`;
     })
     .join("");
 }
@@ -1266,6 +1346,7 @@ function renderPriorityControl(issue, { editable = false } = {}) {
 function renderMetaRow(issue, { editablePriority = false } = {}) {
   return `
     <div class="meta-row">
+      ${renderPhasePill(issue.sprint)}
       ${renderPriorityControl(issue, { editable: editablePriority })}
       <a class="pill pill--status pill--${escapeHtml(issue.status)}" href="#/issues/status/${escapeHtml(issue.status)}">${escapeHtml(statusLabel(issue.status))}</a>
     </div>`;
@@ -1309,13 +1390,14 @@ function renderIssueCard(issue) {
     .filter((file) => evidenceByFile(file));
 
   const issueHref = `#/issue/${escapeHtml(issue.key)}`;
+  const phaseStyle = phaseStyleAttr(issue.sprint);
 
   return `
     <article class="issue-card">
       <div class="issue-card__content">
         <a class="issue-card__link" href="${issueHref}">
           <div class="issue-card__head">
-            <span class="issue-card__id">${escapeHtml(issue.id)}</span>
+            <span class="issue-card__id pill pill--phase" style="${phaseStyle}">${escapeHtml(issue.id)}</span>
             <h2 class="issue-card__title">${escapeHtml(issue.title)}</h2>
           </div>
         </a>
@@ -1323,6 +1405,7 @@ function renderIssueCard(issue) {
         <a class="issue-card__link issue-card__link--summary" href="${issueHref}">
           <p class="issue-card__summary">${escapeHtml(issue.problem?.trim().split("\n")[0] || "")}</p>
         </a>
+        ${renderIssueTags(issue)}
       </div>
       ${evidenceItems.length ? `<div class="issue-card__evidence">${evidenceItems.map((e) => renderEvidenceThumb(e.file, galleryFiles)).join("")}</div>` : ""}
     </article>`;
@@ -1413,10 +1496,10 @@ function renderPhasesAccordion(openPhaseIds) {
       const issues = sprintIssues(sprint.id);
       const isOpen = openSet.has(String(sprint.id));
       return `
-        <details class="phases-accordion__item" data-phase-id="${escapeHtml(String(sprint.id))}"${isOpen ? " open" : ""}>
+        <details class="phases-accordion__item" data-phase-id="${escapeHtml(String(sprint.id))}" style="${phaseStyleAttr(sprint.id)}"${isOpen ? " open" : ""}>
           <summary class="phases-accordion__summary">
             <span class="phases-accordion__heading">
-              <span class="phases-accordion__title">${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</span>
+              <span class="phases-accordion__title">${renderPhasePill(sprint.id, { linked: false })}<span class="phases-accordion__title-text">${escapeHtml(sprint.title)}</span></span>
               <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
               <p class="phases-accordion__desc">${escapeHtml(sprint.description.trim())}</p>
             </span>
@@ -1560,7 +1643,7 @@ function renderIssueDetail(issueKey) {
       <div class="page__primary">
         <header class="page-header">
           <div class="page-header__top">
-            <p class="breadcrumb"><a href="${overviewHref([issue.sprint])}">${escapeHtml(COPY.phase)} ${issue.sprint}</a> / ${escapeHtml(issue.id)}</p>
+            <p class="breadcrumb">${renderPhasePill(issue.sprint)} <span class="breadcrumb__sep" aria-hidden="true">/</span> <span class="pill pill--phase" style="${phaseStyleAttr(issue.sprint)}">${escapeHtml(issue.id)}</span></p>
             ${renderIssueNav(issueKey)}
           </div>
           <div class="page-header__row">
@@ -1757,10 +1840,10 @@ function renderDecisions() {
   const accordion = groups
     .map(({ sprint, decisions }) => {
       return `
-        <details class="phases-accordion__item decisions-accordion__item" data-decision-phase="${escapeHtml(String(sprint.id))}">
+        <details class="phases-accordion__item decisions-accordion__item" data-decision-phase="${escapeHtml(String(sprint.id))}" style="${phaseStyleAttr(sprint.id)}">
           <summary class="phases-accordion__summary">
             <span class="phases-accordion__heading">
-              <span class="phases-accordion__title">${escapeHtml(COPY.phase)} ${sprint.id}: ${escapeHtml(sprint.title)}</span>
+              <span class="phases-accordion__title">${renderPhasePill(sprint.id, { linked: false })}<span class="phases-accordion__title-text">${escapeHtml(sprint.title)}</span></span>
               <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
             </span>
             <span class="phases-accordion__meta">${escapeHtml(COPY.decisionCount(decisions.length))}</span>
@@ -2300,6 +2383,8 @@ function bindAuthHandlers() {
         String(data.get("password") || ""),
         String(data.get("website") || ""),
       );
+      markAuthedSession();
+      skipBootSplash();
       loginForm.reset();
       await loadAppData();
       await showAppShell();
@@ -2317,6 +2402,7 @@ function bindAuthHandlers() {
     } catch {
       /* still lock UI */
     }
+    clearAuthedSession();
     await showAuthPanel();
     main.innerHTML = "";
   });
@@ -3220,12 +3306,14 @@ async function init() {
       setCsrfToken(auth.csrf);
     }
     if (!auth.authenticated) {
+      clearAuthedSession();
       await waitForSplashHold();
       await showAuthPanel();
       return;
     }
+    markAuthedSession();
+    skipBootSplash();
     await loadAppData();
-    await waitForSplashHold();
     await showAppShell();
     render();
   } catch (error) {

@@ -434,15 +434,35 @@ function applyEditorDeepLink() {
   }
 }
 
+const AUTH_SESSION_HINT = 'or-audit-authed';
+
+function markAuthedSession() {
+  try {
+    sessionStorage.setItem(AUTH_SESSION_HINT, '1');
+  } catch {
+    /* ignore */
+  }
+}
+
+function clearAuthedSession() {
+  try {
+    sessionStorage.removeItem(AUTH_SESSION_HINT);
+  } catch {
+    /* ignore */
+  }
+}
+
 async function loadSession() {
   try {
     const data = await requestJson('../api/editor-auth.php');
 
     if (!data.authenticated) {
+      clearAuthedSession();
       showPanel(loginPanel);
       return;
     }
 
+    markAuthedSession();
     state.csrf = data.csrf;
     initPicker();
     initIssueComposer();
@@ -457,6 +477,7 @@ async function loadSession() {
     setSaveIndicator('idle');
     setStatus(editorStatus, '');
   } catch (error) {
+    clearAuthedSession();
     if (error.message.includes('not configured')) {
       showPanel(blockedPanel);
       return;
@@ -504,6 +525,7 @@ loginForm.addEventListener('submit', async (event) => {
       }),
     });
     state.csrf = data.csrf;
+    markAuthedSession();
     loginForm.reset();
     initPicker();
     initIssueComposer();
@@ -597,6 +619,7 @@ logoutButton.addEventListener('click', async () => {
   } catch {
     // Session may already be gone.
   }
+  clearAuthedSession();
   state.csrf = null;
   cancelAutosave();
   showPanel(loginPanel);
