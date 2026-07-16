@@ -39,7 +39,7 @@
   id: '1.3'
   sprint: 1
   title: Add a way back from news articles
-  priority: high
+  priority: critical
   status: planned
   tags:
     - navigation
@@ -111,7 +111,7 @@
   id: '1.7'
   sprint: 1
   title: Give the header more room in the open menu
-  priority: medium
+  priority: critical
   status: planned
   tags:
     - navigation
@@ -124,7 +124,6 @@
     - Header has consistent clearance when menu overlay is open
   evidence:
     - file: 120802.png
-      caption: Menu crowding logo
 - key: d64c6362-1054-468f-a9cb-3f1feb2473ab
   id: '1.8'
   sprint: 1
