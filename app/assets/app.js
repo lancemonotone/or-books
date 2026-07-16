@@ -1402,6 +1402,38 @@ function renderMetaRow(issue, { editablePriority = false } = {}) {
     </div>`;
 }
 
+function renderIssueEstimateMetaSegment(prefix, hours) {
+  const formattedHours = formatHours(hours);
+  if (formattedHours === null) {
+    return "";
+  }
+  let text = `${prefix} ${escapeHtml(formattedHours)}h`;
+  if (state.hourlyRate !== null) {
+    const formattedCost = formatUsd(hoursToCost(hours, state.hourlyRate));
+    if (formattedCost !== null) {
+      text += ` · ${escapeHtml(formattedCost)}`;
+    }
+  }
+  return `<span class="issue-estimate-meta__chip">${text}</span>`;
+}
+
+function renderIssueEstimateMeta(issue) {
+  const estimateHours = issueEstimateHours(issue);
+  const actualHours = issueActualHours(issue);
+  if (estimateHours === null && actualHours === null) {
+    return "";
+  }
+  const segments = [
+    estimateHours !== null
+      ? renderIssueEstimateMetaSegment("Est", estimateHours)
+      : "",
+    actualHours !== null
+      ? renderIssueEstimateMetaSegment("Actual", actualHours)
+      : "",
+  ].filter(Boolean);
+  return `<div class="issue-estimate-meta">${segments.join("")}</div>`;
+}
+
 function renderIssueTags(issue, { editable = false } = {}) {
   const tagsHtml = renderTagChips(issue.tags, {
     editable,
@@ -1452,6 +1484,7 @@ function renderIssueCard(issue) {
           </div>
         </a>
         ${renderMetaRow(issue)}
+        ${renderIssueEstimateMeta(issue)}
         <a class="issue-card__link issue-card__link--summary" href="${issueHref}">
           <p class="issue-card__summary">${escapeHtml(issue.problem?.trim().split("\n")[0] || "")}</p>
         </a>
@@ -1700,6 +1733,7 @@ function renderIssueDetail(issueKey) {
             ${renderEditLink({ tab: "issues", issue: issue.key, label: `Edit issue ${issue.id}` })}
           </div>
           ${renderMetaRow(issue, { editablePriority: true })}
+          ${renderIssueEstimateMeta(issue)}
         </header>
         <section class="prose">
           <h2>${escapeHtml(COPY.whatWeFound)}</h2>
