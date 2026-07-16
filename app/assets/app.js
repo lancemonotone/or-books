@@ -4,6 +4,7 @@ import {
   saveComment,
   saveDecision,
   saveIssuePriority,
+  saveIssueTags,
   saveSettings,
   loadSettings,
   postCommentReply,
@@ -125,6 +126,12 @@ const COPY = {
   priorityFilterTitle: (label) => `Priority: ${label}`,
   statusFilterTitle: (label) => `Status: ${label}`,
   tagFilterTitle: (label) => `Tag: ${label}`,
+  addTag: "Add tag",
+  removeTag: (tag) => `Remove tag ${tag}`,
+  createTag: (tag) => `Create “${tag}”`,
+  tagAlreadyAdded: "Already added",
+  tagPlaceholder: "Find or create tag",
+  tagEmptyList: "No tags yet — type to create one",
   replyCount: (n) => `${n} ${n === 1 ? "reply" : "replies"}`,
 };
 
@@ -418,6 +425,44 @@ function issuesByTag(tag) {
       (entry) => String(entry).trim().toLowerCase() === needle,
     ),
   );
+}
+
+function normalizeTagLabel(tag) {
+  return String(tag || "")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+function tagsMatch(a, b) {
+  return normalizeTagLabel(a).toLowerCase() === normalizeTagLabel(b).toLowerCase();
+}
+
+function collectKnownTags() {
+  const seen = new Map();
+  for (const issue of state.issues) {
+    for (const entry of issue.tags || []) {
+      const tag = normalizeTagLabel(entry);
+      if (!tag) {
+        continue;
+      }
+      const key = tag.toLowerCase();
+      if (!seen.has(key)) {
+        seen.set(key, tag);
+      }
+    }
+  }
+  return [...seen.values()].sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" }),
+  );
+}
+
+function canonicalizeTag(tag, catalog = collectKnownTags()) {
+  const normalized = normalizeTagLabel(tag);
+  if (!normalized) {
+    return "";
+  }
+  const match = catalog.find((entry) => tagsMatch(entry, normalized));
+  return match || normalized;
 }
 
 function getAuthor(kind) {
@@ -1171,14 +1216,28 @@ function renderSummaryItemLabel(keys, title, fallback = "") {
   return `<div class="summary-item__label">${chips}<span class="summary-item__title">${text}</span></div>`;
 }
 
-function renderTagChips(tags = []) {
+function renderTagChips(tags = [], { editable = false, issueKey = "" } = {}) {
   return (tags || [])
-    .map((tag) => String(tag || "").trim())
+    .map((tag) => normalizeTagLabel(tag))
     .filter(Boolean)
-    .map(
-      (tag) =>
-        `<a class="chip chip--tag" href="#/issues/tag/${encodeURIComponent(tag)}">${escapeHtml(tag)}</a>`,
-    )
+    .map((tag) => {
+      const href = `#/issues/tag/${encodeURIComponent(tag)}`;
+      const label = escapeHtml(tag);
+      if (!editable) {
+        return `<a class="chip chip--tag" href="${href}">${label}</a>`;
+      }
+      return `<span class="chip chip--tag chip--tag-edit">
+        <a class="chip__label" href="${href}">${label}</a>
+        <button
+          type="button"
+          class="chip__remove"
+          data-tag-remove
+          data-tag="${escapeHtml(tag)}"
+          data-issue-key="${escapeHtml(issueKey)}"
+          aria-label="${escapeHtml(COPY.removeTag(tag))}"
+        ><span aria-hidden="true">×</span></button>
+      </span>`;
+    })
     .join("");
 }
 
@@ -1212,12 +1271,31 @@ function renderMetaRow(issue, { editablePriority = false } = {}) {
     </div>`;
 }
 
-function renderIssueTags(issue) {
-  const tags = renderTagChips(issue.tags);
-  if (!tags) {
+function renderIssueTags(issue, { editable = false } = {}) {
+  const tagsHtml = renderTagChips(issue.tags, {
+    editable,
+    issueKey: issue.key,
+  });
+  if (!editable && !tagsHtml) {
     return "";
   }
-  return `<div class="chip-row issue-tags">${tags}</div>`;
+
+  const addControl = editable
+    ? `<div class="issue-tags__add" data-tag-add-wrap="${escapeHtml(issue.key)}">
+        <button
+          type="button"
+          class="chip chip--tag-add"
+          data-tag-add-open
+          data-issue-key="${escapeHtml(issue.key)}"
+          aria-label="${escapeHtml(COPY.addTag)}"
+        ><span aria-hidden="true">+</span></button>
+      </div>`
+    : "";
+
+  return `<div
+    class="chip-row issue-tags${editable ? " issue-tags--editable" : ""}"
+    data-issue-tags="${escapeHtml(issue.key)}"
+  >${tagsHtml}${addControl}</div>`;
 }
 
 function renderIssueCard(issue) {
@@ -1496,7 +1574,7 @@ function renderIssueDetail(issueKey) {
           <p>${escapeHtml(issue.problem?.trim() || "")}</p>
           <h2>${escapeHtml(COPY.whatWeSuggest)}</h2>
           <p>${escapeHtml(issue.recommendation?.trim() || "")}</p>
-          ${renderIssueTags(issue)}
+          ${renderIssueTags(issue, { editable: true })}
         </section>
         ${linkedDecisionsHtml ? `<section class="issue-decisions">${linkedDecisionsHtml}</section>` : ""}
         ${renderCommentForm(issue)}
@@ -2342,6 +2420,343 @@ function primeVideoThumbs(root = main) {
     });
 }
 
+function refreshIssueTagsRow(issueKey) {
+  const issue = issueByKey(issueKey);
+  const row = main.querySelector(`[data-issue-tags="${CSS.escape(issueKey)}"]`);
+  if (!issue || !row) {
+    return;
+  }
+  const html = renderIssueTags(issue, { editable: true });
+  const template = document.createElement("template");
+  template.innerHTML = html.trim();
+  const next = template.content.firstElementChild;
+  if (!next) {
+    return;
+  }
+  row.replaceWith(next);
+  bindIssueTagsRow(next);
+}
+
+async function persistIssueTags(issueKey, nextTags, { rollbackTags } = {}) {
+  const issue = issueByKey(issueKey);
+  const row = main.querySelector(`[data-issue-tags="${CSS.escape(issueKey)}"]`);
+  if (!issue) {
+    return;
+  }
+  const previous = Array.isArray(rollbackTags)
+    ? [...rollbackTags]
+    : [...(issue.tags || [])];
+  issue.tags = [...nextTags];
+  if (row) {
+    row.setAttribute("aria-busy", "true");
+    row.querySelectorAll("button, input").forEach((el) => {
+      el.disabled = true;
+    });
+  }
+  try {
+    const result = await saveIssueTags(issueKey, nextTags);
+    issue.tags = Array.isArray(result.tags) ? result.tags : [...nextTags];
+    refreshIssueTagsRow(issueKey);
+  } catch (error) {
+    issue.tags = previous;
+    refreshIssueTagsRow(issueKey);
+    window.alert(error.message || "Could not save tags.");
+  }
+}
+
+function closeTagCombobox(wrap) {
+  const issueKey = wrap?.dataset?.tagAddWrap;
+  if (!wrap || !issueKey) {
+    return;
+  }
+  wrap.innerHTML = `<button
+    type="button"
+    class="chip chip--tag-add"
+    data-tag-add-open
+    data-issue-key="${escapeHtml(issueKey)}"
+    aria-label="${escapeHtml(COPY.addTag)}"
+  ><span aria-hidden="true">+</span></button>`;
+  const button = wrap.querySelector("[data-tag-add-open]");
+  button?.addEventListener("click", () => openTagCombobox(wrap));
+}
+
+function openTagCombobox(wrap) {
+  const issueKey = wrap.dataset.tagAddWrap;
+  const issue = issueByKey(issueKey);
+  if (!issue) {
+    return;
+  }
+
+  const listId = `tag-list-${issueKey}`;
+  wrap.innerHTML = `
+    <div class="combobox combobox--tag" data-tag-picker>
+      <label class="visually-hidden" for="tag-input-${escapeHtml(issueKey)}">${escapeHtml(COPY.addTag)}</label>
+      <div class="combobox__control">
+        <input
+          type="text"
+          id="tag-input-${escapeHtml(issueKey)}"
+          class="combobox__input"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="${escapeHtml(listId)}"
+          aria-autocomplete="list"
+          aria-haspopup="listbox"
+          data-tag-input
+          maxlength="40"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="${escapeHtml(COPY.tagPlaceholder)}"
+        >
+        <ul
+          class="combobox__list"
+          id="${escapeHtml(listId)}"
+          role="listbox"
+          data-tag-list
+          hidden
+        ></ul>
+      </div>
+    </div>`;
+
+  const picker = wrap.querySelector("[data-tag-picker]");
+  const input = picker.querySelector("[data-tag-input]");
+  const list = picker.querySelector("[data-tag-list]");
+  picker._tagOptions = [];
+  picker._tagActiveIndex = -1;
+
+  const setActive = (index) => {
+    const options = list.querySelectorAll("[role='option']");
+    picker._tagActiveIndex = index;
+    options.forEach((option, optionIndex) => {
+      const active = optionIndex === index;
+      option.classList.toggle("is-active", active);
+      option.setAttribute("aria-selected", active ? "true" : "false");
+      if (active) {
+        input.setAttribute("aria-activedescendant", option.id);
+        option.scrollIntoView({ block: "nearest" });
+      }
+    });
+    if (index < 0) {
+      input.removeAttribute("aria-activedescendant");
+    }
+  };
+
+  const choose = async (value) => {
+    picker._tagChoosing = true;
+    const tag = canonicalizeTag(value);
+    if (!tag) {
+      closeTagCombobox(wrap);
+      return;
+    }
+    const current = (issue.tags || []).map(normalizeTagLabel).filter(Boolean);
+    if (current.some((entry) => tagsMatch(entry, tag))) {
+      closeTagCombobox(wrap);
+      return;
+    }
+    const next = [...current, tag];
+    await persistIssueTags(issueKey, next, { rollbackTags: current });
+  };
+
+  const renderOptions = () => {
+    const query = normalizeTagLabel(input.value);
+    const catalog = collectKnownTags();
+    const current = issue.tags || [];
+    const items = [];
+
+    for (const tag of catalog) {
+      if (query && !tag.toLowerCase().includes(query.toLowerCase())) {
+        continue;
+      }
+      const onIssue = current.some((entry) => tagsMatch(entry, tag));
+      items.push({
+        value: tag,
+        label: tag,
+        create: false,
+        disabled: onIssue,
+      });
+    }
+
+    const exactInCatalog = Boolean(query) && catalog.some((tag) => tagsMatch(tag, query));
+    const exactOnIssue =
+      Boolean(query) && current.some((tag) => tagsMatch(tag, query));
+
+    if (query && !exactInCatalog && !exactOnIssue) {
+      items.push({
+        value: query,
+        label: COPY.createTag(query),
+        create: true,
+        disabled: false,
+      });
+    }
+
+    picker._tagOptions = items;
+    if (!items.length) {
+      const emptyCopy = catalog.length
+        ? COPY.tagPlaceholder
+        : COPY.tagEmptyList;
+      list.innerHTML = `<li class="combobox__empty" role="presentation">${escapeHtml(emptyCopy)}</li>`;
+    } else {
+      list.innerHTML = items
+        .map((item, index) => {
+          const optionId = `${listId}-opt-${index}`;
+          const createClass = item.create ? " is-create" : "";
+          const disabledClass = item.disabled ? " is-disabled" : "";
+          const disabledAttr = item.disabled ? ' aria-disabled="true"' : "";
+          const ariaLabel = item.disabled
+            ? ` aria-label="${escapeHtml(`${item.label}, ${COPY.tagAlreadyAdded}`)}"`
+            : "";
+          const mark = item.disabled
+            ? `<span class="combobox__option-mark" aria-hidden="true">✓</span>`
+            : "";
+          return `<li
+            id="${escapeHtml(optionId)}"
+            class="combobox__option${createClass}${disabledClass}"
+            role="option"
+            data-value="${escapeHtml(item.value)}"
+            data-create="${item.create ? "true" : "false"}"
+            data-disabled="${item.disabled ? "true" : "false"}"
+            aria-selected="false"${disabledAttr}${ariaLabel}
+          ><span class="combobox__option-label">${escapeHtml(item.label)}</span>${mark}</li>`;
+        })
+        .join("");
+    }
+
+    list.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+    const preferred = query
+      ? items.findIndex((item) => !item.disabled && !item.create && tagsMatch(item.value, query))
+      : -1;
+    const firstEnabled = items.findIndex((item) => !item.disabled);
+    setActive(
+      preferred >= 0 ? preferred : firstEnabled >= 0 ? firstEnabled : -1,
+    );
+  };
+
+  input.addEventListener("focus", () => {
+    renderOptions();
+  });
+
+  input.addEventListener("input", () => {
+    renderOptions();
+  });
+
+  input.addEventListener("keydown", (event) => {
+    const options = picker._tagOptions || [];
+    const enabledIndexes = options
+      .map((item, index) => (item.disabled ? -1 : index))
+      .filter((index) => index >= 0);
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (list.hidden) {
+        renderOptions();
+        return;
+      }
+      if (!enabledIndexes.length) {
+        return;
+      }
+      const currentPos = enabledIndexes.indexOf(picker._tagActiveIndex);
+      const nextPos =
+        currentPos < 0 ? 0 : (currentPos + 1) % enabledIndexes.length;
+      setActive(enabledIndexes[nextPos]);
+      return;
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (list.hidden) {
+        renderOptions();
+        return;
+      }
+      if (!enabledIndexes.length) {
+        return;
+      }
+      const currentPos = enabledIndexes.indexOf(picker._tagActiveIndex);
+      const nextPos =
+        currentPos < 0
+          ? enabledIndexes.length - 1
+          : (currentPos - 1 + enabledIndexes.length) % enabledIndexes.length;
+      setActive(enabledIndexes[nextPos]);
+      return;
+    }
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (
+        !list.hidden &&
+        picker._tagActiveIndex >= 0 &&
+        options[picker._tagActiveIndex] &&
+        !options[picker._tagActiveIndex].disabled
+      ) {
+        choose(options[picker._tagActiveIndex].value);
+        return;
+      }
+      const query = normalizeTagLabel(input.value);
+      if (query) {
+        choose(query);
+      }
+      return;
+    }
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeTagCombobox(wrap);
+      wrap.querySelector("[data-tag-add-open]")?.focus();
+      return;
+    }
+    if (event.key === "Tab") {
+      closeTagCombobox(wrap);
+    }
+  });
+
+  list.addEventListener("mousedown", (event) => {
+    const option = event.target.closest("[data-value]");
+    if (!option || option.dataset.disabled === "true") {
+      return;
+    }
+    event.preventDefault();
+    choose(option.dataset.value);
+  });
+
+  input.addEventListener("blur", () => {
+    window.setTimeout(() => {
+      if (picker._tagChoosing) {
+        return;
+      }
+      if (!wrap.contains(document.activeElement)) {
+        closeTagCombobox(wrap);
+      }
+    }, 120);
+  });
+
+  input.focus();
+  renderOptions();
+}
+
+function bindIssueTagsRow(row) {
+  if (!row) {
+    return;
+  }
+  const issueKey = row.dataset.issueTags;
+  row.querySelectorAll("[data-tag-remove]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const issue = issueByKey(issueKey);
+      if (!issue) {
+        return;
+      }
+      const removeTag = button.dataset.tag || "";
+      const previous = (issue.tags || []).map(normalizeTagLabel).filter(Boolean);
+      const next = previous.filter((tag) => !tagsMatch(tag, removeTag));
+      await persistIssueTags(issueKey, next, { rollbackTags: previous });
+    });
+  });
+
+  const wrap = row.querySelector("[data-tag-add-wrap]");
+  const openButton = wrap?.querySelector("[data-tag-add-open]");
+  openButton?.addEventListener("click", () => openTagCombobox(wrap));
+}
+
+function bindIssueTags(root = main) {
+  root.querySelectorAll("[data-issue-tags]").forEach((row) => {
+    bindIssueTagsRow(row);
+  });
+}
+
 function bindPageHandlers() {
   bindSortableTables();
 
@@ -2575,6 +2990,8 @@ function bindPageHandlers() {
       }
     });
   });
+
+  bindIssueTags();
 
   const phasesOpenAll = main.querySelector("[data-phases-open-all]");
   const phasesCloseAll = main.querySelector("[data-phases-close-all]");

@@ -1073,9 +1073,6 @@ a.pill {
 
 .chip--tag {
   font-size: 0.7rem;
-  padding: 0.05rem 0.4rem;
-  background: var(--color-muted-surface);
-  color: var(--color-text);
   border: 1px solid var(--color-border);
 
   &:hover {
@@ -1089,8 +1086,125 @@ a.pill {
   }
 }
 
+.chip--tag-edit {
+  max-inline-size: 100%;
+
+  & .chip__label,
+  & .chip__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    block-size: 1em;
+    font-size: inherit;
+    line-height: 1;
+  }
+
+  & .chip__label {
+    color: inherit;
+    text-decoration: none;
+    min-inline-size: 0;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 1px;
+    }
+  }
+
+  & .chip__remove {
+    appearance: none;
+    flex: none;
+    inline-size: 1em;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-muted);
+    font: inherit;
+    cursor: pointer;
+
+    & span {
+      display: block;
+      line-height: 1;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 1px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.chip--tag-add {
+  appearance: none;
+  cursor: pointer;
+  padding-block: 0.2rem;
+  border: 1px solid var(--color-border);
+
+  &:hover,
+  &:focus-visible {
+    border-style: solid;
+    border-color: var(--color-accent-border);
+    color: var(--color-accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
 .issue-tags {
   margin-block-start: 0.65rem;
+  align-items: center;
+
+  &[aria-busy="true"] {
+    opacity: 0.7;
+  }
+}
+
+.issue-tags__add {
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 1.55rem;
+}
+
+.combobox--tag {
+  --combobox-clear-size: 1.5rem;
+  min-inline-size: min(12rem, 70vw);
+
+  & .combobox__control {
+    min-block-size: 1.7rem;
+  }
+
+  & .combobox__input {
+    font-size: 0.8rem;
+    padding-block: 0.2rem;
+  }
+
+  & .combobox__list {
+    font-size: 0.85rem;
+  }
 }
 
 .priority-control {
@@ -1739,6 +1853,10 @@ a.pill {
   }
 
   & .combobox__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
     padding: 0.45rem 0.6rem;
     border-radius: 4px;
     cursor: pointer;
@@ -1752,6 +1870,25 @@ a.pill {
   & .combobox__option.is-create {
     color: var(--color-accent);
     font-weight: 600;
+  }
+
+  & .combobox__option.is-disabled {
+    color: var(--color-muted);
+    background: color-mix(in srgb, var(--color-muted-surface) 70%, var(--color-text) 8%);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  & .combobox__option.is-disabled.is-active,
+  & .combobox__option.is-disabled:hover {
+    background: color-mix(in srgb, var(--color-muted-surface) 70%, var(--color-text) 8%);
+  }
+
+  & .combobox__option-mark {
+    flex: none;
+    font-size: 0.8em;
+    line-height: 1;
+    color: var(--color-muted);
   }
 
   & .combobox__empty {

@@ -141,7 +141,7 @@ Every note needs a stable **`key`** (UUID). Chips, URLs, evidence links, decisio
 
 Change `title`, `problem`, or `recommendation` for client-facing copy. Change `priority` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`, `complete`) for the pills on each card.
 
-`tags` and `acceptance` stay in the file for your own planning. They are **not** shown in the presentation app.
+`tags` show as chips on the issue detail page (filter links; editable there too). `acceptance` stays internal planning only — not shown in the presentation app.
 
 Prefer editing via **`/audit/edit/`** (it assigns `key` and a display `id` for new notes). Hand-editing YAML: generate a new UUID for `key` if you add a row manually.
 

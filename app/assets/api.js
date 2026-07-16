@@ -132,6 +132,10 @@ export function saveIssuePriority(issueKey, priority) {
   return postJson('api/save-issue-priority.php', { issueKey, priority });
 }
 
+export function saveIssueTags(issueKey, tags) {
+  return postJson('api/save-issue-tags.php', { issueKey, tags });
+}
+
 export function loadSettings() {
   return requestJson('api/settings.php');
 }
