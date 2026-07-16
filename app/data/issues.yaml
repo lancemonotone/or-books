@@ -7,6 +7,7 @@
   tags:
     - search
     - navigation
+    - Getting around
   problem: |
     Tapping search opens a different screen with different wording, and the top header disappears. It is easy to lose your place.
   recommendation: |
@@ -27,6 +28,7 @@
   tags:
     - navigation
     - subjects
+    - Getting around
   problem: |
     The Subjects page shows icons only. Without words under them, it is hard to tell what each category is.
   recommendation: |
@@ -44,6 +46,7 @@
   tags:
     - navigation
     - homepage
+    - Getting around
   problem: |
     "See all" and some section titles look like links but nothing happens when you tap them. Real links like "Latest News" don't have "See all" and are not visually distinguishable as links.
   recommendation: |
@@ -63,6 +66,7 @@
   tags:
     - interaction
     - media
+    - 'Books, authors & media'
   problem: |
     In the In the Media list, tapping an item shows a Read Now button instead of opening the article. It takes a second tap to get there.
   recommendation: |
@@ -82,6 +86,7 @@
   tags:
     - images
     - media
+    - 'Books, authors & media'
   problem: |
     Images in media list cards look vertically squashed. The same image looks correct on the full article page.
   recommendation: |
@@ -105,6 +110,7 @@
   tags:
     - layout
     - book-detail
+    - 'Books, authors & media'
   problem: |
     On book detail pages, the cover image fills most of the phone screen. Readers must scroll before they see the description, format options, or purchase buttons.
   recommendation: |
@@ -124,13 +130,14 @@
   tags:
     - header
     - icons
+    - 'Trust & polish'
   problem: |
     The menu, search, and cart icons sit in mismatched boxes. The search icon is not centered in its button.
   recommendation: |
     Give all header icons the same size box and center each icon inside it.
   acceptance:
     - Search icon centered in hit area on all breakpoints
-    - Menu, search, cart share one container spec
+    - 'Menu, search, cart share one container spec'
   evidence:
     - file: 120802.png
       caption: Menu open, search icon off-center
@@ -142,6 +149,7 @@
   status: planned
   tags:
     - typography
+    - 'Trust & polish'
   problem: |
     Section headings, book titles, and pull quotes are too similar in size and weight. Everything competes for attention.
   recommendation: |
@@ -160,6 +168,7 @@
   tags:
     - typography
     - layout
+    - 'Trust & polish'
   problem: |
     Long text on About and legal pages is harder to read when alignment jumps around on a narrow screen.
   recommendation: |
@@ -180,6 +189,7 @@
   tags:
     - content
     - news
+    - 'Trust & polish'
   problem: |
     Bylines read Posted by [name] on [date]. Posted by is redundant, and long names wrap badly on a small screen.
   recommendation: |
@@ -200,6 +210,7 @@
   tags:
     - navigation
     - news
+    - Getting around
   problem: |
     After opening a news or media article there is no obvious way back to the list. You have to scroll to the footer.
   recommendation: |
@@ -218,6 +229,7 @@
   tags:
     - content
     - faq
+    - Getting around
   problem: |
     The FAQ mentions other pages (for example the Booksellers page) as plain text. They are not links.
   recommendation: |
@@ -235,6 +247,7 @@
   tags:
     - navigation
     - menu
+    - Getting around
   problem: |
     Submenus repeat the parent category name. It reads twice for no reason.
   recommendation: |
@@ -253,6 +266,7 @@
   tags:
     - widgets
     - catalog
+    - 'Books, authors & media'
   problem: |
     Featured Title sections sometimes have a tiny heading under the image, or no heading at all. It is unclear what the block is.
   recommendation: |
@@ -272,11 +286,12 @@
   tags:
     - buttons
     - forms
+    - 'Forms & conversion'
   problem: Buttons Add to Cart, Submit, View All, View Full Catalog, Subscribe, etc all look different from page to page.
   recommendation: |
     Use one button style and one quantity control style across the site.
   acceptance:
-    - Primary CTAs share geometry, padding, and type treatment
+    - 'Primary CTAs share geometry, padding, and type treatment'
   evidence:
     - file: 160840.png
     - file: 123310.png
@@ -289,6 +304,7 @@
   tags:
     - accessibility
     - touch
+    - 'Forms & conversion'
   problem: |
     Pricing options, the author alphabet filter, tag chips, video arrows, and captcha fields are small and fiddly on a phone.
   recommendation: |
@@ -306,6 +322,7 @@
   tags:
     - forms
     - contact
+    - 'Forms & conversion'
   problem: |
     The Contact Us form asks visitors to solve a math question and complete reCAPTCHA before submitting. Unless there is a compelling reason to include both, two verification steps is unnecessary friction, and the math answer field is small and easy to miss.
   recommendation: |
@@ -325,6 +342,7 @@
   tags:
     - carousels
     - homepage
+    - 'Trust & polish'
   problem: |
     Some sliders use dots and others use arrow buttons. The homepage mixes both.
   recommendation: |
@@ -344,6 +362,7 @@
   tags:
     - authors
     - layout
+    - 'Books, authors & media'
   problem: |
     On Our Authors, the alphabet letter spinner sits off center on the page. The control looks misaligned next to the author grid and feels uneven when swiping through letters on a phone.
   recommendation: |
@@ -364,6 +383,7 @@
   tags:
     - typography
     - authors
+    - 'Books, authors & media'
   problem: |
     The text in the Featured Author sliders is small and hard to read. The section heading does not match other headings on the site.
   recommendation: |
@@ -382,6 +402,7 @@
   tags:
     - legal
     - tables
+    - 'Trust & polish'
   problem: |
     Tables on the privacy pages do not fit the screen. Content is cut off or hard to scroll sideways.
   recommendation: |
@@ -400,6 +421,7 @@
   tags:
     - spacing
     - layout
+    - 'Trust & polish'
   problem: |
     Some pages have large empty gaps between sections, for example between the book list and the Featured Title block.
   recommendation: |
@@ -420,6 +442,7 @@
   tags:
     - footer
     - layout
+    - 'Trust & polish'
   problem: |
     The Manage Website Data Collection Preferences bar does not line up with the footer content above it.
   recommendation: |
@@ -438,12 +461,13 @@
   tags:
     - navigation
     - homepage
+    - Getting around
   problem: |
     View All under Reading Lists goes to a page that shows the same information already on the homepage. There is nothing new there.
   recommendation: |
     Add real content on that page (descriptions, filters, etc.) or remove the link and keep the module on the homepage only.
   acceptance:
-    - View All page adds value beyond the homepage module, or route is removed
+    - 'View All page adds value beyond the homepage module, or route is removed'
   evidence:
     - file: 164729.png
     - file: 165045.png
@@ -456,6 +480,7 @@
   tags:
     - navigation
     - menu
+    - Getting around
   problem: |
     When the menu is open the overlay is too close to the top and crowds the header compared with other pages.
   recommendation: |
@@ -473,6 +498,7 @@
   tags:
     - navigation
     - widgets
+    - Getting around
   problem: |
     On the homepage, tapping the Featured Title module opens the book in a new browser tab. That breaks the normal flow of browsing the site on a phone and can feel like leaving the site by accident.
   recommendation: |
@@ -491,6 +517,7 @@
   tags:
     - images
     - authors
+    - 'Books, authors & media'
   problem: |
     Author photos in the grid are cropped differently. Some look stretched or cut off awkwardly.
   recommendation: Crop every author image to the same proportions. Handle missing photos cleanly. This can be done manually (more control), or via stylesheet rules (e.g., automatic square crop).
@@ -508,6 +535,7 @@
   tags:
     - layout
     - images
+    - 'Books, authors & media'
   problem: |
     On the In Bookstores section, the stock photos below the heading fills almost the entire phone screen. Little else is visible before scrolling, so the section feels oversized compared with other homepage modules.
   recommendation: |
@@ -526,12 +554,13 @@
   tags:
     - components
     - interaction
+    - 'Books, authors & media'
   problem: |
     On some pages with accordions (for example author profiles), hovering or tapping a section title makes the text animate or shift. The motion draws attention away from the content and feels out of place.
   recommendation: |
     Keep accordion titles visually stable on hover, focus, and tap. If you need feedback, use a subtle change to the arrow or background, not animated title text.
   acceptance:
-    - Accordion title text does not animate or shift on hover, focus, or tap
+    - 'Accordion title text does not animate or shift on hover, focus, or tap'
     - Any feedback uses arrow or background only
   evidence:
     - file: 122948.mp4
@@ -544,6 +573,7 @@
   tags:
     - interaction
     - media
+    - 'Books, authors & media'
   problem: |
     In the In the Media section on author pages, the Read Now button fades and slides up when it appears. The entrance animation feels unnecessary and makes a simple action look fussy.
   recommendation: |
@@ -564,6 +594,7 @@
   tags:
     - forms
     - mailchimp
+    - 'Forms & conversion'
   problem: |
     The bookseller signup sends people to an external Mailchimp page. They leave the OR Books site. The Booksellers page also has uneven text sizing around the orders email.
   recommendation: |
@@ -586,6 +617,7 @@
   tags:
     - legal
     - navigation
+    - 'Trust & polish'
   problem: |
     On the privacy notice page, table-of-contents item 4 is plain black text while every other entry is a blue link. Visitors may think section 4 is missing or not clickable.
   recommendation: |
@@ -605,6 +637,7 @@
   tags:
     - content
     - contact
+    - 'Trust & polish'
   problem: |
     Some pages spell out orders [at] orbooks.com and others use rights@orbooks.com. The [at] version cannot be tapped to open mail on a phone.
   recommendation: |
@@ -632,6 +665,7 @@
   tags:
     - legal
     - typography
+    - 'Trust & polish'
   problem: |
     Privacy notice TOC entries are set in all caps with long section titles. On a phone the list is hard to skim and every line looks the same weight.
   recommendation: |
@@ -651,6 +685,7 @@
   tags:
     - content
     - rights
+    - 'Trust & polish'
   problem: |
     The Rights Catalogs page (/rights-catalogs) is still placeholder copy. The body is Lorem Ipsum, but the page is linked in the site navigation. Visitors can open a page that looks unfinished.
   recommendation: |
@@ -658,7 +693,7 @@
   acceptance:
     - No Lorem Ipsum remains on any public page
     - Navigation lists Rights Catalogs only if the page has real content (or the page is removed per your answer)
-    - If hidden, the link is removed from menus until content is ready
+    - 'If hidden, the link is removed from menus until content is ready'
   evidence:
     - file: 125507.png
 - key: 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
@@ -670,6 +705,7 @@
   tags:
     - content
     - rights
+    - 'Trust & polish'
   problem: |
     The Rights Enquiries page heading is misspelled as "RIGHTS ENQUIRES." The page slug is also misspelled as "/rights-enquires/"
   recommendation: |
