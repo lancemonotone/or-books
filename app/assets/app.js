@@ -1824,8 +1824,12 @@ function renderCommentSummaryCell(row) {
     </details>`;
 }
 
-function renderSortableTh(key, label) {
-  return `<th data-sort-key="${escapeHtml(key)}" aria-sort="none"><button type="button" class="table-sort">${escapeHtml(label)}</button></th>`;
+function renderSortableTh(key, label, initialSort = "none") {
+  const ariaSort =
+    initialSort === "ascending" || initialSort === "descending"
+      ? initialSort
+      : "none";
+  return `<th data-sort-key="${escapeHtml(key)}" aria-sort="${ariaSort}"><button type="button" class="table-sort">${escapeHtml(label)}</button></th>`;
 }
 
 function renderPlainTh(label) {
@@ -1895,6 +1899,10 @@ function renderResponses() {
   const decisionRows = Object.entries(state.responses.decisions)
     .map(([id, row]) => {
       const decision = state.decisions.find((d) => d.key === id);
+      return { id, row, decision, rank: decisionIssueSortRank(decision) };
+    })
+    .sort((a, b) => a.rank - b.rank)
+    .map(({ id, row, decision }) => {
       const label = renderSummaryItemLabel(
         decision?.blocks || [],
         decision?.title,
@@ -1915,6 +1923,10 @@ function renderResponses() {
   const commentRows = Object.entries(state.responses.comments)
     .map(([key, row]) => {
       const issue = issueByKey(key);
+      return { key, row, issue, rank: issueIdSortRank(issue) };
+    })
+    .sort((a, b) => a.rank - b.rank)
+    .map(({ key, row, issue }) => {
       const normalized = normalizeCommentClient(row) || row;
       const stance = STANCE_LABELS[normalized.stance] || normalized.stance;
       const label = renderSummaryItemLabel(
@@ -1956,7 +1968,7 @@ function renderResponses() {
           <table class="summary-table summary-table--answers" data-sortable>
             <thead>
               <tr>
-                ${renderSortableTh("question", "Question")}
+                ${renderSortableTh("question", "Question", "ascending")}
                 ${renderPlainTh("Answer")}
                 ${renderSortableTh("name", "Name")}
                 ${renderPlainTh("Comment")}
@@ -1973,7 +1985,7 @@ function renderResponses() {
           <table class="summary-table summary-table--feedback" data-sortable>
             <thead>
               <tr>
-                ${renderSortableTh("issue", "Issue")}
+                ${renderSortableTh("issue", "Issue", "ascending")}
                 ${renderSortableTh("priority", "Priority")}
                 ${renderSortableTh("reply", "Reply")}
                 ${renderSortableTh("name", "Name")}

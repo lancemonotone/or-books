@@ -1,6 +1,6 @@
 title: OR Books Review
 slug: mobile-review
-updated: '2026-07-07'
+updated: '2026-07-16'
 summary: |
   This review covers orbooks.com. Each issue links to related screenshots and recordings. Read through, add comments as needed, and answer the questions at the end to confirm next steps.
 stats:
@@ -10,22 +10,22 @@ stats:
   decisions: 4
 sprints:
   - id: 1
-    subtitle: Find your way
-    title: Getting around
+    title: First wave
+    subtitle: Delivery wave 1
     description: |
-      Search, menus, links that do not work, dead ends, and taps that send people the wrong way. These shape how visitors move through the site.
+      Issues assigned to the first delivery wave.
   - id: 2
-    subtitle: Browse the catalog
-    title: Books, authors & media
+    title: Second wave
+    subtitle: Delivery wave 2
     description: |
-      Book pages, author directories, media lists, and featured modules. How titles and people are shown and opened on a phone.
+      Issues assigned to the second delivery wave.
   - id: 3
-    subtitle: Complete the action
-    title: Forms & conversion
+    title: Third wave
+    subtitle: Delivery wave 3
     description: |
-      Contact and signup forms, buttons, and controls that are hard to tap. Friction between interest and a completed action.
+      Issues assigned to the third delivery wave.
   - id: 4
-    subtitle: Look finished
-    title: Trust & polish
+    title: Uncategorized
+    subtitle: Needs a phase
     description: |
-      Legal and rights pages, consistent type and spacing, header and footer details, and other finish work that makes the site feel complete.
+      Issues not yet assigned to Phase 1, 2, or 3.

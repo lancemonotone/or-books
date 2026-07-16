@@ -5,29 +5,58 @@ alwaysApply: true
 
 # Git branch workflow (plans → feature branches → staging → main)
 
-This repo is managed with **local branches** (no `origin`).
+This repo is managed with **local branches** (no `origin` required for the loop below).
 
 ## Branch roles
 
 - **`main`**: approved-only, always in a shippable state.
-- **`staging`** (aka `integration`): aggregates completed work that is not yet approved/shipped; base for new plan work.
+- **`staging`** (aka `integration`): aggregates completed work that is not yet approved/shipped; **base for all new plan/feature work**. Must always include the tip of `main`.
 - **`feature/plan-XX-*`**: one branch per plan (or per slice).
 - **`fix/plan-XX-*`**: small follow-ups based on feedback.
 
+## Keep staging current (mandatory)
+
+`staging` must **never lag behind `main`**. New features branch from `staging`; if `staging` is stale, features silently miss shipped code.
+
+### After anything lands on `main`
+
+Immediately bring `staging` up to date (prefer fast-forward):
+
+```bash
+git checkout staging
+git merge main
+```
+
+Do this after:
+
+- Merge **`staging` → `main`**
+- Any commit or merge that lands **directly on `main`**
+- Cherry-picks / hotfixes onto `main`
+
+### Before starting new work
+
+1. Check divergence: `git rev-list --left-right --count staging...main`
+2. If `main` is ahead of `staging`, merge `main` into `staging` first.
+3. Only then: `git checkout -b feature/...` from **`staging`**.
+
+**Agents:** do not create a feature/fix branch from a stale `staging`. Update `staging` from `main` first.
+
 ## Start new work
 
-- Branch from **`staging`** (not `main`) so prior work is available without shipping it.
+- Branch from **up-to-date `staging`** (not raw `main`, unless `staging` and `main` are identical after the sync above).
+- Goal: latest shipped code **plus** any in-review staging work.
 
 ## Review / feedback loop
 
 - Merge **feature → staging** when a plan is ready for review.
 - Apply client feedback as **fix branches** off the correct base:
   - off **`staging`** if not shipped yet
-  - off **`main`** if already shipped
+  - off **`main`** if already shipped — then **merge `main` → `staging`** so staging does not fall behind
 
 ## Shipping
 
 - Merge **`staging` → `main`** only after approval.
+- Then **merge `main` → `staging`** (usually a no-op / FF) so the next feature starts clean.
 
 ## History safety
 

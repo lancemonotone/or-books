@@ -36,44 +36,8 @@
     - Every subject icon has a visible text label on mobile
   evidence:
     - file: 121022.png
-- key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
-  id: '1.3'
-  sprint: 1
-  title: Add a way back from news articles
-  priority: critical
-  status: planned
-  tags:
-    - navigation
-    - news
-  problem: |
-    After opening a news or media article there is no obvious way back to the list. You have to scroll to the footer.
-  recommendation: |
-    Put a Back to News link or similar at the top of each article.
-  acceptance:
-    - User returns to news listing in one tap from any article
-  evidence:
-    - file: 123327.png
-    - file: 161534.png
-- key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
-  id: '1.4'
-  sprint: 1
-  title: Fix Reading Lists View All page
-  priority: high
-  status: planned
-  tags:
-    - navigation
-    - homepage
-  problem: |
-    View All under Reading Lists goes to a page that shows the same information already on the homepage. There is nothing new there.
-  recommendation: |
-    Add real content on that page (descriptions, filters, etc.) or remove the link and keep the module on the homepage only.
-  acceptance:
-    - View All page adds value beyond the homepage module, or route is removed
-  evidence:
-    - file: 164729.png
-    - file: 165045.png
 - key: 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
-  id: '1.5'
+  id: '1.3'
   sprint: 1
   title: Fix text that looks like a link but is not
   priority: high
@@ -91,115 +55,9 @@
   evidence:
     - file: 120911.png
     - file: 121002.png
-- key: f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
-  id: '1.6'
-  sprint: 1
-  title: Link to other pages mentioned in the FAQ
-  priority: high
-  status: planned
-  tags:
-    - content
-    - faq
-  problem: |
-    The FAQ mentions other pages (for example the Booksellers page) as plain text. They are not links.
-  recommendation: |
-    Turn those references into normal links.
-  acceptance:
-    - Every in-copy page reference in FAQ is a tappable link
-  evidence:
-    - file: 125833.png
-- key: 02bb4d06-502d-44db-907c-062d48f5e58c
-  id: '1.7'
-  sprint: 1
-  title: Give the header more room in the open menu
-  priority: critical
-  status: planned
-  tags:
-    - navigation
-    - menu
-  problem: |
-    When the menu is open the overlay is too close to the top and crowds the header compared with other pages.
-  recommendation: |
-    Match the top spacing used elsewhere when the menu is open.
-  acceptance:
-    - Header has consistent clearance when menu overlay is open
-  evidence:
-    - file: 120802.png
-- key: d64c6362-1054-468f-a9cb-3f1feb2473ab
-  id: '1.8'
-  sprint: 1
-  title: Keep Featured Title links in the same tab
-  priority: medium
-  status: planned
-  tags:
-    - navigation
-    - widgets
-  problem: |
-    On the homepage, tapping the Featured Title module opens the book in a new browser tab. That breaks the normal flow of browsing the site on a phone and can feel like leaving the site by accident.
-  recommendation: |
-    Open Featured Title links in the same tab, like other in-site book links.
-  acceptance:
-    - Tapping Featured Title on the homepage navigates in the current tab
-    - No unexpected new tab or window opens for that module
-  evidence:
-    - file: 174154.png
-- key: 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
-  id: '1.9'
-  sprint: 1
-  title: Remove repeated labels in the menu
-  priority: medium
-  status: planned
-  tags:
-    - navigation
-    - menu
-  problem: |
-    Submenus repeat the parent category name. It reads twice for no reason.
-  recommendation: |
-    Drop the duplicate heading under each menu group.
-  acceptance:
-    - No submenu label repeats its parent category name
-  evidence:
-    - file: 120802.png
-      caption: Menu overlay
-- key: 5d04c117-9701-492c-beea-4056113fbdf2
-  id: '2.1'
-  sprint: 2
-  title: Label the Featured Title blocks clearly
-  priority: high
-  status: planned
-  tags:
-    - widgets
-    - catalog
-  problem: |
-    Featured Title sections sometimes have a tiny heading under the image, or no heading at all. It is unclear what the block is.
-  recommendation: |
-    Put a clear section title above the block in the same place on every page that uses it.
-  acceptance:
-    - Featured block has visible section label in same position on all templates
-  evidence:
-    - file: 123809.png
-    - file: 174154.png
-    - file: 123739.png
-- key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
-  id: '2.2'
-  sprint: 2
-  title: Make author photos the same size and shape
-  priority: high
-  status: planned
-  tags:
-    - images
-    - authors
-  problem: |
-    Author photos in the grid are cropped differently. Some look stretched or cut off awkwardly.
-  recommendation: Crop every author image to the same proportions. Handle missing photos cleanly. This can be done manually (more control), or via stylesheet rules (e.g., automatic square crop).
-  acceptance:
-    - All author grid images share one crop ratio
-  evidence:
-    - file: 123519.png
-    - file: 123704.png
 - key: 1003b1bb-4460-4577-97e9-f737dfe9fead
-  id: '2.3'
-  sprint: 2
+  id: '1.4'
+  sprint: 1
   title: Open media articles on the first tap
   priority: high
   status: planned
@@ -217,8 +75,8 @@
     - file: 123119.mp4
     - file: 161238.png
 - key: b57d706d-de6d-46d7-8e3f-6452f175c362
-  id: '2.4'
-  sprint: 2
+  id: '1.5'
+  sprint: 1
   title: Stop squashing images in media lists
   priority: high
   status: planned
@@ -239,9 +97,248 @@
       caption: In the Media list
     - file: 161534.png
       caption: Article page, correct proportions
-- key: 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
+- key: 6eb190a1-cfcd-4029-8261-05027bb3da83
+  id: '1.6'
+  sprint: 1
+  title: Scale the book cover on mobile
+  priority: medium
+  status: planned
+  tags:
+    - layout
+    - book-detail
+  problem: |
+    On book detail pages, the cover image fills most of the phone screen. Readers must scroll before they see the description, format options, or purchase buttons.
+  recommendation: |
+    Limit cover height on small screens so the title, key details, and primary actions appear in the first screenful. Keep a way to view the full cover if needed.
+  acceptance:
+    - Cover does not dominate the first viewport on typical phone widths
+    - Title and at least one primary action are visible without scrolling on first load
+  evidence:
+    - file: 171653.png
+      caption: Run Zohran Run book page on mobile
+- key: 7952f11e-1b30-41a0-b128-5f54fdf49928
+  id: '1.7'
+  sprint: 1
+  title: Align the header icons
+  priority: high
+  status: planned
+  tags:
+    - header
+    - icons
+  problem: |
+    The menu, search, and cart icons sit in mismatched boxes. The search icon is not centered in its button.
+  recommendation: |
+    Give all header icons the same size box and center each icon inside it.
+  acceptance:
+    - Search icon centered in hit area on all breakpoints
+    - Menu, search, cart share one container spec
+  evidence:
+    - file: 120802.png
+      caption: Menu open, search icon off-center
+- key: d9a285fd-c112-4962-be45-5bbb594dc1d3
+  id: '1.8'
+  sprint: 1
+  title: Make headings and titles easier to tell apart
+  priority: high
+  status: planned
+  tags:
+    - typography
+  problem: |
+    Section headings, book titles, and pull quotes are too similar in size and weight. Everything competes for attention.
+  recommendation: |
+    Set clear rules for heading sizes so section titles, book titles, and quotes each have their own level.
+  acceptance:
+    - Section heading vs book title distinguishable at a glance
+  evidence:
+    - file: 120911.png
+    - file: 123249.png
+- key: 030cf68c-ad0d-4b9f-8c65-f0471faf263b
+  id: '1.9'
+  sprint: 1
+  title: Left-align long paragraphs on mobile
+  priority: medium
+  status: planned
+  tags:
+    - typography
+    - layout
+  problem: |
+    Long text on About and legal pages is harder to read when alignment jumps around on a narrow screen.
+  recommendation: |
+    Left-align paragraphs. Reserve centered text for short labels only.
+  acceptance:
+    - Multi-sentence body blocks are left-aligned on mobile
+  evidence:
+    - file: 123828.png
+      caption: About page
+    - file: 125642.png
+      caption: Subsidiary Rights page
+- key: 1c59053b-b5c4-4f94-8361-422f66dd6614
+  id: '1.10'
+  sprint: 1
+  title: Shorten news bylines on mobile
+  priority: medium
+  status: planned
+  tags:
+    - content
+    - news
+  problem: |
+    Bylines read Posted by [name] on [date]. Posted by is redundant, and long names wrap badly on a small screen.
+  recommendation: |
+    Use a shorter line such as the source name and date only.
+  acceptance:
+    - Byline format is consistent and readable on narrow screens
+  evidence:
+    - file: 123327.png
+      caption: News byline
+    - file: 161534.png
+      caption: Media byline
+- key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
+  id: '2.1'
+  sprint: 2
+  title: Add a way back from news articles
+  priority: critical
+  status: planned
+  tags:
+    - navigation
+    - news
+  problem: |
+    After opening a news or media article there is no obvious way back to the list. You have to scroll to the footer.
+  recommendation: |
+    Put a Back to News link or similar at the top of each article.
+  acceptance:
+    - User returns to news listing in one tap from any article
+  evidence:
+    - file: 123327.png
+    - file: 161534.png
+- key: f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
+  id: '2.2'
+  sprint: 2
+  title: Link to other pages mentioned in the FAQ
+  priority: high
+  status: planned
+  tags:
+    - content
+    - faq
+  problem: |
+    The FAQ mentions other pages (for example the Booksellers page) as plain text. They are not links.
+  recommendation: |
+    Turn those references into normal links.
+  acceptance:
+    - Every in-copy page reference in FAQ is a tappable link
+  evidence:
+    - file: 125833.png
+- key: 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
+  id: '2.3'
+  sprint: 2
+  title: Remove repeated labels in the menu
+  priority: medium
+  status: planned
+  tags:
+    - navigation
+    - menu
+  problem: |
+    Submenus repeat the parent category name. It reads twice for no reason.
+  recommendation: |
+    Drop the duplicate heading under each menu group.
+  acceptance:
+    - No submenu label repeats its parent category name
+  evidence:
+    - file: 120802.png
+      caption: Menu overlay
+- key: 5d04c117-9701-492c-beea-4056113fbdf2
+  id: '2.4'
+  sprint: 2
+  title: Label the Featured Title blocks clearly
+  priority: high
+  status: planned
+  tags:
+    - widgets
+    - catalog
+  problem: |
+    Featured Title sections sometimes have a tiny heading under the image, or no heading at all. It is unclear what the block is.
+  recommendation: |
+    Put a clear section title above the block in the same place on every page that uses it.
+  acceptance:
+    - Featured block has visible section label in same position on all templates
+  evidence:
+    - file: 123809.png
+    - file: 174154.png
+    - file: 123739.png
+- key: ad45e92e-3cd0-41a4-a129-f80d2c2908bb
   id: '2.5'
   sprint: 2
+  title: Make buttons look consistent
+  priority: high
+  status: planned
+  tags:
+    - buttons
+    - forms
+  problem: Buttons Add to Cart, Submit, View All, View Full Catalog, Subscribe, etc all look different from page to page.
+  recommendation: |
+    Use one button style and one quantity control style across the site.
+  acceptance:
+    - Primary CTAs share geometry, padding, and type treatment
+  evidence:
+    - file: 160840.png
+    - file: 123310.png
+- key: 016b1384-309d-48ba-a585-398783c97dd6
+  id: '2.6'
+  sprint: 2
+  title: Make small tap targets easier to hit
+  priority: high
+  status: planned
+  tags:
+    - accessibility
+    - touch
+  problem: |
+    Pricing options, the author alphabet filter, tag chips, video arrows, and captcha fields are small and fiddly on a phone.
+  recommendation: |
+    Enlarge the tap area without making the page feel cluttered.
+  acceptance:
+    - Interactive controls meet 44×44px minimum touch target
+  evidence:
+    - file: 123519.png
+- key: 83a326b9-4988-4d2d-bcc4-d1ea3b064e98
+  id: '2.7'
+  sprint: 2
+  title: Remove the math captcha from the contact form
+  priority: medium
+  status: planned
+  tags:
+    - forms
+    - contact
+  problem: |
+    The Contact Us form asks visitors to solve a math question and complete reCAPTCHA before submitting. Unless there is a compelling reason to include both, two verification steps is unnecessary friction, and the math answer field is small and easy to miss.
+  recommendation: |
+    Drop the math question and keep a single bot check (reCAPTCHA). If spam becomes a problem, address it with one method, not both.
+  acceptance:
+    - Contact form no longer shows a math captcha question
+    - Form still protects against spam with one verification step
+    - Submit flow works on mobile without the extra field
+  evidence:
+    - file: 124005.png
+- key: d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
+  id: '2.8'
+  sprint: 2
+  title: Use one slider style across the site
+  priority: medium
+  status: blocked
+  tags:
+    - carousels
+    - homepage
+  problem: |
+    Some sliders use dots and others use arrow buttons. The homepage mixes both.
+  recommendation: |
+    Choose dots or arrows and use that everywhere. See Questions for you.
+  acceptance:
+    - One slider navigation pattern used everywhere
+  evidence:
+    - file: 120911.png
+    - file: 123850.png
+    - file: 125607.png
+- key: 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
+  id: '3.1'
+  sprint: 3
   title: Center the author alphabet spinner
   priority: medium
   status: planned
@@ -260,8 +357,8 @@
     - file: 123547.mp4
       caption: Our Authors alphabet spinner alignment
 - key: f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
-  id: '2.6'
-  sprint: 2
+  id: '3.2'
+  sprint: 3
   title: Improve Featured Author Slider Items on mobile
   priority: medium
   status: planned
@@ -277,28 +374,135 @@
     - Featured Author heading matches site sans hierarchy
   evidence:
     - file: 125607.png
-- key: 6eb190a1-cfcd-4029-8261-05027bb3da83
-  id: '2.7'
-  sprint: 2
-  title: Scale the book cover on mobile
+- key: 6f242823-63e3-4b9c-b49d-4ecf1336c282
+  id: '3.3'
+  sprint: 3
+  title: Make legal tables readable on a phone
+  priority: high
+  status: planned
+  tags:
+    - legal
+    - tables
+  problem: |
+    Tables on the privacy pages do not fit the screen. Content is cut off or hard to scroll sideways.
+  recommendation: |
+    Rework tables for mobile, for example by stacking rows or giving a clear horizontal scroll area.
+  acceptance:
+    - Legal tables readable without losing data on mobile
+  evidence:
+    - file: 125733.png
+      caption: CCPA table
+- key: c392e399-8c2d-4c2e-9896-56b81e76b2d0
+  id: '3.4'
+  sprint: 3
+  title: Even out spacing between sections
   priority: medium
   status: planned
   tags:
+    - spacing
     - layout
-    - book-detail
   problem: |
-    On book detail pages, the cover image fills most of the phone screen. Readers must scroll before they see the description, format options, or purchase buttons.
+    Some pages have large empty gaps between sections, for example between the book list and the Featured Title block.
   recommendation: |
-    Limit cover height on small screens so the title, key details, and primary actions appear in the first screenful. Keep a way to view the full cover if needed.
+    Use steady spacing between major blocks on a page.
   acceptance:
-    - Cover does not dominate the first viewport on typical phone widths
-    - Title and at least one primary action are visible without scrolling on first load
+    - No unexplained large whitespace between related modules
   evidence:
-    - file: 171653.png
-      caption: Run Zohran Run book page on mobile
+    - file: 123739.png
+    - file: 123249.png
+    - file: 123310.png
+    - file: 110356.png
+- key: 535334f1-38be-42ea-9a71-735525922eeb
+  id: '3.5'
+  sprint: 3
+  title: Center the cookie preferences bar with the footer
+  priority: low
+  status: planned
+  tags:
+    - footer
+    - layout
+  problem: |
+    The Manage Website Data Collection Preferences bar does not line up with the footer content above it.
+  recommendation: |
+    Center that bar with the rest of the footer.
+  acceptance:
+    - Preferences bar aligns with footer content block
+  evidence:
+    - file: 123434.png
+      caption: Footer alignment
+- key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
+  id: '4.1'
+  sprint: 4
+  title: Fix Reading Lists View All page
+  priority: high
+  status: planned
+  tags:
+    - navigation
+    - homepage
+  problem: |
+    View All under Reading Lists goes to a page that shows the same information already on the homepage. There is nothing new there.
+  recommendation: |
+    Add real content on that page (descriptions, filters, etc.) or remove the link and keep the module on the homepage only.
+  acceptance:
+    - View All page adds value beyond the homepage module, or route is removed
+  evidence:
+    - file: 164729.png
+    - file: 165045.png
+- key: 02bb4d06-502d-44db-907c-062d48f5e58c
+  id: '4.2'
+  sprint: 4
+  title: Give the header more room in the open menu
+  priority: critical
+  status: planned
+  tags:
+    - navigation
+    - menu
+  problem: |
+    When the menu is open the overlay is too close to the top and crowds the header compared with other pages.
+  recommendation: |
+    Match the top spacing used elsewhere when the menu is open.
+  acceptance:
+    - Header has consistent clearance when menu overlay is open
+  evidence:
+    - file: 120802.png
+- key: d64c6362-1054-468f-a9cb-3f1feb2473ab
+  id: '4.3'
+  sprint: 4
+  title: Keep Featured Title links in the same tab
+  priority: medium
+  status: planned
+  tags:
+    - navigation
+    - widgets
+  problem: |
+    On the homepage, tapping the Featured Title module opens the book in a new browser tab. That breaks the normal flow of browsing the site on a phone and can feel like leaving the site by accident.
+  recommendation: |
+    Open Featured Title links in the same tab, like other in-site book links.
+  acceptance:
+    - Tapping Featured Title on the homepage navigates in the current tab
+    - No unexpected new tab or window opens for that module
+  evidence:
+    - file: 174154.png
+- key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
+  id: '4.4'
+  sprint: 4
+  title: Make author photos the same size and shape
+  priority: high
+  status: planned
+  tags:
+    - images
+    - authors
+  problem: |
+    Author photos in the grid are cropped differently. Some look stretched or cut off awkwardly.
+  recommendation: Crop every author image to the same proportions. Handle missing photos cleanly. This can be done manually (more control), or via stylesheet rules (e.g., automatic square crop).
+  acceptance:
+    - All author grid images share one crop ratio
+  evidence:
+    - file: 123519.png
+    - file: 123704.png
 - key: f94186fe-383f-4e7f-9d60-fa99b3468ebe
-  id: '2.8'
-  sprint: 2
+  id: '4.5'
+  sprint: 4
   title: Scale the In Bookstores images on mobile
   priority: medium
   status: planned
@@ -315,8 +519,8 @@
   evidence:
     - file: 125329.png
 - key: 12737e6f-b52c-4f53-97b6-50c68e98a871
-  id: '2.9'
-  sprint: 2
+  id: '4.6'
+  sprint: 4
   title: Keep accordion titles steady on hover
   priority: low
   status: planned
@@ -333,8 +537,8 @@
   evidence:
     - file: 122948.mp4
 - key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
-  id: '2.10'
-  sprint: 2
+  id: '4.7'
+  sprint: 4
   title: Remove distracting motion on buttons
   priority: low
   status: planned
@@ -352,43 +556,9 @@
     - file: 123119.mp4
     - file: 173459.mp4
     - file: 123929.mp4
-- key: ad45e92e-3cd0-41a4-a129-f80d2c2908bb
-  id: '3.1'
-  sprint: 3
-  title: Make buttons look consistent
-  priority: high
-  status: planned
-  tags:
-    - buttons
-    - forms
-  problem: Buttons Add to Cart, Submit, View All, View Full Catalog, Subscribe, etc all look different from page to page.
-  recommendation: |
-    Use one button style and one quantity control style across the site.
-  acceptance:
-    - Primary CTAs share geometry, padding, and type treatment
-  evidence:
-    - file: 160840.png
-    - file: 123310.png
-- key: 016b1384-309d-48ba-a585-398783c97dd6
-  id: '3.2'
-  sprint: 3
-  title: Make small tap targets easier to hit
-  priority: high
-  status: planned
-  tags:
-    - accessibility
-    - touch
-  problem: |
-    Pricing options, the author alphabet filter, tag chips, video arrows, and captcha fields are small and fiddly on a phone.
-  recommendation: |
-    Enlarge the tap area without making the page feel cluttered.
-  acceptance:
-    - Interactive controls meet 44×44px minimum touch target
-  evidence:
-    - file: 123519.png
 - key: 22f6409d-b5e4-46b1-8086-f2839495505e
-  id: '3.3'
-  sprint: 3
+  id: '4.8'
+  sprint: 4
   title: Keep bookseller signup on orbooks.com
   priority: medium
   status: blocked
@@ -408,46 +578,8 @@
       caption: External signup form
     - file: 125307.png
       caption: Booksellers page
-- key: 83a326b9-4988-4d2d-bcc4-d1ea3b064e98
-  id: '3.4'
-  sprint: 3
-  title: Remove the math captcha from the contact form
-  priority: medium
-  status: planned
-  tags:
-    - forms
-    - contact
-  problem: |
-    The Contact Us form asks visitors to solve a math question and complete reCAPTCHA before submitting. Unless there is a compelling reason to include both, two verification steps is unnecessary friction, and the math answer field is small and easy to miss.
-  recommendation: |
-    Drop the math question and keep a single bot check (reCAPTCHA). If spam becomes a problem, address it with one method, not both.
-  acceptance:
-    - Contact form no longer shows a math captcha question
-    - Form still protects against spam with one verification step
-    - Submit flow works on mobile without the extra field
-  evidence:
-    - file: 124005.png
-- key: 7952f11e-1b30-41a0-b128-5f54fdf49928
-  id: '4.1'
-  sprint: 4
-  title: Align the header icons
-  priority: high
-  status: planned
-  tags:
-    - header
-    - icons
-  problem: |
-    The menu, search, and cart icons sit in mismatched boxes. The search icon is not centered in its button.
-  recommendation: |
-    Give all header icons the same size box and center each icon inside it.
-  acceptance:
-    - Search icon centered in hit area on all breakpoints
-    - Menu, search, cart share one container spec
-  evidence:
-    - file: 120802.png
-      caption: Menu open, search icon off-center
 - key: 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
-  id: '4.2'
+  id: '4.9'
   sprint: 4
   title: Fix the broken link in the privacy table of contents
   priority: high
@@ -465,43 +597,8 @@
   evidence:
     - file: 125703.png
       caption: Privacy notice TOC item 4 not linked
-- key: d9a285fd-c112-4962-be45-5bbb594dc1d3
-  id: '4.3'
-  sprint: 4
-  title: Make headings and titles easier to tell apart
-  priority: high
-  status: planned
-  tags:
-    - typography
-  problem: |
-    Section headings, book titles, and pull quotes are too similar in size and weight. Everything competes for attention.
-  recommendation: |
-    Set clear rules for heading sizes so section titles, book titles, and quotes each have their own level.
-  acceptance:
-    - Section heading vs book title distinguishable at a glance
-  evidence:
-    - file: 120911.png
-    - file: 123249.png
-- key: 6f242823-63e3-4b9c-b49d-4ecf1336c282
-  id: '4.4'
-  sprint: 4
-  title: Make legal tables readable on a phone
-  priority: high
-  status: planned
-  tags:
-    - legal
-    - tables
-  problem: |
-    Tables on the privacy pages do not fit the screen. Content is cut off or hard to scroll sideways.
-  recommendation: |
-    Rework tables for mobile, for example by stacking rows or giving a clear horizontal scroll area.
-  acceptance:
-    - Legal tables readable without losing data on mobile
-  evidence:
-    - file: 125733.png
-      caption: CCPA table
 - key: 11ab1e09-5807-4688-85ed-437200d2fcce
-  id: '4.5'
+  id: '4.10'
   sprint: 4
   title: Show email addresses the same way everywhere
   priority: high
@@ -527,48 +624,8 @@
       caption: Rights Enquiries
     - file: 123949.png
       caption: Contact page
-- key: c392e399-8c2d-4c2e-9896-56b81e76b2d0
-  id: '4.6'
-  sprint: 4
-  title: Even out spacing between sections
-  priority: medium
-  status: planned
-  tags:
-    - spacing
-    - layout
-  problem: |
-    Some pages have large empty gaps between sections, for example between the book list and the Featured Title block.
-  recommendation: |
-    Use steady spacing between major blocks on a page.
-  acceptance:
-    - No unexplained large whitespace between related modules
-  evidence:
-    - file: 123739.png
-    - file: 123249.png
-    - file: 123310.png
-    - file: 110356.png
-- key: 030cf68c-ad0d-4b9f-8c65-f0471faf263b
-  id: '4.7'
-  sprint: 4
-  title: Left-align long paragraphs on mobile
-  priority: medium
-  status: planned
-  tags:
-    - typography
-    - layout
-  problem: |
-    Long text on About and legal pages is harder to read when alignment jumps around on a narrow screen.
-  recommendation: |
-    Left-align paragraphs. Reserve centered text for short labels only.
-  acceptance:
-    - Multi-sentence body blocks are left-aligned on mobile
-  evidence:
-    - file: 123828.png
-      caption: About page
-    - file: 125642.png
-      caption: Subsidiary Rights page
 - key: b59b43f9-981e-4656-8535-9eee882dcebc
-  id: '4.8'
+  id: '4.11'
   sprint: 4
   title: Make the privacy table of contents easier to scan
   priority: medium
@@ -587,7 +644,7 @@
     - file: 125703.png
       caption: Privacy notice TOC all-caps links
 - key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
-  id: '4.9'
+  id: '4.12'
   sprint: 4
   title: Rights Catalogs page
   priority: medium
@@ -605,63 +662,6 @@
     - If hidden, the link is removed from menus until content is ready
   evidence:
     - file: 125507.png
-- key: 1c59053b-b5c4-4f94-8361-422f66dd6614
-  id: '4.10'
-  sprint: 4
-  title: Shorten news bylines on mobile
-  priority: medium
-  status: planned
-  tags:
-    - content
-    - news
-  problem: |
-    Bylines read Posted by [name] on [date]. Posted by is redundant, and long names wrap badly on a small screen.
-  recommendation: |
-    Use a shorter line such as the source name and date only.
-  acceptance:
-    - Byline format is consistent and readable on narrow screens
-  evidence:
-    - file: 123327.png
-      caption: News byline
-    - file: 161534.png
-      caption: Media byline
-- key: d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
-  id: '4.11'
-  sprint: 4
-  title: Use one slider style across the site
-  priority: medium
-  status: blocked
-  tags:
-    - carousels
-    - homepage
-  problem: |
-    Some sliders use dots and others use arrow buttons. The homepage mixes both.
-  recommendation: |
-    Choose dots or arrows and use that everywhere. See Questions for you.
-  acceptance:
-    - One slider navigation pattern used everywhere
-  evidence:
-    - file: 120911.png
-    - file: 123850.png
-    - file: 125607.png
-- key: 535334f1-38be-42ea-9a71-735525922eeb
-  id: '4.12'
-  sprint: 4
-  title: Center the cookie preferences bar with the footer
-  priority: low
-  status: planned
-  tags:
-    - footer
-    - layout
-  problem: |
-    The Manage Website Data Collection Preferences bar does not line up with the footer content above it.
-  recommendation: |
-    Center that bar with the rest of the footer.
-  acceptance:
-    - Preferences bar aligns with footer content block
-  evidence:
-    - file: 123434.png
-      caption: Footer alignment
 - key: 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
   id: '4.13'
   sprint: 4
