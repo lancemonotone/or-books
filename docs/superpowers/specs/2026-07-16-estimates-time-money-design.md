@@ -1,7 +1,7 @@
 # Estimates & burn (time / $) — Design
 
 **Date:** 2026-07-16  
-**Status:** Draft for review  
+**Status:** Approved  
 **App:** OR Books mobile review (`app/`)
 
 ## Problem
@@ -41,6 +41,7 @@ The review lists Issues with priority and status but has no effort or money view
 | Status | Meaning | In Done | In Remaining | In Grand | Deferred side line |
 |--------|---------|---------|--------------|----------|--------------------|
 | `planned` | In play / ready | — | yes | yes | — |
+| `in_progress` | Actively being worked (existing app status; same quote rules as planned) | — | yes | yes | — |
 | `blocked` | Waiting on an answer (Questions) or real gate; still intend to do | — | yes | yes | — |
 | `complete` | Done | yes | — | yes | — |
 | `deferred` | Client: not now (may return) | — | — | — | yes (not quoted) |
