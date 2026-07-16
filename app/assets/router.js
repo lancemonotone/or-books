@@ -10,6 +10,7 @@ const ROUTES = [
   { pattern: /^\/evidence$/, name: 'evidence' },
   { pattern: /^\/evidence\/([^/]+)$/, name: 'evidence-item', params: ['file'] },
   { pattern: /^\/decisions$/, name: 'decisions' },
+  { pattern: /^\/estimates$/, name: 'estimates' },
   { pattern: /^\/responses$/, name: 'responses' },
   { pattern: /^\/settings$/, name: 'settings' },
 ];

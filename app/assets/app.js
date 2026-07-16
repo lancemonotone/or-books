@@ -17,6 +17,15 @@ import {
 } from "./api.js";
 import { parseRoute, onRouteChange } from "./router.js";
 import { motion } from "./motion.js";
+import {
+  summarizeEstimates,
+  summarizeEstimatesByPhase,
+  formatUsd,
+  formatHours,
+  issueEstimateHours,
+  issueActualHours,
+  hoursToCost,
+} from "./estimates.js";
 
 const AUTHOR_KEYS = {
   comment: "or-audit-author",
@@ -133,6 +142,27 @@ const COPY = {
   tagPlaceholder: "Find or create tag",
   tagEmptyList: "No tags yet — type to create one",
   replyCount: (n) => `${n} ${n === 1 ? "reply" : "replies"}`,
+  estimates: "Estimate",
+  hourlyRateMissing: "Hourly rate not configured",
+  estimatesDone: "Done",
+  estimatesRemaining: "Remaining",
+  estimatesGrand: "Grand total",
+  estimatesDeferred: "Deferred",
+  estimatesDeferredNote: "Not included in totals",
+  estimatesNoIssues: "No issues yet.",
+  estimatesEstimateHours: "Estimate hours",
+  estimatesEstimateCost: "Estimate cost",
+  estimatesActualHours: "Actual hours",
+  estimatesActualCost: "Actual cost",
+  estimatesColId: "Issue",
+  estimatesColTitle: "Title",
+  estimatesColStatus: "Status",
+  estimatesColEstimate: "Estimate",
+  estimatesColActual: "Actual",
+  estimatesCompletenessEstimate: (set, total) =>
+    `Estimate hours set on ${set} of ${total} issues`,
+  estimatesCompletenessActual: (set, total) =>
+    `Actual hours set on ${set} of ${total} issues`,
 };
 
 const PRIORITY_LABELS = {
@@ -156,6 +186,7 @@ const STATUS_LABELS = {
   in_progress: "In progress",
   blocked: "Waiting on you",
   complete: "Complete",
+  deferred: "Deferred",
 };
 
 const state = {
@@ -174,7 +205,14 @@ const state = {
   },
   route: parseRoute(),
   ready: false,
+  hourlyRate: null,
 };
+
+function applyHourlyRate(auth) {
+  const raw = auth?.hourlyRate;
+  state.hourlyRate =
+    typeof raw === "number" && Number.isFinite(raw) && raw >= 0 ? raw : null;
+}
 
 function clientName() {
   return String(state.settings?.clientName || "").trim();
@@ -2267,6 +2305,179 @@ function renderSettings() {
     </div>`;
 }
 
+const ESTIMATES_EM_DASH = "—";
+
+function renderEstimatesHoursValue(hours) {
+  const formatted = formatHours(hours);
+  return formatted !== null ? `${escapeHtml(formatted)}h` : ESTIMATES_EM_DASH;
+}
+
+function renderEstimatesCostValue(cost) {
+  if (state.hourlyRate === null) {
+    return ESTIMATES_EM_DASH;
+  }
+  const formatted = formatUsd(cost);
+  return formatted !== null ? escapeHtml(formatted) : ESTIMATES_EM_DASH;
+}
+
+function renderEstimatesHoursCostCell(hours, cost) {
+  return `${renderEstimatesHoursValue(hours)} · ${renderEstimatesCostValue(cost)}`;
+}
+
+function renderEstimatesBucketCard(bucketKey, bucket, label) {
+  return `
+    <article class="estimates-bucket estimates-bucket--${escapeHtml(bucketKey)}">
+      <h3 class="estimates-bucket__title">${escapeHtml(label)}</h3>
+      <dl class="estimates-bucket__metrics">
+        <div class="estimates-bucket__metric">
+          <dt>${escapeHtml(COPY.estimatesEstimateHours)}</dt>
+          <dd>${renderEstimatesHoursValue(bucket.estimateHours)}</dd>
+        </div>
+        <div class="estimates-bucket__metric">
+          <dt>${escapeHtml(COPY.estimatesEstimateCost)}</dt>
+          <dd>${renderEstimatesCostValue(bucket.estimateCost)}</dd>
+        </div>
+        <div class="estimates-bucket__metric">
+          <dt>${escapeHtml(COPY.estimatesActualHours)}</dt>
+          <dd>${renderEstimatesHoursValue(bucket.actualHours)}</dd>
+        </div>
+        <div class="estimates-bucket__metric">
+          <dt>${escapeHtml(COPY.estimatesActualCost)}</dt>
+          <dd>${renderEstimatesCostValue(bucket.actualCost)}</dd>
+        </div>
+      </dl>
+    </article>`;
+}
+
+function renderEstimatesBucketStrip(summary, { compact = false } = {}) {
+  const compactClass = compact ? " estimates-summary--compact" : "";
+  return `
+    <div class="estimates-summary${compactClass}">
+      ${renderEstimatesBucketCard("done", summary.done, COPY.estimatesDone)}
+      ${renderEstimatesBucketCard("remaining", summary.remaining, COPY.estimatesRemaining)}
+      ${renderEstimatesBucketCard("grand", summary.grand, COPY.estimatesGrand)}
+    </div>`;
+}
+
+function renderEstimatesIssueRow(issue) {
+  const estimateHours = issueEstimateHours(issue);
+  const actualHours = issueActualHours(issue);
+  const estimateCost = hoursToCost(estimateHours, state.hourlyRate);
+  const actualCost = hoursToCost(actualHours, state.hourlyRate);
+
+  return `<tr>
+    <td><a href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a></td>
+    <td>${escapeHtml(issue.title)}</td>
+    <td>${escapeHtml(statusLabel(issue.status))}</td>
+    <td>${renderEstimatesHoursCostCell(estimateHours, estimateCost)}</td>
+    <td>${renderEstimatesHoursCostCell(actualHours, actualCost)}</td>
+  </tr>`;
+}
+
+function renderEstimatesPhaseSection(phase) {
+  const title = phase.sprint?.title
+    ? String(phase.sprint.title).trim()
+    : phasePillLabel(phase.sprintId);
+  const issueRows = phase.issues.map(renderEstimatesIssueRow).join("");
+
+  return `
+    <section class="estimates-phase" data-phase-id="${escapeHtml(phase.sprintId)}" style="${phaseStyleAttr(phase.sprintId)}">
+      <header class="estimates-phase__header">
+        <h2 class="estimates-phase__title">${renderPhasePill(phase.sprintId, { linked: false })} <span class="estimates-phase__title-text">${escapeHtml(title)}</span></h2>
+      </header>
+      ${renderEstimatesBucketStrip(phase.summary, { compact: true })}
+      <div class="table-wrap">
+        <table class="estimates-table">
+          <thead>
+            <tr>
+              <th>${escapeHtml(COPY.estimatesColId)}</th>
+              <th>${escapeHtml(COPY.estimatesColTitle)}</th>
+              <th>${escapeHtml(COPY.estimatesColStatus)}</th>
+              <th>${escapeHtml(COPY.estimatesColEstimate)}</th>
+              <th>${escapeHtml(COPY.estimatesColActual)}</th>
+            </tr>
+          </thead>
+          <tbody>${issueRows}</tbody>
+        </table>
+      </div>
+    </section>`;
+}
+
+function renderEstimatesPage() {
+  if (!state.issues.length) {
+    return `
+      <div class="page page--estimates">
+        <header class="page-header">
+          <h1>${escapeHtml(COPY.estimates)}</h1>
+        </header>
+        <p>${escapeHtml(COPY.estimatesNoIssues)}</p>
+      </div>`;
+  }
+
+  const summary = summarizeEstimates(state.issues, state.hourlyRate);
+  const phases = summarizeEstimatesByPhase(
+    state.issues,
+    state.audit?.sprints || [],
+    state.hourlyRate,
+  ).filter((phase) => phase.issues.length > 0);
+  const rateBanner =
+    state.hourlyRate === null
+      ? `<p class="estimates-rate-banner" role="status">${escapeHtml(COPY.hourlyRateMissing)}</p>`
+      : "";
+  const deferred = summary.deferred;
+  const estimateCompleteness = summary.estimateCompleteness;
+  const actualCompleteness = summary.actualCompleteness;
+
+  return `
+    <div class="page page--estimates">
+      <header class="page-header">
+        <h1>${escapeHtml(COPY.estimates)}</h1>
+      </header>
+      ${rateBanner}
+      ${renderEstimatesBucketStrip(summary)}
+      <aside class="estimates-deferred">
+        <h2 class="estimates-deferred__title">${escapeHtml(COPY.estimatesDeferred)}</h2>
+        <p class="estimates-deferred__note">${escapeHtml(COPY.estimatesDeferredNote)}</p>
+        <dl class="estimates-deferred__metrics">
+          <div class="estimates-deferred__metric">
+            <dt>${escapeHtml(COPY.estimatesEstimateHours)}</dt>
+            <dd>${renderEstimatesHoursValue(deferred.estimateHours)}</dd>
+          </div>
+          <div class="estimates-deferred__metric">
+            <dt>${escapeHtml(COPY.estimatesEstimateCost)}</dt>
+            <dd>${renderEstimatesCostValue(deferred.estimateCost)}</dd>
+          </div>
+          <div class="estimates-deferred__metric">
+            <dt>${escapeHtml(COPY.estimatesActualHours)}</dt>
+            <dd>${renderEstimatesHoursValue(deferred.actualHours)}</dd>
+          </div>
+          <div class="estimates-deferred__metric">
+            <dt>${escapeHtml(COPY.estimatesActualCost)}</dt>
+            <dd>${renderEstimatesCostValue(deferred.actualCost)}</dd>
+          </div>
+        </dl>
+      </aside>
+      <p class="estimates-completeness">
+        ${escapeHtml(
+          COPY.estimatesCompletenessEstimate(
+            estimateCompleteness.set,
+            estimateCompleteness.total,
+          ),
+        )}
+        <span class="estimates-completeness__sep" aria-hidden="true">·</span>
+        ${escapeHtml(
+          COPY.estimatesCompletenessActual(
+            actualCompleteness.set,
+            actualCompleteness.total,
+          ),
+        )}
+      </p>
+      <div class="estimates-phases">
+        ${phases.map(renderEstimatesPhaseSection).join("")}
+      </div>
+    </div>`;
+}
+
 function renderRoute() {
   const { name, params } = state.route;
   switch (name) {
@@ -2289,6 +2500,8 @@ function renderRoute() {
       return renderEvidenceGallery(params.file);
     case "decisions":
       return renderDecisions();
+    case "estimates":
+      return renderEstimatesPage();
     case "responses":
       return renderResponses();
     case "settings":
@@ -2388,10 +2601,11 @@ function bindAuthHandlers() {
       status.textContent = "Signing in…";
       status.classList.add("is-visible");
       status.classList.remove("is-error");
-      await login(
+      const loginAuth = await login(
         String(data.get("password") || ""),
         String(data.get("website") || ""),
       );
+      applyHourlyRate(loginAuth);
       markAuthedSession();
       skipBootSplash();
       loginForm.reset();
@@ -3320,6 +3534,7 @@ async function init() {
       await showAuthPanel();
       return;
     }
+    applyHourlyRate(auth);
     markAuthedSession();
     skipBootSplash();
     await loadAppData();
