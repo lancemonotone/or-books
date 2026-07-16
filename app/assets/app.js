@@ -1942,7 +1942,7 @@ function renderResponses() {
       const priorityRank =
         PRIORITY_SORT_RANK[priority] ?? PRIORITY_OPTIONS.length;
       const priorityCell = issue
-        ? renderPriorityControl(issue, { editable: false })
+        ? renderPriorityControl(issue, { editable: true })
         : "";
       const updatedAt = Number(new Date(normalized.updatedAt)) || 0;
       return `<tr>
@@ -2983,6 +2983,8 @@ function bindPageHandlers() {
       const previous = state.issues.find(
         (item) => item.key === issueKey,
       )?.priority;
+      const priorityRank =
+        PRIORITY_SORT_RANK[priority] ?? PRIORITY_OPTIONS.length;
       select.className = `priority-control__select pill pill--${priority}`;
       select.disabled = true;
       try {
@@ -2991,10 +2993,20 @@ function bindPageHandlers() {
         if (issue) {
           issue.priority = priority;
         }
+        const sortCell = select.closest("td[data-sort-value]");
+        if (sortCell) {
+          sortCell.dataset.sortValue = String(priorityRank);
+        }
       } catch (error) {
         if (previous) {
           select.value = previous;
           select.className = `priority-control__select pill pill--${previous}`;
+          const sortCell = select.closest("td[data-sort-value]");
+          if (sortCell) {
+            const previousRank =
+              PRIORITY_SORT_RANK[previous] ?? PRIORITY_OPTIONS.length;
+            sortCell.dataset.sortValue = String(previousRank);
+          }
         }
         window.alert(error.message || "Could not save priority.");
       } finally {
