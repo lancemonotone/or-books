@@ -26,3 +26,22 @@ _Avoid_: Reindex, renumber pass (prefer Compact when discussing the dense rewrit
 
 **Issue order**:
 The sequence of Issues within a Phase in the editor sidebar and in `issues.yaml`. Compact makes Issue ids match this order. Across Phases, Issues stay grouped by Phase in plan order.
+
+**Deferred**:
+An Issue status meaning the client does not want the work at this time (may return later). Deferred Issues are shown on the Estimate page side line but are never included in Done, Remaining, or Grand totals.
+_Avoid_: Blocked (Blocked means waiting on an answer or gate while still intending to do the work)
+
+**Blocked** (status):
+Waiting on a Questions answer or other gate; work is still intended and stays in the Estimate quote (Remaining / Grand).
+_Avoid_: Deferred
+
+**Estimate hours**:
+Optional planned effort on an Issue (`hours` in YAML). Dollar amount is hours × configured hourly rate.
+_Avoid_: Story points, effort band
+
+**Actual hours**:
+Optional burn roll-up on an Issue (`actual_hours`), entered manually from an external time tracker — not a timesheet log inside this app.
+_Avoid_: Time entry, timesheet row
+
+**Done / Remaining / Grand** (Estimate page):
+Done = complete Issues; Remaining = planned + in progress + blocked; Grand = Done + Remaining. Deferred is separate and not quoted.

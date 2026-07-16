@@ -15,6 +15,12 @@ return [
     /** Public base URL of this app (trailing slash OK), used in notification links. */
     'app_public_url' => '',
 
+    /**
+     * USD hourly rate for Issue estimate/actual $ (optional).
+     * Omit or set null when unset — presentation must not invent a default.
+     */
+    'hourly_rate' => null,
+
     'notify' => [
         /** Hard off even when Settings has notify enabled. */
         'enabled' => true,

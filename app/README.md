@@ -55,6 +55,7 @@ Signed-in **Settings** (gear in the header):
 Deploy secrets stay in `api/config.php`:
 
 - `app_public_url` — base URL for links inside notification emails
+- `hourly_rate` — optional USD rate for estimate/actual dollar amounts (omit or null when unset)
 - `notify.from` — From header for PHP `mail()`
 - `notify.flush_secret` — required by the digest cron endpoint
 - `notify.enabled` — hard off for the host
@@ -139,7 +140,11 @@ Open `data/issues.yaml`. Each item looks like this:
 
 Every note needs a stable **`key`** (UUID). Chips, URLs, evidence links, decision blocks, comments, and editor deep links all use **`key`**. The **`id`** (`1.2`) is the human label only—do not put it in lasting references.
 
-Change `title`, `problem`, or `recommendation` for client-facing copy. Change `priority` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `blocked`, `complete`) for the pills on each card.
+Change `title`, `problem`, or `recommendation` for client-facing copy. Change `priority` (`critical`, `high`, `medium`, `low`) or `status` (`planned`, `in_progress`, `blocked`, `deferred`, `complete`) for the pills on each card.
+
+Optional estimate fields: `hours` (planned effort) and `actual_hours` (burn roll-up from an external time tracker, not logged in this app). Dollar amounts use `hours` or `actual_hours` × `hourly_rate` from `config.php` when the rate is set.
+
+**Blocked vs deferred:** set `status: blocked` when an Issue waits on a Questions answer or other gate — it stays in the Estimate quote (Remaining / Grand). Set `status: deferred` when the client does not want the work now — it appears on the Estimate side line but is excluded from Done, Remaining, and Grand totals.
 
 `tags` show as chips on the issue detail page (filter links; editable there too). `acceptance` stays internal planning only — not shown in the presentation app.
 
@@ -219,7 +224,7 @@ Open `data/decisions.yaml`:
           caption: Homepage, dot-style slider
 ```
 
-`blocks` lists Issue **keys** linked to this question. Linked questions appear on those issue pages in the presentation. Set the linked note's `status: blocked` when it depends on the answer.
+`blocks` lists Issue **keys** linked to this question. Linked questions appear on those issue pages in the presentation. Set the linked note's `status: blocked` when it depends on the answer (still in the Estimate quote). Use `status: deferred` when the client does not want the work at this time (out of quote).
 
 Each question needs a stable **`key`** (UUID). The editor assigns one when you add a question; it is not shown to the client. Client answers are stored under that key in `data/responses/decisions.json`.
 

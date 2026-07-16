@@ -21,6 +21,29 @@ function editor_enabled(): bool {
     return editor_password() !== '';
 }
 
+/**
+ * Configured hourly rate for estimate/actual $, or null if unset/invalid.
+ */
+function editor_hourly_rate(): ?float
+{
+    global $editorConfig;
+    if (!array_key_exists('hourly_rate', $editorConfig)) {
+        return null;
+    }
+    $raw = $editorConfig['hourly_rate'];
+    if ($raw === null || $raw === '') {
+        return null;
+    }
+    if (!is_numeric($raw)) {
+        return null;
+    }
+    $rate = (float) $raw;
+    if (!is_finite($rate) || $rate < 0) {
+        return null;
+    }
+    return $rate;
+}
+
 function editor_session_lifetime(): int {
     global $editorConfig;
     $days = (int) ($editorConfig['editor_session_days'] ?? 30);

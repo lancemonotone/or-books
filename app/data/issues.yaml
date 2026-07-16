@@ -338,7 +338,7 @@
   sprint: 2
   title: Use one slider style across the site
   priority: medium
-  status: blocked
+  status: deferred
   tags:
     - carousels
     - homepage
@@ -590,7 +590,7 @@
   sprint: 4
   title: Keep bookseller signup on orbooks.com
   priority: medium
-  status: blocked
+  status: deferred
   tags:
     - forms
     - mailchimp
@@ -681,7 +681,7 @@
   sprint: 4
   title: Rights Catalogs page
   priority: medium
-  status: blocked
+  status: deferred
   tags:
     - content
     - rights
