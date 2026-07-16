@@ -31,24 +31,22 @@ try {
     $record = normalize_comment_record($existing);
 
     if ($action === 'stance') {
-        $stance = parse_stance_value($body['stance'] ?? '');
         $author = sanitize_author($body['author'] ?? '');
         $text = sanitize_text($body['text'] ?? '');
-        $openingText = opening_message_text($stance, $text);
 
-        if ($openingText === '') {
-            respond_json(422, ['error' => 'Choose an agree option or add a note.']);
+        if ($text === '') {
+            respond_json(422, ['error' => 'Comment text is required.']);
         }
 
         $now = gmdate('c');
-        $record['stance'] = $stance;
+        $record['stance'] = '';
         $record['author'] = $author;
         $record['updatedAt'] = $now;
 
         $messages = $record['messages'];
         if ($messages === []) {
-            $messages[] = make_message($author, $openingText, $now);
-        } elseif ($text !== '') {
+            $messages[] = make_message($author, $text, $now);
+        } else {
             $last = $messages[array_key_last($messages)];
             if ($last && authors_match($last['author'], $author)) {
                 $messages[array_key_last($messages)]['text'] = $text;
@@ -61,7 +59,7 @@ try {
         $record['messages'] = array_values($messages);
         $record['text'] = $messages !== []
             ? $messages[array_key_last($messages)]['text']
-            : $openingText;
+            : $text;
 
         $all[$issueId] = $record;
         save_comments($all);
@@ -124,11 +122,8 @@ try {
         $now = gmdate('c');
         $isOpening = count($messages) === 1;
 
-        if ($isOpening && array_key_exists('stance', $body)) {
-            $stance = parse_stance_value($body['stance'] ?? '');
-            $openingText = opening_message_text($stance, $text);
-
-            if ($openingText === '') {
+        if ($text === '') {
+            if ($isOpening) {
                 unset($all[$issueId]);
                 save_comments($all);
                 respond_json(200, [
@@ -140,31 +135,14 @@ try {
                     'cleared' => true,
                 ]);
             }
-
-            $messages[0]['text'] = $openingText;
-            $messages[0]['updatedAt'] = $now;
-            $record['stance'] = $stance;
-            $record['messages'] = array_values($messages);
-            $record['text'] = $openingText;
-            $record['updatedAt'] = $now;
-            $record['author'] = $author;
-
-            $all[$issueId] = $record;
-            save_comments($all);
-            try {
-                notify_comment_event($issueId, $author, $record);
-            } catch (Throwable $notifyError) {
-                error_log('notify_comment_event: ' . $notifyError->getMessage());
-            }
-            respond_json(200, $record);
-        }
-
-        if ($text === '') {
             respond_json(422, ['error' => 'Message text is required.']);
         }
 
         $messages[$lastIndex]['text'] = $text;
         $messages[$lastIndex]['updatedAt'] = $now;
+        if ($isOpening) {
+            $record['stance'] = '';
+        }
         $record['messages'] = array_values($messages);
         $record['text'] = $text;
         $record['updatedAt'] = $now;

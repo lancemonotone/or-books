@@ -1,9 +1,10 @@
 import {
   loadContent,
   loadResponses,
-  saveComment,
   saveDecision,
   saveIssuePriority,
+  saveIssueStatus,
+  saveIssuePhase,
   saveIssueTags,
   saveSettings,
   loadSettings,
@@ -70,10 +71,6 @@ const COPY = {
   summary: "Summary",
   viewAll: "View all",
   suggestions: "suggested changes",
-  decisionsNeeded: "Questions for you",
-  decisionsLead: (n) =>
-    `${n} questions need answers before related work can continue.`,
-  reviewDecisions: "Answer the questions",
   openAllPhases: "Open all",
   closeAllPhases: "Close all",
   evidenceNoUrl: "No page URL",
@@ -89,7 +86,7 @@ const COPY = {
   conversation: "Conversation",
   conversationLead: "Feedback and replies on this issue.",
   yourReply: "Your reply",
-  firstNotePlaceholder: "Add a note (optional)…",
+  firstNotePlaceholder: "Add a note…",
   replyPlaceholder: "Write a reply…",
   sendReply: "Send",
   editMessage: "Edit",
@@ -104,18 +101,11 @@ const COPY = {
   nameClear: "Clear name",
   nameRequired: "Select your name from the list.",
   nameEmptyList: "Add people under Settings first.",
-  doYouAgree: "Do you agree?",
-  stanceNone: "No choice",
-  agree: "Yes",
-  disagree: "No",
-  discuss: "Not sure yet",
   commentsOptional: "Comments (optional)",
   noteOptional: "Note (optional)",
   saveFeedback: "Save",
   saveDecision: "Save answer",
   commentOptional: "Comment (optional)",
-  decisionsPageTitle: "Questions for you",
-  decisionsPageLead: "Your answers determine how the marked items are handled.",
   ourSuggestion: "Suggested approach",
   summaryTitle: "Summary of replies",
   summaryLead:
@@ -185,9 +175,25 @@ const PRIORITY_SORT_RANK = {
 const STATUS_LABELS = {
   planned: "Planned",
   in_progress: "In progress",
-  blocked: "Waiting on you",
-  complete: "Complete",
+  blocked: "Blocked",
   deferred: "Deferred",
+  complete: "Complete",
+};
+
+const STATUS_OPTIONS = [
+  "planned",
+  "in_progress",
+  "blocked",
+  "deferred",
+  "complete",
+];
+
+const STATUS_SORT_RANK = {
+  planned: 0,
+  in_progress: 1,
+  blocked: 2,
+  deferred: 3,
+  complete: 4,
 };
 
 const state = {
@@ -380,6 +386,30 @@ function priorityLabel(priority) {
 
 function statusLabel(status) {
   return STATUS_LABELS[status] || status;
+}
+
+/** Compact date for Summary tables (full stamp on hover via title). */
+function formatSummaryDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return { label: "", title: "", iso: "" };
+  }
+  return {
+    label: date.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+    }),
+    title: date.toLocaleString(),
+    iso: date.toISOString(),
+  };
+}
+
+function renderSummaryDateCell(value) {
+  const { label, title, iso } = formatSummaryDate(value);
+  if (!label) {
+    return "";
+  }
+  return `<time datetime="${escapeHtml(iso)}" title="${escapeHtml(title)}">${escapeHtml(label)}</time>`;
 }
 
 /** Cool hues only (no priority reds). Consecutive phases take opposite ends, then advance inward. */
@@ -1017,56 +1047,6 @@ function bindAuthorPickers(root = main) {
   }
 }
 
-function renderStanceFieldset(selected = "", { name = "stance" } = {}) {
-  const current = String(selected || "");
-  const options = [
-    { value: "", label: COPY.stanceNone },
-    { value: "agree", label: COPY.agree },
-    { value: "disagree", label: COPY.disagree },
-    { value: "discuss", label: COPY.discuss },
-  ];
-  return `
-    <fieldset class="stance-fieldset">
-      <legend>${escapeHtml(COPY.doYouAgree)}</legend>
-      ${options
-        .map(
-          (opt) =>
-            `<label><input type="radio" name="${escapeHtml(name)}" value="${escapeHtml(opt.value)}" ${current === opt.value ? "checked" : ""}> ${escapeHtml(opt.label)}</label>`,
-        )
-        .join("")}
-    </fieldset>`;
-}
-
-function noteTextForOpening(message, stanceLabel) {
-  const text = String(message?.text || "").trim();
-  if (!text) {
-    return "";
-  }
-  if (stanceLabel && text === stanceLabel) {
-    return "";
-  }
-  return text;
-}
-
-function buildOpeningEditForm(message, stance) {
-  const stanceLabel = stance ? STANCE_LABELS[stance] || stance : "";
-  const noteValue = noteTextForOpening(message, stanceLabel);
-  return `
-    <form class="thread-msg__edit-form" data-edit-form="${escapeHtml(message.id)}" data-edit-opening="true">
-      ${renderStanceFieldset(stance || "")}
-      <label class="field">
-        <span class="field__label">${escapeHtml(COPY.noteOptional)}</span>
-        <textarea name="text" rows="2" maxlength="2000" placeholder="${escapeHtml(COPY.firstNotePlaceholder)}">${escapeHtml(noteValue)}</textarea>
-      </label>
-      <input type="hidden" name="author" value="${escapeHtml(message.author)}">
-      <div class="thread-msg__edit-actions">
-        <button type="submit" class="button">${escapeHtml(COPY.saveEdit)}</button>
-        <button type="button" class="button button--ghost" data-cancel-edit>${escapeHtml(COPY.cancelEdit)}</button>
-      </div>
-      <p class="save-status" role="status"></p>
-    </form>`;
-}
-
 function buildReplyEditForm(message) {
   return `
     <form class="thread-msg__edit-form" data-edit-form="${escapeHtml(message.id)}">
@@ -1086,9 +1066,6 @@ function buildReplyEditForm(message) {
 function renderThreadMessages(issue) {
   const row = commentRecord(issue.key);
   const messages = row?.messages || [];
-  const stanceLabel = row?.stance
-    ? STANCE_LABELS[row.stance] || row.stance
-    : "";
 
   if (!messages.length) {
     return "";
@@ -1100,19 +1077,10 @@ function renderThreadMessages(issue) {
         .map((message, index) => {
           const editable = canEditMessage(message, messages);
           const when = message.updatedAt || message.createdAt;
-          const isStanceOnly =
-            index === 0 &&
-            stanceLabel &&
-            String(message.text || "").trim() === stanceLabel;
-          const stancePill =
-            index === 0 && stanceLabel
-              ? `<span class="thread-msg__stance">${escapeHtml(stanceLabel)}</span>`
-              : "";
           return `
-            <article class="thread-msg" data-message-id="${escapeHtml(message.id)}" data-opening="${index === 0 && messages.length === 1 ? "true" : "false"}" data-stance="${escapeHtml(row?.stance || "")}">
+            <article class="thread-msg" data-message-id="${escapeHtml(message.id)}" data-opening="${index === 0 && messages.length === 1 ? "true" : "false"}">
               <header class="thread-msg__head">
                 <span class="thread-msg__author">${escapeHtml(message.author)}</span>
-                ${stancePill}
                 <time class="thread-msg__time" datetime="${escapeHtml(when || "")}">${escapeHtml(when ? new Date(when).toLocaleString() : "")}</time>
                 ${
                   editable
@@ -1120,11 +1088,7 @@ function renderThreadMessages(issue) {
                     : ""
                 }
               </header>
-              ${
-                isStanceOnly
-                  ? ""
-                  : `<div class="thread-msg__body" data-message-body>${escapeHtml(message.text)}</div>`
-              }
+              <div class="thread-msg__body" data-message-body>${escapeHtml(message.text)}</div>
               <div data-edit-slot></div>
             </article>`;
         })
@@ -1137,19 +1101,16 @@ function renderCommentForm(issue) {
   const messages = saved?.messages || [];
   const isFirst = messages.length === 0;
 
-  const stanceBlock = isFirst ? renderStanceFieldset("") : "";
-
   return `
     <section class="feedback-panel" id="feedback">
       <h2>${escapeHtml(COPY.yourFeedback)}</h2>
       ${renderThreadMessages(issue)}
       <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}" data-feedback-mode="${isFirst ? "first" : "reply"}">
-        ${stanceBlock}
         <div class="feedback-composer">
           ${renderAuthorPicker(getAuthor("comment"), { id: `issue-${issue.key}` })}
           <label class="field">
             <span class="visually-hidden">${escapeHtml(COPY.yourReply)}</span>
-            <textarea name="text" rows="2" maxlength="2000" ${isFirst ? "" : "required"} placeholder="${escapeHtml(isFirst ? COPY.firstNotePlaceholder : COPY.replyPlaceholder)}"></textarea>
+            <textarea name="text" rows="2" maxlength="2000" required placeholder="${escapeHtml(isFirst ? COPY.firstNotePlaceholder : COPY.replyPlaceholder)}"></textarea>
           </label>
           <div class="feedback-form__actions">
             <button type="submit" class="button">${escapeHtml(isFirst ? COPY.saveFeedback : COPY.sendReply)}</button>
@@ -1385,22 +1346,75 @@ function renderPriorityControl(issue, { editable = false } = {}) {
   }).join("");
 
   return `
-    <label class="priority-control">
+    <label class="pill-control">
       <span class="visually-hidden">Priority</span>
       <select
-        class="priority-control__select pill pill--${escapeHtml(priority)}"
+        class="pill-control__select pill pill--${escapeHtml(priority)}"
         data-issue-priority="${escapeHtml(issue.key)}"
         aria-label="Priority"
       >${options}</select>
     </label>`;
 }
 
-function renderMetaRow(issue, { editablePriority = false } = {}) {
+function renderStatusControl(issue, { editable = false } = {}) {
+  const status = String(issue.status || "");
+  if (!editable) {
+    return `<a class="pill pill--status pill--${escapeHtml(status)}" href="#/issues/status/${escapeHtml(status)}">${escapeHtml(statusLabel(status))}</a>`;
+  }
+
+  const options = STATUS_OPTIONS.map((value) => {
+    const selected = value === status ? " selected" : "";
+    return `<option value="${escapeHtml(value)}"${selected}>${escapeHtml(statusLabel(value))}</option>`;
+  }).join("");
+
+  return `
+    <label class="pill-control">
+      <span class="visually-hidden">Status</span>
+      <select
+        class="pill-control__select pill pill--status pill--${escapeHtml(status)}"
+        data-issue-status="${escapeHtml(issue.key)}"
+        aria-label="Status"
+      >${options}</select>
+    </label>`;
+}
+
+function renderPhaseControl(issue, { editable = false } = {}) {
+  const sprintId = issue.sprint;
+  if (!editable) {
+    return renderPhasePill(sprintId);
+  }
+
+  const sprints = state.audit?.sprints || [];
+  const options = sprints
+    .map((sprint) => {
+      const value = String(sprint.id);
+      const selected = String(sprintId) === value ? " selected" : "";
+      const label = phasePillLabel(sprint.id);
+      return `<option value="${escapeHtml(value)}"${selected}>${escapeHtml(label)}</option>`;
+    })
+    .join("");
+
+  return `
+    <label class="pill-control">
+      <span class="visually-hidden">${escapeHtml(COPY.phase)}</span>
+      <select
+        class="pill-control__select pill pill--phase"
+        style="${phaseStyleAttr(sprintId)}"
+        data-issue-phase="${escapeHtml(issue.key)}"
+        aria-label="${escapeHtml(COPY.phase)}"
+      >${options}</select>
+    </label>`;
+}
+
+function renderMetaRow(
+  issue,
+  { editablePriority = false, editableStatus = false, editablePhase = false } = {},
+) {
   return `
     <div class="meta-row">
-      ${renderPhasePill(issue.sprint)}
+      ${renderPhaseControl(issue, { editable: editablePhase })}
       ${renderPriorityControl(issue, { editable: editablePriority })}
-      <a class="pill pill--status pill--${escapeHtml(issue.status)}" href="#/issues/status/${escapeHtml(issue.status)}">${escapeHtml(statusLabel(issue.status))}</a>
+      ${renderStatusControl(issue, { editable: editableStatus })}
     </div>`;
 }
 
@@ -1614,7 +1628,6 @@ function renderPhasesAccordion(openPhaseIds) {
 function renderOverview() {
   const openPhases = parseOpenPhases(state.route.searchParams);
   const stats = overviewStats();
-  const pendingDecisions = stats.decisions;
 
   return `
     <div class="page page--overview">
@@ -1627,15 +1640,10 @@ function renderOverview() {
           <li><strong>${stats.screenshots}</strong> screenshots</li>
           <li><strong>${stats.recordings}</strong> recordings</li>
           <li><strong>${stats.issues}</strong> issues</li>
-          <li><strong>${pendingDecisions}</strong> questions</li>
+          <li><strong>${stats.decisions}</strong> questions</li>
         </ul>
       </header>
       ${renderPhasesAccordion(openPhases)}
-      <section class="section section--callout">
-        <h2>${escapeHtml(COPY.decisionsNeeded)}</h2>
-        <p>${escapeHtml(COPY.decisionsLead(pendingDecisions))}</p>
-        <a class="button" href="#/decisions">${escapeHtml(COPY.reviewDecisions)}</a>
-      </section>
     </div>`;
 }
 
@@ -1734,7 +1742,11 @@ function renderIssueDetail(issueKey) {
             <h1>${escapeHtml(issue.title)}</h1>
             ${renderEditLink({ tab: "issues", issue: issue.key, label: `Edit issue ${issue.id}` })}
           </div>
-          ${renderMetaRow(issue, { editablePriority: true })}
+          ${renderMetaRow(issue, {
+            editablePriority: true,
+            editableStatus: true,
+            editablePhase: true,
+          })}
           ${renderIssueEstimateMeta(issue)}
         </header>
         <section class="prose">
@@ -1853,20 +1865,6 @@ function decisionEvidenceFiles(decision) {
   return files;
 }
 
-function groupDecisionsByPhase() {
-  return (state.audit?.sprints || [])
-    .map((sprint) => {
-      const decisions = state.decisions.filter((decision) =>
-        (decision.blocks || []).some((key) => {
-          const issue = issueByKey(key);
-          return issue && String(issue.sprint) === String(sprint.id);
-        }),
-      );
-      return { sprint, decisions };
-    })
-    .filter((group) => group.decisions.length > 0);
-}
-
 function renderDecisionCard(decision) {
   const decisionKey = decision.key;
   const saved = state.responses.decisions[decisionKey];
@@ -1917,43 +1915,6 @@ function renderDecisionCard(decision) {
         </div>
       </form>
     </article>`;
-}
-
-function renderDecisions() {
-  const groups = groupDecisionsByPhase();
-  const accordion = groups
-    .map(({ sprint, decisions }) => {
-      return `
-        <details class="phases-accordion__item decisions-accordion__item" data-decision-phase="${escapeHtml(String(sprint.id))}" style="${phaseStyleAttr(sprint.id)}">
-          <summary class="phases-accordion__summary">
-            <span class="phases-accordion__heading">
-              <span class="phases-accordion__title">${renderPhasePill(sprint.id, { linked: false })}<span class="phases-accordion__title-text">${escapeHtml(sprint.title)}</span></span>
-              <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
-            </span>
-            <span class="phases-accordion__meta">${escapeHtml(COPY.decisionCount(decisions.length))}</span>
-            <span class="phases-accordion__chevron" aria-hidden="true">›</span>
-          </summary>
-          <div class="phases-accordion__panel">
-            <div class="issue-list">${decisions.map(renderDecisionCard).join("")}</div>
-          </div>
-        </details>`;
-    })
-    .join("");
-
-  return `
-    <div class="page page--decisions">
-      <header class="page-header">
-        <div class="page-header__row">
-          <h1>${escapeHtml(COPY.decisionsPageTitle)}</h1>
-          ${renderAccordionControls({
-            openAttr: "data-decisions-open-all",
-            closeAttr: "data-decisions-close-all",
-          })}
-        </div>
-        <p class="lede">${escapeHtml(COPY.decisionsPageLead)}</p>
-      </header>
-      <div class="phases-accordion decisions-accordion">${accordion}</div>
-    </div>`;
 }
 
 function renderCommentSummaryCell(row) {
@@ -2081,7 +2042,7 @@ function renderResponses() {
         <td><strong>${escapeHtml(row.choice)}</strong></td>
         ${sortCell(author.toLowerCase(), escapeHtml(author))}
         <td>${escapeHtml(row.text || "")}</td>
-        ${sortCell(updatedAt, escapeHtml(new Date(row.updatedAt).toLocaleString()))}
+        ${sortCell(updatedAt, renderSummaryDateCell(row.updatedAt))}
       </tr>`;
     })
     .join("");
@@ -2094,7 +2055,6 @@ function renderResponses() {
     .sort((a, b) => a.rank - b.rank)
     .map(({ key, row, issue }) => {
       const normalized = normalizeCommentClient(row) || row;
-      const stance = STANCE_LABELS[normalized.stance] || normalized.stance;
       const label = renderSummaryItemLabel(
         issue ? [key] : [],
         issue?.title,
@@ -2110,14 +2070,25 @@ function renderResponses() {
       const priorityCell = issue
         ? renderPriorityControl(issue, { editable: true })
         : "";
+      const status = String(issue?.status || "");
+      const statusRank = STATUS_SORT_RANK[status] ?? STATUS_OPTIONS.length;
+      const statusCell = issue
+        ? renderStatusControl(issue, { editable: true })
+        : "";
       const updatedAt = Number(new Date(normalized.updatedAt)) || 0;
-      return `<tr>
+      const rowClasses = ["summary-row--phase"];
+      if (status === "deferred") {
+        rowClasses.push("summary-row--deferred");
+      }
+      const phaseStyle = issue?.sprint != null ? phaseStyleAttr(issue.sprint) : "";
+      const styleAttr = phaseStyle ? ` style="${phaseStyle}"` : "";
+      return `<tr class="${rowClasses.join(" ")}"${styleAttr}>
         ${sortCell(issueIdSortRank(issue), label)}
         ${sortCell(priorityRank, priorityCell)}
-        ${sortCell(String(stance).toLowerCase(), `<strong>${escapeHtml(stance)}</strong>`)}
+        ${sortCell(statusRank, statusCell)}
         ${sortCell(author.toLowerCase(), escapeHtml(author))}
         <td>${commentCell}</td>
-        ${sortCell(updatedAt, escapeHtml(new Date(normalized.updatedAt).toLocaleString()))}
+        ${sortCell(updatedAt, renderSummaryDateCell(normalized.updatedAt))}
       </tr>`;
     })
     .join("");
@@ -2153,7 +2124,7 @@ function renderResponses() {
               <tr>
                 ${renderSortableTh("issue", "Issue", "ascending")}
                 ${renderSortableTh("priority", "Priority")}
-                ${renderSortableTh("reply", "Reply")}
+                ${renderSortableTh("status", "Status")}
                 ${renderSortableTh("name", "Name")}
                 ${renderPlainTh("Comment")}
                 ${renderSortableTh("date", "Date")}
@@ -2534,8 +2505,6 @@ function renderRoute() {
       return renderEvidenceGallery();
     case "evidence-item":
       return renderEvidenceGallery(params.file);
-    case "decisions":
-      return renderDecisions();
     case "estimates":
       return renderEstimatesPage();
     case "responses":
@@ -3128,7 +3097,6 @@ function bindPageHandlers() {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const issueId = form.dataset.commentForm;
-      const mode = form.dataset.feedbackMode || "first";
       const picker = form.querySelector("[data-author-picker]");
       const author = syncAuthorPicker(picker);
       if (!author) {
@@ -3143,19 +3111,10 @@ function bindPageHandlers() {
       const status = form.querySelector(".save-status");
       try {
         button.disabled = true;
-        let result;
-        if (mode === "reply") {
-          result = await postCommentReply(issueId, {
-            text: data.get("text"),
-            author,
-          });
-        } else {
-          result = await saveComment(issueId, {
-            stance: data.get("stance"),
-            text: data.get("text"),
-            author,
-          });
-        }
+        const result = await postCommentReply(issueId, {
+          text: data.get("text"),
+          author,
+        });
         state.responses.comments[issueId] =
           normalizeCommentClient(result) || result;
         status.textContent = `${COPY.lastSaved} ${new Date(result.updatedAt).toLocaleString()}`;
@@ -3184,20 +3143,9 @@ function bindPageHandlers() {
       const message = {
         id,
         author: article.querySelector(".thread-msg__author")?.textContent || "",
-        text: body?.textContent || article.dataset.stanceLabel || "",
+        text: body?.textContent || "",
       };
-      const stance = article.dataset.stance || "";
-      const stanceLabel = stance ? STANCE_LABELS[stance] || stance : "";
-      if (!body && stanceLabel) {
-        message.text = stanceLabel;
-      }
-      const isOpening = article.dataset.opening === "true";
-      slot.innerHTML = isOpening
-        ? buildOpeningEditForm(message, stance)
-        : buildReplyEditForm({
-            ...message,
-            text: body?.textContent || message.text,
-          });
+      slot.innerHTML = buildReplyEditForm(message);
       button.hidden = true;
       if (body) {
         body.hidden = true;
@@ -3249,11 +3197,6 @@ function bindPageHandlers() {
         text: data.get("text") || "",
         author,
       };
-      if (form.dataset.editOpening === "true") {
-        payload.stance = data.has("stance")
-          ? String(data.get("stance") || "")
-          : "";
-      }
       try {
         button.disabled = true;
         const result = await editCommentMessage(issueId, payload);
@@ -3330,7 +3273,7 @@ function bindPageHandlers() {
       )?.priority;
       const priorityRank =
         PRIORITY_SORT_RANK[priority] ?? PRIORITY_OPTIONS.length;
-      select.className = `priority-control__select pill pill--${priority}`;
+      select.className = `pill-control__select pill pill--${priority}`;
       select.disabled = true;
       try {
         await saveIssuePriority(issueKey, priority);
@@ -3345,7 +3288,7 @@ function bindPageHandlers() {
       } catch (error) {
         if (previous) {
           select.value = previous;
-          select.className = `priority-control__select pill pill--${previous}`;
+          select.className = `pill-control__select pill pill--${previous}`;
           const sortCell = select.closest("td[data-sort-value]");
           if (sortCell) {
             const previousRank =
@@ -3354,6 +3297,107 @@ function bindPageHandlers() {
           }
         }
         window.alert(error.message || "Could not save priority.");
+      } finally {
+        select.disabled = false;
+      }
+    });
+  });
+
+  main.querySelectorAll("[data-issue-status]").forEach((select) => {
+    select.addEventListener("change", async () => {
+      const issueKey = select.dataset.issueStatus;
+      const status = select.value;
+      const previous = state.issues.find(
+        (item) => item.key === issueKey,
+      )?.status;
+      const statusRank = STATUS_SORT_RANK[status] ?? STATUS_OPTIONS.length;
+      select.className = `pill-control__select pill pill--status pill--${status}`;
+      select.disabled = true;
+      try {
+        await saveIssueStatus(issueKey, status);
+        const issue = state.issues.find((item) => item.key === issueKey);
+        if (issue) {
+          issue.status = status;
+        }
+        const sortCellEl = select.closest("td[data-sort-value]");
+        if (sortCellEl) {
+          sortCellEl.dataset.sortValue = String(statusRank);
+        }
+        const row = select.closest("tr");
+        if (row) {
+          row.classList.toggle("summary-row--deferred", status === "deferred");
+        }
+      } catch (error) {
+        if (previous) {
+          select.value = previous;
+          select.className = `pill-control__select pill pill--status pill--${previous}`;
+          const sortCellEl = select.closest("td[data-sort-value]");
+          if (sortCellEl) {
+            const previousRank =
+              STATUS_SORT_RANK[previous] ?? STATUS_OPTIONS.length;
+            sortCellEl.dataset.sortValue = String(previousRank);
+          }
+          const row = select.closest("tr");
+          if (row) {
+            row.classList.toggle(
+              "summary-row--deferred",
+              previous === "deferred",
+            );
+          }
+        }
+        window.alert(error.message || "Could not save status.");
+      } finally {
+        select.disabled = false;
+      }
+    });
+  });
+
+  main.querySelectorAll("[data-issue-phase]").forEach((select) => {
+    select.addEventListener("change", async () => {
+      const issueKey = select.dataset.issuePhase;
+      const sprint = Number(select.value);
+      const issue = state.issues.find((item) => item.key === issueKey);
+      const previousSprint = issue?.sprint;
+      const previousId = issue?.id;
+      select.style.cssText = phaseStyleAttr(sprint);
+      select.disabled = true;
+      try {
+        const result = await saveIssuePhase(issueKey, sprint);
+        const byKey = new Map(
+          (result.issues || []).map((row) => [row.key, row]),
+        );
+        for (const item of state.issues) {
+          const next = byKey.get(item.key);
+          if (!next) {
+            continue;
+          }
+          item.id = next.id;
+          item.sprint = next.sprint;
+        }
+        const sortCellEl = select.closest("td[data-sort-value]");
+        if (sortCellEl) {
+          sortCellEl.dataset.sortValue = String(sprint);
+        }
+        // Detail breadcrumb / Estimate need a full redraw when ids move.
+        if (state.route.name === "issue" || state.route.name === "estimates") {
+          render();
+        } else if (state.route.name === "responses") {
+          render();
+        }
+      } catch (error) {
+        if (previousSprint != null) {
+          select.value = String(previousSprint);
+          select.style.cssText = phaseStyleAttr(previousSprint);
+          const sortCellEl = select.closest("td[data-sort-value]");
+          if (sortCellEl) {
+            sortCellEl.dataset.sortValue = String(previousSprint);
+          }
+          if (issue && previousId) {
+            issue.sprint = previousSprint;
+            issue.id = previousId;
+          }
+        }
+        window.alert(error.message || "Could not save phase.");
       } finally {
         select.disabled = false;
       }
@@ -3394,24 +3438,6 @@ function bindPageHandlers() {
   if (evidenceCloseAll) {
     evidenceCloseAll.addEventListener("click", () => {
       main.querySelectorAll("details[data-evidence-group]").forEach((item) => {
-        item.open = false;
-      });
-    });
-  }
-
-  const decisionsOpenAll = main.querySelector("[data-decisions-open-all]");
-  const decisionsCloseAll = main.querySelector("[data-decisions-close-all]");
-  if (decisionsOpenAll) {
-    decisionsOpenAll.addEventListener("click", () => {
-      main.querySelectorAll("details[data-decision-phase]").forEach((item) => {
-        item.open = true;
-      });
-      primeVideoThumbs();
-    });
-  }
-  if (decisionsCloseAll) {
-    decisionsCloseAll.addEventListener("click", () => {
-      main.querySelectorAll("details[data-decision-phase]").forEach((item) => {
         item.open = false;
       });
     });

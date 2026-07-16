@@ -1290,11 +1290,13 @@ html[data-theme="dark"] .pill--phase {
   }
 }
 
+.pill-control,
 .priority-control {
   display: inline-flex;
   margin: 0;
 }
 
+.pill-control__select,
 .priority-control__select {
   appearance: none;
   font: inherit;
@@ -1303,7 +1305,8 @@ html[data-theme="dark"] .pill--phase {
   text-transform: uppercase;
   letter-spacing: 0.03em;
   line-height: 1.2;
-  padding: 0.4rem 1.5rem 0.4rem 0.5rem;
+  padding-block: 0.4rem;
+  padding-inline: 0.5rem 1.5rem;
   border: 0;
   border-radius: 999px;
   cursor: pointer;
@@ -2225,7 +2228,7 @@ html[data-theme="dark"] .pill--phase {
 
     & th:nth-child(5),
     & td:nth-child(5) {
-      inline-size: 11rem;
+      inline-size: 5.5rem;
       white-space: nowrap;
     }
   }
@@ -2233,18 +2236,14 @@ html[data-theme="dark"] .pill--phase {
   & .summary-table--feedback {
     & th:nth-child(1),
     & td:nth-child(1) {
-      inline-size: 22%;
+      inline-size: 20%;
     }
 
     & th:nth-child(2),
-    & td:nth-child(2) {
-      inline-size: 8.5rem;
-      white-space: nowrap;
-    }
-
+    & td:nth-child(2),
     & th:nth-child(3),
     & td:nth-child(3) {
-      inline-size: 7rem;
+      inline-size: 17ch;
       white-space: nowrap;
     }
 
@@ -2260,9 +2259,52 @@ html[data-theme="dark"] .pill--phase {
 
     & th:nth-child(6),
     & td:nth-child(6) {
-      inline-size: 11rem;
+      inline-size: 5.5rem;
       white-space: nowrap;
     }
+
+    & tr.summary-row--phase {
+      --summary-row-phase-bg: var(--phase-bg, var(--color-muted-surface));
+
+      background: color-mix(
+        in srgb,
+        var(--summary-row-phase-bg) 38%,
+        var(--color-surface)
+      );
+    }
+
+    & tr.summary-row--deferred {
+      --deferred-row-grayscale: 0.35;
+
+      color: var(--color-muted);
+      background: color-mix(
+        in srgb,
+        var(--color-muted) 45%,
+        var(--color-muted-surface)
+      );
+      filter: grayscale(var(--deferred-row-grayscale));
+      transition:
+        filter 0.15s ease,
+        background-color 0.15s ease;
+
+      &:hover,
+      &:focus-within {
+        --deferred-row-grayscale: 0.1;
+
+        background: color-mix(
+          in srgb,
+          var(--color-muted) 8%,
+          var(--color-muted-surface)
+        );
+      }
+    }
+  }
+
+  html[data-theme="dark"] & .summary-table--feedback tr.summary-row--phase {
+    --summary-row-phase-bg: var(
+      --phase-bg-dark,
+      var(--phase-bg, var(--color-muted-surface))
+    );
   }
 
   & .summary-item__label {
@@ -2603,7 +2645,8 @@ html[data-theme="dark"] .pill--phase {
 
   margin: 0;
   padding: 1rem;
-  border: 1px solid color-mix(in srgb, var(--color-deferred) 28%, var(--color-border));
+  border: 1px solid
+    color-mix(in srgb, var(--color-deferred) 28%, var(--color-border));
   border-radius: var(--radius);
   background: color-mix(
     in srgb,

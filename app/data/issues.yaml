@@ -338,7 +338,7 @@
   sprint: 2
   title: Use one slider style across the site
   priority: medium
-  status: blocked
+  status: planned
   tags:
     - carousels
     - homepage
@@ -489,27 +489,8 @@
     - No unexpected new tab or window opens for that module
   evidence:
     - file: 174154.png
-- key: f94186fe-383f-4e7f-9d60-fa99b3468ebe
-  id: '4.3'
-  sprint: 4
-  title: Scale the In Bookstores images on mobile
-  priority: medium
-  status: planned
-  tags:
-    - layout
-    - images
-    - 'Books, authors & media'
-  problem: |
-    On the In Bookstores section, the stock photos below the heading fills almost the entire phone screen. Little else is visible before scrolling, so the section feels oversized compared with other homepage modules.
-  recommendation: |
-    Limit image height on small screens so the heading, illustration, and a reasonable slice of the photo fit in the first screenful. Match the visual weight of other promotional blocks on the site.
-  acceptance:
-    - In Bookstores imagery does not dominate the full viewport on typical phone widths
-    - Section heading remains visible with the image scaled proportionally
-  evidence:
-    - file: 125329.png
 - key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
-  id: '4.4'
+  id: '4.3'
   sprint: 4
   title: Remove distracting motion on buttons
   priority: low
@@ -530,11 +511,11 @@
     - file: 173459.mp4
     - file: 123929.mp4
 - key: 22f6409d-b5e4-46b1-8086-f2839495505e
-  id: '4.5'
+  id: '4.4'
   sprint: 4
   title: Keep bookseller signup on orbooks.com
   priority: medium
-  status: blocked
+  status: planned
   tags:
     - forms
     - mailchimp
@@ -553,11 +534,11 @@
     - file: 125307.png
       caption: Booksellers page
 - key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
-  id: '4.6'
+  id: '4.5'
   sprint: 4
   title: Rights Catalogs page
   priority: medium
-  status: blocked
+  status: planned
   tags:
     - content
     - rights
@@ -716,3 +697,22 @@
     - Page slug spelled correctly
   evidence:
     - file: 125454.png
+- key: f94186fe-383f-4e7f-9d60-fa99b3468ebe
+  id: '5.8'
+  sprint: 5
+  title: Scale the In Bookstores images on mobile
+  priority: medium
+  status: deferred
+  tags:
+    - layout
+    - images
+    - 'Books, authors & media'
+  problem: |
+    On the In Bookstores section, the stock photos below the heading fills almost the entire phone screen. Little else is visible before scrolling, so the section feels oversized compared with other homepage modules.
+  recommendation: |
+    Limit image height on small screens so the heading, illustration, and a reasonable slice of the photo fit in the first screenful. Match the visual weight of other promotional blocks on the site.
+  acceptance:
+    - In Bookstores imagery does not dominate the full viewport on typical phone widths
+    - Section heading remains visible with the image scaled proportionally
+  evidence:
+    - file: 125329.png

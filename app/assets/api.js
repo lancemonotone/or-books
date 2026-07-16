@@ -132,6 +132,14 @@ export function saveIssuePriority(issueKey, priority) {
   return postJson('api/save-issue-priority.php', { issueKey, priority });
 }
 
+export function saveIssueStatus(issueKey, status) {
+  return postJson('api/save-issue-status.php', { issueKey, status });
+}
+
+export function saveIssuePhase(issueKey, sprint) {
+  return postJson('api/save-issue-phase.php', { issueKey, sprint });
+}
+
 export function saveIssueTags(issueKey, tags) {
   return postJson('api/save-issue-tags.php', { issueKey, tags });
 }

@@ -10,27 +10,23 @@ stats:
   decisions: 4
 sprints:
   - id: 1
-    title: First wave
-    subtitle: Delivery wave 1
-    description: |
-      Issues assigned to the first delivery wave.
+    subtitle: ''
+    title: ''
+    description: ''
   - id: 2
-    title: Second wave
-    subtitle: Delivery wave 2
-    description: |
-      Issues assigned to the second delivery wave.
+    subtitle: ''
+    title: ''
+    description: ''
   - id: 3
-    title: Third wave
-    subtitle: Delivery wave 3
-    description: |
-      Issues assigned to the third delivery wave.
+    subtitle: ''
+    title: ''
+    description: ''
   - id: 4
-    title: Fourth wave
-    subtitle: Delivery wave 4
-    description: |
-      Issues assigned to the fourth delivery wave.
+    subtitle: ''
+    title: ''
+    description: ''
   - id: 5
-    title: Deferred
     subtitle: Not in scope for now
+    title: Deferred
     description: |
       Issues the client has declined or parked. Shown on the Estimate side line; not included in Done, Remaining, or Grand totals.

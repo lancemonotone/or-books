@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/editor-lib.php';
 
-const ISSUE_PRIORITIES = ['critical', 'high', 'medium', 'low'];
+const ISSUE_STATUSES = ['planned', 'in_progress', 'blocked', 'deferred', 'complete'];
 
 editor_start_session();
 editor_require_auth();
@@ -19,14 +19,14 @@ editor_verify_csrf($body['csrf'] ?? null);
 editor_release_session();
 
 $issueKey = trim((string) ($body['issueKey'] ?? ''));
-$priority = trim((string) ($body['priority'] ?? ''));
+$status = trim((string) ($body['status'] ?? ''));
 
 if ($issueKey === '') {
     respond_json(422, ['error' => 'issueKey is required.']);
 }
 
-if (!in_array($priority, ISSUE_PRIORITIES, true)) {
-    respond_json(422, ['error' => 'Invalid priority.']);
+if (!in_array($status, ISSUE_STATUSES, true)) {
+    respond_json(422, ['error' => 'Invalid status.']);
 }
 
 $path = editor_data_path('issues');
@@ -34,10 +34,6 @@ if (!file_exists($path)) {
     respond_json(404, ['error' => 'Issues file not found.']);
 }
 
-/*
- * Lock a sidecar file, not issues.yaml itself.
- * Windows denies rename() onto a path that still has an open handle (code 5).
- */
 $lockPath = $path . '.lock';
 $lock = fopen($lockPath, 'c+');
 if ($lock === false) {
@@ -54,7 +50,7 @@ try {
         respond_json(500, ['error' => 'Could not read issues file.']);
     }
 
-    $updated = update_issue_priority_yaml($content, $issueKey, $priority);
+    $updated = update_issue_status_yaml($content, $issueKey, $status);
     editor_write_yaml('issues', $updated);
 } finally {
     flock($lock, LOCK_UN);
@@ -64,15 +60,15 @@ try {
 respond_json(200, [
     'ok' => true,
     'issueKey' => $issueKey,
-    'priority' => $priority,
+    'status' => $status,
     'savedAt' => gmdate('c'),
 ]);
 
 /**
- * Replace priority inside the YAML block for one issue key.
+ * Replace status inside the YAML block for one issue key.
  * Preserves the rest of the file as-is (no full re-dump).
  */
-function update_issue_priority_yaml(string $content, string $issueKey, string $priority): string
+function update_issue_status_yaml(string $content, string $issueKey, string $status): string
 {
     $escapedKey = preg_quote($issueKey, '/');
     $parts = preg_split('/(?=^- key:)/m', $content);
@@ -91,14 +87,14 @@ function update_issue_priority_yaml(string $content, string $issueKey, string $p
         $found = true;
         $count = 0;
         $part = preg_replace(
-            '/^([ \t]*)priority:\s*\S+[ \t]*\r?$/m',
-            '${1}priority: ' . $priority,
+            '/^([ \t]*)status:\s*\S+[ \t]*\r?$/m',
+            '${1}status: ' . $status,
             $part,
             1,
             $count
         );
         if (!is_string($part) || $count !== 1) {
-            respond_json(500, ['error' => 'Could not update priority for this issue.']);
+            respond_json(500, ['error' => 'Could not update status for this issue.']);
         }
         break;
     }
