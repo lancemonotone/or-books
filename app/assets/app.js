@@ -137,6 +137,13 @@ const PRIORITY_LABELS = {
 
 const PRIORITY_OPTIONS = ["critical", "high", "medium", "low"];
 
+const PRIORITY_SORT_RANK = {
+  critical: 0,
+  high: 1,
+  medium: 2,
+  low: 3,
+};
+
 const STATUS_LABELS = {
   planned: "Planned",
   in_progress: "In progress",
@@ -332,6 +339,29 @@ function compareIssueIds(a, b) {
     return aPhase - bPhase;
   }
   return aNum - bNum;
+}
+
+function issueIdSortRank(issueLike) {
+  if (!issueLike) {
+    return Number.MAX_SAFE_INTEGER;
+  }
+  const [phase = 0, num = 0] = String(issueLike.id || "")
+    .split(".")
+    .map(Number);
+  const phaseRank = Number.isFinite(phase) ? phase : 0;
+  const numRank = Number.isFinite(num) ? num : 0;
+  return phaseRank * 10000 + numRank;
+}
+
+function decisionIssueSortRank(decision) {
+  const issues = (decision?.blocks || [])
+    .map(issueByKey)
+    .filter(Boolean)
+    .sort(compareIssueIds);
+  if (!issues.length) {
+    return Number.MAX_SAFE_INTEGER;
+  }
+  return issueIdSortRank(issues[0]);
 }
 
 function orderedSprintIssues(sprintId) {
@@ -1716,6 +1746,72 @@ function renderCommentSummaryCell(row) {
     </details>`;
 }
 
+function renderSortableTh(key, label) {
+  return `<th data-sort-key="${escapeHtml(key)}" aria-sort="none"><button type="button" class="table-sort">${escapeHtml(label)}</button></th>`;
+}
+
+function renderPlainTh(label) {
+  return `<th>${escapeHtml(label)}</th>`;
+}
+
+function sortCell(value, html) {
+  return `<td data-sort-value="${escapeHtml(String(value ?? ""))}">${html}</td>`;
+}
+
+function compareSortValues(a, b) {
+  const an = Number(a);
+  const bn = Number(b);
+  const aNumeric = a !== "" && Number.isFinite(an);
+  const bNumeric = b !== "" && Number.isFinite(bn);
+  if (aNumeric && bNumeric) {
+    return an - bn;
+  }
+  return String(a).localeCompare(String(b), undefined, {
+    numeric: true,
+    sensitivity: "base",
+  });
+}
+
+function sortTableByColumn(table, colIndex, direction) {
+  const tbody = table.tBodies[0];
+  if (!tbody) {
+    return;
+  }
+  const rows = [...tbody.rows].filter(
+    (row) => !(row.cells.length === 1 && row.cells[0].hasAttribute("colspan")),
+  );
+  const multiplier = direction === "ascending" ? 1 : -1;
+  rows.sort((left, right) => {
+    const a = left.cells[colIndex]?.dataset.sortValue ?? "";
+    const b = right.cells[colIndex]?.dataset.sortValue ?? "";
+    return compareSortValues(a, b) * multiplier;
+  });
+  rows.forEach((row) => tbody.appendChild(row));
+}
+
+function bindSortableTables(root = main) {
+  root.querySelectorAll("table[data-sortable]").forEach((table) => {
+    table.querySelectorAll("th[data-sort-key] .table-sort").forEach((button) => {
+      button.addEventListener("click", () => {
+        const th = button.closest("th");
+        if (!th) {
+          return;
+        }
+        const headerRow = th.parentElement;
+        const colIndex = [...headerRow.children].indexOf(th);
+        const current = th.getAttribute("aria-sort");
+        const nextDir =
+          current === "ascending" ? "descending" : "ascending";
+        headerRow.querySelectorAll("th[data-sort-key]").forEach((header) => {
+          header.setAttribute("aria-sort", "none");
+        });
+        th.setAttribute("aria-sort", nextDir);
+        sortTableByColumn(table, colIndex, nextDir);
+      });
+    });
+  });
+}
+
 function renderResponses() {
   const decisionRows = Object.entries(state.responses.decisions)
     .map(([id, row]) => {
@@ -1725,7 +1821,15 @@ function renderResponses() {
         decision?.title,
         id,
       );
-      return `<tr><td>${label}</td><td><strong>${escapeHtml(row.choice)}</strong></td><td>${escapeHtml(row.author || "")}</td><td>${escapeHtml(row.text || "")}</td><td>${escapeHtml(new Date(row.updatedAt).toLocaleString())}</td></tr>`;
+      const author = String(row.author || "").trim();
+      const updatedAt = Number(new Date(row.updatedAt)) || 0;
+      return `<tr>
+        ${sortCell(decisionIssueSortRank(decision), label)}
+        <td><strong>${escapeHtml(row.choice)}</strong></td>
+        ${sortCell(author.toLowerCase(), escapeHtml(author))}
+        <td>${escapeHtml(row.text || "")}</td>
+        ${sortCell(updatedAt, escapeHtml(new Date(row.updatedAt).toLocaleString()))}
+      </tr>`;
     })
     .join("");
 
@@ -1743,7 +1847,21 @@ function renderResponses() {
       const author = String(
         normalized.messages?.[0]?.author || normalized.author || "",
       ).trim();
-      return `<tr><td>${label}</td><td><strong>${escapeHtml(stance)}</strong></td><td>${escapeHtml(author)}</td><td>${commentCell}</td><td>${escapeHtml(new Date(normalized.updatedAt).toLocaleString())}</td></tr>`;
+      const priority = String(issue?.priority || "");
+      const priorityRank =
+        PRIORITY_SORT_RANK[priority] ?? PRIORITY_OPTIONS.length;
+      const priorityCell = issue
+        ? renderPriorityControl(issue, { editable: false })
+        : "";
+      const updatedAt = Number(new Date(normalized.updatedAt)) || 0;
+      return `<tr>
+        ${sortCell(issueIdSortRank(issue), label)}
+        ${sortCell(priorityRank, priorityCell)}
+        ${sortCell(String(stance).toLowerCase(), `<strong>${escapeHtml(stance)}</strong>`)}
+        ${sortCell(author.toLowerCase(), escapeHtml(author))}
+        <td>${commentCell}</td>
+        ${sortCell(updatedAt, escapeHtml(new Date(normalized.updatedAt).toLocaleString()))}
+      </tr>`;
     })
     .join("");
 
@@ -1756,8 +1874,16 @@ function renderResponses() {
       <section class="section">
         <h2>Answers</h2>
         <div class="table-wrap">
-          <table>
-            <thead><tr><th>Question</th><th>Answer</th><th>Name</th><th>Comment</th><th>Date</th></tr></thead>
+          <table class="summary-table summary-table--answers" data-sortable>
+            <thead>
+              <tr>
+                ${renderSortableTh("question", "Question")}
+                ${renderPlainTh("Answer")}
+                ${renderSortableTh("name", "Name")}
+                ${renderPlainTh("Comment")}
+                ${renderSortableTh("date", "Date")}
+              </tr>
+            </thead>
             <tbody>${decisionRows || `<tr><td colspan="5">${escapeHtml(COPY.noDecisionsYet)}</td></tr>`}</tbody>
           </table>
         </div>
@@ -1765,9 +1891,18 @@ function renderResponses() {
       <section class="section">
         <h2>Feedback on issues</h2>
         <div class="table-wrap">
-          <table>
-            <thead><tr><th>Issue</th><th>Reply</th><th>Name</th><th>Comment</th><th>Date</th></tr></thead>
-            <tbody>${commentRows || `<tr><td colspan="5">${escapeHtml(COPY.noFeedbackYet)}</td></tr>`}</tbody>
+          <table class="summary-table summary-table--feedback" data-sortable>
+            <thead>
+              <tr>
+                ${renderSortableTh("issue", "Issue")}
+                ${renderSortableTh("priority", "Priority")}
+                ${renderSortableTh("reply", "Reply")}
+                ${renderSortableTh("name", "Name")}
+                ${renderPlainTh("Comment")}
+                ${renderSortableTh("date", "Date")}
+              </tr>
+            </thead>
+            <tbody>${commentRows || `<tr><td colspan="6">${escapeHtml(COPY.noFeedbackYet)}</td></tr>`}</tbody>
           </table>
         </div>
       </section>
@@ -2207,6 +2342,8 @@ function primeVideoThumbs(root = main) {
 }
 
 function bindPageHandlers() {
+  bindSortableTables();
+
   main.querySelectorAll("[data-open-evidence]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const gallery = parseEvidenceGallery(btn);
