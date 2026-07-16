@@ -452,27 +452,8 @@
   evidence:
     - file: 123434.png
       caption: Footer alignment
-- key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
-  id: '4.1'
-  sprint: 4
-  title: Fix Reading Lists View All page
-  priority: high
-  status: deferred
-  tags:
-    - navigation
-    - homepage
-    - Getting around
-  problem: |
-    View All under Reading Lists goes to a page that shows the same information already on the homepage. There is nothing new there.
-  recommendation: |
-    Add real content on that page (descriptions, filters, etc.) or remove the link and keep the module on the homepage only.
-  acceptance:
-    - 'View All page adds value beyond the homepage module, or route is removed'
-  evidence:
-    - file: 164729.png
-    - file: 165045.png
 - key: 02bb4d06-502d-44db-907c-062d48f5e58c
-  id: '4.2'
+  id: '4.1'
   sprint: 4
   title: Give the header more room in the open menu
   priority: critical
@@ -490,7 +471,7 @@
   evidence:
     - file: 120802.png
 - key: d64c6362-1054-468f-a9cb-3f1feb2473ab
-  id: '4.3'
+  id: '4.2'
   sprint: 4
   title: Keep Featured Title links in the same tab
   priority: medium
@@ -508,26 +489,8 @@
     - No unexpected new tab or window opens for that module
   evidence:
     - file: 174154.png
-- key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
-  id: '4.4'
-  sprint: 4
-  title: Make author photos the same size and shape
-  priority: high
-  status: deferred
-  tags:
-    - images
-    - authors
-    - 'Books, authors & media'
-  problem: |
-    Author photos in the grid are cropped differently. Some look stretched or cut off awkwardly.
-  recommendation: Crop every author image to the same proportions. Handle missing photos cleanly. This can be done manually (more control), or via stylesheet rules (e.g., automatic square crop).
-  acceptance:
-    - All author grid images share one crop ratio
-  evidence:
-    - file: 123519.png
-    - file: 123704.png
 - key: f94186fe-383f-4e7f-9d60-fa99b3468ebe
-  id: '4.5'
+  id: '4.3'
   sprint: 4
   title: Scale the In Bookstores images on mobile
   priority: medium
@@ -545,27 +508,8 @@
     - Section heading remains visible with the image scaled proportionally
   evidence:
     - file: 125329.png
-- key: 12737e6f-b52c-4f53-97b6-50c68e98a871
-  id: '4.6'
-  sprint: 4
-  title: Keep accordion titles steady on hover
-  priority: low
-  status: deferred
-  tags:
-    - components
-    - interaction
-    - 'Books, authors & media'
-  problem: |
-    On some pages with accordions (for example author profiles), hovering or tapping a section title makes the text animate or shift. The motion draws attention away from the content and feels out of place.
-  recommendation: |
-    Keep accordion titles visually stable on hover, focus, and tap. If you need feedback, use a subtle change to the arrow or background, not animated title text.
-  acceptance:
-    - 'Accordion title text does not animate or shift on hover, focus, or tap'
-    - Any feedback uses arrow or background only
-  evidence:
-    - file: 122948.mp4
 - key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
-  id: '4.7'
+  id: '4.4'
   sprint: 4
   title: Remove distracting motion on buttons
   priority: low
@@ -586,7 +530,7 @@
     - file: 173459.mp4
     - file: 123929.mp4
 - key: 22f6409d-b5e4-46b1-8086-f2839495505e
-  id: '4.8'
+  id: '4.5'
   sprint: 4
   title: Keep bookseller signup on orbooks.com
   priority: medium
@@ -608,9 +552,85 @@
       caption: External signup form
     - file: 125307.png
       caption: Booksellers page
-- key: 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
-  id: '4.9'
+- key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
+  id: '4.6'
   sprint: 4
+  title: Rights Catalogs page
+  priority: medium
+  status: blocked
+  tags:
+    - content
+    - rights
+    - 'Trust & polish'
+  problem: |
+    The Rights Catalogs page (/rights-catalogs) is still placeholder copy. The body is Lorem Ipsum, but the page is linked in the site navigation. Visitors can open a page that looks unfinished.
+  recommendation: |
+    Do not leave placeholder text live in the menu. Recommended: hide the page from navigation until real catalog content is ready. See Questions for you to choose hide, populate, or remove.
+  acceptance:
+    - No Lorem Ipsum remains on any public page
+    - Navigation lists Rights Catalogs only if the page has real content (or the page is removed per your answer)
+    - 'If hidden, the link is removed from menus until content is ready'
+  evidence:
+    - file: 125507.png
+- key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
+  id: '5.1'
+  sprint: 5
+  title: Fix Reading Lists View All page
+  priority: high
+  status: deferred
+  tags:
+    - navigation
+    - homepage
+    - Getting around
+  problem: |
+    View All under Reading Lists goes to a page that shows the same information already on the homepage. There is nothing new there.
+  recommendation: |
+    Add real content on that page (descriptions, filters, etc.) or remove the link and keep the module on the homepage only.
+  acceptance:
+    - 'View All page adds value beyond the homepage module, or route is removed'
+  evidence:
+    - file: 164729.png
+    - file: 165045.png
+- key: 74c65dc5-7a86-4fe3-8327-cf3be9715f38
+  id: '5.2'
+  sprint: 5
+  title: Make author photos the same size and shape
+  priority: high
+  status: deferred
+  tags:
+    - images
+    - authors
+    - 'Books, authors & media'
+  problem: |
+    Author photos in the grid are cropped differently. Some look stretched or cut off awkwardly.
+  recommendation: Crop every author image to the same proportions. Handle missing photos cleanly. This can be done manually (more control), or via stylesheet rules (e.g., automatic square crop).
+  acceptance:
+    - All author grid images share one crop ratio
+  evidence:
+    - file: 123519.png
+    - file: 123704.png
+- key: 12737e6f-b52c-4f53-97b6-50c68e98a871
+  id: '5.3'
+  sprint: 5
+  title: Keep accordion titles steady on hover
+  priority: low
+  status: deferred
+  tags:
+    - components
+    - interaction
+    - 'Books, authors & media'
+  problem: |
+    On some pages with accordions (for example author profiles), hovering or tapping a section title makes the text animate or shift. The motion draws attention away from the content and feels out of place.
+  recommendation: |
+    Keep accordion titles visually stable on hover, focus, and tap. If you need feedback, use a subtle change to the arrow or background, not animated title text.
+  acceptance:
+    - 'Accordion title text does not animate or shift on hover, focus, or tap'
+    - Any feedback uses arrow or background only
+  evidence:
+    - file: 122948.mp4
+- key: 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
+  id: '5.4'
+  sprint: 5
   title: Fix the broken link in the privacy table of contents
   priority: high
   status: deferred
@@ -629,8 +649,8 @@
     - file: 125703.png
       caption: Privacy notice TOC item 4 not linked
 - key: 11ab1e09-5807-4688-85ed-437200d2fcce
-  id: '4.10'
-  sprint: 4
+  id: '5.5'
+  sprint: 5
   title: Show email addresses the same way everywhere
   priority: high
   status: deferred
@@ -657,8 +677,8 @@
     - file: 123949.png
       caption: Contact page
 - key: b59b43f9-981e-4656-8535-9eee882dcebc
-  id: '4.11'
-  sprint: 4
+  id: '5.6'
+  sprint: 5
   title: Make the privacy table of contents easier to scan
   priority: medium
   status: deferred
@@ -676,29 +696,9 @@
   evidence:
     - file: 125703.png
       caption: Privacy notice TOC all-caps links
-- key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
-  id: '4.12'
-  sprint: 4
-  title: Rights Catalogs page
-  priority: medium
-  status: blocked
-  tags:
-    - content
-    - rights
-    - 'Trust & polish'
-  problem: |
-    The Rights Catalogs page (/rights-catalogs) is still placeholder copy. The body is Lorem Ipsum, but the page is linked in the site navigation. Visitors can open a page that looks unfinished.
-  recommendation: |
-    Do not leave placeholder text live in the menu. Recommended: hide the page from navigation until real catalog content is ready. See Questions for you to choose hide, populate, or remove.
-  acceptance:
-    - No Lorem Ipsum remains on any public page
-    - Navigation lists Rights Catalogs only if the page has real content (or the page is removed per your answer)
-    - 'If hidden, the link is removed from menus until content is ready'
-  evidence:
-    - file: 125507.png
 - key: 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
-  id: '4.13'
-  sprint: 4
+  id: '5.7'
+  sprint: 5
   title: Fix Rights Enquiries page heading typo
   priority: low
   status: deferred

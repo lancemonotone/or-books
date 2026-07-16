@@ -154,7 +154,7 @@ Prefer editing via **`/audit/edit/`** (it assigns `key` and a display `id` for n
 
 1. Prefer the editor’s **Add issue** (assigns `key` + display `id`).
 2. Or add a block to `issues.yaml` with a new UUID `key`, next display `id` in sequence (e.g. `1.10`), and the same fields as above.
-3. Set `sprint` to `1`, `2`, `3`, or `4` (Uncategorized) to place it in the right phase.
+3. Set `sprint` to `1`–`5` to place it in the right phase (5 = Deferred).
 4. Link screenshots under `evidence` (see below).
 
 ### Link a screenshot to a note
@@ -193,7 +193,7 @@ For videos, set `type: video` in `evidence.yaml`.
 
 Phases live in `data/audit.yaml` under `sprints`. Each phase has `id`, `title`, `subtitle`, and `description` (all client-facing).
 
-Current phases are delivery waves (**1 / 2 / 3**) plus **4 Uncategorized** — not the old theme buckets. Display `id` is `phase.sequence` (order within the phase only). Priority (`critical` / `high` / `medium` / `low`) is separate and can vary within a phase.
+Current phases are delivery waves (**1 / 2 / 3 / 4**) plus **5 Deferred**. Display `id` is `phase.sequence` (order within the phase only). Priority (`critical` / `high` / `medium` / `low`) is separate and can vary within a phase.
 
 Notes are assigned to a phase with the `sprint` field in `issues.yaml`. The phase `id` must match.
 

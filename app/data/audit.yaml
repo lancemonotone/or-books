@@ -25,7 +25,12 @@ sprints:
     description: |
       Issues assigned to the third delivery wave.
   - id: 4
-    title: Uncategorized
-    subtitle: Needs a phase
+    title: Fourth wave
+    subtitle: Delivery wave 4
     description: |
-      Issues not yet assigned to Phase 1, 2, or 3.
+      Issues assigned to the fourth delivery wave.
+  - id: 5
+    title: Deferred
+    subtitle: Not in scope for now
+    description: |
+      Issues the client has declined or parked. Shown on the Estimate side line; not included in Done, Remaining, or Grand totals.
