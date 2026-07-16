@@ -38,6 +38,7 @@
   --color-in-progress: #1d4ed8;
   --color-blocked: #7c2d12;
   --color-complete: #047857;
+  --color-deferred: #5b4b8a;
 
   /* Issue status — backgrounds */
   --color-status-critical-bg: #fde8e8;
@@ -48,6 +49,7 @@
   --color-status-in-progress-bg: #dbeafe;
   --color-status-blocked-bg: #ffedd5;
   --color-status-complete-bg: #d1fae5;
+  --color-status-deferred-bg: #ebe8f4;
 
   /* Editor danger affordances */
   --color-danger-text: #b91c1c;
@@ -102,6 +104,7 @@ html[data-theme="dark"] {
   --color-in-progress: #60a5fa;
   --color-blocked: #fdba74;
   --color-complete: #34d399;
+  --color-deferred: #c4b5fd;
 
   --color-status-critical-bg: #3a2222;
   --color-status-high-bg: #3a2a18;
@@ -111,6 +114,7 @@ html[data-theme="dark"] {
   --color-status-in-progress-bg: #1a2740;
   --color-status-blocked-bg: #3a2a18;
   --color-status-complete-bg: #1a3328;
+  --color-status-deferred-bg: #2a2640;
 
   --color-danger-text: #f87171;
   --color-danger-border: #7f1d1d;
