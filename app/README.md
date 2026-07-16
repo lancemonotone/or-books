@@ -144,7 +144,7 @@ Change `title`, `problem`, or `recommendation` for client-facing copy. Change `p
 
 Optional estimate fields: `hours` (planned effort) and `actual_hours` (burn roll-up from an external time tracker, not logged in this app). Dollar amounts use `hours` or `actual_hours` × `hourly_rate` from `config.php` when the rate is set.
 
-**Blocked vs deferred:** set `status: blocked` when an Issue waits on a Questions answer or other gate — it stays in the Estimate quote (Remaining / Grand). Set `status: deferred` when the client does not want the work now — it appears on the Estimate side line but is excluded from Done, Remaining, and Grand totals.
+**Blocked vs deferred:** set `status: blocked` (“Waiting on you”) when an Issue waits on a Questions answer or other client gate — it stays in the Estimate quote (Remaining / Grand). Set `status: deferred` when the client does not want the recommended work (often a No / disagree stance or matching comments — confirm iffy cases by hand). Deferred appears on the Estimate side line but is excluded from Done, Remaining, and Grand totals. Do not mass-convert Blocked → Deferred.
 
 `tags` show as chips on the issue detail page (filter links; editable there too). `acceptance` stays internal planning only — not shown in the presentation app.
 
@@ -224,7 +224,7 @@ Open `data/decisions.yaml`:
           caption: Homepage, dot-style slider
 ```
 
-`blocks` lists Issue **keys** linked to this question. Linked questions appear on those issue pages in the presentation. Set the linked note's `status: blocked` when it depends on the answer (still in the Estimate quote). Use `status: deferred` when the client does not want the work at this time (out of quote).
+`blocks` lists Issue **keys** linked to this question. Linked questions appear on those issue pages in the presentation. Set the linked note's `status: blocked` when it depends on the answer (Waiting on you; still in the Estimate quote). Use `status: deferred` only when the client has declined the recommended work (out of quote) — not as a rename of Blocked.
 
 Each question needs a stable **`key`** (UUID). The editor assigns one when you add a question; it is not shown to the client. Client answers are stored under that key in `data/responses/decisions.json`.
 
