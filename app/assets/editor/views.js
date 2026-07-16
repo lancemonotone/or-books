@@ -479,6 +479,7 @@ const ISSUE_STATUS_OPTIONS = [
   { value: "planned", label: "Planned" },
   { value: "in_progress", label: "In progress" },
   { value: "blocked", label: "Waiting on you" },
+  { value: "deferred", label: "Deferred" },
   { value: "complete", label: "Complete" },
 ];
 
@@ -827,6 +828,28 @@ function renderIssueForm(issue, audit, galleryEvidence = [], issues = []) {
           ${field("Priority", select("priority", issue.priority, ISSUE_PRIORITY_OPTIONS))}
           ${field("Status", select("status", issue.status, ISSUE_STATUS_OPTIONS))}
         </div>
+        <div class="editor-grid editor-grid--2">
+          ${field(
+            "Hours (estimate)",
+            input(
+              "hours",
+              issue.hours == null || issue.hours === "" ? "" : String(issue.hours),
+              "number",
+              'min="0" step="0.25"',
+            ),
+          )}
+          ${field(
+            "Actual hours",
+            input(
+              "actual_hours",
+              issue.actual_hours == null || issue.actual_hours === ""
+                ? ""
+                : String(issue.actual_hours),
+              "number",
+              'min="0" step="0.25"',
+            ),
+          )}
+        </div>
         ${field("Tags (comma separated)", input("tags", (issue.tags || []).join(", ")))}
         ${field("Issue Found", textarea("problem", issue.problem || "", 5))}
         ${field("Suggested Fix", textarea("recommendation", issue.recommendation || "", 5))}
@@ -1001,6 +1024,18 @@ function bindIssueForm(
   primeVideoThumbs(detail);
 }
 
+function readOptionalHours(form, name) {
+  const raw = form.querySelector(`[name="${name}"]`)?.value;
+  if (raw == null || String(raw).trim() === "") {
+    return null;
+  }
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < 0) {
+    throw new Error(`${name} must be a number ≥ 0.`);
+  }
+  return n;
+}
+
 function applyIssueForm(issue, root) {
   const form = root.querySelector("#issue-form");
   if (!form) {
@@ -1013,6 +1048,22 @@ function applyIssueForm(issue, root) {
   issue.title = form.querySelector('[name="title"]')?.value ?? "";
   issue.priority = form.querySelector('[name="priority"]')?.value ?? "medium";
   issue.status = form.querySelector('[name="status"]')?.value ?? "planned";
+  try {
+    const hours = readOptionalHours(form, "hours");
+    const actualHours = readOptionalHours(form, "actual_hours");
+    if (hours == null) {
+      delete issue.hours;
+    } else {
+      issue.hours = hours;
+    }
+    if (actualHours == null) {
+      delete issue.actual_hours;
+    } else {
+      issue.actual_hours = actualHours;
+    }
+  } catch (error) {
+    setEditorStatus(error.message, true);
+  }
   issue.tags = (form.querySelector('[name="tags"]')?.value || "")
     .split(",")
     .map((tag) => tag.trim())
