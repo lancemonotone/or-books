@@ -25,8 +25,8 @@ const AUTHOR_KEYS = {
 const THEME_KEY = "or-audit-theme";
 const BOOT_ENTER_MS = 700;
 const BOOT_LABEL_DELAY_MS = 500;
-const BOOT_HOLD_MS = 1500;
-const BOOT_EXIT_MS = 550;
+const BOOT_HOLD_MS = 1000;
+const BOOT_EXIT_MS = 500;
 
 const COPY = {
   overview: "Overview",
@@ -1791,24 +1791,25 @@ function sortTableByColumn(table, colIndex, direction) {
 
 function bindSortableTables(root = main) {
   root.querySelectorAll("table[data-sortable]").forEach((table) => {
-    table.querySelectorAll("th[data-sort-key] .table-sort").forEach((button) => {
-      button.addEventListener("click", () => {
-        const th = button.closest("th");
-        if (!th) {
-          return;
-        }
-        const headerRow = th.parentElement;
-        const colIndex = [...headerRow.children].indexOf(th);
-        const current = th.getAttribute("aria-sort");
-        const nextDir =
-          current === "ascending" ? "descending" : "ascending";
-        headerRow.querySelectorAll("th[data-sort-key]").forEach((header) => {
-          header.setAttribute("aria-sort", "none");
+    table
+      .querySelectorAll("th[data-sort-key] .table-sort")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const th = button.closest("th");
+          if (!th) {
+            return;
+          }
+          const headerRow = th.parentElement;
+          const colIndex = [...headerRow.children].indexOf(th);
+          const current = th.getAttribute("aria-sort");
+          const nextDir = current === "ascending" ? "descending" : "ascending";
+          headerRow.querySelectorAll("th[data-sort-key]").forEach((header) => {
+            header.setAttribute("aria-sort", "none");
+          });
+          th.setAttribute("aria-sort", nextDir);
+          sortTableByColumn(table, colIndex, nextDir);
         });
-        th.setAttribute("aria-sort", nextDir);
-        sortTableByColumn(table, colIndex, nextDir);
       });
-    });
   });
 }
 

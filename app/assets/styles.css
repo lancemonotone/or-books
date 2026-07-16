@@ -344,7 +344,9 @@ code {
 /* Boot splash + auth gate */
 
 .boot-splash {
-  --splash-mark-size: min(63vw, 18rem);
+  --splash-mark-size: min(43.2vw, 15.6rem);
+  --splash-label-size: min(59vw, 19rem);
+  --splash-label-nudge: -50px;
   --splash-motion-distance: 0.4rem;
   --splash-in-duration: 0.7s;
   --splash-out-duration: 0.55s;
@@ -364,9 +366,10 @@ code {
     display: none;
   }
 
-  @media (min-width: 768px) {
-    --splash-mark-size: min(43.2vw, 21.6rem);
-  }
+  /* @media (min-width: 768px) {
+    --splash-mark-size: min(43.2vw, 15.6rem);
+    --splash-label-size: min(40vw, 21.375rem);
+  } */
 
   @media (prefers-reduced-motion: reduce) {
     --splash-motion-distance: 0;
@@ -401,23 +404,16 @@ code {
 }
 
 .boot-splash__label {
-  display: inline-block;
+  display: block;
   margin: 0;
-  rotate: -2deg;
-  transform: translateY(-50px);
-  color: #82d987;
-  font-family: Fredoka, "Nunito", system-ui, sans-serif;
-  font-size: clamp(1.85rem, 8.5vw, 3rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-align: center;
-  text-transform: uppercase;
+  inline-size: var(--splash-label-size);
+  block-size: auto;
+  aspect-ratio: 342 / 53;
+  /* transform: translateY(var(--splash-label-nudge)); */
   opacity: 0;
-  filter: drop-shadow(4px 0 #21293a) drop-shadow(-4px 0 #21293a)
-    drop-shadow(0 4px #21293a) drop-shadow(0 -4px #21293a);
   animation: boot-splash-label-in var(--splash-in-duration)
     var(--splash-ease-in) var(--splash-label-in-delay) both;
+  rotate: -2deg;
 }
 
 .boot-splash.is-leaving .boot-splash__label {
