@@ -457,7 +457,7 @@
   sprint: 4
   title: Fix Reading Lists View All page
   priority: high
-  status: planned
+  status: deferred
   tags:
     - navigation
     - homepage
@@ -513,7 +513,7 @@
   sprint: 4
   title: Make author photos the same size and shape
   priority: high
-  status: planned
+  status: deferred
   tags:
     - images
     - authors
@@ -550,7 +550,7 @@
   sprint: 4
   title: Keep accordion titles steady on hover
   priority: low
-  status: planned
+  status: deferred
   tags:
     - components
     - interaction
@@ -613,7 +613,7 @@
   sprint: 4
   title: Fix the broken link in the privacy table of contents
   priority: high
-  status: planned
+  status: deferred
   tags:
     - legal
     - navigation
@@ -633,7 +633,7 @@
   sprint: 4
   title: Show email addresses the same way everywhere
   priority: high
-  status: planned
+  status: deferred
   tags:
     - content
     - contact
@@ -661,7 +661,7 @@
   sprint: 4
   title: Make the privacy table of contents easier to scan
   priority: medium
-  status: planned
+  status: deferred
   tags:
     - legal
     - typography
@@ -701,7 +701,7 @@
   sprint: 4
   title: Fix Rights Enquiries page heading typo
   priority: low
-  status: planned
+  status: deferred
   tags:
     - content
     - rights
