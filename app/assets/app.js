@@ -1126,6 +1126,18 @@ const ISSUE_NAV_PREV_ICON = `<svg class="issue-nav__icon" width="16" height="16"
 
 const ISSUE_NAV_NEXT_ICON = `<svg class="issue-nav__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>`;
 
+const ACCORDION_OPEN_ALL_ICON = `<svg class="phases-accordion__control-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 6 5 5 5-5"/><path d="m7 13 5 5 5-5"/></svg>`;
+
+const ACCORDION_CLOSE_ALL_ICON = `<svg class="phases-accordion__control-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 11 5-5 5 5"/><path d="m7 18 5-5 5 5"/></svg>`;
+
+function renderAccordionControls({ openAttr, closeAttr }) {
+  return `
+          <div class="phases-accordion__controls">
+            <button type="button" class="phases-accordion__control" ${openAttr} aria-label="${escapeHtml(COPY.openAllPhases)}" title="${escapeHtml(COPY.openAllPhases)}">${ACCORDION_OPEN_ALL_ICON}</button>
+            <button type="button" class="phases-accordion__control" ${closeAttr} aria-label="${escapeHtml(COPY.closeAllPhases)}" title="${escapeHtml(COPY.closeAllPhases)}">${ACCORDION_CLOSE_ALL_ICON}</button>
+          </div>`;
+}
+
 function editorUrl({ tab, issue, file } = {}) {
   const params = new URLSearchParams();
   if (tab) {
@@ -1517,11 +1529,10 @@ function renderPhasesAccordion(openPhaseIds) {
       <section class="section">
         <div class="section__head">
           <h2>${escapeHtml(COPY.phases)}</h2>
-          <div class="phases-accordion__controls">
-            <button type="button" class="phases-accordion__control" data-phases-open-all>${escapeHtml(COPY.openAllPhases)}</button>
-            <span class="phases-accordion__control-sep" aria-hidden="true">·</span>
-            <button type="button" class="phases-accordion__control" data-phases-close-all>${escapeHtml(COPY.closeAllPhases)}</button>
-          </div>
+          ${renderAccordionControls({
+            openAttr: "data-phases-open-all",
+            closeAttr: "data-phases-close-all",
+          })}
         </div>
         <div class="phases-accordion">${groups}</div>
       </section>`;
@@ -1743,11 +1754,10 @@ function renderEvidenceGallery(filterFile = null) {
       <header class="page-header">
         <div class="page-header__row">
           <h1>${escapeHtml(COPY.screenshotsGallery)}</h1>
-          <div class="phases-accordion__controls">
-            <button type="button" class="phases-accordion__control" data-evidence-open-all>${escapeHtml(COPY.openAllPhases)}</button>
-            <span class="phases-accordion__control-sep" aria-hidden="true">·</span>
-            <button type="button" class="phases-accordion__control" data-evidence-close-all>${escapeHtml(COPY.closeAllPhases)}</button>
-          </div>
+          ${renderAccordionControls({
+            openAttr: "data-evidence-open-all",
+            closeAttr: "data-evidence-close-all",
+          })}
         </div>
         <p class="lede">${escapeHtml(COPY.screenshotsLead)}</p>
       </header>
@@ -1861,11 +1871,10 @@ function renderDecisions() {
       <header class="page-header">
         <div class="page-header__row">
           <h1>${escapeHtml(COPY.decisionsPageTitle)}</h1>
-          <div class="phases-accordion__controls">
-            <button type="button" class="phases-accordion__control" data-decisions-open-all>${escapeHtml(COPY.openAllPhases)}</button>
-            <span class="phases-accordion__control-sep" aria-hidden="true">·</span>
-            <button type="button" class="phases-accordion__control" data-decisions-close-all>${escapeHtml(COPY.closeAllPhases)}</button>
-          </div>
+          ${renderAccordionControls({
+            openAttr: "data-decisions-open-all",
+            closeAttr: "data-decisions-close-all",
+          })}
         </div>
         <p class="lede">${escapeHtml(COPY.decisionsPageLead)}</p>
       </header>
