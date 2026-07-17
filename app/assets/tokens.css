@@ -37,7 +37,7 @@
   --color-planned: var(--color-medium);
   --color-in-progress: #1d4ed8;
   --color-blocked: var(--color-critical);
-  --color-complete: #047857;
+  --color-complete: #8dbd91;
   --color-deferred: var(--color-low);
 
   /* Issue status — backgrounds */

@@ -442,8 +442,7 @@ function phaseColorVars(sprintId) {
   const len = phaseHues.length;
   const slot = (index - 1) % len;
   // 0 → start, 1 → end, 2 → start+1, 3 → end-1, …
-  const hueIndex =
-    slot % 2 === 0 ? slot / 2 : len - 1 - Math.floor(slot / 2);
+  const hueIndex = slot % 2 === 0 ? slot / 2 : len - 1 - Math.floor(slot / 2);
   const hue = phaseHues[hueIndex];
   return {
     "--phase-fg": `hsl(${hue} 52% 34%)`,
@@ -604,7 +603,9 @@ function normalizeTagLabel(tag) {
 }
 
 function tagsMatch(a, b) {
-  return normalizeTagLabel(a).toLowerCase() === normalizeTagLabel(b).toLowerCase();
+  return (
+    normalizeTagLabel(a).toLowerCase() === normalizeTagLabel(b).toLowerCase()
+  );
 }
 
 function collectKnownTags() {
@@ -695,9 +696,7 @@ function normalizeCommentClient(row) {
     author,
     updatedAt,
     messages,
-    text: messages.length
-      ? messages[messages.length - 1].text
-      : fallbackText,
+    text: messages.length ? messages[messages.length - 1].text : fallbackText,
   };
 }
 
@@ -1420,7 +1419,11 @@ function renderPhaseControl(issue, { editable = false } = {}) {
 
 function renderMetaRow(
   issue,
-  { editablePriority = false, editableStatus = false, editablePhase = false } = {},
+  {
+    editablePriority = false,
+    editableStatus = false,
+    editablePhase = false,
+  } = {},
 ) {
   return `
     <div class="meta-row">
@@ -2078,7 +2081,9 @@ function renderResponses() {
         id,
       );
       const author = String(row?.author || "").trim();
-      const updatedAt = row?.updatedAt ? Number(new Date(row.updatedAt)) || 0 : 0;
+      const updatedAt = row?.updatedAt
+        ? Number(new Date(row.updatedAt)) || 0
+        : 0;
       const answer = row?.choice
         ? `<strong>${escapeHtml(row.choice)}</strong>`
         : `<span class="muted">${escapeHtml(COPY.noAnswerYet)}</span>`;
@@ -2994,7 +2999,8 @@ function openTagCombobox(wrap) {
       });
     }
 
-    const exactInCatalog = Boolean(query) && catalog.some((tag) => tagsMatch(tag, query));
+    const exactInCatalog =
+      Boolean(query) && catalog.some((tag) => tagsMatch(tag, query));
     const exactOnIssue =
       Boolean(query) && current.some((tag) => tagsMatch(tag, query));
 
@@ -3042,7 +3048,10 @@ function openTagCombobox(wrap) {
     list.hidden = false;
     input.setAttribute("aria-expanded", "true");
     const preferred = query
-      ? items.findIndex((item) => !item.disabled && !item.create && tagsMatch(item.value, query))
+      ? items.findIndex(
+          (item) =>
+            !item.disabled && !item.create && tagsMatch(item.value, query),
+        )
       : -1;
     const firstEnabled = items.findIndex((item) => !item.disabled);
     setActive(
@@ -3159,7 +3168,9 @@ function bindIssueTagsRow(row) {
         return;
       }
       const removeTag = button.dataset.tag || "";
-      const previous = (issue.tags || []).map(normalizeTagLabel).filter(Boolean);
+      const previous = (issue.tags || [])
+        .map(normalizeTagLabel)
+        .filter(Boolean);
       const next = previous.filter((tag) => !tagsMatch(tag, removeTag));
       await persistIssueTags(issueKey, next, { rollbackTags: previous });
     });
