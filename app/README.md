@@ -144,7 +144,7 @@ Change `title`, `problem`, or `recommendation` for client-facing copy. Change `p
 
 Optional estimate fields: `hours` (planned effort) and `actual_hours` (burn roll-up from an external time tracker, not logged in this app). Dollar amounts use `hours` or `actual_hours` × `hourly_rate` from `config.php` when the rate is set.
 
-**Blocked vs deferred:** set `status: blocked` (“Waiting on you”) when an Issue waits on a Questions answer or other client gate — it stays in the Estimate quote (Remaining / Grand). Set `status: deferred` when the client does not want the recommended work (often a No / disagree stance or matching comments — confirm iffy cases by hand). Deferred appears on the Estimate side line but is excluded from Done, Remaining, and Grand totals. Do not mass-convert Blocked → Deferred.
+**Blocked vs deferred:** set `status: blocked` (“Waiting on you”) when an Issue waits on a Questions answer or other client gate — it stays in the Estimate quote (Remaining / Grand). Set `status: deferred` when the client does not want the recommended work (confirm from comments / scope by hand). Deferred appears on the Estimate side line but is excluded from Done, Remaining, and Grand totals. Do not mass-convert Blocked → Deferred.
 
 `tags` show as chips on the issue detail page (filter links; editable there too). `acceptance` stays internal planning only — not shown in the presentation app.
 

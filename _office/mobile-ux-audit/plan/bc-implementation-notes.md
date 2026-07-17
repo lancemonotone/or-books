@@ -389,7 +389,7 @@ Senior-dev instructions for planned Issues (phases 1–4). Assumes familiarity w
 
 ### 4.2 Remove distracting button motion — **0.5h**
 
-**Client (disagree with nuance):** Remove from “New items”; retain on black buttons.
+**Client:** Remove from “New items”; retain on black buttons.
 
 **Steps:**
 

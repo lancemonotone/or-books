@@ -23,14 +23,14 @@ if ($issueId === '') {
     respond_json(422, ['error' => 'issueId is required.']);
 }
 
-$action = trim((string) ($body['action'] ?? 'stance'));
+$action = trim((string) ($body['action'] ?? 'comment'));
 
 try {
     $all = load_comments();
     $existing = isset($all[$issueId]) && is_array($all[$issueId]) ? $all[$issueId] : [];
     $record = normalize_comment_record($existing);
 
-    if ($action === 'stance') {
+    if ($action === 'comment') {
         $author = sanitize_author($body['author'] ?? '');
         $text = sanitize_text($body['text'] ?? '');
 
@@ -39,7 +39,6 @@ try {
         }
 
         $now = gmdate('c');
-        $record['stance'] = '';
         $record['author'] = $author;
         $record['updatedAt'] = $now;
 
@@ -127,7 +126,6 @@ try {
                 unset($all[$issueId]);
                 save_comments($all);
                 respond_json(200, [
-                    'stance' => '',
                     'text' => '',
                     'author' => '',
                     'updatedAt' => $now,
@@ -140,9 +138,6 @@ try {
 
         $messages[$lastIndex]['text'] = $text;
         $messages[$lastIndex]['updatedAt'] = $now;
-        if ($isOpening) {
-            $record['stance'] = '';
-        }
         $record['messages'] = array_values($messages);
         $record['text'] = $text;
         $record['updatedAt'] = $now;

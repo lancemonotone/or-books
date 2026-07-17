@@ -28,7 +28,7 @@ _Avoid_: Reindex, renumber pass (prefer Compact when discussing the dense rewrit
 The sequence of Issues within a Phase in the editor sidebar and in `issues.yaml`. Compact makes Issue ids match this order. Across Phases, Issues stay grouped by Phase in plan order.
 
 **Deferred**:
-An Issue status meaning the client does not want the recommended work (often signaled by a No / disagree stance or comments to that effect). Deferred Issues are shown on the Estimate page side line but are never included in Done, Remaining, or Grand totals. Set by judgment — stance alone is not always enough.
+An Issue status meaning the client does not want the recommended work (often signaled by comments to that effect). Deferred Issues are shown on the Estimate page side line but are never included in Done, Remaining, or Grand totals. Set by judgment from comments and scope — not from a Yes/No control.
 _Avoid_: Blocked
 
 **Blocked** (status):

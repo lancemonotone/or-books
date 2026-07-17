@@ -644,18 +644,10 @@ function authorsMatch(a, b) {
   );
 }
 
-const STANCE_LABELS = {
-  agree: "Yes",
-  disagree: "No",
-  discuss: "Not sure yet",
-};
-
 function normalizeCommentClient(row) {
   if (!row || typeof row !== "object") {
     return null;
   }
-  const stance = String(row.stance || "").trim();
-  const stanceLabel = stance ? STANCE_LABELS[stance] || stance : "";
   const author = String(row.author || "").trim();
   const updatedAt = String(row.updatedAt || "");
   let messages = Array.isArray(row.messages)
@@ -664,13 +656,13 @@ function normalizeCommentClient(row) {
       )
     : [];
 
-  if (messages.length === 0 && stance) {
-    const text = String(row.text || "").trim() || stanceLabel;
+  const fallbackText = String(row.text || "").trim();
+  if (messages.length === 0 && fallbackText) {
     messages = [
       {
-        id: `legacy-${stance}-${updatedAt || "opening"}`,
+        id: `legacy-text-${updatedAt || "opening"}`,
         author: author || "Unknown",
-        text,
+        text: fallbackText,
         createdAt: updatedAt,
         updatedAt,
       },
@@ -679,13 +671,12 @@ function normalizeCommentClient(row) {
 
   return {
     ...row,
-    stance,
     author,
     updatedAt,
     messages,
     text: messages.length
       ? messages[messages.length - 1].text
-      : String(row.text || ""),
+      : fallbackText,
   };
 }
 

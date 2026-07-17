@@ -103,7 +103,7 @@ async function postJson(url, body) {
 export function saveComment(issueId, payload) {
   return postJson('api/save-comment.php', {
     issueId,
-    action: 'stance',
+    action: 'comment',
     ...payload,
   });
 }
