@@ -259,16 +259,7 @@ function applyBrand() {
   document.querySelectorAll("[data-brand]").forEach((el) => {
     el.textContent = name;
   });
-  const auditTitle = state.audit?.title ? String(state.audit.title).trim() : "";
-  if (name && auditTitle) {
-    document.title = `${name}: ${auditTitle}`;
-  } else if (auditTitle) {
-    document.title = auditTitle;
-  } else if (name) {
-    document.title = name;
-  } else {
-    document.title = "Review";
-  }
+  document.title = name;
 }
 
 function getThemePref() {
@@ -1665,7 +1656,7 @@ function renderOverview() {
     <div class="page page--overview">
       <header class="page-header page-header--split">
         <div class="page-header__intro">
-          <h1>${escapeHtml(state.audit.title)}</h1>
+          <h1>${escapeHtml(clientName())}</h1>
           <p class="lede">${escapeHtml(state.audit.summary.trim())}</p>
         </div>
         <ul class="stat-list page-header__stats">
@@ -2669,6 +2660,9 @@ async function showAppShell() {
 async function loadAppData() {
   const content = await loadContent();
   state.audit = content.audit;
+  if (state.audit && typeof state.audit === "object") {
+    delete state.audit.title;
+  }
   state.issues = content.issues;
   state.evidence = content.evidence;
   state.decisions = content.decisions;
@@ -3821,7 +3815,7 @@ function bindGlobalHandlers() {
 
 async function init() {
   applyTheme();
-  document.title = "Review";
+  applyBrand();
   bindGlobalHandlers();
   bindAuthHandlers();
 

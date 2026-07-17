@@ -496,10 +496,7 @@ export function renderAuditView(audit, root, onChange) {
   root.innerHTML = `
     <section class="editor-section">
       <h2>Overview page</h2>
-      <div class="editor-grid editor-grid--2">
-        ${field("Title", input("title", audit.title || ""))}
-        ${field("Last updated", input("updated", audit.updated || "", "date"))}
-      </div>
+      ${field("Last updated", input("updated", audit.updated || "", "date"))}
       ${field("Introduction", textarea("summary", audit.summary || "", 6))}
       <h3>Phases</h3>
       <div class="editor-stack" id="sprints-list">
@@ -545,7 +542,7 @@ export function renderAuditView(audit, root, onChange) {
 }
 
 function applyAuditForm(audit, root) {
-  audit.title = root.querySelector('[name="title"]')?.value ?? "";
+  delete audit.title;
   audit.updated = root.querySelector('[name="updated"]')?.value ?? "";
   audit.summary = root.querySelector('[name="summary"]')?.value ?? "";
   audit.sprints = [...root.querySelectorAll("[data-sprint-index]")].map(

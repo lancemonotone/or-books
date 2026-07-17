@@ -1,4 +1,3 @@
-title: OR Books Review
 slug: mobile-review
 updated: '2026-07-16'
 summary: |
@@ -6,13 +5,14 @@ summary: |
 stats:
   screenshots: 42
   recordings: 5
-  issues: 36
+  issues: 37
   decisions: 4
 sprints:
   - id: 1
-    subtitle: ''
-    title: ''
-    description: ''
+    subtitle: Site audit
+    title: Discovery
+    description: |
+      Two hours reviewing the storefront (especially mobile) to find issues and turn them into this plan.
   - id: 2
     subtitle: ''
     title: ''
@@ -26,7 +26,11 @@ sprints:
     title: ''
     description: ''
   - id: 5
+    subtitle: ''
+    title: ''
+    description: ''
+  - id: 6
     subtitle: Not in scope for now
     title: Deferred
     description: |
-      Issues the client has declined or parked. Shown on the Estimate side line; not included in Done, Remaining, or Grand totals.
+      Declined or parked issues. Shown on the Estimate side line; not included in Done, Remaining, or Grand totals.

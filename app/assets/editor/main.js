@@ -394,6 +394,9 @@ async function loadAllData() {
     evidence: evidence || [],
     decisions: decisions || [],
   };
+  if (state.data.audit && typeof state.data.audit === 'object') {
+    delete state.data.audit.title;
+  }
   state.ui.selectedIssueKey = state.data.issues[0]?.key ?? null;
   state.ui.selectedDecisionKey = state.data.decisions[0]?.key ?? null;
   state.ui.selectedEvidenceIndex = 0;

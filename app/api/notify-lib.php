@@ -197,12 +197,13 @@ function notify_render_conversation(array $messages): string
 function notify_render_email(array $event, array $settings): array
 {
     $clientName = trim((string) ($settings['clientName'] ?? ''));
-    $prefix = $clientName !== '' ? $clientName : 'Review';
     $type = (string) ($event['type'] ?? '');
 
     if ($type === 'decision') {
         $title = (string) ($event['decisionTitle'] ?? 'Question');
-        $subject = '[' . $prefix . '] Answer: ' . $title;
+        $subject = $clientName !== ''
+            ? '[' . $clientName . '] Answer: ' . $title
+            : 'Answer: ' . $title;
         $chips = notify_render_chip($title);
         $bodyInner = '<p style="margin:0 0 12px;font-size:14px;"><strong>'
             . notify_escape((string) ($event['author'] ?? ''))
@@ -220,7 +221,10 @@ function notify_render_email(array $event, array $settings): array
         $issueId = (string) ($event['issueId'] ?? '');
         $issueTitle = (string) ($event['issueTitle'] ?? '');
         $label = trim($issueId . ($issueTitle !== '' ? ' — ' . $issueTitle : ''));
-        $subject = '[' . $prefix . '] ' . ($label !== '' ? $label : 'Issue update');
+        $updateLabel = $label !== '' ? $label : 'Issue update';
+        $subject = $clientName !== ''
+            ? '[' . $clientName . '] ' . $updateLabel
+            : $updateLabel;
         $chips = notify_render_chip($issueId) . notify_render_chip($issueTitle);
         $messages = is_array($event['messages'] ?? null) ? $event['messages'] : [];
         $bodyInner = '<p style="margin:0 0 12px;font-size:14px;"><strong>'
@@ -248,9 +252,11 @@ function notify_render_email(array $event, array $settings): array
 function notify_render_digest(array $events, array $settings): array
 {
     $clientName = trim((string) ($settings['clientName'] ?? ''));
-    $prefix = $clientName !== '' ? $clientName : 'Review';
     $count = count($events);
-    $subject = '[' . $prefix . '] Digest — ' . $count . ' ' . ($count === 1 ? 'update' : 'updates');
+    $digestLabel = 'Digest — ' . $count . ' ' . ($count === 1 ? 'update' : 'updates');
+    $subject = $clientName !== ''
+        ? '[' . $clientName . '] ' . $digestLabel
+        : $digestLabel;
     $parts = [];
     foreach ($events as $event) {
         $rendered = notify_render_email($event, $settings);

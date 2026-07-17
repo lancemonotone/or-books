@@ -49,7 +49,7 @@ The review app and content editor share the same password and session. **Nothing
 
 Signed-in **Settings** (gear in the header):
 
-- Client / project name (header brand and titles)
+- Client / project name (header brand, Overview heading, browser tab, email subject prefix)
 - Appearance: light / dark / system (saved in the browser)
 - Notification on/off, client & developer teams (each person = name used in the app + email + update frequency). Those names are the options in the “Your name” picker on issues and Questions.
 
@@ -112,7 +112,7 @@ There is no admin screen. You edit **YAML files** in `data/` with any text edito
 
 | File | What it controls |
 |------|------------------|
-| `data/audit.yaml` | Page title, intro text, phase groupings (overview counts are calculated automatically) |
+| `data/audit.yaml` | Intro text, phase groupings, last-updated (overview counts are calculated automatically) |
 | `data/issues.yaml` | Each recommendation note (what the client reads) |
 | `data/evidence.yaml` | Screenshot and video index |
 | `data/decisions.yaml` | Questions the client must answer |
