@@ -3044,7 +3044,7 @@ html[data-theme="dark"] .pill--phase {
     & .estimate-print__deferred-note {
       margin: 0;
       font-style: italic;
-      font-size: 0.9rem;
+      font-size: calc(0.9rem - 2pt);
       text-align: end;
       white-space: nowrap;
 
