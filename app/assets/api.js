@@ -144,6 +144,10 @@ export function saveIssueTags(issueKey, tags) {
   return postJson('api/save-issue-tags.php', { issueKey, tags });
 }
 
+export function savePhaseOrder(phaseIds) {
+  return postJson('api/save-phase-order.php', { phaseIds });
+}
+
 export function loadSettings() {
   return requestJson('api/settings.php');
 }

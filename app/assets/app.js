@@ -6,6 +6,7 @@ import {
   saveIssueStatus,
   saveIssuePhase,
   saveIssueTags,
+  savePhaseOrder,
   saveSettings,
   loadSettings,
   postCommentReply,
@@ -77,6 +78,8 @@ const COPY = {
   suggestions: "suggested changes",
   openAllPhases: "Open all",
   closeAllPhases: "Close all",
+  reorderPhases: "Reorder phases",
+  doneReorderingPhases: "Done",
   evidenceNoUrl: "No page URL",
   evidenceGroupCount: (n) => `${n} ${n === 1 ? "item" : "items"}`,
   decisionCount: (n) => `${n} ${n === 1 ? "question" : "questions"}`,
@@ -220,6 +223,7 @@ const state = {
   ready: false,
   hourlyRate: null,
   vendor: null,
+  phaseReorderMode: false,
 };
 
 function applyHourlyRate(auth) {
@@ -1605,13 +1609,19 @@ function overviewStats() {
 
 function renderPhasesAccordion(openPhaseIds) {
   const openSet = new Set(openPhaseIds.map(String));
+  const reorderMode = Boolean(state.phaseReorderMode);
+  const canReorder = (state.audit.sprints || []).length >= 2;
   const groups = state.audit.sprints
     .map((sprint) => {
       const issues = sprintIssues(sprint.id);
-      const isOpen = openSet.has(String(sprint.id));
+      const isOpen = !reorderMode && openSet.has(String(sprint.id));
+      const dragHandle = reorderMode
+        ? `<button type="button" class="phases-accordion__drag" data-drag-handle draggable="true" aria-label="Drag to reorder">⠿</button>`
+        : "";
       return `
         <details class="phases-accordion__item" data-phase-id="${escapeHtml(String(sprint.id))}" style="${phaseStyleAttr(sprint.id)}"${isOpen ? " open" : ""}>
           <summary class="phases-accordion__summary">
+            ${dragHandle}
             <span class="phases-accordion__heading">
               <span class="phases-accordion__title">${renderPhasePill(sprint.id, { linked: false })}<span class="phases-accordion__title-text">${escapeHtml(sprint.title)}</span></span>
               <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
@@ -1627,16 +1637,21 @@ function renderPhasesAccordion(openPhaseIds) {
     })
     .join("");
 
+  const accordionControls = reorderMode
+    ? `<div class="phases-accordion__controls"><button type="button" class="phases-accordion__reorder" data-phases-reorder>${escapeHtml(COPY.doneReorderingPhases)}</button></div>`
+    : `<div class="phases-accordion__controls">${
+        canReorder
+          ? `<button type="button" class="phases-accordion__reorder" data-phases-reorder>${escapeHtml(COPY.reorderPhases)}</button>`
+          : ""
+      }<button type="button" class="phases-accordion__control" data-phases-open-all aria-label="${escapeHtml(COPY.openAllPhases)}" title="${escapeHtml(COPY.openAllPhases)}">${ACCORDION_OPEN_ALL_ICON}</button><button type="button" class="phases-accordion__control" data-phases-close-all aria-label="${escapeHtml(COPY.closeAllPhases)}" title="${escapeHtml(COPY.closeAllPhases)}">${ACCORDION_CLOSE_ALL_ICON}</button></div>`;
+
   return `
       <section class="section">
         <div class="section__head">
           <h2>${escapeHtml(COPY.phases)}</h2>
-          ${renderAccordionControls({
-            openAttr: "data-phases-open-all",
-            closeAttr: "data-phases-close-all",
-          })}
+          ${accordionControls}
         </div>
-        <div class="phases-accordion">${groups}</div>
+        <div class="phases-accordion"${reorderMode ? " data-phase-reorder" : ""}>${groups}</div>
       </section>`;
 }
 
@@ -2564,6 +2579,9 @@ function render() {
   if (!state.ready) {
     return;
   }
+  if (state.route.name !== "overview") {
+    state.phaseReorderMode = false;
+  }
   motion.viewTransition(() => {
     main.innerHTML = renderRoute();
     updateActiveNav();
@@ -3116,6 +3134,129 @@ function bindIssueTags(root = main) {
   });
 }
 
+function bindPhaseReorderDrag(root = main) {
+  const container = root.querySelector(".phases-accordion[data-phase-reorder]");
+  if (!container) {
+    return;
+  }
+
+  let draggedPhaseId = null;
+  const items = () => [...container.querySelectorAll("details[data-phase-id]")];
+
+  const clearDropState = () => {
+    container
+      .querySelectorAll(".is-dragging, .is-drop-before, .is-drop-after")
+      .forEach((node) => {
+        node.classList.remove("is-dragging", "is-drop-before", "is-drop-after");
+      });
+  };
+
+  container.querySelectorAll("[data-drag-handle]").forEach((handle) => {
+    handle.addEventListener("dragstart", (event) => {
+      const item = handle.closest("details[data-phase-id]");
+      draggedPhaseId = item?.dataset.phaseId || null;
+      if (!draggedPhaseId) {
+        return;
+      }
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", draggedPhaseId);
+      item?.classList.add("is-dragging");
+    });
+    handle.addEventListener("dragend", () => {
+      draggedPhaseId = null;
+      clearDropState();
+    });
+    handle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    });
+  });
+
+  container.addEventListener("dragover", (event) => {
+    if (!draggedPhaseId) {
+      return;
+    }
+    event.preventDefault();
+    clearDropState();
+    const item = event.target.closest("details[data-phase-id]");
+    if (item && item.dataset.phaseId !== draggedPhaseId) {
+      const rect = item.getBoundingClientRect();
+      const before = event.clientY < rect.top + rect.height / 2;
+      item.classList.add(before ? "is-drop-before" : "is-drop-after");
+    }
+  });
+
+  container.addEventListener("drop", async (event) => {
+    event.preventDefault();
+    const fromId = event.dataTransfer.getData("text/plain") || draggedPhaseId;
+    const target = event.target.closest("details[data-phase-id]");
+    const rect = target?.getBoundingClientRect();
+    const before =
+      target && rect ? event.clientY < rect.top + rect.height / 2 : true;
+    clearDropState();
+    if (!fromId || !target || target.dataset.phaseId === fromId) {
+      return;
+    }
+
+    const order = items().map((el) => el.dataset.phaseId);
+    const fromIndex = order.indexOf(fromId);
+    if (fromIndex < 0) {
+      return;
+    }
+    order.splice(fromIndex, 1);
+    const targetId = target.dataset.phaseId;
+    let toIndex = order.indexOf(targetId);
+    if (!before) {
+      toIndex += 1;
+    }
+    order.splice(toIndex, 0, fromId);
+
+    const byId = new Map(items().map((el) => [el.dataset.phaseId, el]));
+    order.forEach((id) => {
+      const el = byId.get(id);
+      if (el) {
+        container.appendChild(el);
+      }
+    });
+
+    const previousSprints = structuredClone(state.audit.sprints);
+    const previousIssues = state.issues.map((issue) => ({
+      key: issue.key,
+      id: issue.id,
+      sprint: issue.sprint,
+    }));
+
+    try {
+      const result = await savePhaseOrder(order.map(Number));
+      state.audit.sprints = result.sprints;
+      const byKey = new Map((result.issues || []).map((row) => [row.key, row]));
+      for (const item of state.issues) {
+        const next = byKey.get(item.key);
+        if (!next) {
+          continue;
+        }
+        item.id = next.id;
+        item.sprint = next.sprint;
+      }
+      state.phaseReorderMode = true;
+      render();
+    } catch (error) {
+      state.audit.sprints = previousSprints;
+      const prevByKey = new Map(previousIssues.map((row) => [row.key, row]));
+      for (const item of state.issues) {
+        const prev = prevByKey.get(item.key);
+        if (!prev) {
+          continue;
+        }
+        item.id = prev.id;
+        item.sprint = prev.sprint;
+      }
+      window.alert(error.message || "Could not save phase order.");
+      render();
+    }
+  });
+}
+
 function bindPageHandlers() {
   bindSortableTables();
 
@@ -3465,6 +3606,21 @@ function bindPageHandlers() {
 
   bindIssueTags();
 
+  const reorderBtn = main.querySelector("[data-phases-reorder]");
+  if (reorderBtn) {
+    reorderBtn.addEventListener("click", () => {
+      if (state.phaseReorderMode) {
+        state.phaseReorderMode = false;
+        render();
+        return;
+      }
+      state.phaseReorderMode = true;
+      history.replaceState(null, "", overviewHref([]));
+      state.route = parseRoute();
+      render();
+    });
+  }
+
   const phasesOpenAll = main.querySelector("[data-phases-open-all]");
   const phasesCloseAll = main.querySelector("[data-phases-close-all]");
   if (phasesOpenAll) {
@@ -3504,12 +3660,20 @@ function bindPageHandlers() {
 
   main.querySelectorAll("details[data-phase-id]").forEach((item) => {
     item.addEventListener("toggle", () => {
+      if (state.phaseReorderMode) {
+        item.open = false;
+        return;
+      }
       syncOverviewPhaseUrl();
       if (item.open) {
         primeVideoThumbs(item);
       }
     });
   });
+
+  if (state.phaseReorderMode) {
+    bindPhaseReorderDrag();
+  }
 
   main.querySelectorAll("details[data-evidence-group]").forEach((item) => {
     item.addEventListener("toggle", () => {

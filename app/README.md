@@ -97,7 +97,8 @@ This is not hidden from humans who know the URL. It blocks casual crawlers and d
 2. Sign in with the password.
 3. Use the tabs: **Overview**, **Issues**, **Media**, **Questions**.
 4. Pick an item in the sidebar; changes autosave. Deep-link with `?tab=issues&issue=<key>` (UUID), not the display id.
-5. **Reorder:** drag the ⠿ handle in the Issues sidebar. With **All phases**, drag across phase groups; with a single phase filter, reorder within that phase only. Display ids Compact automatically after reorder, delete, phase change, or new issue.
+5. **Reorder issues:** drag the ⠿ handle in the Issues sidebar. With **All phases**, drag across phase groups; with a single phase filter, reorder within that phase only. Display ids Compact automatically after reorder, delete, phase change, or new issue.
+6. **Reorder phases (Overview):** on the presentation Overview, use **Reorder phases**. All phases collapse; drag the ⠿ handle to change plan order. Phase numbers become dense `1…N`; Issue display ids Compact to match (`n.x`). Issue keys are unchanged.
 
 **Media files:** copy PNG or MP4 files into `media/` on the server (or run `scripts/link-media.sh` locally). Use **Add media** or **Change file** to open the image picker — it refreshes the file list when it opens.
 
@@ -195,7 +196,7 @@ For videos, set `type: video` in `evidence.yaml`.
 
 Phases live in `data/audit.yaml` under `sprints`. Each phase has `id`, `title`, `subtitle`, and `description` (all client-facing).
 
-Current phases are delivery waves (**1 / 2 / 3 / 4**) plus **5 Deferred**. Display `id` is `phase.sequence` (order within the phase only). Priority (`critical` / `high` / `medium` / `low`) is separate and can vary within a phase.
+Phase numbers are dense `1…N` in list order. Reordering on Overview renumbers ids and Compacts Issue display ids (`n.x`). A title like “Deferred” is ordinary copy — not a special pinned phase. Priority (`critical` / `high` / `medium` / `low`) is separate and can vary within a phase.
 
 Notes are assigned to a phase with the `sprint` field in `issues.yaml`. The phase `id` must match.
 
