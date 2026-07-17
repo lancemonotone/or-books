@@ -990,13 +990,14 @@ html[data-theme="dark"] .phases-accordion__item {
   color: var(--color-muted);
 
   &.chip--phase {
-    background: var(--phase-bg, var(--color-muted-surface));
+    /* background-color only — shorthand would wipe other background layers */
+    background-color: var(--phase-bg, var(--color-muted-surface));
     color: var(--phase-fg, var(--color-muted));
   }
 }
 
 html[data-theme="dark"] .chip--issue.chip--phase {
-  background: var(--phase-bg-dark, var(--phase-bg, var(--color-muted-surface)));
+  background-color: var(--phase-bg-dark, var(--phase-bg, var(--color-muted-surface)));
   color: var(--phase-fg-dark, var(--phase-fg, var(--color-muted)));
 }
 
@@ -1128,12 +1129,14 @@ a.pill {
 }
 
 .pill--phase {
-  background: var(--phase-bg, var(--color-muted-surface));
+  /* background-color only — shorthand wipes pill-control caret background-image
+     (dark rule also out-specs .pill-control__select, so arrows vanished in dark). */
+  background-color: var(--phase-bg, var(--color-muted-surface));
   color: var(--phase-fg, var(--color-muted));
 }
 
 html[data-theme="dark"] .pill--phase {
-  background: var(--phase-bg-dark, var(--phase-bg, var(--color-muted-surface)));
+  background-color: var(--phase-bg-dark, var(--phase-bg, var(--color-muted-surface)));
   color: var(--phase-fg-dark, var(--phase-fg, var(--color-muted)));
 }
 
