@@ -201,6 +201,24 @@
       caption: News byline
     - file: 161534.png
       caption: Media byline
+- key: 02bb4d06-502d-44db-907c-062d48f5e58c
+  id: '1.11'
+  sprint: 1
+  title: Give the header more room in the open menu
+  priority: critical
+  status: planned
+  tags:
+    - navigation
+    - menu
+    - Getting around
+  problem: |
+    When the menu is open the overlay is too close to the top and crowds the header compared with other pages.
+  recommendation: |
+    Match the top spacing used elsewhere when the menu is open.
+  acceptance:
+    - Header has consistent clearance when menu overlay is open
+  evidence:
+    - file: 120802.png
 - key: 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
   id: '2.1'
   sprint: 2
@@ -452,67 +470,29 @@
   evidence:
     - file: 123434.png
       caption: Footer alignment
-- key: 02bb4d06-502d-44db-907c-062d48f5e58c
-  id: '4.1'
-  sprint: 4
-  title: Give the header more room in the open menu
-  priority: critical
-  status: planned
-  tags:
-    - navigation
-    - menu
-    - Getting around
-  problem: |
-    When the menu is open the overlay is too close to the top and crowds the header compared with other pages.
-  recommendation: |
-    Match the top spacing used elsewhere when the menu is open.
-  acceptance:
-    - Header has consistent clearance when menu overlay is open
-  evidence:
-    - file: 120802.png
-- key: d64c6362-1054-468f-a9cb-3f1feb2473ab
-  id: '4.2'
-  sprint: 4
-  title: Keep Featured Title links in the same tab
+- key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
+  id: '3.6'
+  sprint: 3
+  title: Rights Catalogs page
   priority: medium
   status: planned
   tags:
-    - navigation
-    - widgets
-    - Getting around
+    - content
+    - rights
+    - 'Trust & polish'
   problem: |
-    On the homepage, tapping the Featured Title module opens the book in a new browser tab. That breaks the normal flow of browsing the site on a phone and can feel like leaving the site by accident.
+    The Rights Catalogs page (/rights-catalogs) is still placeholder copy. The body is Lorem Ipsum, but the page is linked in the site navigation. Visitors can open a page that looks unfinished.
   recommendation: |
-    Open Featured Title links in the same tab, like other in-site book links.
+    Do not leave placeholder text live in the menu. Recommended: hide the page from navigation until real catalog content is ready. See Questions for you to choose hide, populate, or remove.
   acceptance:
-    - Tapping Featured Title on the homepage navigates in the current tab
-    - No unexpected new tab or window opens for that module
+    - No Lorem Ipsum remains on any public page
+    - Navigation lists Rights Catalogs only if the page has real content (or the page is removed per your answer)
+    - 'If hidden, the link is removed from menus until content is ready'
   evidence:
-    - file: 174154.png
-- key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
-  id: '4.3'
-  sprint: 4
-  title: Remove distracting motion on buttons
-  priority: low
-  status: planned
-  tags:
-    - interaction
-    - media
-    - 'Books, authors & media'
-  problem: |
-    In the In the Media section on author pages, the Read Now button fades and slides up when it appears. The entrance animation feels unnecessary and makes a simple action look fussy.
-  recommendation: |
-    Show the Read Now control immediately, without a slide or bounce. If any transition is needed, keep it to a brief, subtle fade with no vertical movement.
-  acceptance:
-    - Read Now does not slide or bounce into view on author In the Media items
-    - Button is readable as soon as it appears
-  evidence:
-    - file: 123119.mp4
-    - file: 173459.mp4
-    - file: 123929.mp4
+    - file: 125507.png
 - key: 22f6409d-b5e4-46b1-8086-f2839495505e
-  id: '4.4'
-  sprint: 4
+  id: '3.7'
+  sprint: 3
   title: Keep bookseller signup on orbooks.com
   priority: medium
   status: planned
@@ -533,26 +513,46 @@
       caption: External signup form
     - file: 125307.png
       caption: Booksellers page
-- key: fb10d3ef-47f4-49e0-852e-b75d75b4244f
-  id: '4.5'
+- key: d64c6362-1054-468f-a9cb-3f1feb2473ab
+  id: '4.1'
   sprint: 4
-  title: Rights Catalogs page
+  title: Keep Featured Title links in the same tab
   priority: medium
   status: planned
   tags:
-    - content
-    - rights
-    - 'Trust & polish'
+    - navigation
+    - widgets
+    - Getting around
   problem: |
-    The Rights Catalogs page (/rights-catalogs) is still placeholder copy. The body is Lorem Ipsum, but the page is linked in the site navigation. Visitors can open a page that looks unfinished.
+    On the homepage, tapping the Featured Title module opens the book in a new browser tab. That breaks the normal flow of browsing the site on a phone and can feel like leaving the site by accident.
   recommendation: |
-    Do not leave placeholder text live in the menu. Recommended: hide the page from navigation until real catalog content is ready. See Questions for you to choose hide, populate, or remove.
+    Open Featured Title links in the same tab, like other in-site book links.
   acceptance:
-    - No Lorem Ipsum remains on any public page
-    - Navigation lists Rights Catalogs only if the page has real content (or the page is removed per your answer)
-    - 'If hidden, the link is removed from menus until content is ready'
+    - Tapping Featured Title on the homepage navigates in the current tab
+    - No unexpected new tab or window opens for that module
   evidence:
-    - file: 125507.png
+    - file: 174154.png
+- key: 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
+  id: '4.2'
+  sprint: 4
+  title: Remove distracting motion on buttons
+  priority: low
+  status: planned
+  tags:
+    - interaction
+    - media
+    - 'Books, authors & media'
+  problem: |
+    In the In the Media section on author pages, the Read Now button fades and slides up when it appears. The entrance animation feels unnecessary and makes a simple action look fussy.
+  recommendation: |
+    Show the Read Now control immediately, without a slide or bounce. If any transition is needed, keep it to a brief, subtle fade with no vertical movement.
+  acceptance:
+    - Read Now does not slide or bounce into view on author In the Media items
+    - Button is readable as soon as it appears
+  evidence:
+    - file: 123119.mp4
+    - file: 173459.mp4
+    - file: 123929.mp4
 - key: 62f9d4cd-453f-472e-81f4-7b252f7577bd
   id: '5.1'
   sprint: 5
