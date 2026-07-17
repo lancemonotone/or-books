@@ -28,6 +28,7 @@ function notify_config(): array
         'enabled' => ($notify['enabled'] ?? true) !== false,
         'from' => trim((string) ($notify['from'] ?? '')),
         'flush_secret' => trim((string) ($notify['flush_secret'] ?? '')),
+        'bcc' => trim((string) ($notify['bcc'] ?? '')),
         'app_public_url' => rtrim(trim((string) ($editorConfig['app_public_url'] ?? '')), '/') . '/',
     ];
 }
@@ -263,19 +264,42 @@ function notify_render_digest(array $events, array $settings): array
     return ['subject' => $subject, 'html' => $html];
 }
 
-function notify_send_mail(array $emails, string $subject, string $html): bool
-{
+/**
+ * @param list<string> $emails
+ * @param bool $applyBcc Immediate sends only; digests leave this false.
+ *                       Skips BCC when that address is already in To (already a recipient).
+ */
+function notify_send_mail(
+    array $emails,
+    string $subject,
+    string $html,
+    bool $applyBcc = false
+): bool {
     $emails = array_values(array_filter(array_map('trim', $emails)));
     if ($emails === []) {
         return false;
     }
-    $from = notify_config()['from'];
+    $cfg = notify_config();
+    $from = $cfg['from'];
     $headers = [
         'MIME-Version: 1.0',
         'Content-Type: text/html; charset=UTF-8',
     ];
     if ($from !== '') {
         $headers[] = 'From: ' . $from;
+    }
+    $bcc = $cfg['bcc'];
+    if ($applyBcc && $bcc !== '') {
+        $alreadyTo = false;
+        foreach ($emails as $email) {
+            if (strcasecmp($email, $bcc) === 0) {
+                $alreadyTo = true;
+                break;
+            }
+        }
+        if (!$alreadyTo) {
+            $headers[] = 'Bcc: ' . $bcc;
+        }
     }
     $to = implode(', ', $emails);
     $ok = @mail($to, $subject, $html, implode("\r\n", $headers));
@@ -370,7 +394,7 @@ function notify_record_event(array $event): void
         $immediate = team_member_emails_by_frequency($team, 'immediate');
         if ($immediate !== []) {
             $rendered = notify_render_email($event, $settings);
-            notify_send_mail($immediate, $rendered['subject'], $rendered['html']);
+            notify_send_mail($immediate, $rendered['subject'], $rendered['html'], true);
         }
 
         $digestEmails = team_digest_emails($team);

@@ -28,5 +28,11 @@ return [
         'from' => '',
         /** Shared secret for notify-flush.php?secret=… cron hits. */
         'flush_secret' => '',
+        /**
+         * Optional BCC for immediate notifies only (not digests).
+         * Skipped when this address is already in the To list.
+         */
+        'bcc' => '',
     ],
 ];
+
