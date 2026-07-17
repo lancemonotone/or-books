@@ -116,13 +116,15 @@ const COPY = {
   ourSuggestion: "Suggested approach",
   summaryTitle: "Summary of replies",
   summaryLead:
-    "Everything saved so far. You will also see your own answers on each form.",
+    "Every question and issue in this review. Answers and comments appear when someone has saved them.",
   noScreenshotsLinked: "No screenshots linked yet.",
   noIssuesLinked: "No issues linked",
   lastSaved: "Saved",
   youChose: "You chose",
-  noDecisionsYet: "No answers saved yet.",
-  noFeedbackYet: "No feedback saved yet.",
+  noDecisionsYet: "No questions in this review yet.",
+  noFeedbackYet: "No issues in this review yet.",
+  noAnswerYet: "—",
+  noCommentYet: "—",
   loadError: "Could not load review data",
   phaseNotFound: "Phase not found.",
   issueNotFound: "Issue not found.",
@@ -2053,11 +2055,30 @@ function bindSortableTables(root = main) {
 }
 
 function renderResponses() {
-  const decisionRows = Object.entries(state.responses.decisions)
-    .map(([id, row]) => {
-      const decision = state.decisions.find((d) => d.key === id);
-      return { id, row, decision, rank: decisionIssueSortRank(decision) };
-    })
+  const decisionResponses = state.responses.decisions || {};
+  const commentResponses = state.responses.comments || {};
+
+  const decisionEntries = (state.decisions || []).map((decision) => ({
+    id: decision.key,
+    decision,
+    row: decisionResponses[decision.key] || null,
+    rank: decisionIssueSortRank(decision),
+  }));
+
+  const knownDecisionKeys = new Set(decisionEntries.map((entry) => entry.id));
+  Object.entries(decisionResponses).forEach(([id, row]) => {
+    if (knownDecisionKeys.has(id)) {
+      return;
+    }
+    decisionEntries.push({
+      id,
+      decision: null,
+      row,
+      rank: Number.MAX_SAFE_INTEGER,
+    });
+  });
+
+  const decisionRows = decisionEntries
     .sort((a, b) => a.rank - b.rank)
     .map(({ id, row, decision }) => {
       const label = renderSummaryItemLabel(
@@ -2065,34 +2086,58 @@ function renderResponses() {
         decision?.title,
         id,
       );
-      const author = String(row.author || "").trim();
-      const updatedAt = Number(new Date(row.updatedAt)) || 0;
+      const author = String(row?.author || "").trim();
+      const updatedAt = row?.updatedAt ? Number(new Date(row.updatedAt)) || 0 : 0;
+      const answer = row?.choice
+        ? `<strong>${escapeHtml(row.choice)}</strong>`
+        : `<span class="muted">${escapeHtml(COPY.noAnswerYet)}</span>`;
+      const comment = row?.text
+        ? escapeHtml(row.text)
+        : `<span class="muted">${escapeHtml(COPY.noCommentYet)}</span>`;
       return `<tr>
         ${sortCell(decisionIssueSortRank(decision), label)}
-        <td><strong>${escapeHtml(row.choice)}</strong></td>
+        <td>${answer}</td>
         ${sortCell(author.toLowerCase(), escapeHtml(author))}
-        <td>${escapeHtml(row.text || "")}</td>
-        ${sortCell(updatedAt, renderSummaryDateCell(row.updatedAt))}
+        <td>${comment}</td>
+        ${sortCell(updatedAt, renderSummaryDateCell(row?.updatedAt))}
       </tr>`;
     })
     .join("");
 
-  const commentRows = Object.entries(state.responses.comments)
-    .map(([key, row]) => {
-      const issue = issueByKey(key);
-      return { key, row, issue, rank: issueIdSortRank(issue) };
-    })
+  const issueEntries = (state.issues || []).map((issue) => ({
+    key: issue.key,
+    issue,
+    row: commentResponses[issue.key] || null,
+    rank: issueIdSortRank(issue),
+  }));
+
+  const knownIssueKeys = new Set(issueEntries.map((entry) => entry.key));
+  Object.entries(commentResponses).forEach(([key, row]) => {
+    if (knownIssueKeys.has(key)) {
+      return;
+    }
+    issueEntries.push({
+      key,
+      issue: null,
+      row,
+      rank: Number.MAX_SAFE_INTEGER,
+    });
+  });
+
+  const commentRows = issueEntries
     .sort((a, b) => a.rank - b.rank)
     .map(({ key, row, issue }) => {
-      const normalized = normalizeCommentClient(row) || row;
+      const normalized = row ? normalizeCommentClient(row) || row : null;
       const label = renderSummaryItemLabel(
         issue ? [key] : [],
         issue?.title,
         key,
       );
-      const commentCell = renderCommentSummaryCell(normalized);
+      const commentCell = normalized
+        ? renderCommentSummaryCell(normalized)
+        : `<span class="muted">${escapeHtml(COPY.noCommentYet)}</span>`;
       const author = String(
-        normalized.messages?.[0]?.author || normalized.author || "",
+        normalized?.messages?.[0]?.author || normalized?.author || "",
       ).trim();
       const priority = String(issue?.priority || "");
       const priorityRank =
@@ -2105,12 +2150,15 @@ function renderResponses() {
       const statusCell = issue
         ? renderStatusControl(issue, { editable: true })
         : "";
-      const updatedAt = Number(new Date(normalized.updatedAt)) || 0;
+      const updatedAt = normalized?.updatedAt
+        ? Number(new Date(normalized.updatedAt)) || 0
+        : 0;
       const rowClasses = ["summary-row--phase"];
       if (status === "deferred") {
         rowClasses.push("summary-row--deferred");
       }
-      const phaseStyle = issue?.sprint != null ? phaseStyleAttr(issue.sprint) : "";
+      const phaseStyle =
+        issue?.sprint != null ? phaseStyleAttr(issue.sprint) : "";
       const styleAttr = phaseStyle ? ` style="${phaseStyle}"` : "";
       return `<tr class="${rowClasses.join(" ")}"${styleAttr}>
         ${sortCell(issueIdSortRank(issue), label)}
@@ -2118,7 +2166,7 @@ function renderResponses() {
         ${sortCell(statusRank, statusCell)}
         ${sortCell(author.toLowerCase(), escapeHtml(author))}
         <td>${commentCell}</td>
-        ${sortCell(updatedAt, renderSummaryDateCell(normalized.updatedAt))}
+        ${sortCell(updatedAt, renderSummaryDateCell(normalized?.updatedAt))}
       </tr>`;
     })
     .join("");

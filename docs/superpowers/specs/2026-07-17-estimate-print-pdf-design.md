@@ -55,7 +55,7 @@ The Estimate page shows quote rollups in the browser but has no downloadable cli
 
 1. **Header:** optional vendor block (`logo`, `business`, `name`, `address`, `email`, `phone` from config) + title “Estimate”; `clientName` when set; generated date; hourly rate line or Fail Fast note.
 2. **Summary:** Grand estimate hours + estimate `$` only (no Done / Remaining cards; no “Grand total” title). Note that deferred issues are not included in the total.
-3. **Per-phase tables:** Issue id · Title · Status · Estimate hours · Estimate `$` (quoted statuses only; em dash when unset). Optional actual columns when `includeActuals`.
+3. **Per-phase tables:** Issue id · Title · Status · Estimate hours · Estimate `$` (all quoted statuses — done + remaining; em dash when unset). Optional actual columns when `includeActuals`. `includeDone` / `includeRemaining` do **not** hide rows here (they only toggle the top Done/Remaining summary cards).
 4. **Deferred phase(s)** stay in the phase list when `includeDeferredAppendix` — same layout as other phases (no page break / special chrome).
 
 ## Architecture
@@ -83,8 +83,9 @@ Print CSS: hide app chrome and screen Estimate page; show only `#estimate-print-
 ## Verification (manual)
 
 1. Open `#/estimates` → Download estimate → Save as PDF.
-2. Summary estimate hours/`$` match page Done / Remaining / Grand.
+2. Summary estimate hours/`$` match page Grand (and Done/Remaining when those profile flags are on).
 3. No actuals or completeness in default PDF.
-4. Deferred phase section present with other phases; no page break; same styling as Phase 1–4.
-5. Clear rate → `$` Fail Fast; hours still show.
-6. Empty Issues → button disabled.
+4. Deferred phase section present with other phases; no page break; same styling as other phases.
+5. Phases that only contain `complete` Issues (e.g. Discovery) still appear in per-phase tables; Grand hours include them.
+6. Clear rate → `$` Fail Fast; hours still show.
+7. Empty Issues → button disabled.

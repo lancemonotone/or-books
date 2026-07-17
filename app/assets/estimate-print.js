@@ -127,6 +127,8 @@ function renderIssueRow(issue, profile, rate, copy, statusLabelFn) {
 
 /**
  * Issues shown in a phase section (quoted + optional deferred).
+ * `includeDone` / `includeRemaining` only gate the top summary cards, not
+ * these rows — quoted work (done + remaining) always lists so Grand matches.
  * @param {object[]} issues
  * @param {object} profile
  */
@@ -138,9 +140,6 @@ function filterPhaseIssues(issues, profile) {
     }
     if (bucket === "deferred") {
       return Boolean(profile.includeDeferredAppendix);
-    }
-    if (!profile.includeDone && bucket === "done") {
-      return false;
     }
     return true;
   });
