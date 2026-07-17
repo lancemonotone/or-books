@@ -18,6 +18,7 @@ if ($method === 'GET') {
         'csrf' => $csrf,
         'files' => EDITOR_FILES,
         'hourlyRate' => $authenticated ? editor_hourly_rate() : null,
+        'vendor' => $authenticated ? editor_vendor() : null,
     ]);
 }
 
@@ -50,4 +51,5 @@ respond_json(200, [
     'ok' => true,
     'csrf' => editor_csrf_token(),
     'hourlyRate' => editor_hourly_rate(),
+    'vendor' => editor_vendor(),
 ]);

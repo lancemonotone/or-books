@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 /**
  * Shared helpers for flat-file JSON responses.
- * Copy config.example.php to config.php and set allowed_methods if needed.
+ * Config lives at the repo root: copy config.example.php to config.php.
  */
 
-$configFile = __DIR__ . '/config.php';
+$configFile = dirname(__DIR__, 2) . '/config.php';
 $config = file_exists($configFile) ? require $configFile : [];
+
+/** @var array $editorConfig Alias used by editor/notify helpers. */
+$editorConfig = is_array($config) ? $config : [];
 
 function respond_json(int $status, array $payload): void
 {

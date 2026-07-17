@@ -7,17 +7,18 @@ Discovery notes and roadmap live in [`../_office/mobile-ux-audit/`](../_office/m
 ## Layout
 
 ```
-app/                      ← document root on the server (deploy as /audit/)
-├── index.html
-├── assets/               # JS, CSS, motion adapter
-├── api/                  # PHP — saves comments/decisions to JSON
-├── data/                 # issues.yaml, evidence.yaml, decisions.yaml
-├── edit/                 # password-protected YAML editor (not linked from presentation)
-├── media/                # PNG + MP4 (gitignored — link or copy)
-├── robots.txt            # asks crawlers to skip /edit/ and editor API
-└── scripts/
-    ├── link-media.sh
-    └── link-media.ps1
+or-books/                 ← repo root
+├── config.example.php    # copy → config.php (gitignored)
+├── config.php            # local secrets + vendor + hourly_rate
+└── app/                  ← document root on the server (deploy as /audit/)
+    ├── index.html
+    ├── assets/           # JS, CSS, motion adapter
+    ├── api/              # PHP — saves comments/decisions to JSON
+    ├── data/             # issues.yaml, evidence.yaml, decisions.yaml
+    ├── edit/             # password-protected YAML editor
+    ├── media/            # PNG + MP4 (gitignored — link or copy)
+    ├── robots.txt
+    └── scripts/
 ```
 
 ## Local preview
@@ -39,7 +40,7 @@ Saving feedback requires PHP on the deployed host.
 2. Copy or sync `_office/screenshots/*` into `media/` on the server.
 3. Make `data/responses/` writable by PHP.
 4. Make `data/` writable by PHP if you use the editor.
-5. Copy `api/config.example.php` to `api/config.php` and set `editor_password`.
+5. Copy `../config.example.php` to `../config.php` (repo root, sibling to `app/`) and set `editor_password`.
 6. Optional: add HTTP Basic Auth in `.htaccess` for another layer.
 
 The review app and content editor share the same password and session. **Nothing in the review UI loads without sign-in.** YAML/JSON under `data/` are blocked from direct HTTP access and served only through authenticated APIs.
@@ -52,10 +53,11 @@ Signed-in **Settings** (gear in the header):
 - Appearance: light / dark / system (saved in the browser)
 - Notification on/off, client & developer teams (each person = name used in the app + email + update frequency). Those names are the options in the “Your name” picker on issues and Questions.
 
-Deploy secrets stay in `api/config.php`:
+Deploy secrets stay in `config.php` at the **repo root** (sibling to `app/`; outside the web docroot when you deploy `app/` contents as `/audit/`):
 
 - `app_public_url` — base URL for links inside notification emails
 - `hourly_rate` — optional USD rate for estimate/actual dollar amounts (omit or null when unset)
+- `vendor` — optional estimate PDF header: `name`, `business`, `address`, `email`, `phone`, `logo` (path relative to the app folder, e.g. `assets/vendor-logo.png`)
 - `notify.from` — From header for PHP `mail()`
 - `notify.flush_secret` — required by the digest cron endpoint
 - `notify.enabled` — hard off for the host
@@ -68,7 +70,7 @@ URL: **`/audit/edit/`** (linked from the signed-in review nav).
 
 ### Setup
 
-1. Copy `api/config.example.php` to `api/config.php`.
+1. Copy `../config.example.php` to `../config.php` (repo root).
 2. Set `editor_password` to a long random string.
 3. Ensure PHP can write to `data/*.yaml`.
 

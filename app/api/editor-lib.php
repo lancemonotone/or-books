@@ -9,9 +9,6 @@ const EDITOR_MAX_BYTES = 1_048_576;
 const EDITOR_MAX_LOGIN_ATTEMPTS = 8;
 const EDITOR_LOCKOUT_SECONDS = 900;
 
-$configFile = __DIR__ . '/config.php';
-$editorConfig = file_exists($configFile) ? require $configFile : [];
-
 function editor_password(): string {
     global $editorConfig;
     return trim((string) ($editorConfig['editor_password'] ?? ''));
@@ -42,6 +39,43 @@ function editor_hourly_rate(): ?float
         return null;
     }
     return $rate;
+}
+
+/**
+ * Sanitize a relative logo path for the estimate PDF (no .., no scheme).
+ */
+function editor_vendor_logo_path(string $raw): string
+{
+    $path = str_replace('\\', '/', trim($raw));
+    if ($path === '' || str_contains($path, '..') || preg_match('#^[a-z][a-z0-9+.-]*:#i', $path)) {
+        return '';
+    }
+    $path = ltrim($path, '/');
+    if ($path === '' || !preg_match('#^[A-Za-z0-9._/-]+$#', $path)) {
+        return '';
+    }
+    return $path;
+}
+
+/**
+ * Vendor block for estimate PDF header (authenticated clients only).
+ * Blank fields omitted from the returned array values as empty strings — client skips empty.
+ *
+ * @return array{name: string, business: string, address: string, email: string, phone: string, logo: string}
+ */
+function editor_vendor(): array
+{
+    global $editorConfig;
+    $raw = is_array($editorConfig['vendor'] ?? null) ? $editorConfig['vendor'] : [];
+
+    return [
+        'name' => trim((string) ($raw['name'] ?? '')),
+        'business' => trim((string) ($raw['business'] ?? '')),
+        'address' => trim((string) ($raw['address'] ?? '')),
+        'email' => trim((string) ($raw['email'] ?? '')),
+        'phone' => trim((string) ($raw['phone'] ?? '')),
+        'logo' => editor_vendor_logo_path((string) ($raw['logo'] ?? '')),
+    ];
 }
 
 function editor_session_lifetime(): int {
@@ -108,7 +142,7 @@ function editor_verify_honeypot(?string $value): void {
 
 function editor_require_enabled(): void {
     if (!editor_enabled()) {
-        respond_json(503, ['error' => 'Editor is not configured. Set editor_password in api/config.php.']);
+        respond_json(503, ['error' => 'Editor is not configured. Set editor_password in config.php (repo root).']);
     }
 }
 

@@ -20,7 +20,7 @@ function notify_config(): array
 {
     global $editorConfig;
     if (!isset($editorConfig) || !is_array($editorConfig)) {
-        $configFile = __DIR__ . '/config.php';
+        $configFile = dirname(__DIR__, 2) . '/config.php';
         $editorConfig = file_exists($configFile) ? require $configFile : [];
     }
     $notify = is_array($editorConfig['notify'] ?? null) ? $editorConfig['notify'] : [];

@@ -27,6 +27,10 @@ import {
   issueActualHours,
   hoursToCost,
 } from "./estimates.js";
+import {
+  DEFAULT_ESTIMATE_PRINT_PROFILE,
+  printEstimate,
+} from "./estimate-print.js";
 
 const AUTHOR_KEYS = {
   comment: "or-audit-author",
@@ -154,6 +158,8 @@ const COPY = {
     `Estimate hours set on ${set} of ${total} issues`,
   estimatesCompletenessActual: (set, total) =>
     `Actual hours set on ${set} of ${total} issues`,
+  estimatesDownload: "Download estimate",
+  estimatePrintRate: (formatted) => `Hourly rate: ${formatted}`,
 };
 
 const PRIORITY_LABELS = {
@@ -213,12 +219,29 @@ const state = {
   route: parseRoute(),
   ready: false,
   hourlyRate: null,
+  vendor: null,
 };
 
 function applyHourlyRate(auth) {
   const raw = auth?.hourlyRate;
   state.hourlyRate =
     typeof raw === "number" && Number.isFinite(raw) && raw >= 0 ? raw : null;
+}
+
+function applyVendor(auth) {
+  const raw = auth?.vendor;
+  if (!raw || typeof raw !== "object") {
+    state.vendor = null;
+    return;
+  }
+  state.vendor = {
+    name: String(raw.name || "").trim(),
+    business: String(raw.business || "").trim(),
+    address: String(raw.address || "").trim(),
+    email: String(raw.email || "").trim(),
+    phone: String(raw.phone || "").trim(),
+    logo: String(raw.logo || "").trim(),
+  };
 }
 
 function clientName() {
@@ -295,6 +318,7 @@ function markAuthedSession() {
 
 function clearAuthedSession() {
   state.hourlyRate = null;
+  state.vendor = null;
   try {
     sessionStorage.removeItem(AUTH_SESSION_HINT);
   } catch {
@@ -2366,7 +2390,7 @@ function renderEstimatesIssueRow(issue) {
   return `<tr>
     <td><a href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a></td>
     <td>${escapeHtml(issue.title)}</td>
-    <td>${escapeHtml(statusLabel(issue.status))}</td>
+    <td>${renderStatusControl(issue, { editable: true })}</td>
     <td>${renderEstimatesHoursCostCell(estimateHours, estimateCost)}</td>
     <td>${renderEstimatesHoursCostCell(actualHours, actualCost)}</td>
   </tr>`;
@@ -2401,12 +2425,26 @@ function renderEstimatesPhaseSection(phase) {
     </section>`;
 }
 
+function estimatePrintPhaseTitle(sprintId, sprint) {
+  if (sprint?.title) {
+    return String(sprint.title).trim();
+  }
+  return phasePillLabel(sprintId);
+}
+
+function renderEstimatesDownloadButton(disabled = false) {
+  return `<button type="button" class="button" data-download-estimate${disabled ? " disabled" : ""}>${escapeHtml(COPY.estimatesDownload)}</button>`;
+}
+
 function renderEstimatesPage() {
   if (!state.issues.length) {
     return `
       <div class="page page--estimates">
         <header class="page-header">
-          <h1>${escapeHtml(COPY.estimates)}</h1>
+          <div class="page-header__row">
+            <h1>${escapeHtml(COPY.estimates)}</h1>
+            ${renderEstimatesDownloadButton(true)}
+          </div>
         </header>
         <p>${escapeHtml(COPY.estimatesNoIssues)}</p>
       </div>`;
@@ -2429,7 +2467,10 @@ function renderEstimatesPage() {
   return `
     <div class="page page--estimates">
       <header class="page-header">
-        <h1>${escapeHtml(COPY.estimates)}</h1>
+        <div class="page-header__row">
+          <h1>${escapeHtml(COPY.estimates)}</h1>
+          ${renderEstimatesDownloadButton(false)}
+        </div>
       </header>
       ${rateBanner}
       ${renderEstimatesBucketStrip(summary)}
@@ -2602,6 +2643,7 @@ function bindAuthHandlers() {
         String(data.get("website") || ""),
       );
       applyHourlyRate(loginAuth);
+      applyVendor(loginAuth);
       markAuthedSession();
       skipBootSplash();
       loginForm.reset();
@@ -3077,6 +3119,28 @@ function bindIssueTags(root = main) {
 function bindPageHandlers() {
   bindSortableTables();
 
+  main.querySelectorAll("[data-download-estimate]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!state.issues.length) {
+        return;
+      }
+      printEstimate(
+        {
+          issues: state.issues,
+          sprints: state.audit?.sprints || [],
+          rate: state.hourlyRate,
+          clientName: clientName(),
+          vendor: state.vendor,
+          generatedAt: new Date(),
+          copy: COPY,
+          statusLabel,
+          phaseTitle: estimatePrintPhaseTitle,
+        },
+        DEFAULT_ESTIMATE_PRINT_PROFILE,
+      );
+    });
+  });
+
   main.querySelectorAll("[data-open-evidence]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const gallery = parseEvidenceGallery(btn);
@@ -3309,6 +3373,10 @@ function bindPageHandlers() {
         const issue = state.issues.find((item) => item.key === issueKey);
         if (issue) {
           issue.status = status;
+        }
+        if (state.route.name === "estimates") {
+          render();
+          return;
         }
         const sortCellEl = select.closest("td[data-sort-value]");
         if (sortCellEl) {
@@ -3588,6 +3656,7 @@ async function init() {
       return;
     }
     applyHourlyRate(auth);
+    applyVendor(auth);
     markAuthedSession();
     skipBootSplash();
     await loadAppData();
