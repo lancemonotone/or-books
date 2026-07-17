@@ -53,9 +53,25 @@
     },
     "d64c6362-1054-468f-a9cb-3f1feb2473ab": {
         "stance": "discuss",
-        "text": "Is it possible to keep this in the same tab for mobile only? We'd like to have it open in a new tab when viewed on desktop.\n[p3]",
+        "text": "We can certainly do that with some javascript if you'd like, although browser compliance is not guaranteed (it should work in most). I would push back a little though, because these are internal product links. Most shoppers expect clicking an internal link will take them to the linked page in the same tab, and they can use the Back button if they want to return. Can I ask what problem you're hoping to solve for shoppers? There may be a more natural way to achieve it.",
         "author": "Antara",
-        "updatedAt": "2026-07-14T14:50:58+00:00"
+        "updatedAt": "2026-07-17T15:11:20+00:00",
+        "messages": [
+            {
+                "id": "legacy-2235c9d93384b7f1",
+                "author": "Antara",
+                "text": "Is it possible to keep this in the same tab for mobile only? We'd like to have it open in a new tab when viewed on desktop.\n[p3]",
+                "createdAt": "2026-07-14T14:50:58+00:00",
+                "updatedAt": "2026-07-14T14:50:58+00:00"
+            },
+            {
+                "id": "b9ba35f3f05dc5742ea9086e74a8820b",
+                "author": "Rus",
+                "text": "We can certainly do that with some javascript if you'd like, although browser compliance is not guaranteed (it should work in most). I would push back a little though, because these are internal product links. Most shoppers expect clicking an internal link will take them to the linked page in the same tab, and they can use the Back button if they want to return. Can I ask what problem you're hoping to solve for shoppers? There may be a more natural way to achieve it.",
+                "createdAt": "2026-07-17T15:11:20+00:00",
+                "updatedAt": "2026-07-17T15:11:20+00:00"
+            }
+        ]
     },
     "56ca0eac-6c8c-4e37-b16d-69ac88ce008f": {
         "stance": "agree",
