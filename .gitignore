@@ -2,8 +2,8 @@
 app/media/*
 !app/media/.gitkeep
 
-# Optional local API config (repo root — sibling to app/)
-/config.php
+# Optional local API config (app root)
+/app/config.php
 
 # Local Node deps for one-shot scripts
 app/node_modules/

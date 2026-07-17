@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Copy to config.php (same folder) and set editor_password.
  * Same password gates the review app and the content editor.
  *
- * Path: repo root (sibling to app/). PHP loads it from app/api via dirname.
+ * Path: app/ (alongside index.html). PHP loads it from app/api via dirname(__DIR__).
  *
  * Notification secrets stay here; team lists and client name live in Settings (settings.json).
  */

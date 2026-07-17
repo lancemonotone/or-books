@@ -34,8 +34,8 @@ The Estimate page shows quote rollups in the browser but has no downloadable cli
 | Flexibility | Profile object in code; no UI toggles yet |
 | Rate missing | Hours still print; `$` cells use Fail Fast copy |
 | Client name missing | Omit name line (no invented default) |
-| Vendor header | From root `config.php` `vendor` block; omit blank fields / invalid logo |
-| Config location | Repo root `config.php` (sibling to `app/`) |
+| Vendor header | From `app/config.php` `vendor` block; omit blank fields / invalid logo |
+| Config location | `app/config.php` (app root, alongside `index.html`) |
 | Access | Anyone who can see `#/estimates` |
 
 ## Default profile

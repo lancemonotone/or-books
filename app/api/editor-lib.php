@@ -142,7 +142,7 @@ function editor_verify_honeypot(?string $value): void {
 
 function editor_require_enabled(): void {
     if (!editor_enabled()) {
-        respond_json(503, ['error' => 'Editor is not configured. Set editor_password in config.php (repo root).']);
+        respond_json(503, ['error' => 'Editor is not configured. Set editor_password in config.php (app root).']);
     }
 }
 

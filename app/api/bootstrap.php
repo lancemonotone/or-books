@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 /**
  * Shared helpers for flat-file JSON responses.
- * Config lives at the repo root: copy config.example.php to config.php.
+ * Config lives in app/: copy config.example.php to config.php.
  */
 
-$configFile = dirname(__DIR__, 2) . '/config.php';
+$configFile = dirname(__DIR__) . '/config.php';
 $config = file_exists($configFile) ? require $configFile : [];
 
 /** @var array $editorConfig Alias used by editor/notify helpers. */

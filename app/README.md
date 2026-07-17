@@ -8,9 +8,9 @@ Discovery notes and roadmap live in [`../_office/mobile-ux-audit/`](../_office/m
 
 ```
 or-books/                 ← repo root
-├── config.example.php    # copy → config.php (gitignored)
-├── config.php            # local secrets + vendor + hourly_rate
 └── app/                  ← document root on the server (deploy as /audit/)
+    ├── config.example.php  # copy → config.php (gitignored)
+    ├── config.php          # local secrets + vendor + hourly_rate
     ├── index.html
     ├── assets/           # JS, CSS, motion adapter
     ├── api/              # PHP — saves comments/decisions to JSON
@@ -40,7 +40,7 @@ Saving feedback requires PHP on the deployed host.
 2. Copy or sync `_office/screenshots/*` into `media/` on the server.
 3. Make `data/responses/` writable by PHP.
 4. Make `data/` writable by PHP if you use the editor.
-5. Copy `../config.example.php` to `../config.php` (repo root, sibling to `app/`) and set `editor_password`.
+5. Copy `config.example.php` to `config.php` (in this `app/` folder) and set `editor_password`.
 6. Optional: add HTTP Basic Auth in `.htaccess` for another layer.
 
 The review app and content editor share the same password and session. **Nothing in the review UI loads without sign-in.** YAML/JSON under `data/` are blocked from direct HTTP access and served only through authenticated APIs.
@@ -53,7 +53,7 @@ Signed-in **Settings** (gear in the header):
 - Appearance: light / dark / system (saved in the browser)
 - Notification on/off, client & developer teams (each person = name used in the app + email + update frequency). Those names are the options in the “Your name” picker on issues and Questions.
 
-Deploy secrets stay in `config.php` at the **repo root** (sibling to `app/`; outside the web docroot when you deploy `app/` contents as `/audit/`):
+Deploy secrets stay in `config.php` at the **app root** (same folder as `index.html`; deploy with the rest of `app/` as `/audit/`):
 
 - `app_public_url` — base URL for links inside notification emails
 - `hourly_rate` — optional USD rate for estimate/actual dollar amounts (omit or null when unset)
@@ -70,7 +70,7 @@ URL: **`/audit/edit/`** (linked from the signed-in review nav).
 
 ### Setup
 
-1. Copy `../config.example.php` to `../config.php` (repo root).
+1. Copy `config.example.php` to `config.php` (in this `app/` folder).
 2. Set `editor_password` to a long random string.
 3. Ensure PHP can write to `data/*.yaml`.
 
