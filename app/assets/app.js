@@ -1817,7 +1817,7 @@ function renderPhasesAccordion(openPhaseIds) {
           ? `<button type="button" class="button button--ghost button--small" data-author-add-phase>${escapeHtml(COPY.addPhase)}</button>`
           : ""
       }${
-        canReorder
+        editMode && canReorder
           ? `<button type="button" class="phases-accordion__reorder" data-phases-reorder>${escapeHtml(COPY.reorderPhases)}</button>`
           : ""
       }${

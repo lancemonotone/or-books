@@ -332,6 +332,7 @@ export function bindAuthorEditToggle(state, { onChange, copy }) {
     persistEditMode(state.editMode);
     applyEditModeClass(state.editMode);
     if (!state.editMode) {
+      state.phaseReorderMode = false;
       clearSaveTimers();
     }
     updateEditToggleLabel(button, state, copy);
