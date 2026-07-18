@@ -21,9 +21,9 @@
         ]
     },
     "280a567f-7694-47ee-8d72-402e68da199d": {
-        "text": "In-house imagery. But we would like to remove the heading. Can we have list of the subject under a 'View More' accordion. \n[P1]",
+        "text": "Should the (new) subject icons stay visible on the page (no “SUBJECTS” title), with a View More accordion below that only lists the subject names as text links? Or should the icons themselves sit inside that accordion (collapsed until someone opens View More)?\n\nA rough sketch or “like [page]” would be helpful if that's doable.",
         "author": "Antara",
-        "updatedAt": "2026-07-14T14:33:33+00:00",
+        "updatedAt": "2026-07-18T13:21:42+00:00",
         "messages": [
             {
                 "id": "legacy-3452f877cc39e952",
@@ -31,6 +31,13 @@
                 "text": "In-house imagery. But we would like to remove the heading. Can we have list of the subject under a 'View More' accordion. \n[P1]",
                 "createdAt": "2026-07-14T14:33:33+00:00",
                 "updatedAt": "2026-07-14T14:33:33+00:00"
+            },
+            {
+                "id": "85a22f838ccb16235514fcb55d59a3cf",
+                "author": "Rus",
+                "text": "Should the (new) subject icons stay visible on the page (no “SUBJECTS” title), with a View More accordion below that only lists the subject names as text links? Or should the icons themselves sit inside that accordion (collapsed until someone opens View More)?\n\nA rough sketch or “like [page]” would be helpful if that's doable.",
+                "createdAt": "2026-07-18T13:21:42+00:00",
+                "updatedAt": "2026-07-18T13:21:42+00:00"
             }
         ]
     },
@@ -464,9 +471,9 @@
         ]
     },
     "d9a285fd-c112-4962-be45-5bbb594dc1d3": {
-        "text": "[P1]\nInterested to know your suggestion.",
+        "text": "Looking at this again, I think the problem is not the headings but rather the body font size, which while not bold, competes with the headings in size on these single book views.",
         "author": "Antara",
-        "updatedAt": "2026-07-14T15:09:29+00:00",
+        "updatedAt": "2026-07-18T13:45:40+00:00",
         "messages": [
             {
                 "id": "legacy-8d249a13fde50d7c",
@@ -474,6 +481,13 @@
                 "text": "[P1]\nInterested to know your suggestion.",
                 "createdAt": "2026-07-14T15:09:29+00:00",
                 "updatedAt": "2026-07-14T15:09:29+00:00"
+            },
+            {
+                "id": "04328564ad3f7f200e2de146418fa4e6",
+                "author": "Rus",
+                "text": "Looking at this again, I think the problem is not the headings but rather the body font size, which while not bold, competes with the headings in size on these single book views.",
+                "createdAt": "2026-07-18T13:45:40+00:00",
+                "updatedAt": "2026-07-18T13:45:40+00:00"
             }
         ]
     },
