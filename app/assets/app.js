@@ -78,6 +78,7 @@ const COPY = {
   teamAddMember: "Add person",
   teamRemoveMember: "Remove person",
   teamFrequency: "Update frequency",
+  frequencyNone: "None",
   frequencyImmediate: "Immediate",
   frequencyHourly: "Hourly digest",
   frequencyDaily: "Daily digest",
@@ -2319,11 +2320,12 @@ function renderResponses() {
     </div>`;
 }
 
-function frequencyOptions(selected = "immediate") {
-  const current = ["immediate", "hourly", "daily"].includes(selected)
+function frequencyOptions(selected = "none") {
+  const current = ["none", "immediate", "hourly", "daily"].includes(selected)
     ? selected
-    : "immediate";
+    : "none";
   return `
+    <option value="none"${current === "none" ? " selected" : ""}>${escapeHtml(COPY.frequencyNone)}</option>
     <option value="immediate"${current === "immediate" ? " selected" : ""}>${escapeHtml(COPY.frequencyImmediate)}</option>
     <option value="hourly"${current === "hourly" ? " selected" : ""}>${escapeHtml(COPY.frequencyHourly)}</option>
     <option value="daily"${current === "daily" ? " selected" : ""}>${escapeHtml(COPY.frequencyDaily)}</option>`;
@@ -2349,7 +2351,7 @@ function isAdminTeamMember(member) {
 }
 
 function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
-  const frequency = member.frequency || "immediate";
+  const frequency = member.frequency || "none";
   const isAdminMember = isAdminTeamMember(member);
   const hasLogin = Boolean(member.hasLogin);
   const mustChange = Boolean(member.mustChangePassword);
@@ -2416,7 +2418,7 @@ function renderTeamFields(teamKey, team) {
   const members =
     Array.isArray(team?.members) && team.members.length
       ? team.members
-      : [{ name: "", email: "", frequency: "immediate" }];
+      : [{ name: "", email: "", frequency: "none" }];
   return `
     <fieldset class="settings-fieldset" data-team="${escapeHtml(teamKey)}">
       <legend>${escapeHtml(teamKey === "client" ? COPY.clientTeam : COPY.developerTeam)}</legend>
@@ -2442,7 +2444,7 @@ function readTeamMembersFromForm(form, teamKey) {
     const email = row.querySelector(`input[name="${teamKey}-email[]"]`)?.value.trim() || "";
     const frequency =
       row.querySelector(`select[name="${teamKey}-frequency[]"]`)?.value ||
-      "immediate";
+      "none";
     const tempPassword =
       row.querySelector(`input[name="${teamKey}-tempPassword[]"]`)?.value || "";
     if (!name || !email) {
@@ -2469,7 +2471,7 @@ function bindTeamMemberRepeaters(root = main) {
         "beforeend",
         renderTeamMemberRow(
           teamKey,
-          { name: "", email: "", frequency: "immediate" },
+          { name: "", email: "", frequency: "none" },
           { showRemove: true },
         ),
       );
@@ -2495,7 +2497,7 @@ function bindTeamMemberRepeaters(root = main) {
           "beforeend",
           renderTeamMemberRow(
             teamKey,
-            { name: "", email: "", frequency: "immediate" },
+            { name: "", email: "", frequency: "none" },
             { showRemove: true },
           ),
         );

@@ -460,8 +460,8 @@ function notify_flush_due(): array
                 continue;
             }
             $email = trim((string) ($member['email'] ?? ''));
-            $frequency = normalize_frequency((string) ($member['frequency'] ?? 'immediate'));
-            if ($email === '' || $frequency === 'immediate') {
+            $frequency = normalize_frequency((string) ($member['frequency'] ?? 'none'));
+            if ($email === '' || $frequency === 'none' || $frequency === 'immediate') {
                 continue;
             }
             $stateKey = strtolower($email);

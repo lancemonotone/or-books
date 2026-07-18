@@ -28,10 +28,10 @@ function default_settings(): array
 function normalize_frequency(string $value): string
 {
     $value = strtolower(trim($value));
-    if (in_array($value, ['immediate', 'hourly', 'daily'], true)) {
+    if (in_array($value, ['none', 'immediate', 'hourly', 'daily'], true)) {
         return $value;
     }
-    return 'immediate';
+    return 'none';
 }
 
 /**
@@ -60,7 +60,7 @@ function normalize_team_members(array $team): array
             $members[] = [
                 'name' => $name,
                 'email' => $email,
-                'frequency' => normalize_frequency((string) ($row['frequency'] ?? 'immediate')),
+                'frequency' => normalize_frequency((string) ($row['frequency'] ?? 'none')),
             ];
         }
     }
@@ -79,7 +79,7 @@ function normalize_team_members(array $team): array
             $members[] = [
                 'name' => $name,
                 'email' => $email,
-                'frequency' => 'immediate',
+                'frequency' => 'none',
             ];
         }
     }
@@ -141,7 +141,7 @@ function team_member_emails_by_frequency(array $team, string $frequency): array
         if (!is_array($member)) {
             continue;
         }
-        if (normalize_frequency((string) ($member['frequency'] ?? 'immediate')) !== $frequency) {
+        if (normalize_frequency((string) ($member['frequency'] ?? 'none')) !== $frequency) {
             continue;
         }
         $email = trim((string) ($member['email'] ?? ''));
@@ -162,8 +162,8 @@ function team_digest_emails(array $team): array
         if (!is_array($member)) {
             continue;
         }
-        $freq = normalize_frequency((string) ($member['frequency'] ?? 'immediate'));
-        if ($freq === 'immediate') {
+        $freq = normalize_frequency((string) ($member['frequency'] ?? 'none'));
+        if ($freq === 'none' || $freq === 'immediate') {
             continue;
         }
         $email = trim((string) ($member['email'] ?? ''));
