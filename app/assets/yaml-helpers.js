@@ -26,24 +26,16 @@ export function dumpYaml(data, file = "") {
     });
   }
 
+  if (file === "audit" && payload && typeof payload === "object") {
+    const { stats: _stats, slug: _slug, ...rest } = payload;
+    payload = rest;
+  }
+
   return yaml.dump(payload, { lineWidth: -1, noRefs: true });
 }
 
 export function parseYaml(text) {
   return yaml.load(text);
-}
-
-export function syncAuditStats(audit, tasks, evidence, decisions) {
-  audit.stats = {
-    screenshots: evidence.filter(
-      (row) => row.type !== "video" && !String(row.file || "").endsWith(".mp4"),
-    ).length,
-    recordings: evidence.filter(
-      (row) => row.type === "video" || String(row.file || "").endsWith(".mp4"),
-    ).length,
-    tasks: tasks.length,
-    decisions: decisions.length,
-  };
 }
 
 export function syncEvidenceTaskLinks(tasks, evidence) {

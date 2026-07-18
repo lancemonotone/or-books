@@ -1,7 +1,6 @@
 import { getCsrfToken, mediaUrl as presentationMediaUrl } from "./api.js";
 import {
   dumpYaml,
-  syncAuditStats,
   syncEvidenceTaskLinks,
   syncTaskEvidenceFromGallery,
   compactTaskIds,
@@ -63,7 +62,6 @@ export async function uploadMediaFile(file) {
 
 export {
   dumpYaml,
-  syncAuditStats,
   syncEvidenceTaskLinks,
   syncTaskEvidenceFromGallery,
   compactTaskIds,

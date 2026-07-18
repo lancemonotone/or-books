@@ -2,7 +2,6 @@ import {
   saveYamlFile,
   loadMediaList,
   uploadMediaFile,
-  syncAuditStats,
   syncEvidenceTaskLinks,
   syncTaskEvidenceFromGallery,
   compactTaskIds,
@@ -78,30 +77,23 @@ function debounceSave(key, fn) {
 
 export async function persistTasks(state) {
   syncEvidenceTaskLinks(state.tasks, state.evidence);
-  syncAuditStats(state.audit, state.tasks, state.evidence, state.decisions);
   await saveYamlFile("tasks", state.tasks);
   await saveYamlFile("evidence", state.evidence);
-  await saveYamlFile("audit", state.audit);
 }
 
 export async function persistAudit(state) {
-  syncAuditStats(state.audit, state.tasks, state.evidence, state.decisions);
   await saveYamlFile("audit", state.audit);
 }
 
 export async function persistEvidenceBundle(state) {
   syncTaskEvidenceFromGallery(state.tasks, state.evidence);
   syncEvidenceTaskLinks(state.tasks, state.evidence);
-  syncAuditStats(state.audit, state.tasks, state.evidence, state.decisions);
   await saveYamlFile("evidence", state.evidence);
   await saveYamlFile("tasks", state.tasks);
-  await saveYamlFile("audit", state.audit);
 }
 
 export async function persistDecisions(state) {
-  syncAuditStats(state.audit, state.tasks, state.evidence, state.decisions);
   await saveYamlFile("decisions", state.decisions);
-  await saveYamlFile("audit", state.audit);
 }
 
 export function createBlankDecision({ blocks = [] } = {}) {
