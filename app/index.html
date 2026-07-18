@@ -140,7 +140,18 @@
         <a href="#/" data-nav>Overview</a>
         <a href="#/responses" data-nav data-presenter>Summary</a>
         <a href="#/estimates" data-nav>Estimate</a>
-        <a href="#/evidence" data-nav>Screenshots</a>
+        <a href="#/evidence" data-nav>Media</a>
+        <button
+          type="button"
+          class="site-nav__button site-nav__icon-button"
+          id="edit-mode-toggle"
+          hidden
+          aria-pressed="false"
+          aria-label="Edit"
+          title="Edit"
+        >
+          <svg class="site-nav__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </button>
         <div class="account-menu" id="account-menu">
           <button
             type="button"
@@ -169,15 +180,15 @@
 
   <main id="main" class="site-main" data-view-transition="main" tabindex="-1" hidden></main>
 
-  <dialog class="lightbox" id="lightbox" aria-label="Screenshot viewer">
+  <dialog class="lightbox" id="lightbox" aria-label="Media viewer">
     <div class="lightbox__toolbar">
       <span class="lightbox__title" id="lightbox-title"></span>
       <button type="button" class="lightbox__close" data-lightbox-close aria-label="Close">×</button>
     </div>
     <div class="lightbox__stage">
-      <button type="button" class="lightbox__nav lightbox__nav--prev" data-lightbox-prev aria-label="Previous screenshot" hidden>‹</button>
+      <button type="button" class="lightbox__nav lightbox__nav--prev" data-lightbox-prev aria-label="Previous media" hidden>‹</button>
       <div class="lightbox__body" id="lightbox-body"></div>
-      <button type="button" class="lightbox__nav lightbox__nav--next" data-lightbox-next aria-label="Next screenshot" hidden>›</button>
+      <button type="button" class="lightbox__nav lightbox__nav--next" data-lightbox-next aria-label="Next media" hidden>›</button>
     </div>
     <div class="lightbox__footer" id="lightbox-footer"></div>
   </dialog>
@@ -191,6 +202,38 @@
       <div class="audit-dialog__body" id="audit-dialog-body">
         <p class="audit-dialog__empty">Loading…</p>
       </div>
+    </div>
+  </dialog>
+
+  <dialog class="media-picker" id="media-picker" aria-label="Choose media file">
+    <form method="dialog" class="media-picker__form">
+      <header class="media-picker__header">
+        <h2 class="media-picker__title">Choose file</h2>
+        <button type="button" class="media-picker__close" id="picker-close" aria-label="Close">×</button>
+      </header>
+      <label class="media-picker__search">
+        <span class="visually-hidden">Search files</span>
+        <input type="search" id="picker-search" placeholder="Search…">
+      </label>
+      <div class="media-picker__grid" id="picker-grid"></div>
+      <footer class="media-picker__footer">
+        <label class="media-picker__upload button button--ghost">
+          Upload
+          <input type="file" id="picker-upload" accept=".png,.jpg,.jpeg,.webp,.mp4,image/png,image/jpeg,image/webp,video/mp4" hidden>
+        </label>
+        <p class="media-picker__upload-status" id="picker-upload-status" role="status"></p>
+        <button type="submit" class="button button--ghost">Cancel</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="media-editor" id="media-editor" aria-label="Edit media">
+    <div class="media-editor__inner">
+      <header class="media-editor__header">
+        <h2 class="media-editor__title" id="media-editor-title">Edit media</h2>
+        <button type="button" class="media-editor__close" id="media-editor-close" aria-label="Close">×</button>
+      </header>
+      <div class="media-editor__body" id="media-editor-body"></div>
     </div>
   </dialog>
 

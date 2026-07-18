@@ -30,45 +30,45 @@ foreach ($phaseIdsRaw as $raw) {
 }
 
 $auditPath = editor_data_path('audit');
-$issuesPath = editor_data_path('issues');
-if (!file_exists($auditPath) || !file_exists($issuesPath)) {
-    respond_json(404, ['error' => 'Audit or issues file not found.']);
+$tasksPath = editor_data_path('tasks');
+if (!file_exists($auditPath) || !file_exists($tasksPath)) {
+    respond_json(404, ['error' => 'Audit or tasks file not found.']);
 }
 
 $auditLockPath = $auditPath . '.lock';
-$issuesLockPath = $issuesPath . '.lock';
+$tasksLockPath = $tasksPath . '.lock';
 $auditLock = fopen($auditLockPath, 'c+');
-$issuesLock = fopen($issuesLockPath, 'c+');
-if ($auditLock === false || $issuesLock === false) {
+$tasksLock = fopen($tasksLockPath, 'c+');
+if ($auditLock === false || $tasksLock === false) {
     respond_json(500, ['error' => 'Could not lock data files.']);
 }
 
 try {
-    if (!flock($auditLock, LOCK_EX) || !flock($issuesLock, LOCK_EX)) {
+    if (!flock($auditLock, LOCK_EX) || !flock($tasksLock, LOCK_EX)) {
         respond_json(500, ['error' => 'Could not lock data files.']);
     }
 
     $auditContent = file_get_contents($auditPath);
-    $issuesContent = file_get_contents($issuesPath);
-    if ($auditContent === false || $issuesContent === false) {
+    $tasksContent = file_get_contents($tasksPath);
+    if ($auditContent === false || $tasksContent === false) {
         respond_json(500, ['error' => 'Could not read data files.']);
     }
 
-    $result = reorder_phases_yaml($auditContent, $issuesContent, $requestedIds);
+    $result = reorder_phases_yaml($auditContent, $tasksContent, $requestedIds);
     editor_write_yaml('audit', $result['auditContent']);
-    editor_write_yaml('issues', $result['issuesContent']);
+    editor_write_yaml('tasks', $result['tasksContent']);
 } finally {
     flock($auditLock, LOCK_UN);
-    flock($issuesLock, LOCK_UN);
+    flock($tasksLock, LOCK_UN);
     fclose($auditLock);
-    fclose($issuesLock);
+    fclose($tasksLock);
 }
 
 editor_log_activity('phase.reorder');
 respond_json(200, [
     'ok' => true,
     'sprints' => $result['sprints'],
-    'issues' => $result['issues'],
+    'tasks' => $result['tasks'],
     'phaseMap' => $result['phaseMap'],
     'savedAt' => gmdate('c'),
 ]);
@@ -77,13 +77,13 @@ respond_json(200, [
  * @param list<int> $requestedIds
  * @return array{
  *   auditContent: string,
- *   issuesContent: string,
+ *   tasksContent: string,
  *   sprints: list<array{id:int,title:string,subtitle:string,description:string}>,
- *   issues: list<array{key:string,id:string,sprint:int}>,
+ *   tasks: list<array{key:string,id:string,sprint:int}>,
  *   phaseMap: array<string,int>
  * }
  */
-function reorder_phases_yaml(string $auditContent, string $issuesContent, array $requestedIds): array
+function reorder_phases_yaml(string $auditContent, string $tasksContent, array $requestedIds): array
 {
     $parsed = parse_audit_sprints_section($auditContent);
     $currentIds = array_map(static fn(array $s): int => $s['id'], $parsed['sprints']);
@@ -120,13 +120,13 @@ function reorder_phases_yaml(string $auditContent, string $issuesContent, array 
 
     $auditContent = $parsed['before'] . "sprints:\n" . implode('', $newBlocks) . $parsed['after'];
 
-    $issuesResult = remap_issues_for_phase_order($issuesContent, $phaseMap, array_column($newSprints, 'id'));
+    $tasksResult = remap_tasks_for_phase_order($tasksContent, $phaseMap, array_column($newSprints, 'id'));
 
     return [
         'auditContent' => $auditContent,
-        'issuesContent' => $issuesResult['content'],
+        'tasksContent' => $tasksResult['content'],
         'sprints' => $newSprints,
-        'issues' => $issuesResult['issues'],
+        'tasks' => $tasksResult['tasks'],
         'phaseMap' => $phaseMap,
     ];
 }
@@ -250,13 +250,13 @@ function rewrite_sprint_block_id(string $block, int $newId): string
 /**
  * @param array<string,int> $phaseMap oldId string => newId
  * @param list<int> $newPhaseIds dense 1…N in order
- * @return array{content: string, issues: list<array{key:string,id:string,sprint:int}>}
+ * @return array{content: string, tasks: list<array{key:string,id:string,sprint:int}>}
  */
-function remap_issues_for_phase_order(string $content, array $phaseMap, array $newPhaseIds): array
+function remap_tasks_for_phase_order(string $content, array $phaseMap, array $newPhaseIds): array
 {
     $parts = preg_split('/(?=^- key:)/m', $content);
     if ($parts === false) {
-        respond_json(500, ['error' => 'Could not parse issues file.']);
+        respond_json(500, ['error' => 'Could not parse tasks file.']);
     }
 
     $prefix = '';
@@ -308,7 +308,7 @@ function remap_issues_for_phase_order(string $content, array $phaseMap, array $n
         $ordered
     );
 
-    $issues = [];
+    $tasks = [];
     foreach ($ordered as $block) {
         $key = read_block_key($block);
         $id = read_block_id($block);
@@ -316,7 +316,7 @@ function remap_issues_for_phase_order(string $content, array $phaseMap, array $n
         if ($key === null || $id === null || $sprint === null) {
             continue;
         }
-        $issues[] = [
+        $tasks[] = [
             'key' => $key,
             'id' => $id,
             'sprint' => $sprint,
@@ -325,7 +325,7 @@ function remap_issues_for_phase_order(string $content, array $phaseMap, array $n
 
     return [
         'content' => $prefix . implode('', $ordered),
-        'issues' => $issues,
+        'tasks' => $tasks,
     ];
 }
 
@@ -365,7 +365,7 @@ function write_block_id(string $block, string $id): string
         $count
     );
     if (!is_string($updated) || $count !== 1) {
-        respond_json(500, ['error' => 'Could not rewrite Issue id.']);
+        respond_json(500, ['error' => 'Could not rewrite Task id.']);
     }
     return $updated;
 }
@@ -381,7 +381,7 @@ function write_block_sprint(string $block, int $sprint): string
         $count
     );
     if (!is_string($updated) || $count !== 1) {
-        respond_json(500, ['error' => 'Could not update phase for this issue.']);
+        respond_json(500, ['error' => 'Could not update phase for this task.']);
     }
     return $updated;
 }

@@ -1,7 +1,7 @@
 - file: 120802.png
   type: image
   page: Menu overlay
-  issues:
+  tasks:
     - 02bb4d06-502d-44db-907c-062d48f5e58c
     - 56ca0eac-6c8c-4e37-b16d-69ac88ce008f
     - 7952f11e-1b30-41a0-b128-5f54fdf49928
@@ -9,245 +9,245 @@
 - file: 120911.png
   type: image
   page: Homepage
-  issues:
+  tasks:
     - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
   url: https://orbooks.com/
 - file: 121002.png
   type: image
   page: 'Homepage: author and news modules'
-  issues:
+  tasks:
     - 553ddbd1-fe57-4788-ad5f-0d2727de1ebf
   url: https://orbooks.com/
 - file: 121022.png
   type: image
   page: Subjects page
-  issues:
+  tasks:
     - 280a567f-7694-47ee-8d72-402e68da199d
   url: https://orbooks.com/
 - file: 121855.png
   type: image
   page: Search entry
-  issues:
+  tasks:
     - d64e9880-9bd4-4b26-850b-f04a0b9b341b
   url: https://orbooks.com/
 - file: 121904.png
   type: image
   page: Search active
-  issues:
+  tasks:
     - d64e9880-9bd4-4b26-850b-f04a0b9b341b
   url: https://orbooks.com/
 - file: 122948.mp4
   type: video
   page: Author Page Accordion Titles Font
-  issues:
+  tasks:
     - 12737e6f-b52c-4f53-97b6-50c68e98a871
   url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 123119.mp4
   type: video
   page: 'In the Media: Read Now overlay'
-  issues:
+  tasks:
     - 1003b1bb-4460-4577-97e9-f737dfe9fead
     - 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
   url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 123202.png
   type: image
   page: 'Author: In the Media (squished images)'
-  issues:
+  tasks:
     - b57d706d-de6d-46d7-8e3f-6452f175c362
   url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 123215.png
   type: image
   page: 'Author: In the Media'
-  issues:
+  tasks:
     - b57d706d-de6d-46d7-8e3f-6452f175c362
   url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 123249.png
   type: image
   page: 'Book detail: Run Zohran Run'
-  issues:
+  tasks:
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
     - d9a285fd-c112-4962-be45-5bbb594dc1d3
   url: https://orbooks.com/catalog/run-zohran-run/
 - file: 123310.png
   type: image
   page: 'Book detail: purchase options'
-  issues:
+  tasks:
     - ad45e92e-3cd0-41a4-a129-f80d2c2908bb
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
   url: https://orbooks.com/catalog/run-zohran-run/
 - file: 123327.png
   type: image
   page: 'News article: Run Zohran Run'
-  issues:
+  tasks:
     - 1c59053b-b5c4-4f94-8361-422f66dd6614
     - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
   url: https://orbooks.com/news/the-inside-story-behind-new-yorks-first-democratic-socialist-mayor-run-zohran-run/
 - file: 123434.png
   type: image
   page: Global footer
-  issues:
+  tasks:
     - 535334f1-38be-42ea-9a71-735525922eeb
   url: https://orbooks.com/
 - file: 123519.png
   type: image
   page: 'Our Authors: filter and grid'
-  issues:
+  tasks:
     - 016b1384-309d-48ba-a585-398783c97dd6
     - 74c65dc5-7a86-4fe3-8327-cf3be9715f38
   url: https://orbooks.com/authors/
 - file: 123547.mp4
   type: video
   page: Author Spinner
-  issues:
+  tasks:
     - 4dd2ab1c-7e52-49b9-8051-99e3dce44b2f
   url: https://orbooks.com/authors/
 - file: 123704.png
   type: image
   page: 'Our Authors: grid scroll'
-  issues:
+  tasks:
     - 74c65dc5-7a86-4fe3-8327-cf3be9715f38
   url: https://orbooks.com/authors/
 - file: 123739.png
   type: image
   page: Catalog list + Featured Title
-  issues:
+  tasks:
     - 5d04c117-9701-492c-beea-4056113fbdf2
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
   url: I don't remember where this came from
 - file: 123809.png
   type: image
   page: 'Featured Title: Red Card'
-  issues:
+  tasks:
     - 5d04c117-9701-492c-beea-4056113fbdf2
   url: https://orbooks.com/catalog/
 - file: 123828.png
   type: image
   page: About
-  issues:
+  tasks:
     - 030cf68c-ad0d-4b9f-8c65-f0471faf263b
   url: https://orbooks.com/about/
 - file: 123850.png
   type: image
   page: 'About: video slider'
-  issues:
+  tasks:
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
   url: https://orbooks.com/about/
 - file: 123929.mp4
   type: video
   page: Button Animation About Page
-  issues:
+  tasks:
     - 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
   url: https://orbooks.com/about/
 - file: 123949.png
   type: image
   page: Contact Us
-  issues:
+  tasks:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
   url: https://orbooks.com/contact-us/
 - file: 124005.png
   type: image
   page: Contact form + footer
-  issues:
+  tasks:
     - 83a326b9-4988-4d2d-bcc4-d1ea3b064e98
   url: https://orbooks.com/contact-us/
 - file: 125307.png
   type: image
   page: 'Booksellers: mixed email formats'
-  issues:
+  tasks:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
     - 22f6409d-b5e4-46b1-8086-f2839495505e
   url: https://orbooks.com/booksellers/
 - file: 125329.png
   type: image
   page: In Bookstores
-  issues:
+  tasks:
     - f94186fe-383f-4e7f-9d60-fa99b3468ebe
   url: https://orbooks.com/
 - file: 125454.png
   type: image
   page: Rights Enquiries
-  issues:
+  tasks:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
     - 7b6cbe1e-f36f-48a8-aff4-e14fbaf2ad80
   url: https://orbooks.com/rights-enquires/
 - file: 125507.png
   type: image
   page: 'Rights Catalogs: Lorem Ipsum'
-  issues:
+  tasks:
     - fb10d3ef-47f4-49e0-852e-b75d75b4244f
   url: https://orbooks.com/rights-catalogs/
 - file: 125535.png
   type: image
   page: Mailchimp bookseller signup
-  issues:
+  tasks:
     - 22f6409d-b5e4-46b1-8086-f2839495505e
   url: https://orbooks.us2.list-manage.com/subscribe?u=6180a1909cdc59a9df25c1a94&id=70480d4b0a
 - file: 125607.png
   type: image
   page: 'Authors: Featured + directory'
-  issues:
+  tasks:
     - d1a5bef1-69b2-4ff5-8bf2-61efc6b31212
     - f8f642a3-54ca-4424-ab4c-54f0ae11a5d6
   url: https://orbooks.com/authors/
 - file: 125642.png
   type: image
   page: Subsidiary Rights
-  issues:
+  tasks:
     - 030cf68c-ad0d-4b9f-8c65-f0471faf263b
   url: https://orbooks.com/subsidiary-rights/
 - file: 125703.png
   type: image
   page: Privacy notice TOC
-  issues:
+  tasks:
     - 27ca7574-1799-4c4c-8cc5-2574b0cc29ea
     - b59b43f9-981e-4656-8535-9eee882dcebc
   url: https://orbooks.com/privacy-policy-guidelines/
 - file: 125733.png
   type: image
   page: Privacy CCPA table
-  issues:
+  tasks:
     - 6f242823-63e3-4b9c-b49d-4ecf1336c282
   url: https://orbooks.com/privacy-policy-guidelines/
 - file: 125756.png
   type: image
   page: Privacy Policy & Guidelines
-  issues: []
+  tasks: []
   url: https://orbooks.com/privacy-policy-guidelines/
 - file: 125811.png
   type: image
   page: Terms & Conditions
-  issues:
+  tasks:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
   url: https://orbooks.com/terms-conditions/
 - file: 125833.png
   type: image
   page: FAQ
-  issues:
+  tasks:
     - f0aba0aa-c6c2-4223-9d36-f0cfe1c00dbf
   url: https://orbooks.com/faq/
 - file: 130006.png
   type: image
   page: Shipping / orders info
-  issues:
+  tasks:
     - 11ab1e09-5807-4688-85ed-437200d2fcce
   url: https://orbooks.com/faq/
 - file: 160840.png
   type: image
   page: Reading Lists module
-  issues:
+  tasks:
     - ad45e92e-3cd0-41a4-a129-f80d2c2908bb
   url: https://orbooks.com/
 - file: 161238.png
   type: image
   page: 'In the Media list: Read Now overlay'
-  issues:
+  tasks:
     - 1003b1bb-4460-4577-97e9-f737dfe9fead
   url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 161534.png
   type: image
   page: Media single article
-  issues:
+  tasks:
     - 1c59053b-b5c4-4f94-8361-422f66dd6614
     - 2cf3d97d-aeac-4251-8a81-fb4fe4bd78b6
     - b57d706d-de6d-46d7-8e3f-6452f175c362
@@ -255,42 +255,42 @@
 - file: 164729.png
   type: image
   page: Reading Lists page
-  issues:
+  tasks:
     - 62f9d4cd-453f-472e-81f4-7b252f7577bd
   url: https://orbooks.com/reading-lists/
 - file: 165045.png
   type: image
   page: Reading Lists module
-  issues:
+  tasks:
     - 62f9d4cd-453f-472e-81f4-7b252f7577bd
   url: https://orbooks.com/
 - file: 170035.png
   type: image
   page: Author Page Accordions
-  issues: []
+  tasks: []
   url: https://orbooks.com/authors/h/theodore-hamm/
 - file: 171653.png
   type: image
   page: Book Page Thumbnail
-  issues:
+  tasks:
     - 6eb190a1-cfcd-4029-8261-05027bb3da83
   url: https://orbooks.com/catalog/run-zohran-run/
 - file: 173459.mp4
   type: video
   page: Button Animation
-  issues:
+  tasks:
     - 432cbc0b-e4f3-40ff-aad8-f62a9f5d5eeb
   url: https://orbooks.com/about/
 - file: 174154.png
   type: image
   page: Home Page Featured Title Module
-  issues:
+  tasks:
     - 5d04c117-9701-492c-beea-4056113fbdf2
     - d64c6362-1054-468f-a9cb-3f1feb2473ab
   url: https://orbooks.com/
 - file: 110356.png
   type: image
   page: Privacy Policy
-  issues:
+  tasks:
     - c392e399-8c2d-4c2e-9896-56b81e76b2d0
   url: https://orbooks.com/privacy-policy-guidelines/
