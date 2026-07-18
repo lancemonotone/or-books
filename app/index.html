@@ -27,7 +27,7 @@
   <link rel="icon" href="assets/briefboard-logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body class="is-locked is-booting">
@@ -50,19 +50,23 @@
         alt=""
         aria-hidden="true"
       >
-      <img
-        class="boot-splash__label"
-        src="assets/briefboard-title.webp"
-        width="342"
-        height="53"
-        alt=""
-        aria-hidden="true"
-      >
+      <p class="boot-splash__label" aria-hidden="true">BRIEFBOARD</p>
     </div>
   </div>
 
   <section class="auth-panel" id="auth-panel" hidden>
     <div class="auth-panel__card">
+      <div class="auth-panel__brand">
+        <img
+          class="auth-panel__mark"
+          src="assets/briefboard-logo.svg"
+          width="160"
+          height="160"
+          alt=""
+          decoding="async"
+        >
+        <p class="auth-panel__wordmark">BRIEFBOARD</p>
+      </div>
       <h1>Sign in</h1>
       <p class="auth-panel__lede">Enter your email and password to continue.</p>
       <form class="auth-form" id="login-form">

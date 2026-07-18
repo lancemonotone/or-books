@@ -611,7 +611,6 @@ code {
   box-shadow: none;
   animation: boot-splash-mark-in var(--splash-in-duration) var(--splash-ease-in)
     both;
-  filter: drop-shadow(0px 0px 2px #777);
 }
 
 .boot-splash.is-leaving .boot-splash__mark {
@@ -622,14 +621,19 @@ code {
 .boot-splash__label {
   display: block;
   margin: 0;
-  inline-size: var(--splash-label-size);
-  block-size: auto;
-  aspect-ratio: 342 / 53;
-  /* transform: translateY(var(--splash-label-nudge)); */
+  inline-size: auto;
+  max-inline-size: min(100%, var(--splash-label-size));
+  font-family: var(--font-brand);
+  font-weight: var(--font-brand-weight);
+  font-size: clamp(1.75rem, 7vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-brand);
   opacity: 0;
   animation: boot-splash-label-in var(--splash-in-duration)
     var(--splash-ease-in) var(--splash-label-in-delay) both;
-  filter: drop-shadow(1px 1px 0px #777);
 }
 
 .boot-splash.is-leaving .boot-splash__label {
@@ -657,7 +661,7 @@ code {
 
   to {
     opacity: 0;
-    transform: translateY(var(--splash-motion-distance));
+    transform: translateY(calc(-1 * var(--splash-motion-distance)));
   }
 }
 
@@ -722,9 +726,43 @@ html[data-skip-splash] {
     box-shadow: var(--shadow-dialog, none);
   }
 
+  & .auth-panel__brand {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    margin-block-end: 1.25rem;
+  }
+
+  & .auth-panel__mark {
+    display: block;
+    inline-size: min(42vw, 8.5rem);
+    block-size: auto;
+    aspect-ratio: 1;
+  }
+
+  & .auth-panel__wordmark {
+    display: block;
+    margin: 0;
+    font-family: var(--font-brand);
+    font-weight: var(--font-brand-weight);
+    font-size: clamp(1.35rem, 5vw, 1.85rem);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--color-brand);
+  }
+
+  & .auth-panel__card > h1 {
+    margin-block: 0;
+    text-align: center;
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  }
+
   & .auth-panel__lede {
     color: var(--color-muted);
     margin-block: 0.5rem 1.25rem;
+    text-align: center;
   }
 
   & .auth-form {
@@ -747,6 +785,10 @@ html[data-skip-splash] {
   @media (min-width: 768px) {
     & .auth-panel__card {
       padding: 2rem;
+    }
+
+    & .auth-panel__mark {
+      inline-size: 9.5rem;
     }
   }
 }
