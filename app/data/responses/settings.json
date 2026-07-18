@@ -1,44 +1,44 @@
 {
-  "clientName": "OR Books",
-  "notifyEnabled": true,
-  "teams": {
-    "client": {
-      "members": [
-        {
-          "name": "Antara Ghosh",
-          "email": "antara.ghosh@orbooks.com",
-          "frequency": "daily"
+    "clientName": "OR Books",
+    "notifyEnabled": true,
+    "teams": {
+        "client": {
+            "members": [
+                {
+                    "name": "Antara Ghosh",
+                    "email": "antara.ghosh@orbooks.com",
+                    "frequency": "daily"
+                },
+                {
+                    "name": "Olivia Heffernan",
+                    "email": "olivia.heffernan@orbooks.com",
+                    "frequency": "daily"
+                },
+                {
+                    "name": "Colin Robinson",
+                    "email": "colin.robinson@orbooks.com",
+                    "frequency": "none"
+                },
+                {
+                    "name": "Fatema Merchant",
+                    "email": "fatema.merchant@orbooks.com",
+                    "frequency": "none"
+                },
+                {
+                    "name": "Jamie Stern-Weiner",
+                    "email": "jamie.weiner@orbooks.com",
+                    "frequency": "none"
+                }
+            ]
         },
-        {
-          "name": "Olivia Heffernan",
-          "email": "olivia.heffernan@orbooks.com",
-          "frequency": "daily"
-        },
-        {
-          "name": "Colin Robinson",
-          "email": "colin.robinson@orbooks.com",
-          "frequency": "daily"
-        },
-        {
-          "name": "Fatema Merchant",
-          "email": "fatema.merchant@orbooks.com",
-          "frequency": "daily"
-        },
-        {
-          "name": "Jamie Stern-Weiner",
-          "email": "jamie.weiner@orbooks.com",
-          "frequency": "daily"
+        "developer": {
+            "members": [
+                {
+                    "name": "Rus Miller",
+                    "email": "lancemonotone@gmail.com",
+                    "frequency": "immediate"
+                }
+            ]
         }
-      ]
-    },
-    "developer": {
-      "members": [
-        {
-          "name": "Rus Miller",
-          "email": "lancemonotone@gmail.com",
-          "frequency": "immediate"
-        }
-      ]
     }
-  }
 }
