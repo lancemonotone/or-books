@@ -89,14 +89,14 @@ async function fetchYaml(name) {
 }
 
 export async function loadContent() {
-  const [audit, issues, evidence, decisions] = await Promise.all([
+  const [audit, tasks, evidence, decisions] = await Promise.all([
     fetchYaml('audit'),
-    fetchYaml('issues'),
+    fetchYaml('tasks'),
     fetchYaml('evidence'),
     fetchYaml('decisions'),
   ]);
 
-  return { audit, issues, evidence, decisions };
+  return { audit, tasks, evidence, decisions };
 }
 
 export async function loadResponses() {
@@ -123,25 +123,25 @@ async function postJson(url, body) {
   });
 }
 
-export function saveComment(issueId, payload) {
+export function saveComment(taskId, payload) {
   return postJson('api/save-comment.php', {
-    issueId,
+    taskId,
     action: 'comment',
     ...payload,
   });
 }
 
-export function postCommentReply(issueId, payload) {
+export function postCommentReply(taskId, payload) {
   return postJson('api/save-comment.php', {
-    issueId,
+    taskId,
     action: 'reply',
     ...payload,
   });
 }
 
-export function editCommentMessage(issueId, payload) {
+export function editCommentMessage(taskId, payload) {
   return postJson('api/save-comment.php', {
-    issueId,
+    taskId,
     action: 'edit',
     ...payload,
   });
@@ -151,20 +151,20 @@ export function saveDecision(decisionId, payload) {
   return postJson('api/save-decision.php', { decisionId, ...payload });
 }
 
-export function saveIssuePriority(issueKey, priority) {
-  return postJson('api/save-issue-priority.php', { issueKey, priority });
+export function saveTaskPriority(taskKey, priority) {
+  return postJson('api/save-task-priority.php', { taskKey, priority });
 }
 
-export function saveIssueStatus(issueKey, status) {
-  return postJson('api/save-issue-status.php', { issueKey, status });
+export function saveTaskStatus(taskKey, status) {
+  return postJson('api/save-task-status.php', { taskKey, status });
 }
 
-export function saveIssuePhase(issueKey, sprint) {
-  return postJson('api/save-issue-phase.php', { issueKey, sprint });
+export function saveTaskPhase(taskKey, sprint) {
+  return postJson('api/save-task-phase.php', { taskKey, sprint });
 }
 
-export function saveIssueTags(issueKey, tags) {
-  return postJson('api/save-issue-tags.php', { issueKey, tags });
+export function saveTaskTags(taskKey, tags) {
+  return postJson('api/save-task-tags.php', { taskKey, tags });
 }
 
 export function savePhaseOrder(phaseIds) {

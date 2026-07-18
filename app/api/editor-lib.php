@@ -5,7 +5,7 @@ declare(strict_types=1);
 require __DIR__ . '/bootstrap.php';
 require_once __DIR__ . '/settings-lib.php';
 
-const EDITOR_FILES = ['audit', 'issues', 'evidence', 'decisions'];
+const EDITOR_FILES = ['audit', 'tasks', 'evidence', 'decisions'];
 const EDITOR_MAX_BYTES = 1_048_576;
 const EDITOR_MAX_LOGIN_ATTEMPTS = 8;
 const EDITOR_LOCKOUT_SECONDS = 900;

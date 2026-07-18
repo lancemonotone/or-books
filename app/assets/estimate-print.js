@@ -3,10 +3,10 @@ import {
   summarizeEstimatesByPhase,
   formatUsd,
   formatHours,
-  issueEstimateHours,
-  issueActualHours,
+  taskEstimateHours,
+  taskActualHours,
   hoursToCost,
-  issueQuoteBucket,
+  taskQuoteBucket,
 } from "./estimates.js";
 
 export const DEFAULT_ESTIMATE_PRINT_PROFILE = {
@@ -98,27 +98,27 @@ function renderSummaryBucket(bucket, label, profile, rate, copy) {
 }
 
 /**
- * @param {object} issue
+ * @param {object} task
  * @param {object} profile
  * @param {number|null|undefined} rate
  * @param {object} copy
  * @param {(status: string) => string} statusLabelFn
  */
-function renderIssueRow(issue, profile, rate, copy, statusLabelFn) {
-  const estimateHours = issueEstimateHours(issue);
+function renderTaskRow(task, profile, rate, copy, statusLabelFn) {
+  const estimateHours = taskEstimateHours(task);
   const estimateCost = hoursToCost(estimateHours, rate);
   const actualCells = profile.includeActuals
     ? (() => {
-        const actualHours = issueActualHours(issue);
+        const actualHours = taskActualHours(task);
         const actualCost = hoursToCost(actualHours, rate);
         return `<td>${hoursCell(actualHours)}</td><td>${costCell(actualCost, rate, copy.hourlyRateMissing)}</td>`;
       })()
     : "";
 
   return `<tr>
-    <td>${escapeHtml(issue.id)}</td>
-    <td>${escapeHtml(issue.title)}</td>
-    <td>${escapeHtml(statusLabelFn(issue.status))}</td>
+    <td>${escapeHtml(task.id)}</td>
+    <td>${escapeHtml(task.title)}</td>
+    <td>${escapeHtml(statusLabelFn(task.status))}</td>
     <td>${hoursCell(estimateHours)}</td>
     <td>${costCell(estimateCost, rate, copy.hourlyRateMissing)}</td>
     ${actualCells}
@@ -126,15 +126,15 @@ function renderIssueRow(issue, profile, rate, copy, statusLabelFn) {
 }
 
 /**
- * Issues shown in a phase section (quoted + optional deferred).
+ * Tasks shown in a phase section (quoted + optional deferred).
  * `includeDone` / `includeRemaining` only gate the top summary cards, not
  * these rows — quoted work (done + remaining) always lists so Grand matches.
- * @param {object[]} issues
+ * @param {object[]} tasks
  * @param {object} profile
  */
-function filterPhaseIssues(issues, profile) {
-  return (issues || []).filter((issue) => {
-    const bucket = issueQuoteBucket(issue);
+function filterPhaseTasks(tasks, profile) {
+  return (tasks || []).filter((task) => {
+    const bucket = taskQuoteBucket(task);
     if (bucket === "other") {
       return false;
     }
@@ -161,8 +161,8 @@ function renderPhaseSection(
   statusLabelFn,
   phaseTitleFn,
 ) {
-  const issues = filterPhaseIssues(phase.issues, profile);
-  if (!issues.length) {
+  const tasks = filterPhaseTasks(phase.tasks, profile);
+  if (!tasks.length) {
     return "";
   }
 
@@ -170,8 +170,8 @@ function renderPhaseSection(
   const actualHeaders = profile.includeActuals
     ? `<th>${escapeHtml(copy.estimatesActualHours)}</th><th>${escapeHtml(copy.estimatesActualCost)}</th>`
     : "";
-  const rows = issues
-    .map((issue) => renderIssueRow(issue, profile, rate, copy, statusLabelFn))
+  const rows = tasks
+    .map((task) => renderTaskRow(task, profile, rate, copy, statusLabelFn))
     .join("");
 
   return `
@@ -243,7 +243,7 @@ function renderVendorHeader(vendor) {
 
 /**
  * @param {{
- *   issues: object[],
+ *   tasks: object[],
  *   sprints: object[],
  *   rate: number|null|undefined,
  *   clientName: string,
@@ -259,7 +259,7 @@ function renderVendorHeader(vendor) {
 export function buildEstimatePrintHtml(data, profile) {
   const resolved = mergeProfile(profile);
   const {
-    issues = [],
+    tasks = [],
     sprints = [],
     rate = null,
     clientName = "",
@@ -270,9 +270,9 @@ export function buildEstimatePrintHtml(data, profile) {
     phaseTitle: phaseTitleFn,
   } = data;
 
-  const summary = summarizeEstimates(issues, rate);
-  const phases = summarizeEstimatesByPhase(issues, sprints, rate).filter(
-    (phase) => filterPhaseIssues(phase.issues, resolved).length > 0,
+  const summary = summarizeEstimates(tasks, rate);
+  const phases = summarizeEstimatesByPhase(tasks, sprints, rate).filter(
+    (phase) => filterPhaseTasks(phase.tasks, resolved).length > 0,
   );
 
   const date =
@@ -332,7 +332,7 @@ export function buildEstimatePrintHtml(data, profile) {
     ),
   );
 
-  const deferredNote = `<p class="estimate-print__deferred-note">Issues with <em>${escapeHtml(copy.estimatesDeferred)}</em> status are not included in the total.</p>`;
+  const deferredNote = `<p class="estimate-print__deferred-note">Tasks with <em>${escapeHtml(copy.estimatesDeferred)}</em> status are not included in the total.</p>`;
 
   const completeness = resolved.includeCompleteness
     ? `<p class="estimate-print__completeness">${escapeHtml(
@@ -446,7 +446,7 @@ function waitForPrintImages(root) {
  * @param {object} [profile]
  */
 export async function printEstimate(data, profile) {
-  if (!data?.issues?.length) {
+  if (!data?.tasks?.length) {
     return;
   }
 
