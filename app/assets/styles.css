@@ -606,7 +606,7 @@ code {
   display: block;
   inline-size: var(--splash-mark-size);
   block-size: auto;
-  aspect-ratio: 1;
+  aspect-ratio: var(--logo-aspect);
   border-radius: 0;
   box-shadow: none;
   animation: boot-splash-mark-in var(--splash-in-duration) var(--splash-ease-in)
@@ -737,7 +737,7 @@ html[data-skip-splash] {
     display: block;
     inline-size: min(42vw, 8.5rem);
     block-size: auto;
-    aspect-ratio: 1;
+    aspect-ratio: var(--logo-aspect);
   }
 
   & .auth-panel__wordmark {

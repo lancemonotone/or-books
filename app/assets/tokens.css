@@ -22,6 +22,8 @@
 
   /* Brand */
   --color-brand: #98b797;
+  /* briefboard-logo.svg intrinsic ratio */
+  --logo-aspect: 806 / 979;
   --color-accent: #8b1e1e;
   --color-accent-hover: #6d1818;
   --color-accent-soft: #f3e8e8;
