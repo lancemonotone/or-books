@@ -3011,15 +3011,16 @@ html[data-theme="dark"] .pill--phase {
 }
 
 .estimates-summary {
-  --summary-columns: 1;
   --summary-gap: 0.75rem;
+  --summary-layout: minmax(0, 1fr);
 
   display: grid;
-  grid-template-columns: repeat(var(--summary-columns), minmax(0, 1fr));
+  grid-template-columns: var(--summary-layout);
   gap: var(--summary-gap);
 
   @media (min-width: 768px) {
-    --summary-columns: 3;
+    /* Grand total reads as the hero column. */
+    --summary-layout: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr);
     --summary-gap: 1rem;
   }
 
@@ -3039,6 +3040,11 @@ html[data-theme="dark"] .pill--phase {
       --bucket-title-size: 0.7rem;
       --metric-gap: 0.35rem 0.65rem;
     }
+
+    & .estimates-bucket--grand {
+      --bucket-title-size: 0.76rem;
+      --metric-value-size: 1rem;
+    }
   }
 }
 
@@ -3046,10 +3052,15 @@ html[data-theme="dark"] .pill--phase {
   --bucket-padding: 0.85rem 1rem;
   --bucket-title-size: 0.75rem;
   --metric-gap: 0.5rem 0.85rem;
+  --metric-value-size: 0.95rem;
+  --bucket-accent: var(--color-border);
+  --bucket-accent-width: 3px;
 
   margin: 0;
   padding: var(--bucket-padding);
   border: 1px solid var(--color-border);
+  border-inline-start-width: var(--bucket-accent-width);
+  border-inline-start-color: var(--bucket-accent);
   border-radius: var(--radius);
   background: var(--color-surface);
   box-shadow: var(--shadow);
@@ -3085,7 +3096,7 @@ html[data-theme="dark"] .pill--phase {
 
     & dd {
       margin: 0;
-      font-size: 0.95rem;
+      font-size: var(--metric-value-size);
       font-weight: 600;
       font-variant-numeric: tabular-nums;
       color: var(--color-text);
@@ -3093,15 +3104,27 @@ html[data-theme="dark"] .pill--phase {
   }
 
   &.estimates-bucket--done {
-    border-inline-start: 3px solid var(--color-complete);
+    --bucket-accent: var(--color-complete);
   }
 
   &.estimates-bucket--remaining {
-    border-inline-start: 3px solid var(--color-in-progress);
+    --bucket-accent: var(--color-in-progress);
   }
 
   &.estimates-bucket--grand {
-    border-inline-start: 3px solid var(--color-accent);
+    --bucket-accent: var(--color-accent);
+    --bucket-accent-width: 5px;
+    --bucket-title-size: 0.82rem;
+    --metric-value-size: 1.1rem;
+    background: color-mix(in srgb, var(--color-accent) 9%, var(--color-surface));
+
+    & .estimates-bucket__title {
+      color: var(--color-accent);
+    }
+
+    & .estimates-bucket__metric dd {
+      font-weight: 700;
+    }
   }
 }
 
