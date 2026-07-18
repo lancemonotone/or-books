@@ -9,10 +9,12 @@ import {
   savePhaseOrder,
   saveSettings,
   loadSettings,
+  loadAuditLog,
   postCommentReply,
   editCommentMessage,
   fetchAuth,
   login,
+  changePassword,
   logout,
   setCsrfToken,
   mediaUrl,
@@ -47,7 +49,19 @@ const BOOT_EXIT_MS = 500;
 const COPY = {
   overview: "Overview",
   settings: "Settings",
-  settingsLead: "Project name, appearance, and notification teams.",
+  settingsLead:
+    "Project name, appearance, and notification teams. Temp passwords give other people a review login — not for the admin account.",
+  activityLog: "Activity log",
+  activityLogLead: "Recent sign-ins and changes. Admin only.",
+  openActivityLog: "View activity log",
+  activityLogEmpty: "No activity recorded yet.",
+  activityLogColWhen: "When",
+  activityLogColWho: "Who",
+  activityLogColAction: "Action",
+  activityLogColResult: "Result",
+  activityLogOk: "OK",
+  activityLogFail: "Failed",
+  accountMenu: "Account",
   clientName: "Client / project name",
   appearance: "Appearance",
   themeLight: "Light",
@@ -102,7 +116,24 @@ const COPY = {
   noMessagesYet: "No messages yet.",
   signIn: "Sign in",
   signOut: "Sign out",
-  authLead: "Enter the review password to continue.",
+  authLead: "Enter your email and password to continue.",
+  changePassword: "Change password",
+  changePasswordLead: "Choose a new password for your account.",
+  changePasswordForcedLead:
+    "You must set a new password before continuing.",
+  currentPassword: "Current password",
+  newPassword: "New password",
+  confirmPassword: "Confirm new password",
+  savePassword: "Save password",
+  passwordChanged: "Password updated.",
+  teamTempPassword: "Temp password",
+  teamLoginStatus: "Login",
+  teamHasLogin: "Has login",
+  teamMustChange: "Must change password",
+  teamNoLogin: "No login yet",
+  teamAdminLogin:
+    "Admin account — change password with the lock icon in the header",
+  cancel: "Cancel",
   yourName: "Your name",
   namePlaceholder: "Select a name",
   nameClear: "Clear name",
@@ -226,6 +257,11 @@ const state = {
   hourlyRate: null,
   vendor: null,
   phaseReorderMode: false,
+  auth: {
+    email: null,
+    role: null,
+    mustChangePassword: false,
+  },
 };
 
 function applyHourlyRate(auth) {
@@ -248,6 +284,66 @@ function applyVendor(auth) {
     phone: String(raw.phone || "").trim(),
     logo: String(raw.logo || "").trim(),
   };
+}
+
+function applyAuthSession(auth) {
+  state.auth = {
+    email: auth?.email ? String(auth.email) : null,
+    role: auth?.role === "admin" ? "admin" : auth?.authenticated ? "user" : null,
+    mustChangePassword: Boolean(auth?.mustChangePassword),
+  };
+  syncAdminNav();
+}
+
+function isAdmin() {
+  return state.auth.role === "admin";
+}
+
+function syncAdminNav() {
+  const show = isAdmin();
+  const menu = document.getElementById("account-menu");
+  const panel = document.getElementById("account-menu-panel");
+  const logoutBtn = document.getElementById("logout-button");
+
+  let editorLink = document.getElementById("nav-editor-link");
+  if (show) {
+    if (!editorLink && menu) {
+      editorLink = document.createElement("a");
+      editorLink.id = "nav-editor-link";
+      editorLink.href = "edit/";
+      editorLink.textContent = "Editor";
+      menu.before(editorLink);
+    }
+  } else if (editorLink) {
+    editorLink.remove();
+  }
+
+  let settingsLink = document.getElementById("account-menu-settings");
+  if (show) {
+    if (!settingsLink && panel && logoutBtn) {
+      settingsLink = document.createElement("a");
+      settingsLink.id = "account-menu-settings";
+      settingsLink.className = "account-menu__item";
+      settingsLink.href = "#/settings";
+      settingsLink.dataset.nav = "";
+      settingsLink.setAttribute("role", "menuitem");
+      settingsLink.textContent = COPY.settings;
+      logoutBtn.before(settingsLink);
+    }
+  } else if (settingsLink) {
+    settingsLink.remove();
+  }
+
+  const emailEl = document.getElementById("account-menu-email");
+  if (emailEl) {
+    if (state.auth.email) {
+      emailEl.hidden = false;
+      emailEl.textContent = state.auth.email;
+    } else {
+      emailEl.hidden = true;
+      emailEl.textContent = "";
+    }
+  }
 }
 
 function clientName() {
@@ -296,9 +392,21 @@ const siteHeader = document.getElementById("site-header");
 const bootSplash = document.getElementById("boot-splash");
 const authPanel = document.getElementById("auth-panel");
 const authBlocked = document.getElementById("auth-blocked");
+const changePasswordPanel = document.getElementById("change-password-panel");
 const loginForm = document.getElementById("login-form");
 const loginStatus = document.getElementById("login-status");
+const changePasswordForm = document.getElementById("change-password-form");
+const changePasswordStatus = document.getElementById("change-password-status");
+const changePasswordLede = document.getElementById("change-password-lede");
+const changePasswordCancel = document.getElementById("change-password-cancel");
+const changePasswordButton = document.getElementById("change-password-button");
 const logoutButton = document.getElementById("logout-button");
+const accountMenu = document.getElementById("account-menu");
+const accountMenuToggle = document.getElementById("account-menu-toggle");
+const accountMenuPanel = document.getElementById("account-menu-panel");
+const auditDialog = document.getElementById("audit-dialog");
+const auditDialogBody = document.getElementById("audit-dialog-body");
+const auditDialogClose = document.getElementById("audit-dialog-close");
 const bootStartedAt = performance.now();
 let bootEnded = false;
 
@@ -2221,8 +2329,38 @@ function frequencyOptions(selected = "immediate") {
     <option value="daily"${current === "daily" ? " selected" : ""}>${escapeHtml(COPY.frequencyDaily)}</option>`;
 }
 
+function emailsMatch(a, b) {
+  return (
+    String(a || "")
+      .trim()
+      .toLowerCase() ===
+    String(b || "")
+      .trim()
+      .toLowerCase()
+  );
+}
+
+function isAdminTeamMember(member) {
+  return (
+    isAdmin() &&
+    state.auth.email &&
+    emailsMatch(member?.email, state.auth.email)
+  );
+}
+
 function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
   const frequency = member.frequency || "immediate";
+  const isAdminMember = isAdminTeamMember(member);
+  const hasLogin = Boolean(member.hasLogin);
+  const mustChange = Boolean(member.mustChangePassword);
+  let loginStatus = COPY.teamNoLogin;
+  if (isAdminMember) {
+    loginStatus = COPY.teamAdminLogin;
+  } else if (hasLogin && mustChange) {
+    loginStatus = COPY.teamMustChange;
+  } else if (hasLogin) {
+    loginStatus = COPY.teamHasLogin;
+  }
   const actionControl = showRemove
     ? `<button
         type="button"
@@ -2234,8 +2372,20 @@ function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>`
     : `<span class="settings-member__action-empty" aria-hidden="true"></span>`;
+  const loginCell = isAdminMember
+    ? `<div class="settings-member__cell">
+        <span class="field__label">${escapeHtml(COPY.teamLoginStatus)}</span>
+        <p class="settings-member__login-status">${escapeHtml(loginStatus)}</p>
+      </div>`
+    : `<div class="settings-member__cell">
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.teamTempPassword)}</span>
+          <input type="password" name="${escapeHtml(teamKey)}-tempPassword[]" autocomplete="new-password" placeholder="Leave blank to keep">
+        </label>
+        <p class="settings-member__login-status">${escapeHtml(loginStatus)}</p>
+      </div>`;
   return `
-    <div class="settings-member" data-member-row>
+    <div class="settings-member" data-member-row${isAdminMember ? ' data-admin-member="1"' : ""}>
       <div class="settings-member__cell">
         <label class="field">
           <span class="field__label">${escapeHtml(COPY.teamMemberName)}</span>
@@ -2254,6 +2404,7 @@ function renderTeamMemberRow(teamKey, member = {}, { showRemove = true } = {}) {
           <select name="${escapeHtml(teamKey)}-frequency[]">${frequencyOptions(frequency)}</select>
         </label>
       </div>
+      ${loginCell}
       <div class="settings-member__cell settings-member__cell--action">
         <span class="field__label" aria-hidden="true">&nbsp;</span>
         ${actionControl}
@@ -2271,8 +2422,8 @@ function renderTeamFields(teamKey, team) {
       <legend>${escapeHtml(teamKey === "client" ? COPY.clientTeam : COPY.developerTeam)}</legend>
       <div class="settings-members" data-members="${escapeHtml(teamKey)}">
         ${members
-          .map((member, index) =>
-            renderTeamMemberRow(teamKey, member, { showRemove: index > 0 }),
+          .map((member) =>
+            renderTeamMemberRow(teamKey, member, { showRemove: true }),
           )
           .join("")}
       </div>
@@ -2284,25 +2435,24 @@ function renderTeamFields(teamKey, team) {
 }
 
 function readTeamMembersFromForm(form, teamKey) {
-  const names = [
-    ...form.querySelectorAll(`input[name="${teamKey}-name[]"]`),
-  ].map((el) => el.value.trim());
-  const emails = [
-    ...form.querySelectorAll(`input[name="${teamKey}-email[]"]`),
-  ].map((el) => el.value.trim());
-  const frequencies = [
-    ...form.querySelectorAll(`select[name="${teamKey}-frequency[]"]`),
-  ].map((el) => el.value);
+  const rows = [...form.querySelectorAll(`[data-members="${teamKey}"] [data-member-row]`)];
   const members = [];
-  const count = Math.max(names.length, emails.length, frequencies.length);
-  for (let i = 0; i < count; i++) {
-    const name = names[i] || "";
-    const email = emails[i] || "";
-    const frequency = frequencies[i] || "immediate";
+  for (const row of rows) {
+    const name = row.querySelector(`input[name="${teamKey}-name[]"]`)?.value.trim() || "";
+    const email = row.querySelector(`input[name="${teamKey}-email[]"]`)?.value.trim() || "";
+    const frequency =
+      row.querySelector(`select[name="${teamKey}-frequency[]"]`)?.value ||
+      "immediate";
+    const tempPassword =
+      row.querySelector(`input[name="${teamKey}-tempPassword[]"]`)?.value || "";
     if (!name || !email) {
       continue;
     }
-    members.push({ name, email, frequency });
+    const member = { name, email, frequency };
+    if (tempPassword && !row.hasAttribute("data-admin-member")) {
+      member.tempPassword = tempPassword;
+    }
+    members.push(member);
   }
   return members;
 }
@@ -2335,10 +2485,21 @@ function bindTeamMemberRepeaters(root = main) {
         return;
       }
       const row = remove.closest("[data-member-row]");
-      if (!row || row === list.querySelector("[data-member-row]")) {
+      if (!row) {
         return;
       }
+      const teamKey = list.getAttribute("data-members");
       row.remove();
+      if (!list.querySelector("[data-member-row]") && teamKey) {
+        list.insertAdjacentHTML(
+          "beforeend",
+          renderTeamMemberRow(
+            teamKey,
+            { name: "", email: "", frequency: "immediate" },
+            { showRemove: true },
+          ),
+        );
+      }
     });
   });
 }
@@ -2377,6 +2538,13 @@ function renderSettings() {
           </label>
           ${renderTeamFields("client", settings.teams?.client)}
           ${renderTeamFields("developer", settings.teams?.developer)}
+        </section>
+        <section class="section settings-section">
+          <h2>${escapeHtml(COPY.activityLog)}</h2>
+          <p class="lede">${escapeHtml(COPY.activityLogLead)}</p>
+          <button type="button" class="button button--ghost" data-open-audit-log>
+            ${escapeHtml(COPY.openActivityLog)}
+          </button>
         </section>
         <div class="feedback-form__actions">
           <button type="submit" class="button">${escapeHtml(COPY.saveSettings)}</button>
@@ -2601,6 +2769,9 @@ function renderRoute() {
     case "responses":
       return renderResponses();
     case "settings":
+      if (!isAdmin()) {
+        return renderOverview();
+      }
       return renderSettings();
     default:
       return renderOverview();
@@ -2638,6 +2809,9 @@ async function showAuthPanel() {
   document.body.classList.add("is-locked");
   authPanel.hidden = false;
   authBlocked.hidden = true;
+  if (changePasswordPanel) {
+    changePasswordPanel.hidden = true;
+  }
   siteHeader.hidden = true;
   main.hidden = true;
   state.ready = false;
@@ -2648,9 +2822,39 @@ async function showBlockedPanel() {
   document.body.classList.add("is-locked");
   authPanel.hidden = true;
   authBlocked.hidden = false;
+  if (changePasswordPanel) {
+    changePasswordPanel.hidden = true;
+  }
   siteHeader.hidden = true;
   main.hidden = true;
   state.ready = false;
+}
+
+async function showChangePasswordPanel({ forced = false } = {}) {
+  await endBoot();
+  document.body.classList.add("is-locked");
+  authPanel.hidden = true;
+  authBlocked.hidden = true;
+  if (changePasswordPanel) {
+    changePasswordPanel.hidden = false;
+  }
+  siteHeader.hidden = true;
+  main.hidden = true;
+  if (changePasswordLede) {
+    changePasswordLede.textContent = forced
+      ? COPY.changePasswordForcedLead
+      : COPY.changePasswordLead;
+  }
+  if (changePasswordCancel) {
+    changePasswordCancel.hidden = forced;
+  }
+  if (changePasswordForm) {
+    changePasswordForm.reset();
+  }
+  if (changePasswordStatus) {
+    changePasswordStatus.textContent = "";
+    changePasswordStatus.classList.remove("is-visible", "is-error");
+  }
 }
 
 async function showAppShell() {
@@ -2658,8 +2862,12 @@ async function showAppShell() {
   document.body.classList.remove("is-locked");
   authPanel.hidden = true;
   authBlocked.hidden = true;
+  if (changePasswordPanel) {
+    changePasswordPanel.hidden = true;
+  }
   siteHeader.hidden = false;
   main.hidden = false;
+  syncAdminNav();
 }
 
 async function loadAppData() {
@@ -2694,7 +2902,155 @@ async function loadAppData() {
   applyTheme();
 }
 
+async function afterAuthenticated(auth) {
+  applyAuthSession(auth);
+  applyHourlyRate(auth);
+  applyVendor(auth);
+  markAuthedSession();
+  skipBootSplash();
+  if (state.auth.mustChangePassword) {
+    await showChangePasswordPanel({ forced: true });
+    return;
+  }
+  await loadAppData();
+  await showAppShell();
+  state.route = normalizeLegacyRoute(parseRoute());
+  if (state.route.name === "settings" && !isAdmin()) {
+    history.replaceState(null, "", "#/");
+    state.route = normalizeLegacyRoute(parseRoute());
+  }
+  render();
+}
+
+function closeAccountMenu() {
+  if (!accountMenuPanel || !accountMenuToggle) {
+    return;
+  }
+  accountMenuPanel.hidden = true;
+  accountMenuToggle.setAttribute("aria-expanded", "false");
+}
+
+function formatAuditWhen(iso) {
+  try {
+    return new Date(iso).toLocaleString();
+  } catch {
+    return String(iso || "");
+  }
+}
+
+function formatAuditAction(entry) {
+  const action = String(entry?.action || "");
+  const target = entry?.target && typeof entry.target === "object" ? entry.target : {};
+  const bits = [action];
+  if (target.issueKey) {
+    bits.push(String(target.issueKey));
+  }
+  if (target.decisionId) {
+    bits.push(String(target.decisionId));
+  }
+  if (target.file) {
+    bits.push(String(target.file));
+  }
+  if (target.priority) {
+    bits.push(String(target.priority));
+  }
+  if (target.status) {
+    bits.push(String(target.status));
+  }
+  return bits.join(" · ");
+}
+
+function renderAuditLogEntries(entries) {
+  if (!Array.isArray(entries) || entries.length === 0) {
+    return `<p class="audit-dialog__empty">${escapeHtml(COPY.activityLogEmpty)}</p>`;
+  }
+  const rows = entries
+    .map((entry) => {
+      const ok = entry?.ok !== false;
+      const result = ok ? COPY.activityLogOk : COPY.activityLogFail;
+      const reason =
+        !ok && entry?.reason
+          ? ` (${escapeHtml(String(entry.reason))})`
+          : "";
+      return `<tr>
+        <td>${escapeHtml(formatAuditWhen(entry?.at))}</td>
+        <td>${escapeHtml(String(entry?.email || "—"))}</td>
+        <td>${escapeHtml(formatAuditAction(entry))}</td>
+        <td class="${ok ? "audit-ok" : "audit-fail"}">${escapeHtml(result)}${reason}</td>
+      </tr>`;
+    })
+    .join("");
+  return `<table class="audit-table">
+    <thead>
+      <tr>
+        <th>${escapeHtml(COPY.activityLogColWhen)}</th>
+        <th>${escapeHtml(COPY.activityLogColWho)}</th>
+        <th>${escapeHtml(COPY.activityLogColAction)}</th>
+        <th>${escapeHtml(COPY.activityLogColResult)}</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+async function openAuditLogDialog() {
+  if (!auditDialog || !auditDialogBody) {
+    return;
+  }
+  auditDialogBody.innerHTML = `<p class="audit-dialog__empty">Loading…</p>`;
+  if (typeof auditDialog.showModal === "function") {
+    auditDialog.showModal();
+  } else {
+    auditDialog.setAttribute("open", "");
+  }
+  try {
+    const data = await loadAuditLog();
+    auditDialogBody.innerHTML = renderAuditLogEntries(data.entries || []);
+  } catch (error) {
+    auditDialogBody.innerHTML = `<p class="audit-dialog__empty">${escapeHtml(error.message)}</p>`;
+  }
+}
+
+function closeAuditLogDialog() {
+  if (!auditDialog) {
+    return;
+  }
+  if (typeof auditDialog.close === "function") {
+    auditDialog.close();
+  } else {
+    auditDialog.removeAttribute("open");
+  }
+}
+
 function bindAuthHandlers() {
+  accountMenuToggle?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (!accountMenuPanel) {
+      return;
+    }
+    const open = accountMenuPanel.hidden;
+    accountMenuPanel.hidden = !open;
+    accountMenuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!accountMenu || accountMenu.contains(event.target)) {
+      return;
+    }
+    closeAccountMenu();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAccountMenu();
+    }
+  });
+
+  accountMenuPanel?.addEventListener("click", () => {
+    // Keep menu open until an item acts; settings nav will leave page.
+    closeAccountMenu();
+  });
+
   loginForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const data = new FormData(loginForm);
@@ -2704,33 +3060,88 @@ function bindAuthHandlers() {
       status.classList.add("is-visible");
       status.classList.remove("is-error");
       const loginAuth = await login(
+        String(data.get("email") || ""),
         String(data.get("password") || ""),
         String(data.get("website") || ""),
       );
-      applyHourlyRate(loginAuth);
-      applyVendor(loginAuth);
-      markAuthedSession();
-      skipBootSplash();
       loginForm.reset();
-      await loadAppData();
-      await showAppShell();
-      state.route = normalizeLegacyRoute(parseRoute());
-      render();
+      await afterAuthenticated(loginAuth);
     } catch (error) {
       status.textContent = error.message;
       status.classList.add("is-visible", "is-error");
     }
   });
 
+  changePasswordForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(changePasswordForm);
+    const status = changePasswordStatus;
+    const forced = state.auth.mustChangePassword;
+    try {
+      status.textContent = "Saving…";
+      status.classList.add("is-visible");
+      status.classList.remove("is-error");
+      const result = await changePassword(
+        String(data.get("currentPassword") || ""),
+        String(data.get("newPassword") || ""),
+        String(data.get("confirmPassword") || ""),
+        String(data.get("website") || ""),
+      );
+      applyAuthSession(result);
+      changePasswordForm.reset();
+      status.textContent = COPY.passwordChanged;
+      status.classList.add("is-visible");
+      if (forced || !state.ready) {
+        await loadAppData();
+        await showAppShell();
+        state.route = normalizeLegacyRoute(parseRoute());
+        render();
+      } else {
+        await showAppShell();
+      }
+    } catch (error) {
+      status.textContent = error.message;
+      status.classList.add("is-visible", "is-error");
+    }
+  });
+
+  changePasswordCancel?.addEventListener("click", async () => {
+    if (state.auth.mustChangePassword) {
+      return;
+    }
+    await showAppShell();
+    if (state.ready) {
+      render();
+    }
+  });
+
+  changePasswordButton?.addEventListener("click", async () => {
+    closeAccountMenu();
+    await showChangePasswordPanel({ forced: false });
+  });
+
   logoutButton?.addEventListener("click", async () => {
+    closeAccountMenu();
     try {
       await logout();
     } catch {
       /* still lock UI */
     }
     clearAuthedSession();
+    state.auth = { email: null, role: null, mustChangePassword: false };
+    syncAdminNav();
     await showAuthPanel();
     main.innerHTML = "";
+  });
+
+  auditDialogClose?.addEventListener("click", () => {
+    closeAuditLogDialog();
+  });
+
+  auditDialog?.addEventListener("click", (event) => {
+    if (event.target === auditDialog) {
+      closeAuditLogDialog();
+    }
   });
 }
 
@@ -3470,6 +3881,11 @@ function bindPageHandlers() {
   const settingsForm = main.querySelector("[data-settings-form]");
   if (settingsForm) {
     bindTeamMemberRepeaters(settingsForm);
+    settingsForm
+      .querySelector("[data-open-audit-log]")
+      ?.addEventListener("click", () => {
+        openAuditLogDialog();
+      });
     settingsForm.querySelectorAll('input[name="theme"]').forEach((input) => {
       input.addEventListener("change", () => {
         if (input.checked) {
@@ -3843,6 +4259,10 @@ async function init() {
       return;
     }
     state.route = normalizeLegacyRoute(parseRoute());
+    if (state.route.name === "settings" && !isAdmin()) {
+      history.replaceState(null, "", "#/");
+      state.route = normalizeLegacyRoute(parseRoute());
+    }
     const shouldScrollPhases =
       state.route.name === "overview" &&
       parseOpenPhases(state.route.searchParams).length > 0;
@@ -3872,13 +4292,7 @@ async function init() {
       await showAuthPanel();
       return;
     }
-    applyHourlyRate(auth);
-    applyVendor(auth);
-    markAuthedSession();
-    skipBootSplash();
-    await loadAppData();
-    await showAppShell();
-    render();
+    await afterAuthenticated(auth);
   } catch (error) {
     await waitForSplashHold();
     if (String(error.message || "").includes("not configured")) {

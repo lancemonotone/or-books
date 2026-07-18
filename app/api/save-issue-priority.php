@@ -61,6 +61,7 @@ try {
     fclose($lock);
 }
 
+editor_log_activity('issue.priority', ['issueKey' => $issueKey, 'priority' => $priority]);
 respond_json(200, [
     'ok' => true,
     'issueKey' => $issueKey,

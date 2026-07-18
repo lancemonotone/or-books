@@ -32,14 +32,37 @@ export async function fetchAuth() {
   return requestJson('api/editor-auth.php');
 }
 
-export async function login(password, honeypot = '') {
+export async function login(email, password, honeypot = '') {
   const data = await requestJson('api/editor-auth.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       action: 'login',
+      email,
       password,
       website: honeypot,
+    }),
+  });
+  setCsrfToken(data.csrf || '');
+  return data;
+}
+
+export async function changePassword(
+  currentPassword,
+  newPassword,
+  confirmPassword,
+  honeypot = ''
+) {
+  const data = await requestJson('api/editor-auth.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'change_password',
+      currentPassword,
+      newPassword,
+      confirmPassword,
+      website: honeypot,
+      csrf: csrfToken,
     }),
   });
   setCsrfToken(data.csrf || '');
@@ -154,6 +177,10 @@ export function loadSettings() {
 
 export function saveSettings(payload) {
   return postJson('api/settings.php', payload);
+}
+
+export function loadAuditLog() {
+  return requestJson('api/audit-log.php');
 }
 
 export function mediaUrl(file) {

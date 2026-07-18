@@ -64,6 +64,7 @@ try {
     fclose($lock);
 }
 
+editor_log_activity('issue.tags', ['issueKey' => $issueKey]);
 respond_json(200, [
     'ok' => true,
     'issueKey' => $issueKey,

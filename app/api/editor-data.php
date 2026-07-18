@@ -5,7 +5,7 @@ declare(strict_types=1);
 require __DIR__ . '/editor-lib.php';
 
 editor_start_session();
-editor_require_auth();
+editor_require_admin();
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
@@ -44,6 +44,7 @@ try {
     respond_json(500, ['error' => 'Could not save file.']);
 }
 
+editor_log_activity('editor.save', ['file' => $file]);
 respond_json(200, [
     'ok' => true,
     'file' => $file,

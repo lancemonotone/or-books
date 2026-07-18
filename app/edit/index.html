@@ -23,7 +23,12 @@
   <main id="main" class="editor-main">
     <section class="editor-panel editor-panel--login" id="login-panel" hidden>
       <h1>Sign in</h1>
+      <p class="editor-lede">Admin email and password required.</p>
       <form class="editor-form" id="login-form">
+        <label class="editor-field">
+          <span class="editor-field__label">Email</span>
+          <input type="email" name="email" id="login-email" required autocomplete="username">
+        </label>
         <label class="editor-field">
           <span class="editor-field__label">Password</span>
           <input type="password" name="password" id="login-password" required autocomplete="current-password">
@@ -34,6 +39,31 @@
         </label>
         <button type="submit" class="editor-button">Sign in</button>
         <p class="editor-status" id="login-status" role="status"></p>
+      </form>
+    </section>
+
+    <section class="editor-panel editor-panel--login" id="change-password-panel" hidden>
+      <h1>Change password</h1>
+      <p class="editor-lede" id="change-password-lede">Choose a new password before using the editor.</p>
+      <form class="editor-form" id="change-password-form">
+        <label class="editor-field">
+          <span class="editor-field__label">Current password</span>
+          <input type="password" name="currentPassword" required autocomplete="current-password">
+        </label>
+        <label class="editor-field">
+          <span class="editor-field__label">New password</span>
+          <input type="password" name="newPassword" required minlength="8" autocomplete="new-password">
+        </label>
+        <label class="editor-field">
+          <span class="editor-field__label">Confirm new password</span>
+          <input type="password" name="confirmPassword" required minlength="8" autocomplete="new-password">
+        </label>
+        <label class="editor-honeypot" aria-hidden="true">
+          <span>Website</span>
+          <input type="text" name="website" tabindex="-1" autocomplete="off">
+        </label>
+        <button type="submit" class="editor-button">Save password</button>
+        <p class="editor-status" id="change-password-status" role="status"></p>
       </form>
     </section>
 
@@ -68,8 +98,17 @@
     <section class="editor-panel editor-panel--blocked" id="blocked-panel" hidden>
       <h1>Editor not configured</h1>
       <p class="editor-lede">
-        Copy <code>api/config.example.php</code> to <code>api/config.php</code> and set
+        Copy <code>config.example.php</code> to <code>config.php</code> in the
+        <code>app/</code> folder and set <code>admin_email</code> and
         <code>editor_password</code>. Saving requires PHP on the server.
+      </p>
+    </section>
+
+    <section class="editor-panel editor-panel--blocked" id="forbidden-panel" hidden>
+      <h1>Admin only</h1>
+      <p class="editor-lede">
+        The content editor is limited to the admin account. Open the
+        <a href="../">presentation</a> to continue reviewing.
       </p>
     </section>
   </main>

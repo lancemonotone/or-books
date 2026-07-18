@@ -64,6 +64,7 @@ try {
     fclose($issuesLock);
 }
 
+editor_log_activity('phase.reorder');
 respond_json(200, [
     'ok' => true,
     'sprints' => $result['sprints'],

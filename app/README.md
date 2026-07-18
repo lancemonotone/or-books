@@ -40,21 +40,24 @@ Saving feedback requires PHP on the deployed host.
 2. Copy or sync `_office/screenshots/*` into `media/` on the server.
 3. Make `data/responses/` writable by PHP.
 4. Make `data/` writable by PHP if you use the editor.
-5. Copy `config.example.php` to `config.php` (in this `app/` folder) and set `editor_password`.
+5. Copy `config.example.php` to `config.php` (in this `app/` folder) and set `admin_email` plus `editor_password` (admin bootstrap).
 6. Optional: add HTTP Basic Auth in `.htaccess` for another layer.
 
-The review app and content editor share the same password and session. **Nothing in the review UI loads without sign-in.** YAML/JSON under `data/` are blocked from direct HTTP access and served only through authenticated APIs.
+Sign-in is **email + password**. The address in `admin_email` is the only admin (Settings + content editor). Other people sign in only after the admin adds them to a Settings team and sets a temporary password. **Nothing in the review UI loads without sign-in.** YAML/JSON under `data/` are blocked from direct HTTP access and served only through authenticated APIs.
 
 ## Settings
 
-Signed-in **Settings** (gear in the header):
+**Admin only** (gear in the header):
 
 - Client / project name (header brand, Overview heading, browser tab, email subject prefix)
 - Appearance: light / dark / system (saved in the browser)
 - Notification on/off, client & developer teams (each person = name used in the app + email + update frequency). Those names are the options in the “Your name” picker on issues and Questions.
+- Per team member: set or reset a temporary login password (hashed in `data/responses/users.json`; no auth emails are sent)
 
 Deploy secrets stay in `config.php` at the **app root** (same folder as `index.html`; deploy with the rest of `app/` as `/audit/`):
 
+- `admin_email` — sole admin account (Settings + content editor)
+- `editor_password` — admin bootstrap password until a hash is stored in `users.json`
 - `app_public_url` — base URL for links inside notification emails
 - `hourly_rate` — optional USD rate for estimate/actual dollar amounts (omit or null when unset)
 - `vendor` — optional estimate PDF header: `name`, `business`, `address`, `email`, `phone`, `logo` (path relative to the app folder, e.g. `assets/vendor-logo.png`)
@@ -71,16 +74,17 @@ URL: **`/audit/edit/`** (linked from the signed-in review nav).
 ### Setup
 
 1. Copy `config.example.php` to `config.php` (in this `app/` folder).
-2. Set `editor_password` to a long random string.
-3. Ensure PHP can write to `data/*.yaml`.
+2. Set `admin_email` and an `editor_password` bootstrap value (long random string).
+3. Ensure PHP can write to `data/*.yaml` and `data/responses/`.
 
-Leave `editor_password` empty to disable the review app and editor (both require it).
+Auth is disabled (503) when `admin_email` is empty, or when the admin has no stored hash and `editor_password` is empty.
 
 ### Security (basic)
 
 | Layer | What it does |
 |-------|----------------|
-| Password | Required to open the review app and editor; stored in `config.php` only |
+| Email + password | Admin from config; users from Settings team + `users.json` hashes |
+| Roles | Admin: Settings + editor; user: review app only |
 | Session cookie | HttpOnly, SameSite=Strict; shared by review + editor |
 | CSRF token | Required on saves, replies, and sign-out |
 | Honeypot field | Hidden field bots often fill; request rejected |
@@ -94,7 +98,7 @@ This is not hidden from humans who know the URL. It blocks casual crawlers and d
 ### Using the editor
 
 1. Open `/audit/edit/`.
-2. Sign in with the password.
+2. Sign in as admin (`admin_email` + password). Non-admins are blocked.
 3. Use the tabs: **Overview**, **Issues**, **Media**, **Questions**.
 4. Pick an item in the sidebar; changes autosave. Deep-link with `?tab=issues&issue=<key>` (UUID), not the display id.
 5. **Reorder issues:** drag the ⠿ handle in the Issues sidebar. With **All phases**, drag across phase groups; with a single phase filter, reorder within that phase only. Display ids Compact automatically after reorder, delete, phase change, or new issue.

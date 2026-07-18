@@ -15,10 +15,14 @@ import { initIssueComposer } from './issue-composer.js';
 import { applyActiveForm, renderActiveView } from './views.js';
 
 const loginPanel = document.getElementById('login-panel');
+const changePasswordPanel = document.getElementById('change-password-panel');
 const workspacePanel = document.getElementById('workspace-panel');
 const blockedPanel = document.getElementById('blocked-panel');
+const forbiddenPanel = document.getElementById('forbidden-panel');
 const loginForm = document.getElementById('login-form');
 const loginStatus = document.getElementById('login-status');
+const changePasswordForm = document.getElementById('change-password-form');
+const changePasswordStatus = document.getElementById('change-password-status');
 const editorStatus = document.getElementById('editor-status');
 const saveIndicator = document.getElementById('save-indicator');
 const saveIndicatorText = document.getElementById('save-indicator-text');
@@ -34,6 +38,8 @@ const tabButtons = document.querySelectorAll('[data-tab]');
 
 const state = {
   csrf: null,
+  role: null,
+  mustChangePassword: false,
   activeTab: 'issues',
   data: {
     audit: null,
@@ -57,12 +63,21 @@ const state = {
 };
 
 function showPanel(panel) {
-  [loginPanel, workspacePanel, blockedPanel].forEach((node) => {
+  [loginPanel, changePasswordPanel, workspacePanel, blockedPanel, forbiddenPanel].forEach((node) => {
+    if (!node) {
+      return;
+    }
     node.hidden = node !== panel;
   });
   if (logoutButton) {
-    logoutButton.hidden = panel !== workspacePanel;
+    logoutButton.hidden = panel !== workspacePanel && panel !== changePasswordPanel;
   }
+}
+
+function applyAuthMeta(data) {
+  state.csrf = data.csrf || state.csrf;
+  state.role = data.role || null;
+  state.mustChangePassword = Boolean(data.mustChangePassword);
 }
 
 function setStatus(node, message, isError = false) {
@@ -455,6 +470,36 @@ function clearAuthedSession() {
   }
 }
 
+async function enterWorkspace() {
+  markAuthedSession();
+  initPicker();
+  initIssueComposer();
+  initAutosave({
+    onSave: () => persistDirty({ quiet: true }),
+    onIndicator: setSaveIndicator,
+  });
+  await loadAllData();
+  showPanel(workspacePanel);
+  renderWorkspace();
+  syncEditorUrl({ push: false });
+  setSaveIndicator('idle');
+  setStatus(editorStatus, '');
+}
+
+async function handleAuthenticatedSession(data) {
+  applyAuthMeta(data);
+  if (data.role !== 'admin') {
+    clearAuthedSession();
+    showPanel(forbiddenPanel);
+    return;
+  }
+  if (data.mustChangePassword) {
+    showPanel(changePasswordPanel);
+    return;
+  }
+  await enterWorkspace();
+}
+
 async function loadSession() {
   try {
     const data = await requestJson('../api/editor-auth.php');
@@ -465,20 +510,7 @@ async function loadSession() {
       return;
     }
 
-    markAuthedSession();
-    state.csrf = data.csrf;
-    initPicker();
-    initIssueComposer();
-    initAutosave({
-      onSave: () => persistDirty({ quiet: true }),
-      onIndicator: setSaveIndicator,
-    });
-    await loadAllData();
-    showPanel(workspacePanel);
-    renderWorkspace();
-    syncEditorUrl({ push: false });
-    setSaveIndicator('idle');
-    setStatus(editorStatus, '');
+    await handleAuthenticatedSession(data);
   } catch (error) {
     clearAuthedSession();
     if (error.message.includes('not configured')) {
@@ -523,27 +555,43 @@ loginForm.addEventListener('submit', async (event) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action: 'login',
+        email: formData.get('email'),
         password: formData.get('password'),
         website: formData.get('website'),
       }),
     });
-    state.csrf = data.csrf;
-    markAuthedSession();
     loginForm.reset();
-    initPicker();
-    initIssueComposer();
-    initAutosave({
-      onSave: () => persistDirty({ quiet: true }),
-      onIndicator: setSaveIndicator,
-    });
-    await loadAllData();
-    showPanel(workspacePanel);
-    renderWorkspace();
-    syncEditorUrl({ push: false });
-    setSaveIndicator('idle');
     setStatus(loginStatus, '');
+    await handleAuthenticatedSession(data);
   } catch (error) {
     setStatus(loginStatus, error.message, true);
+  }
+});
+
+changePasswordForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const formData = new FormData(changePasswordForm);
+  setStatus(changePasswordStatus, 'Saving…');
+
+  try {
+    const data = await requestJson('../api/editor-auth.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'change_password',
+        currentPassword: formData.get('currentPassword'),
+        newPassword: formData.get('newPassword'),
+        confirmPassword: formData.get('confirmPassword'),
+        website: formData.get('website'),
+        csrf: state.csrf,
+      }),
+    });
+    applyAuthMeta(data);
+    changePasswordForm.reset();
+    setStatus(changePasswordStatus, '');
+    await enterWorkspace();
+  } catch (error) {
+    setStatus(changePasswordStatus, error.message, true);
   }
 });
 

@@ -3,14 +3,26 @@
 declare(strict_types=1);
 
 /**
- * Copy to config.php (same folder) and set editor_password.
- * Same password gates the review app and the content editor.
+ * Copy to config.php (same folder) and set admin_email + editor_password.
+ *
+ * Auth: email + password. admin_email is the only admin (Settings + content editor).
+ * editor_password is the admin bootstrap password until the admin sets a hashed
+ * password in the app; after that, the config password is ignored for login.
  *
  * Path: app/ (alongside index.html). PHP loads it from app/api via dirname(__DIR__).
  *
  * Notification secrets stay here; team lists and client name live in Settings (settings.json).
+ * User password hashes live in data/responses/users.json (not here).
  */
 return [
+    /** Required. Only this address is admin (not editable in Settings). */
+    'admin_email' => '',
+
+    /**
+     * Admin bootstrap password (plaintext). Used only when admin has no hash in users.json.
+     * Leave empty after admin has set a password in the app (or keep as offline recovery:
+     * clear the admin row in users.json to re-enable this value).
+     */
     'editor_password' => '',
     'editor_session_days' => 30,
 

@@ -51,4 +51,5 @@ try {
     error_log('notify_decision_event: ' . $notifyError->getMessage());
 }
 
+editor_log_activity('decision.save', ['decisionId' => $decisionId]);
 respond_json(200, $record);

@@ -57,9 +57,16 @@ function write_json_file(string $path, array $data): void
         throw new RuntimeException('Cannot write response file.');
     }
 
-    if (!rename($tmp, $path)) {
-        @unlink($tmp);
-        throw new RuntimeException('Cannot finalize response file.');
+    // Windows: rename() onto an existing path often fails with "Access is denied".
+    if (!@rename($tmp, $path)) {
+        if (file_exists($path) && !@unlink($path)) {
+            @unlink($tmp);
+            throw new RuntimeException('Cannot finalize response file.');
+        }
+        if (!@rename($tmp, $path)) {
+            @unlink($tmp);
+            throw new RuntimeException('Cannot finalize response file.');
+        }
     }
 }
 

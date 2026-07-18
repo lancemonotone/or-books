@@ -76,6 +76,7 @@ try {
     fclose($lock);
 }
 
+editor_log_activity('issue.phase', ['issueKey' => $issueKey, 'sprint' => $sprint]);
 respond_json(200, [
     'ok' => true,
     'issueKey' => $issueKey,

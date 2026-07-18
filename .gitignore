@@ -5,5 +5,11 @@ app/media/*
 # Optional local API config (app root)
 /app/config.php
 
+# Auth password hashes (local / deploy host only)
+/app/data/responses/users.json
+
+# Admin audit trail (local / deploy host only)
+/app/data/responses/audit-log.json
+
 # Local Node deps for one-shot scripts
 app/node_modules/

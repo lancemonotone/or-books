@@ -67,6 +67,7 @@ try {
         } catch (Throwable $notifyError) {
             error_log('notify_comment_event: ' . $notifyError->getMessage());
         }
+        editor_log_activity('comment.save', ['issueKey' => $issueId]);
         respond_json(200, $record);
     }
 
@@ -93,6 +94,7 @@ try {
         } catch (Throwable $notifyError) {
             error_log('notify_comment_event: ' . $notifyError->getMessage());
         }
+        editor_log_activity('comment.reply', ['issueKey' => $issueId]);
         respond_json(200, $record);
     }
 
@@ -125,6 +127,7 @@ try {
             if ($isOpening) {
                 unset($all[$issueId]);
                 save_comments($all);
+                editor_log_activity('comment.clear', ['issueKey' => $issueId]);
                 respond_json(200, [
                     'text' => '',
                     'author' => '',
@@ -149,6 +152,7 @@ try {
         } catch (Throwable $notifyError) {
             error_log('notify_comment_event: ' . $notifyError->getMessage());
         }
+        editor_log_activity('comment.edit', ['issueKey' => $issueId]);
         respond_json(200, $record);
     }
 
