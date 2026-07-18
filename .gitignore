@@ -8,6 +8,10 @@ app/media/*
 # Auth password hashes (local / deploy host only)
 /app/data/responses/users.json
 
+# Per-task Author soft locks (runtime)
+/app/data/responses/task-locks.json
+/app/data/responses/task-locks.json.lock
+
 # Admin audit trail (local / deploy host only)
 /app/data/responses/audit-log.json
 

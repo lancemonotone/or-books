@@ -18,53 +18,53 @@ editor_verify_honeypot($body['website'] ?? null);
 editor_verify_csrf($body['csrf'] ?? null);
 editor_release_session();
 
-$issueKey = trim((string) ($body['issueKey'] ?? ''));
+$taskKey = trim((string) ($body['taskKey'] ?? ''));
 $priority = trim((string) ($body['priority'] ?? ''));
 
-if ($issueKey === '') {
-    respond_json(422, ['error' => 'issueKey is required.']);
+if ($taskKey === '') {
+    respond_json(422, ['error' => 'taskKey is required.']);
 }
 
 if (!in_array($priority, ISSUE_PRIORITIES, true)) {
     respond_json(422, ['error' => 'Invalid priority.']);
 }
 
-$path = editor_data_path('issues');
+$path = editor_data_path('tasks');
 if (!file_exists($path)) {
-    respond_json(404, ['error' => 'Issues file not found.']);
+    respond_json(404, ['error' => 'Tasks file not found.']);
 }
 
 /*
- * Lock a sidecar file, not issues.yaml itself.
+ * Lock a sidecar file, not tasks.yaml itself.
  * Windows denies rename() onto a path that still has an open handle (code 5).
  */
 $lockPath = $path . '.lock';
 $lock = fopen($lockPath, 'c+');
 if ($lock === false) {
-    respond_json(500, ['error' => 'Could not lock issues file.']);
+    respond_json(500, ['error' => 'Could not lock tasks file.']);
 }
 
 try {
     if (!flock($lock, LOCK_EX)) {
-        respond_json(500, ['error' => 'Could not lock issues file.']);
+        respond_json(500, ['error' => 'Could not lock tasks file.']);
     }
 
     $content = file_get_contents($path);
     if ($content === false) {
-        respond_json(500, ['error' => 'Could not read issues file.']);
+        respond_json(500, ['error' => 'Could not read tasks file.']);
     }
 
-    $updated = update_issue_priority_yaml($content, $issueKey, $priority);
-    editor_write_yaml('issues', $updated);
+    $updated = update_task_priority_yaml($content, $taskKey, $priority);
+    editor_write_yaml('tasks', $updated);
 } finally {
     flock($lock, LOCK_UN);
     fclose($lock);
 }
 
-editor_log_activity('issue.priority', ['issueKey' => $issueKey, 'priority' => $priority]);
+editor_log_activity('task.priority', ['taskKey' => $taskKey, 'priority' => $priority]);
 respond_json(200, [
     'ok' => true,
-    'issueKey' => $issueKey,
+    'taskKey' => $taskKey,
     'priority' => $priority,
     'savedAt' => gmdate('c'),
 ]);
@@ -73,12 +73,12 @@ respond_json(200, [
  * Replace priority inside the YAML block for one issue key.
  * Preserves the rest of the file as-is (no full re-dump).
  */
-function update_issue_priority_yaml(string $content, string $issueKey, string $priority): string
+function update_task_priority_yaml(string $content, string $taskKey, string $priority): string
 {
-    $escapedKey = preg_quote($issueKey, '/');
+    $escapedKey = preg_quote($taskKey, '/');
     $parts = preg_split('/(?=^- key:)/m', $content);
     if ($parts === false) {
-        respond_json(500, ['error' => 'Could not parse issues file.']);
+        respond_json(500, ['error' => 'Could not parse tasks file.']);
     }
 
     $found = false;

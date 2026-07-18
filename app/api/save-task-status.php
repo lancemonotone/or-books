@@ -18,49 +18,49 @@ editor_verify_honeypot($body['website'] ?? null);
 editor_verify_csrf($body['csrf'] ?? null);
 editor_release_session();
 
-$issueKey = trim((string) ($body['issueKey'] ?? ''));
+$taskKey = trim((string) ($body['taskKey'] ?? ''));
 $status = trim((string) ($body['status'] ?? ''));
 
-if ($issueKey === '') {
-    respond_json(422, ['error' => 'issueKey is required.']);
+if ($taskKey === '') {
+    respond_json(422, ['error' => 'taskKey is required.']);
 }
 
 if (!in_array($status, ISSUE_STATUSES, true)) {
     respond_json(422, ['error' => 'Invalid status.']);
 }
 
-$path = editor_data_path('issues');
+$path = editor_data_path('tasks');
 if (!file_exists($path)) {
-    respond_json(404, ['error' => 'Issues file not found.']);
+    respond_json(404, ['error' => 'Tasks file not found.']);
 }
 
 $lockPath = $path . '.lock';
 $lock = fopen($lockPath, 'c+');
 if ($lock === false) {
-    respond_json(500, ['error' => 'Could not lock issues file.']);
+    respond_json(500, ['error' => 'Could not lock tasks file.']);
 }
 
 try {
     if (!flock($lock, LOCK_EX)) {
-        respond_json(500, ['error' => 'Could not lock issues file.']);
+        respond_json(500, ['error' => 'Could not lock tasks file.']);
     }
 
     $content = file_get_contents($path);
     if ($content === false) {
-        respond_json(500, ['error' => 'Could not read issues file.']);
+        respond_json(500, ['error' => 'Could not read tasks file.']);
     }
 
-    $updated = update_issue_status_yaml($content, $issueKey, $status);
-    editor_write_yaml('issues', $updated);
+    $updated = update_task_status_yaml($content, $taskKey, $status);
+    editor_write_yaml('tasks', $updated);
 } finally {
     flock($lock, LOCK_UN);
     fclose($lock);
 }
 
-editor_log_activity('issue.status', ['issueKey' => $issueKey, 'status' => $status]);
+editor_log_activity('task.status', ['taskKey' => $taskKey, 'status' => $status]);
 respond_json(200, [
     'ok' => true,
-    'issueKey' => $issueKey,
+    'taskKey' => $taskKey,
     'status' => $status,
     'savedAt' => gmdate('c'),
 ]);
@@ -69,12 +69,12 @@ respond_json(200, [
  * Replace status inside the YAML block for one issue key.
  * Preserves the rest of the file as-is (no full re-dump).
  */
-function update_issue_status_yaml(string $content, string $issueKey, string $status): string
+function update_task_status_yaml(string $content, string $taskKey, string $status): string
 {
-    $escapedKey = preg_quote($issueKey, '/');
+    $escapedKey = preg_quote($taskKey, '/');
     $parts = preg_split('/(?=^- key:)/m', $content);
     if ($parts === false) {
-        respond_json(500, ['error' => 'Could not parse issues file.']);
+        respond_json(500, ['error' => 'Could not parse tasks file.']);
     }
 
     $found = false;

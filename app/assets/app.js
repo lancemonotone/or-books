@@ -2,10 +2,10 @@ import {
   loadContent,
   loadResponses,
   saveDecision,
-  saveIssuePriority,
-  saveIssueStatus,
-  saveIssuePhase,
-  saveIssueTags,
+  saveTaskPriority,
+  saveTaskStatus,
+  saveTaskPhase,
+  saveTaskTags,
   savePhaseOrder,
   saveSettings,
   loadSettings,
@@ -26,14 +26,30 @@ import {
   summarizeEstimatesByPhase,
   formatUsd,
   formatHours,
-  issueEstimateHours,
-  issueActualHours,
+  taskEstimateHours,
+  taskActualHours,
   hoursToCost,
 } from "./estimates.js";
 import {
   DEFAULT_ESTIMATE_PRINT_PROFILE,
   printEstimate,
 } from "./estimate-print.js";
+import {
+  readStoredEditMode,
+  applyEditModeClass,
+  syncAuthorEditToggle,
+  bindAuthorEditToggle,
+  bindAuthorModeHandlers,
+  initAuthorMediaPicker,
+  takePendingDecisionScroll,
+} from "./author-mode.js";
+import {
+  syncTaskAuthorLock,
+  takeoverTaskLock,
+  bindTaskLockLifecycle,
+  taskAuthoringBlocked,
+  renderTaskLockBanner,
+} from "./task-lock.js";
 
 const AUTHOR_KEYS = {
   comment: "or-audit-author",
@@ -90,7 +106,7 @@ const COPY = {
   settingsSaved: "Settings saved.",
   phases: "Phases",
   phase: "Phase",
-  screenshots: "Screenshots",
+  screenshots: "Media",
   yourInput: "Your input",
   summary: "Summary",
   viewAll: "View all",
@@ -102,15 +118,16 @@ const COPY = {
   evidenceNoUrl: "No page URL",
   evidenceGroupCount: (n) => `${n} ${n === 1 ? "item" : "items"}`,
   decisionCount: (n) => `${n} ${n === 1 ? "question" : "questions"}`,
-  whatWeFound: "Issue Found",
+  whatWeFound: "Task Found",
   whatWeSuggest: "Suggested Fix",
-  screenshotsHeading: "Screenshots",
-  screenshotsGallery: "Screenshots and videos",
-  screenshotsLead: "Screenshots and recordings, linked to the issues below.",
+  screenshotsHeading: "Media",
+  screenshotsGallery: "Media",
+  screenshotsLead:
+    "Images and recordings linked to tasks. In Edit mode, click a thumbnail to edit.",
   yourFeedback: "Your feedback",
   postingAs: "Posting as",
   conversation: "Conversation",
-  conversationLead: "Feedback and replies on this issue.",
+  conversationLead: "Feedback and replies on this task.",
   yourReply: "Your reply",
   firstNotePlaceholder: "Add a note…",
   replyPlaceholder: "Write a reply…",
@@ -152,21 +169,21 @@ const COPY = {
   ourSuggestion: "Suggested approach",
   summaryTitle: "Summary of replies",
   summaryLead:
-    "Every question and issue in this review. Answers and comments appear when someone has saved them.",
-  noScreenshotsLinked: "No screenshots linked yet.",
-  noIssuesLinked: "No issues linked",
+    "Every question and task in this review. Answers and comments appear when someone has saved them.",
+  noScreenshotsLinked: "No media linked yet.",
+  noTasksLinked: "No tasks linked",
   lastSaved: "Saved",
   youChose: "You chose",
   noDecisionsYet: "No questions in this review yet.",
-  noFeedbackYet: "No issues in this review yet.",
+  noFeedbackYet: "No tasks in this review yet.",
   noAnswerYet: "—",
   noCommentYet: "—",
   loadError: "Could not load review data",
   phaseNotFound: "Phase not found.",
-  issueNotFound: "Issue not found.",
-  previousIssue: "Previous issue",
-  nextIssue: "Next issue",
-  filterNotFound: "No issues match this filter.",
+  taskNotFound: "Task not found.",
+  previousTask: "Previous task",
+  nextTask: "Next task",
+  filterNotFound: "No tasks match this filter.",
   priorityFilterTitle: (label) => `Priority: ${label}`,
   statusFilterTitle: (label) => `Status: ${label}`,
   tagFilterTitle: (label) => `Tag: ${label}`,
@@ -183,24 +200,56 @@ const COPY = {
   estimatesRemaining: "Remaining",
   estimatesGrand: "Grand total",
   estimatesDeferred: "Deferred",
-  estimatesDeferredCount: (n) => `${n} ${n === 1 ? "issue" : "issues"}`,
+  estimatesDeferredCount: (n) => `${n} ${n === 1 ? "task" : "tasks"}`,
   estimatesDeferredNote: "Not included in totals",
-  estimatesNoIssues: "No issues yet.",
+  estimatesNoTasks: "No tasks yet.",
   estimatesEstimateHours: "Estimate hours",
   estimatesEstimateCost: "Estimate cost",
   estimatesActualHours: "Actual hours",
   estimatesActualCost: "Actual cost",
-  estimatesColId: "Issue",
+  estimatesColId: "Task",
   estimatesColTitle: "Title",
   estimatesColStatus: "Status",
   estimatesColEstimate: "Estimate",
   estimatesColActual: "Actual",
   estimatesCompletenessEstimate: (set, total) =>
-    `Estimate hours set on ${set} of ${total} issues`,
+    `Estimate hours set on ${set} of ${total} tasks`,
   estimatesCompletenessActual: (set, total) =>
-    `Actual hours set on ${set} of ${total} issues`,
+    `Actual hours set on ${set} of ${total} tasks`,
   estimatesDownload: "Download estimate",
   estimatePrintRate: (formatted) => `Hourly rate: ${formatted}`,
+  editMode: "Edit",
+  doneEditing: "Done",
+  addPhase: "Add phase",
+  deletePhase: "Delete phase",
+  addTask: "Add task",
+  deleteTask: "Delete task",
+  addMedia: "Add media",
+  removeMedia: "Remove",
+  addEvidenceRow: "Add media",
+  deleteEvidenceRow: "Remove from index",
+  editHours: "Hours (estimate)",
+  editActualHours: "Actual hours",
+  linkTasks: "Link tasks",
+  addQuestion: "Add question",
+  deleteQuestion: "Delete question",
+  questionsHeading: "Questions",
+  questionTitle: "Short title",
+  questionText: "Question shown to client",
+  questionRecommendation: "Suggested approach",
+  questionLinkedTasks: "Linked tasks",
+  questionAnswerChoices: "Answer choices",
+  addOption: "Add option",
+  removeOption: "Remove option",
+  optionValue: "Value (saved answer)",
+  optionLabel: "Button label",
+  optionDescription: "Helper text",
+  optionMedia: "Example media",
+  addOptionMedia: "Add media",
+  changeOptionMedia: "Change file",
+  noOptionMedia: "No media for this option.",
+  noAnswerChoices: "Add at least one answer choice.",
+  noTasksYet: "No tasks yet.",
 };
 
 const PRIORITY_LABELS = {
@@ -245,7 +294,7 @@ const STATUS_SORT_RANK = {
 
 const state = {
   audit: null,
-  issues: [],
+  tasks: [],
   evidence: [],
   decisions: [],
   responses: { comments: {}, decisions: {} },
@@ -262,6 +311,8 @@ const state = {
   hourlyRate: null,
   vendor: null,
   phaseReorderMode: false,
+  editMode: readStoredEditMode(),
+  taskLock: null,
   auth: {
     email: null,
     role: null,
@@ -306,22 +357,15 @@ function isAdmin() {
 
 function syncAdminNav() {
   const show = isAdmin();
-  const menu = document.getElementById("account-menu");
   const panel = document.getElementById("account-menu-panel");
   const logoutBtn = document.getElementById("logout-button");
 
-  let editorLink = document.getElementById("nav-editor-link");
-  if (show) {
-    if (!editorLink && menu) {
-      editorLink = document.createElement("a");
-      editorLink.id = "nav-editor-link";
-      editorLink.href = "edit/";
-      editorLink.textContent = "Editor";
-      menu.before(editorLink);
-    }
-  } else if (editorLink) {
+  const editorLink = document.getElementById("nav-editor-link");
+  if (editorLink) {
     editorLink.remove();
   }
+
+  syncAuthorEditToggle(state, COPY);
 
   let settingsLink = document.getElementById("account-menu-settings");
   if (show) {
@@ -567,6 +611,17 @@ function phaseColorVars(sprintId) {
   };
 }
 
+function syncPillControlChrome(select, chromeClassName, styleCssText) {
+  const control = select.closest(".pill-control");
+  if (!control) {
+    return;
+  }
+  control.className = `pill-control ${chromeClassName}`;
+  if (styleCssText !== undefined) {
+    control.style.cssText = styleCssText || "";
+  }
+}
+
 function phaseStyleAttr(sprintId) {
   return Object.entries(phaseColorVars(sprintId))
     .map(([name, value]) => `${name}:${value}`)
@@ -593,35 +648,35 @@ function renderPhasePill(sprintId, { linked = true } = {}) {
   return `<a class="${className}" style="${style}" href="${overviewHref([sprintId])}">${label}</a>`;
 }
 
-function issueByKey(key) {
-  return state.issues.find((item) => item.key === key);
+function taskByKey(key) {
+  return state.tasks.find((item) => item.key === key);
 }
 
 function evidenceByFile(file) {
   return state.evidence.find((item) => item.file === file);
 }
 
-function issuesForEvidence(file) {
+function tasksForEvidence(file) {
   const row = evidenceByFile(file);
-  if (!row?.issues?.length) {
+  if (!row?.tasks?.length) {
     return [];
   }
-  return row.issues.map(issueByKey).filter(Boolean);
+  return row.tasks.map(taskByKey).filter(Boolean);
 }
 
-function decisionsForIssue(issueKey) {
+function decisionsForTask(taskKey) {
   return state.decisions.filter((decision) =>
-    (decision.blocks || []).includes(issueKey),
+    (decision.blocks || []).includes(taskKey),
   );
 }
 
-function sprintIssues(sprintId) {
-  return state.issues.filter(
+function sprintTasks(sprintId) {
+  return state.tasks.filter(
     (item) => String(item.sprint) === String(sprintId),
   );
 }
 
-function compareIssueIds(a, b) {
+function compareTaskIds(a, b) {
   const [aPhase = 0, aNum = 0] = String(a.id).split(".").map(Number);
   const [bPhase = 0, bNum = 0] = String(b.id).split(".").map(Number);
   if (aPhase !== bPhase) {
@@ -630,7 +685,7 @@ function compareIssueIds(a, b) {
   return aNum - bNum;
 }
 
-function issueIdSortRank(issueLike) {
+function taskIdSortRank(issueLike) {
   if (!issueLike) {
     return Number.MAX_SAFE_INTEGER;
   }
@@ -642,67 +697,67 @@ function issueIdSortRank(issueLike) {
   return phaseRank * 10000 + numRank;
 }
 
-function decisionIssueSortRank(decision) {
-  const issues = (decision?.blocks || [])
-    .map(issueByKey)
+function decisionTaskSortRank(decision) {
+  const tasks = (decision?.blocks || [])
+    .map(taskByKey)
     .filter(Boolean)
-    .sort(compareIssueIds);
-  if (!issues.length) {
+    .sort(compareTaskIds);
+  if (!tasks.length) {
     return Number.MAX_SAFE_INTEGER;
   }
-  return issueIdSortRank(issues[0]);
+  return taskIdSortRank(tasks[0]);
 }
 
-function orderedSprintIssues(sprintId) {
-  return [...sprintIssues(sprintId)].sort(compareIssueIds);
+function orderedSprintTasks(sprintId) {
+  return [...sprintTasks(sprintId)].sort(compareTaskIds);
 }
 
-function issueNeighbors(issueKey) {
-  const issue = issueByKey(issueKey);
-  if (!issue) {
+function taskNeighbors(taskKey) {
+  const task = taskByKey(taskKey);
+  if (!task) {
     return { prev: null, next: null };
   }
 
-  const phaseIssues = orderedSprintIssues(issue.sprint);
-  const index = phaseIssues.findIndex((item) => item.key === issueKey);
+  const phaseTasks = orderedSprintTasks(task.sprint);
+  const index = phaseTasks.findIndex((item) => item.key === taskKey);
   if (index < 0) {
     return { prev: null, next: null };
   }
 
   return {
-    prev: index > 0 ? phaseIssues[index - 1] : null,
-    next: index < phaseIssues.length - 1 ? phaseIssues[index + 1] : null,
+    prev: index > 0 ? phaseTasks[index - 1] : null,
+    next: index < phaseTasks.length - 1 ? phaseTasks[index + 1] : null,
   };
 }
 
-function renderIssueNav(issueKey) {
-  const { prev, next } = issueNeighbors(issueKey);
+function renderTaskNav(taskKey) {
+  const { prev, next } = taskNeighbors(taskKey);
   const prevControl = prev
-    ? `<a class="issue-nav__link" href="#/issue/${escapeHtml(prev.key)}" aria-label="${escapeHtml(COPY.previousIssue)}: ${escapeHtml(prev.id)} ${escapeHtml(prev.title)}">${ISSUE_NAV_PREV_ICON}</a>`
-    : `<span class="issue-nav__link is-disabled" aria-hidden="true">${ISSUE_NAV_PREV_ICON}</span>`;
+    ? `<a class="issue-nav__link" href="#/task/${escapeHtml(prev.key)}" aria-label="${escapeHtml(COPY.previousTask)}: ${escapeHtml(prev.id)} ${escapeHtml(prev.title)}">${TASK_NAV_PREV_ICON}</a>`
+    : `<span class="issue-nav__link is-disabled" aria-hidden="true">${TASK_NAV_PREV_ICON}</span>`;
   const nextControl = next
-    ? `<a class="issue-nav__link" href="#/issue/${escapeHtml(next.key)}" aria-label="${escapeHtml(COPY.nextIssue)}: ${escapeHtml(next.id)} ${escapeHtml(next.title)}">${ISSUE_NAV_NEXT_ICON}</a>`
-    : `<span class="issue-nav__link is-disabled" aria-hidden="true">${ISSUE_NAV_NEXT_ICON}</span>`;
+    ? `<a class="issue-nav__link" href="#/task/${escapeHtml(next.key)}" aria-label="${escapeHtml(COPY.nextTask)}: ${escapeHtml(next.id)} ${escapeHtml(next.title)}">${TASK_NAV_NEXT_ICON}</a>`
+    : `<span class="issue-nav__link is-disabled" aria-hidden="true">${TASK_NAV_NEXT_ICON}</span>`;
 
-  return `<nav class="issue-nav" aria-label="Issues in this phase">${prevControl}${nextControl}</nav>`;
+  return `<nav class="issue-nav" aria-label="Tasks in this phase">${prevControl}${nextControl}</nav>`;
 }
 
-function issuesByPriority(priority) {
-  return state.issues.filter((item) => item.priority === priority);
+function tasksByPriority(priority) {
+  return state.tasks.filter((item) => item.priority === priority);
 }
 
-function issuesByStatus(status) {
-  return state.issues.filter((item) => item.status === status);
+function tasksByStatus(status) {
+  return state.tasks.filter((item) => item.status === status);
 }
 
-function issuesByTag(tag) {
+function tasksByTag(tag) {
   const needle = String(tag || "")
     .trim()
     .toLowerCase();
   if (!needle) {
     return [];
   }
-  return state.issues.filter((item) =>
+  return state.tasks.filter((item) =>
     (item.tags || []).some(
       (entry) => String(entry).trim().toLowerCase() === needle,
     ),
@@ -723,8 +778,8 @@ function tagsMatch(a, b) {
 
 function collectKnownTags() {
   const seen = new Map();
-  for (const issue of state.issues) {
-    for (const entry of issue.tags || []) {
+  for (const task of state.tasks) {
+    for (const entry of task.tags || []) {
       const tag = normalizeTagLabel(entry);
       if (!tag) {
         continue;
@@ -813,12 +868,12 @@ function normalizeCommentClient(row) {
   };
 }
 
-function commentRecord(issueKey) {
-  return normalizeCommentClient(state.responses.comments[issueKey]);
+function commentRecord(taskKey) {
+  return normalizeCommentClient(state.responses.comments[taskKey]);
 }
 
-function commentMessages(issueKey) {
-  return commentRecord(issueKey)?.messages || [];
+function commentMessages(taskKey) {
+  return commentRecord(taskKey)?.messages || [];
 }
 
 function canEditMessage(message, messages) {
@@ -1187,8 +1242,8 @@ function buildReplyEditForm(message) {
     </form>`;
 }
 
-function renderThreadMessages(issue) {
-  const row = commentRecord(issue.key);
+function renderThreadMessages(task) {
+  const row = commentRecord(task.key);
   const messages = row?.messages || [];
 
   if (!messages.length) {
@@ -1220,18 +1275,18 @@ function renderThreadMessages(issue) {
     </div>`;
 }
 
-function renderCommentForm(issue) {
-  const saved = commentRecord(issue.key);
+function renderCommentForm(task) {
+  const saved = commentRecord(task.key);
   const messages = saved?.messages || [];
   const isFirst = messages.length === 0;
 
   return `
     <section class="feedback-panel" id="feedback">
       <h2>${escapeHtml(COPY.yourFeedback)}</h2>
-      ${renderThreadMessages(issue)}
-      <form class="feedback-form" data-comment-form="${escapeHtml(issue.key)}" data-feedback-mode="${isFirst ? "first" : "reply"}">
+      ${renderThreadMessages(task)}
+      <form class="feedback-form" data-comment-form="${escapeHtml(task.key)}" data-feedback-mode="${isFirst ? "first" : "reply"}">
         <div class="feedback-composer">
-          ${renderAuthorPicker(getAuthor("comment"), { id: `issue-${issue.key}` })}
+          ${renderAuthorPicker(getAuthor("comment"), { id: `task-${task.key}` })}
           <label class="field">
             <span class="visually-hidden">${escapeHtml(COPY.yourReply)}</span>
             <textarea name="text" rows="2" maxlength="2000" required placeholder="${escapeHtml(isFirst ? COPY.firstNotePlaceholder : COPY.replyPlaceholder)}"></textarea>
@@ -1245,15 +1300,15 @@ function renderCommentForm(issue) {
     </section>`;
 }
 
-const EDIT_ICON = `<svg class="edit-link__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+const TASK_NAV_PREV_ICON = `<svg class="issue-nav__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>`;
 
-const ISSUE_NAV_PREV_ICON = `<svg class="issue-nav__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>`;
-
-const ISSUE_NAV_NEXT_ICON = `<svg class="issue-nav__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>`;
+const TASK_NAV_NEXT_ICON = `<svg class="issue-nav__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>`;
 
 const ACCORDION_OPEN_ALL_ICON = `<svg class="phases-accordion__control-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 6 5 5 5-5"/><path d="m7 13 5 5 5-5"/></svg>`;
 
 const ACCORDION_CLOSE_ALL_ICON = `<svg class="phases-accordion__control-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 11 5-5 5 5"/><path d="m7 18 5-5 5 5"/></svg>`;
+
+const TRASH_ICON = `<svg class="media-block__remove-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`;
 
 function renderAccordionControls({ openAttr, closeAttr }) {
   return `
@@ -1263,27 +1318,6 @@ function renderAccordionControls({ openAttr, closeAttr }) {
           </div>`;
 }
 
-function editorUrl({ tab, issue, file } = {}) {
-  const params = new URLSearchParams();
-  if (tab) {
-    params.set("tab", tab);
-  }
-  if (issue) {
-    params.set("issue", issue);
-  }
-  if (file) {
-    params.set("file", file);
-  }
-  const query = params.toString();
-  return query ? `edit/?${query}` : "edit/";
-}
-
-function renderEditLink({ tab, issue, file, label = "Edit", className = "" }) {
-  const href = editorUrl({ tab, issue, file });
-  const classes = ["edit-link", className].filter(Boolean).join(" ");
-  return `<a class="${escapeHtml(classes)}" href="${escapeHtml(href)}" aria-label="${escapeHtml(label)}" title="${escapeHtml(label)}">${EDIT_ICON}</a>`;
-}
-
 function evidenceGalleryAttr(files) {
   if (!files || files.length <= 1) {
     return "";
@@ -1291,8 +1325,8 @@ function evidenceGalleryAttr(files) {
   return ` data-evidence-gallery="${escapeHtml(files.join(","))}"`;
 }
 
-function issueEvidenceFiles(issue) {
-  return (issue.evidence || [])
+function taskEvidenceFiles(task) {
+  return (task.evidence || [])
     .map((item) => item.file)
     .filter((file) => evidenceByFile(file));
 }
@@ -1397,48 +1431,50 @@ function renderEvidenceThumb(file, galleryFiles = null, options = {}) {
   const label = row.page || file;
   const caption =
     captionMode === "page" ? row.page || "" : evidenceThumbCaption(row);
+  const openAttr =
+    options.openAttr || `data-open-evidence="${escapeHtml(file)}"`;
   if (isVideoEvidence(row)) {
     return `
-      <button type="button" class="evidence-thumb evidence-thumb--video" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
+      <button type="button" class="evidence-thumb evidence-thumb--video" ${openAttr}${galleryAttr} title="${escapeHtml(label)}">
         ${renderVideoPreviewMarkup(file, label)}
         <span class="evidence-thumb__play" aria-hidden="true">▶</span>
         ${caption ? `<span class="evidence-thumb__label">${escapeHtml(caption)}</span>` : ""}
       </button>`;
   }
   return `
-    <button type="button" class="evidence-thumb" data-open-evidence="${escapeHtml(file)}"${galleryAttr} title="${escapeHtml(label)}">
+    <button type="button" class="evidence-thumb" ${openAttr}${galleryAttr} title="${escapeHtml(label)}">
       <img src="${escapeHtml(mediaUrl(file))}" alt="${escapeHtml(label)}" loading="lazy">
       ${caption ? `<span class="evidence-thumb__label">${escapeHtml(caption)}</span>` : ""}
     </button>`;
 }
 
-function renderIssueChips(keys) {
+function renderTaskChips(keys) {
   return keys
     .map((key) => {
-      const issue = issueByKey(key);
-      if (!issue) {
+      const task = taskByKey(key);
+      if (!task) {
         return "";
       }
-      const phaseId = issue.sprint ?? String(issue.id).split(".")[0];
-      return `<a class="chip chip--issue chip--phase" style="${phaseStyleAttr(phaseId)}" href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a>`;
+      const phaseId = task.sprint ?? String(task.id).split(".")[0];
+      return `<a class="chip chip--issue chip--phase" style="${phaseStyleAttr(phaseId)}" href="#/task/${escapeHtml(task.key)}">${escapeHtml(task.id)}</a>`;
     })
     .join("");
 }
 
 function renderSummaryItemLabel(keys, title, fallback = "") {
   const chips = keys.length
-    ? `<span class="summary-item__chips">${renderIssueChips(keys)}</span>`
+    ? `<span class="summary-item__chips">${renderTaskChips(keys)}</span>`
     : "";
   const text = escapeHtml(title || fallback);
   return `<div class="summary-item__label">${chips}<span class="summary-item__title">${text}</span></div>`;
 }
 
-function renderTagChips(tags = [], { editable = false, issueKey = "" } = {}) {
+function renderTagChips(tags = [], { editable = false, taskKey = "" } = {}) {
   return (tags || [])
     .map((tag) => normalizeTagLabel(tag))
     .filter(Boolean)
     .map((tag) => {
-      const href = `#/issues/tag/${encodeURIComponent(tag)}`;
+      const href = `#/tasks/tag/${encodeURIComponent(tag)}`;
       const label = escapeHtml(tag);
       if (!editable) {
         return `<a class="chip chip--tag" href="${href}">${label}</a>`;
@@ -1450,7 +1486,7 @@ function renderTagChips(tags = [], { editable = false, issueKey = "" } = {}) {
           class="chip__remove"
           data-tag-remove
           data-tag="${escapeHtml(tag)}"
-          data-issue-key="${escapeHtml(issueKey)}"
+          data-task-key="${escapeHtml(taskKey)}"
           aria-label="${escapeHtml(COPY.removeTag(tag))}"
         ><span aria-hidden="true">×</span></button>
       </span>`;
@@ -1458,10 +1494,10 @@ function renderTagChips(tags = [], { editable = false, issueKey = "" } = {}) {
     .join("");
 }
 
-function renderPriorityControl(issue, { editable = false } = {}) {
-  const priority = String(issue.priority || "");
+function renderPriorityControl(task, { editable = false } = {}) {
+  const priority = String(task.priority || "");
   if (!editable) {
-    return `<a class="pill pill--${escapeHtml(priority)}" href="#/issues/priority/${escapeHtml(priority)}">${escapeHtml(priorityLabel(priority))}</a>`;
+    return `<a class="pill pill--${escapeHtml(priority)}" href="#/tasks/priority/${escapeHtml(priority)}">${escapeHtml(priorityLabel(priority))}</a>`;
   }
 
   const options = PRIORITY_OPTIONS.map((value) => {
@@ -1470,20 +1506,20 @@ function renderPriorityControl(issue, { editable = false } = {}) {
   }).join("");
 
   return `
-    <label class="pill-control">
+    <label class="pill-control pill pill--${escapeHtml(priority)}">
       <span class="visually-hidden">Priority</span>
       <select
-        class="pill-control__select pill pill--${escapeHtml(priority)}"
-        data-issue-priority="${escapeHtml(issue.key)}"
+        class="pill-control__select"
+        data-task-priority="${escapeHtml(task.key)}"
         aria-label="Priority"
       >${options}</select>
     </label>`;
 }
 
-function renderStatusControl(issue, { editable = false } = {}) {
-  const status = String(issue.status || "");
+function renderStatusControl(task, { editable = false } = {}) {
+  const status = String(task.status || "");
   if (!editable) {
-    return `<a class="pill pill--status pill--${escapeHtml(status)}" href="#/issues/status/${escapeHtml(status)}">${escapeHtml(statusLabel(status))}</a>`;
+    return `<a class="pill pill--status pill--${escapeHtml(status)}" href="#/tasks/status/${escapeHtml(status)}">${escapeHtml(statusLabel(status))}</a>`;
   }
 
   const options = STATUS_OPTIONS.map((value) => {
@@ -1492,18 +1528,18 @@ function renderStatusControl(issue, { editable = false } = {}) {
   }).join("");
 
   return `
-    <label class="pill-control">
+    <label class="pill-control pill pill--status pill--${escapeHtml(status)}">
       <span class="visually-hidden">Status</span>
       <select
-        class="pill-control__select pill pill--status pill--${escapeHtml(status)}"
-        data-issue-status="${escapeHtml(issue.key)}"
+        class="pill-control__select"
+        data-task-status="${escapeHtml(task.key)}"
         aria-label="Status"
       >${options}</select>
     </label>`;
 }
 
-function renderPhaseControl(issue, { editable = false } = {}) {
-  const sprintId = issue.sprint;
+function renderPhaseControl(task, { editable = false } = {}) {
+  const sprintId = task.sprint;
   if (!editable) {
     return renderPhasePill(sprintId);
   }
@@ -1519,19 +1555,18 @@ function renderPhaseControl(issue, { editable = false } = {}) {
     .join("");
 
   return `
-    <label class="pill-control">
+    <label class="pill-control pill pill--phase" style="${phaseStyleAttr(sprintId)}">
       <span class="visually-hidden">${escapeHtml(COPY.phase)}</span>
       <select
-        class="pill-control__select pill pill--phase"
-        style="${phaseStyleAttr(sprintId)}"
-        data-issue-phase="${escapeHtml(issue.key)}"
+        class="pill-control__select"
+        data-task-phase="${escapeHtml(task.key)}"
         aria-label="${escapeHtml(COPY.phase)}"
       >${options}</select>
     </label>`;
 }
 
 function renderMetaRow(
-  issue,
+  task,
   {
     editablePriority = false,
     editableStatus = false,
@@ -1540,13 +1575,14 @@ function renderMetaRow(
 ) {
   return `
     <div class="meta-row">
-      ${renderPhaseControl(issue, { editable: editablePhase })}
-      ${renderPriorityControl(issue, { editable: editablePriority })}
-      ${renderStatusControl(issue, { editable: editableStatus })}
+      ${renderPhaseControl(task, { editable: editablePhase })}
+      ${renderPriorityControl(task, { editable: editablePriority })}
+      ${renderStatusControl(task, { editable: editableStatus })}
+      ${renderTaskEstimateMeta(task)}
     </div>`;
 }
 
-function renderIssueEstimateMetaSegment(prefix, hours) {
+function renderTaskEstimateMetaSegment(prefix, hours) {
   const formattedHours = formatHours(hours);
   if (formattedHours === null) {
     return "";
@@ -1561,39 +1597,39 @@ function renderIssueEstimateMetaSegment(prefix, hours) {
   return `<span class="issue-estimate-meta__chip">${text}</span>`;
 }
 
-function renderIssueEstimateMeta(issue) {
-  const estimateHours = issueEstimateHours(issue);
-  const actualHours = issueActualHours(issue);
+function renderTaskEstimateMeta(task) {
+  const estimateHours = taskEstimateHours(task);
+  const actualHours = taskActualHours(task);
   if (estimateHours === null && actualHours === null) {
     return "";
   }
   const segments = [
     estimateHours !== null
-      ? renderIssueEstimateMetaSegment("Est", estimateHours)
+      ? renderTaskEstimateMetaSegment("Est", estimateHours)
       : "",
     actualHours !== null
-      ? renderIssueEstimateMetaSegment("Actual", actualHours)
+      ? renderTaskEstimateMetaSegment("Actual", actualHours)
       : "",
   ].filter(Boolean);
   return `<div class="issue-estimate-meta">${segments.join("")}</div>`;
 }
 
-function renderIssueTags(issue, { editable = false } = {}) {
-  const tagsHtml = renderTagChips(issue.tags, {
+function renderTaskTags(task, { editable = false } = {}) {
+  const tagsHtml = renderTagChips(task.tags, {
     editable,
-    issueKey: issue.key,
+    taskKey: task.key,
   });
   if (!editable && !tagsHtml) {
     return "";
   }
 
   const addControl = editable
-    ? `<div class="issue-tags__add" data-tag-add-wrap="${escapeHtml(issue.key)}">
+    ? `<div class="issue-tags__add" data-tag-add-wrap="${escapeHtml(task.key)}">
         <button
           type="button"
           class="chip chip--tag-add"
           data-tag-add-open
-          data-issue-key="${escapeHtml(issue.key)}"
+          data-task-key="${escapeHtml(task.key)}"
           aria-label="${escapeHtml(COPY.addTag)}"
         ><span aria-hidden="true">+</span></button>
       </div>`
@@ -1601,38 +1637,37 @@ function renderIssueTags(issue, { editable = false } = {}) {
 
   return `<div
     class="chip-row issue-tags${editable ? " issue-tags--editable" : ""}"
-    data-issue-tags="${escapeHtml(issue.key)}"
+    data-task-tags="${escapeHtml(task.key)}"
   >${tagsHtml}${addControl}</div>`;
 }
 
-function renderIssueCard(issue) {
-  const evidenceItems = issue.evidence?.length
-    ? issue.evidence
+function renderTaskCard(task) {
+  const evidenceItems = task.evidence?.length
+    ? task.evidence
     : state.evidence
-        .filter((row) => row.issues?.includes(issue.key))
+        .filter((row) => row.tasks?.includes(task.key))
         .map((row) => ({ file: row.file }));
   const galleryFiles = evidenceItems
     .map((item) => item.file)
     .filter((file) => evidenceByFile(file));
 
-  const issueHref = `#/issue/${escapeHtml(issue.key)}`;
-  const phaseStyle = phaseStyleAttr(issue.sprint);
+  const taskHref = `#/task/${escapeHtml(task.key)}`;
+  const phaseStyle = phaseStyleAttr(task.sprint);
 
   return `
-    <article class="issue-card">
+    <article class="issue-card"${state.editMode ? ` data-author-task-drag="${escapeHtml(task.key)}"` : ""}>
       <div class="issue-card__content">
-        <a class="issue-card__link" href="${issueHref}">
+        <a class="issue-card__link" href="${taskHref}">
           <div class="issue-card__head">
-            <span class="issue-card__id pill pill--phase" style="${phaseStyle}">${escapeHtml(issue.id)}</span>
-            <h2 class="issue-card__title">${escapeHtml(issue.title)}</h2>
+            <span class="issue-card__id pill pill--phase" style="${phaseStyle}">${escapeHtml(task.id)}</span>
+            <h2 class="issue-card__title">${escapeHtml(task.title)}</h2>
           </div>
         </a>
-        ${renderMetaRow(issue)}
-        ${renderIssueEstimateMeta(issue)}
-        <a class="issue-card__link issue-card__link--summary" href="${issueHref}">
-          <p class="issue-card__summary">${escapeHtml(issue.problem?.trim().split("\n")[0] || "")}</p>
+        ${renderMetaRow(task)}
+        <a class="issue-card__link issue-card__link--summary" href="${taskHref}">
+          <p class="issue-card__summary">${escapeHtml(task.problem?.trim().split("\n")[0] || "")}</p>
         </a>
-        ${renderIssueTags(issue)}
+        ${renderTaskTags(task)}
       </div>
       ${evidenceItems.length ? `<div class="issue-card__evidence">${evidenceItems.map((e) => renderEvidenceThumb(e.file, galleryFiles)).join("")}</div>` : ""}
     </article>`;
@@ -1691,6 +1726,17 @@ function scrollToOpenPhase() {
 }
 
 function normalizeLegacyRoute(route) {
+  const rawHash = window.location.hash.replace(/^#/, "") || "/";
+  const queryIndex = rawHash.indexOf("?");
+  const path = queryIndex >= 0 ? rawHash.slice(0, queryIndex) : rawHash;
+  const query = queryIndex >= 0 ? rawHash.slice(queryIndex) : "";
+
+  if (path.startsWith("/issue/") || path.startsWith("/issues/")) {
+    const redirected = `#${path.replace(/^\/issues\//, "/tasks/").replace(/^\/issue\//, "/task/")}${query}`;
+    history.replaceState(null, "", redirected);
+    return parseRoute();
+  }
+
   if (route.name === "sprints") {
     history.replaceState(null, "", "#/");
     return parseRoute();
@@ -1711,7 +1757,7 @@ function overviewStats() {
     recordings: state.evidence.filter(
       (row) => row.type === "video" || String(row.file || "").endsWith(".mp4"),
     ).length,
-    issues: state.issues.length,
+    tasks: state.tasks.length,
     decisions: state.decisions.length,
   };
 }
@@ -1719,28 +1765,46 @@ function overviewStats() {
 function renderPhasesAccordion(openPhaseIds) {
   const openSet = new Set(openPhaseIds.map(String));
   const reorderMode = Boolean(state.phaseReorderMode);
+  const editMode = Boolean(state.editMode);
   const canReorder = (state.audit.sprints || []).length >= 2;
   const groups = state.audit.sprints
     .map((sprint) => {
-      const issues = sprintIssues(sprint.id);
+      const tasks = sprintTasks(sprint.id);
       const isOpen = !reorderMode && openSet.has(String(sprint.id));
       const dragHandle = reorderMode
         ? `<button type="button" class="phases-accordion__drag" data-drag-handle draggable="true" aria-label="Drag to reorder">⠿</button>`
         : "";
+      const phaseTitle = editMode
+        ? `<input class="author-field author-field--inline" type="text" data-author-phase="${escapeHtml(String(sprint.id))}" data-author-field="title" value="${escapeHtml(sprint.title)}" aria-label="Phase title">`
+        : `<span class="phases-accordion__title-text">${escapeHtml(sprint.title)}</span>`;
+      const phaseSubtitle = editMode
+        ? `<input class="author-field author-field--inline" type="text" data-author-phase="${escapeHtml(String(sprint.id))}" data-author-field="subtitle" value="${escapeHtml(sprint.subtitle || "")}" aria-label="Phase subtitle" placeholder="Subtitle">`
+        : `<span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>`;
+      const phaseDesc = editMode
+        ? `<textarea class="author-field" rows="2" data-author-phase="${escapeHtml(String(sprint.id))}" data-author-field="description" aria-label="Phase description">${escapeHtml(sprint.description.trim())}</textarea>`
+        : `<p class="phases-accordion__desc">${escapeHtml(sprint.description.trim())}</p>`;
+      const phaseActions = editMode
+        ? `<div class="author-actions">
+            <button type="button" class="button button--ghost button--small" data-author-add-task="${escapeHtml(String(sprint.id))}">${escapeHtml(COPY.addTask)}</button>
+            <button type="button" class="button button--ghost button--small" data-author-delete-phase="${escapeHtml(String(sprint.id))}">${escapeHtml(COPY.deletePhase)}</button>
+          </div>`
+        : "";
+      const taskCards = tasks.map(renderTaskCard).join("");
       return `
         <details class="phases-accordion__item" data-phase-id="${escapeHtml(String(sprint.id))}" style="${phaseStyleAttr(sprint.id)}"${isOpen ? " open" : ""}>
           <summary class="phases-accordion__summary">
             ${dragHandle}
             <span class="phases-accordion__heading">
-              <span class="phases-accordion__title">${renderPhasePill(sprint.id, { linked: false })}<span class="phases-accordion__title-text">${escapeHtml(sprint.title)}</span></span>
-              <span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>
-              <p class="phases-accordion__desc">${escapeHtml(sprint.description.trim())}</p>
+              <span class="phases-accordion__title">${renderPhasePill(sprint.id, { linked: false })}${phaseTitle}</span>
+              ${phaseSubtitle}
+              ${phaseDesc}
             </span>
-            <span class="phases-accordion__meta">${issues.length} ${COPY.suggestions}</span>
+            <span class="phases-accordion__meta">${tasks.length} ${COPY.suggestions}</span>
             <span class="phases-accordion__chevron" aria-hidden="true">›</span>
           </summary>
           <div class="phases-accordion__panel">
-            <div class="issue-list">${issues.map(renderIssueCard).join("")}</div>
+            ${phaseActions}
+            <div class="issue-list"${editMode ? ` data-author-task-list="${escapeHtml(String(sprint.id))}"` : ""}>${taskCards}</div>
           </div>
         </details>`;
     })
@@ -1749,10 +1813,18 @@ function renderPhasesAccordion(openPhaseIds) {
   const accordionControls = reorderMode
     ? `<div class="phases-accordion__controls"><button type="button" class="phases-accordion__reorder" data-phases-reorder>${escapeHtml(COPY.doneReorderingPhases)}</button></div>`
     : `<div class="phases-accordion__controls">${
+        editMode
+          ? `<button type="button" class="button button--ghost button--small" data-author-add-phase>${escapeHtml(COPY.addPhase)}</button>`
+          : ""
+      }${
         canReorder
           ? `<button type="button" class="phases-accordion__reorder" data-phases-reorder>${escapeHtml(COPY.reorderPhases)}</button>`
           : ""
-      }<button type="button" class="phases-accordion__control" data-phases-open-all aria-label="${escapeHtml(COPY.openAllPhases)}" title="${escapeHtml(COPY.openAllPhases)}">${ACCORDION_OPEN_ALL_ICON}</button><button type="button" class="phases-accordion__control" data-phases-close-all aria-label="${escapeHtml(COPY.closeAllPhases)}" title="${escapeHtml(COPY.closeAllPhases)}">${ACCORDION_CLOSE_ALL_ICON}</button></div>`;
+      }${
+        !editMode
+          ? `<button type="button" class="phases-accordion__control" data-phases-open-all aria-label="${escapeHtml(COPY.openAllPhases)}" title="${escapeHtml(COPY.openAllPhases)}">${ACCORDION_OPEN_ALL_ICON}</button><button type="button" class="phases-accordion__control" data-phases-close-all aria-label="${escapeHtml(COPY.closeAllPhases)}" title="${escapeHtml(COPY.closeAllPhases)}">${ACCORDION_CLOSE_ALL_ICON}</button>`
+          : ""
+      }</div>`;
 
   return `
       <section class="section">
@@ -1767,18 +1839,25 @@ function renderPhasesAccordion(openPhaseIds) {
 function renderOverview() {
   const openPhases = parseOpenPhases(state.route.searchParams);
   const stats = overviewStats();
+  const summaryHtml = state.editMode && isAdmin()
+    ? `<textarea class="author-field author-field--summary" rows="4" data-author-summary aria-label="Overview intro">${escapeHtml(state.audit.summary.trim())}</textarea>`
+    : `<p class="lede">${escapeHtml(state.audit.summary.trim())}</p>`;
+  const addQuestionBtn = state.editMode
+    ? `<button type="button" class="button button--ghost" data-author-add-decision>${escapeHtml(COPY.addQuestion)}</button>`
+    : "";
 
   return `
     <div class="page page--overview">
       <header class="page-header page-header--split">
         <div class="page-header__intro">
           <h1>${escapeHtml(clientName())}</h1>
-          <p class="lede">${escapeHtml(state.audit.summary.trim())}</p>
+          ${summaryHtml}
+          ${addQuestionBtn ? `<div class="author-actions">${addQuestionBtn}</div>` : ""}
         </div>
         <ul class="stat-list page-header__stats">
-          <li><strong>${stats.screenshots}</strong> screenshots</li>
+          <li><strong>${stats.screenshots}</strong> media images</li>
           <li><strong>${stats.recordings}</strong> recordings</li>
-          <li><strong>${stats.issues}</strong> issues</li>
+          <li><strong>${stats.tasks}</strong> tasks</li>
           <li><strong>${stats.decisions}</strong> questions</li>
         </ul>
       </header>
@@ -1786,17 +1865,17 @@ function renderOverview() {
     </div>`;
 }
 
-function renderFilteredIssues(kind, value) {
-  let issues = [];
+function renderFilteredTasks(kind, value) {
+  let tasks = [];
   let title = "";
   if (kind === "priority") {
-    issues = issuesByPriority(value);
+    tasks = tasksByPriority(value);
     title = COPY.priorityFilterTitle(priorityLabel(value));
   } else if (kind === "status") {
-    issues = issuesByStatus(value);
+    tasks = tasksByStatus(value);
     title = COPY.statusFilterTitle(statusLabel(value));
   } else if (kind === "tag") {
-    issues = issuesByTag(value);
+    tasks = tasksByTag(value);
     title = COPY.tagFilterTitle(value);
   } else {
     title = COPY.filterNotFound;
@@ -1807,96 +1886,134 @@ function renderFilteredIssues(kind, value) {
       <header class="page-header">
         <p class="breadcrumb"><a href="#/">${escapeHtml(COPY.overview)}</a></p>
         <h1>${escapeHtml(title)}</h1>
-        <p class="lede">${issues.length} ${COPY.suggestions}</p>
+        <p class="lede">${tasks.length} ${COPY.suggestions}</p>
       </header>
-      <div class="issue-list">${issues.map(renderIssueCard).join("") || `<p>${escapeHtml(COPY.filterNotFound)}</p>`}</div>
+      <div class="issue-list">${tasks.map(renderTaskCard).join("") || `<p>${escapeHtml(COPY.filterNotFound)}</p>`}</div>
     </div>`;
 }
 
-function renderIssueDetail(issueKey) {
-  const issue = issueByKey(issueKey);
-  if (!issue) {
-    return `<div class="page"><p>${escapeHtml(COPY.issueNotFound)}</p></div>`;
+function renderTaskDetail(taskKey) {
+  const task = taskByKey(taskKey);
+  if (!task) {
+    return `<div class="page"><p>${escapeHtml(COPY.taskNotFound)}</p></div>`;
   }
 
-  const galleryFiles = issueEvidenceFiles(issue);
+  const galleryFiles = taskEvidenceFiles(task);
   const galleryAttr = evidenceGalleryAttr(galleryFiles);
+  const authorBlocked = taskAuthoringBlocked(state, taskKey);
+  const editMode = Boolean(state.editMode) && !authorBlocked;
 
-  const evidenceHtml = (issue.evidence || [])
+  const evidenceHtml = (task.evidence || [])
     .map((item) => {
       const row = evidenceByFile(item.file);
-      const alt = issue.title || item.file;
-      const issueKeys = row?.issues?.length
-        ? row.issues
-        : issuesForEvidence(item.file).map((linked) => linked.key);
-      const chipsHtml = issueKeys.length
-        ? `<div class="chip-row media-block__chips">${renderIssueChips(issueKeys)}</div>`
+      const alt = task.title || item.file;
+      const taskKeys = row?.tasks?.length
+        ? row.tasks
+        : tasksForEvidence(item.file).map((linked) => linked.key);
+      const chipsHtml = taskKeys.length
+        ? `<div class="chip-row media-block__chips">${renderTaskChips(taskKeys)}</div>`
         : "";
       const pageLink = renderEvidencePageLink(row, "media-block__page-link");
       const footerParts = [pageLink, chipsHtml].filter(Boolean).join("");
       const footerHtml = footerParts
         ? `<figcaption>${footerParts}</figcaption>`
         : "";
-      const editLink = renderEditLink({
-        tab: "evidence",
-        file: item.file,
-        label: `Edit screenshot ${item.file}`,
-        className: "edit-link--overlay",
-      });
+      const removeBtn = editMode
+        ? `<button type="button" class="media-block__remove" data-author-remove-task-media="${escapeHtml(item.file)}" data-task-key="${escapeHtml(task.key)}" aria-label="${escapeHtml(COPY.removeMedia)}" title="${escapeHtml(COPY.removeMedia)}">${TRASH_ICON}</button>`
+        : "";
       if (isVideoEvidence(row)) {
         return `
           <figure class="media-block">
-            ${editLink}
-            <button type="button" class="media-block__image media-block__image--video" data-open-evidence="${escapeHtml(item.file)}"${galleryAttr}>
-              ${renderVideoPreviewMarkup(item.file, alt)}
-              <span class="media-block__play" aria-hidden="true">▶</span>
-            </button>
+            <div class="media-block__frame">
+              <button type="button" class="media-block__image media-block__image--video" data-open-evidence="${escapeHtml(item.file)}"${galleryAttr}>
+                ${renderVideoPreviewMarkup(item.file, alt)}
+                <span class="media-block__play" aria-hidden="true">▶</span>
+              </button>
+              ${removeBtn}
+            </div>
             ${footerHtml}
           </figure>`;
       }
       return `
         <figure class="media-block">
-          ${editLink}
-          <button type="button" class="media-block__image" data-open-evidence="${escapeHtml(item.file)}"${galleryAttr}>
-            <img src="${escapeHtml(mediaUrl(item.file))}" alt="${escapeHtml(alt)}" loading="lazy">
-          </button>
+          <div class="media-block__frame">
+            <button type="button" class="media-block__image" data-open-evidence="${escapeHtml(item.file)}"${galleryAttr}>
+              <img src="${escapeHtml(mediaUrl(item.file))}" alt="${escapeHtml(alt)}" loading="lazy">
+            </button>
+            ${removeBtn}
+          </div>
           ${footerHtml}
         </figure>`;
     })
     .join("");
 
-  const linkedDecisionsHtml = decisionsForIssue(issueKey)
+  const linkedDecisionsHtml = decisionsForTask(taskKey)
     .map((decision) => renderDecisionCard(decision))
     .join("");
+
+  const titleHtml = editMode
+    ? `<input class="author-field author-field--title" type="text" data-author-task-field="title" data-task-key="${escapeHtml(task.key)}" value="${escapeHtml(task.title)}" aria-label="Task title">`
+    : `<h1>${escapeHtml(task.title)}</h1>`;
+
+  const problemHtml = editMode
+    ? `<textarea class="author-field" rows="6" data-author-task-field="problem" data-task-key="${escapeHtml(task.key)}" aria-label="${escapeHtml(COPY.whatWeFound)}">${escapeHtml(task.problem?.trim() || "")}</textarea>`
+    : `<p>${escapeHtml(task.problem?.trim() || "")}</p>`;
+
+  const recommendationHtml = editMode
+    ? `<textarea class="author-field" rows="6" data-author-task-field="recommendation" data-task-key="${escapeHtml(task.key)}" aria-label="${escapeHtml(COPY.whatWeSuggest)}">${escapeHtml(task.recommendation?.trim() || "")}</textarea>`
+    : `<p>${escapeHtml(task.recommendation?.trim() || "")}</p>`;
+
+  const hoursHtml =
+    editMode && isAdmin()
+      ? `<div class="author-hours">
+          <label class="field">
+            <span class="field__label">${escapeHtml(COPY.editHours)}</span>
+            <input class="author-field" type="number" min="0" step="0.25" data-author-task-hours="hours" data-task-key="${escapeHtml(task.key)}" value="${task.hours == null ? "" : escapeHtml(String(task.hours))}">
+          </label>
+          <label class="field">
+            <span class="field__label">${escapeHtml(COPY.editActualHours)}</span>
+            <input class="author-field" type="number" min="0" step="0.25" data-author-task-hours="actual_hours" data-task-key="${escapeHtml(task.key)}" value="${task.actual_hours == null ? "" : escapeHtml(String(task.actual_hours))}">
+          </label>
+        </div>`
+      : "";
+
+  const authorTaskActions = editMode
+    ? `<div class="author-actions">
+        <button type="button" class="button button--ghost" data-author-add-task-media="${escapeHtml(task.key)}">${escapeHtml(COPY.addMedia)}</button>
+        <button type="button" class="button button--ghost" data-author-add-decision="${escapeHtml(task.key)}">${escapeHtml(COPY.addQuestion)}</button>
+        <button type="button" class="button button--ghost" data-author-delete-task="${escapeHtml(task.key)}">${escapeHtml(COPY.deleteTask)}</button>
+      </div>`
+    : "";
 
   return `
     <div class="page page--split">
       <div class="page__primary">
         <header class="page-header">
           <div class="page-header__top">
-            <p class="breadcrumb">${renderPhasePill(issue.sprint)} <span class="breadcrumb__sep" aria-hidden="true">/</span> <span class="pill pill--phase" style="${phaseStyleAttr(issue.sprint)}">${escapeHtml(issue.id)}</span></p>
-            ${renderIssueNav(issueKey)}
+            <p class="breadcrumb">${renderPhasePill(task.sprint)} <span class="breadcrumb__sep" aria-hidden="true">/</span> <span class="pill pill--phase" style="${phaseStyleAttr(task.sprint)}">${escapeHtml(task.id)}</span></p>
+            ${renderTaskNav(taskKey)}
           </div>
+          ${renderTaskLockBanner(state, taskKey, { escapeHtml })}
           <div class="page-header__row">
-            <h1>${escapeHtml(issue.title)}</h1>
-            ${renderEditLink({ tab: "issues", issue: issue.key, label: `Edit issue ${issue.id}` })}
+            ${titleHtml}
           </div>
-          ${renderMetaRow(issue, {
+          ${renderMetaRow(task, {
             editablePriority: true,
             editableStatus: true,
             editablePhase: true,
           })}
-          ${renderIssueEstimateMeta(issue)}
+          ${hoursHtml}
+          ${authorTaskActions}
         </header>
         <section class="prose">
           <h2>${escapeHtml(COPY.whatWeFound)}</h2>
-          <p>${escapeHtml(issue.problem?.trim() || "")}</p>
+          ${problemHtml}
           <h2>${escapeHtml(COPY.whatWeSuggest)}</h2>
-          <p>${escapeHtml(issue.recommendation?.trim() || "")}</p>
-          ${renderIssueTags(issue, { editable: true })}
+          ${recommendationHtml}
+          ${renderTaskTags(task, { editable: true })}
         </section>
         ${linkedDecisionsHtml ? `<section class="issue-decisions">${linkedDecisionsHtml}</section>` : ""}
-        ${renderCommentForm(issue)}
+        ${renderCommentForm(task)}
       </div>
       <aside class="page__aside">
         <h2>${escapeHtml(COPY.screenshotsHeading)}</h2>
@@ -1907,23 +2024,23 @@ function renderIssueDetail(issueKey) {
 
 function renderGalleryCard(row, { galleryFiles = null } = {}) {
   const files = galleryFiles || [row.file];
-  const chips = renderIssueChips(row.issues || []);
-  const thumb = renderEvidenceThumb(row.file, files, { captionMode: "url" });
-  const editLink = renderEditLink({
-    tab: "evidence",
-    file: row.file,
-    label: `Edit screenshot ${row.file}`,
-  });
+  const chips = renderTaskChips(row.tasks || []);
+  const editMode = Boolean(state.editMode);
+  const thumb = editMode
+    ? renderEvidenceThumb(row.file, files, {
+        captionMode: "url",
+        openAttr: `data-author-open-evidence="${escapeHtml(row.file)}"`,
+      })
+    : renderEvidenceThumb(row.file, files, { captionMode: "url" });
 
   return `
-    <article class="gallery-card">
+    <article class="gallery-card${editMode ? " gallery-card--editable" : ""}"${editMode ? ` data-author-edit-evidence="${escapeHtml(row.file)}"` : ""}>
       ${thumb}
       <div class="gallery-card__body">
         <div class="gallery-card__head">
           <h2>${escapeHtml(row.page || row.file)}</h2>
-          ${editLink}
         </div>
-        <div class="chip-row">${chips || `<span class="muted">${escapeHtml(COPY.noIssuesLinked)}</span>`}</div>
+        <div class="chip-row">${chips || `<span class="muted">${escapeHtml(COPY.noTasksLinked)}</span>`}</div>
       </div>
     </article>`;
 }
@@ -1940,11 +2057,6 @@ function renderEvidenceGallery(filterFile = null) {
         <header class="page-header">
           <div class="page-header__row">
             <h1>${escapeHtml(COPY.screenshotsGallery)}</h1>
-            ${renderEditLink({
-              tab: "evidence",
-              file: filterFile,
-              label: `Edit screenshot ${filterFile}`,
-            })}
           </div>
           <p class="lede">${escapeHtml(COPY.screenshotsLead)}</p>
         </header>
@@ -1979,10 +2091,14 @@ function renderEvidenceGallery(filterFile = null) {
       <header class="page-header">
         <div class="page-header__row">
           <h1>${escapeHtml(COPY.screenshotsGallery)}</h1>
-          ${renderAccordionControls({
-            openAttr: "data-evidence-open-all",
-            closeAttr: "data-evidence-close-all",
-          })}
+          ${
+            state.editMode
+              ? `<button type="button" class="button button--ghost" data-author-add-evidence>${escapeHtml(COPY.addEvidenceRow)}</button>`
+              : renderAccordionControls({
+                  openAttr: "data-evidence-open-all",
+                  closeAttr: "data-evidence-close-all",
+                })
+          }
         </div>
         <p class="lede">${escapeHtml(COPY.screenshotsLead)}</p>
       </header>
@@ -2004,7 +2120,133 @@ function decisionEvidenceFiles(decision) {
   return files;
 }
 
+function renderDecisionBlocksEditor(decision) {
+  const key = decision.key;
+  const linked = new Set((decision.blocks || []).map(String));
+  const groups = (state.audit.sprints || [])
+    .map((sprint) => {
+      const tasks = sprintTasks(sprint.id);
+      if (!tasks.length) {
+        return "";
+      }
+      const rows = tasks
+        .map(
+          (task) => `
+          <label class="author-decision-block">
+            <input type="checkbox" data-author-decision-block value="${escapeHtml(task.key)}" data-decision-key="${escapeHtml(key)}"${linked.has(String(task.key)) ? " checked" : ""}>
+            <span class="author-decision-block__id">${escapeHtml(task.id)}</span>
+            <span class="author-decision-block__title">${escapeHtml(task.title)}</span>
+          </label>`,
+        )
+        .join("");
+      return `
+        <div class="author-decision-group">
+          <p class="author-decision-group__title">${escapeHtml(sprint.title || `Phase ${sprint.id}`)}</p>
+          <div class="author-decision-group__list">${rows}</div>
+        </div>`;
+    })
+    .join("");
+
+  return groups || `<p class="muted">${escapeHtml(COPY.noTasksYet)}</p>`;
+}
+
+function renderDecisionOptionEditor(decision, option, optionIndex) {
+  const key = decision.key;
+  const evidenceRows = (option.evidence || [])
+    .map((item, evidenceIndex) => {
+      const thumb = item.file
+        ? `<span class="author-option-media__thumb">${
+            String(item.file).toLowerCase().endsWith(".mp4")
+              ? `<video preload="metadata" muted playsinline src="${escapeHtml(mediaUrl(item.file))}#t=0.1"></video>`
+              : `<img src="${escapeHtml(mediaUrl(item.file))}" alt="" loading="lazy">`
+          }</span>`
+        : "";
+      return `
+        <div class="author-option-media" data-option-evidence-index="${evidenceIndex}">
+          ${thumb}
+          <div class="author-option-media__fields">
+            <label class="field">
+              <span class="field__label">Caption</span>
+              <input class="author-field" type="text" data-author-option-caption data-decision-key="${escapeHtml(key)}" data-option-index="${optionIndex}" data-evidence-index="${evidenceIndex}" value="${escapeHtml(item.caption || "")}">
+            </label>
+            <div class="author-actions">
+              <button type="button" class="button button--ghost button--small" data-author-change-option-media data-decision-key="${escapeHtml(key)}" data-option-index="${optionIndex}" data-evidence-index="${evidenceIndex}">${escapeHtml(COPY.changeOptionMedia)}</button>
+              <button type="button" class="button button--ghost button--small" data-author-remove-option-media data-decision-key="${escapeHtml(key)}" data-option-index="${optionIndex}" data-evidence-index="${evidenceIndex}">${escapeHtml(COPY.removeMedia)}</button>
+            </div>
+          </div>
+        </div>`;
+    })
+    .join("");
+
+  return `
+    <article class="author-option-card" data-option-index="${optionIndex}">
+      <div class="author-option-card__grid">
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.optionValue)}</span>
+          <input class="author-field" type="text" data-author-option-field="value" data-decision-key="${escapeHtml(key)}" data-option-index="${optionIndex}" value="${escapeHtml(option.value || "")}">
+        </label>
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.optionLabel)}</span>
+          <input class="author-field" type="text" data-author-option-field="label" data-decision-key="${escapeHtml(key)}" data-option-index="${optionIndex}" value="${escapeHtml(option.label || "")}">
+        </label>
+      </div>
+      <label class="field">
+        <span class="field__label">${escapeHtml(COPY.optionDescription)}</span>
+        <textarea class="author-field" rows="2" data-author-option-field="description" data-decision-key="${escapeHtml(key)}" data-option-index="${optionIndex}">${escapeHtml(option.description || "")}</textarea>
+      </label>
+      <div class="author-option-card__media-head">
+        <h4>${escapeHtml(COPY.optionMedia)}</h4>
+        <button type="button" class="button button--ghost button--small" data-author-add-option-media data-decision-key="${escapeHtml(key)}" data-option-index="${optionIndex}">${escapeHtml(COPY.addOptionMedia)}</button>
+      </div>
+      <div class="author-option-card__media-list">${evidenceRows || `<p class="muted">${escapeHtml(COPY.noOptionMedia)}</p>`}</div>
+      <button type="button" class="button button--ghost button--small" data-author-remove-option="${optionIndex}" data-decision-key="${escapeHtml(key)}">${escapeHtml(COPY.removeOption)}</button>
+    </article>`;
+}
+
+function renderDecisionAuthorCard(decision) {
+  const key = decision.key;
+  const options = (decision.options || [])
+    .map((option, index) => renderDecisionOptionEditor(decision, option, index))
+    .join("");
+
+  return `
+    <article class="issue-card decision-card decision-card--author" id="decision-${escapeHtml(key)}" data-author-decision="${escapeHtml(key)}">
+      <div class="issue-card__content">
+        <div class="author-actions">
+          <button type="button" class="button button--ghost button--small" data-author-delete-decision="${escapeHtml(key)}">${escapeHtml(COPY.deleteQuestion)}</button>
+        </div>
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.questionTitle)}</span>
+          <input class="author-field author-field--title" type="text" data-author-decision-field="title" data-decision-key="${escapeHtml(key)}" value="${escapeHtml(decision.title || "")}">
+        </label>
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.questionText)}</span>
+          <textarea class="author-field" rows="3" data-author-decision-field="question" data-decision-key="${escapeHtml(key)}">${escapeHtml(decision.question || "")}</textarea>
+        </label>
+        <label class="field">
+          <span class="field__label">${escapeHtml(COPY.questionRecommendation)}</span>
+          <textarea class="author-field" rows="4" data-author-decision-field="recommendation" data-decision-key="${escapeHtml(key)}">${escapeHtml(decision.recommendation || "")}</textarea>
+        </label>
+        <section class="author-decision-section">
+          <h3>${escapeHtml(COPY.questionLinkedTasks)}</h3>
+          <div class="author-decision-groups">${renderDecisionBlocksEditor(decision)}</div>
+        </section>
+        <section class="author-decision-section">
+          <div class="author-decision-section__head">
+            <h3>${escapeHtml(COPY.questionAnswerChoices)}</h3>
+            <button type="button" class="button button--ghost button--small" data-author-add-option="${escapeHtml(key)}">${escapeHtml(COPY.addOption)}</button>
+          </div>
+          <div class="author-option-list">${options || `<p class="muted">${escapeHtml(COPY.noAnswerChoices)}</p>`}</div>
+        </section>
+      </div>
+    </article>`;
+}
+
 function renderDecisionCard(decision) {
+  if (state.editMode) {
+    return renderDecisionAuthorCard(decision);
+  }
+
   const decisionKey = decision.key;
   const saved = state.responses.decisions[decisionKey];
   const evidenceFiles = decisionEvidenceFiles(decision);
@@ -2031,7 +2273,7 @@ function renderDecisionCard(decision) {
         <div class="issue-card__head">
           <h2 class="issue-card__title">${escapeHtml(decision.title)}</h2>
         </div>
-        ${(decision.blocks || []).length ? `<div class="meta-row decision-card__blocks">${renderIssueChips(decision.blocks)}</div>` : ""}
+        ${(decision.blocks || []).length ? `<div class="meta-row decision-card__blocks">${renderTaskChips(decision.blocks)}</div>` : ""}
         <p class="issue-card__summary">${escapeHtml(decision.question)}</p>
         ${decision.recommendation ? `<p class="decision-card__rec"><strong>${escapeHtml(COPY.ourSuggestion)}:</strong> ${escapeHtml(decision.recommendation.trim())}</p>` : ""}
       </div>
@@ -2169,7 +2411,7 @@ function renderResponses() {
     id: decision.key,
     decision,
     row: decisionResponses[decision.key] || null,
-    rank: decisionIssueSortRank(decision),
+    rank: decisionTaskSortRank(decision),
   }));
 
   const knownDecisionKeys = new Set(decisionEntries.map((entry) => entry.id));
@@ -2204,7 +2446,7 @@ function renderResponses() {
         ? escapeHtml(row.text)
         : `<span class="muted">${escapeHtml(COPY.noCommentYet)}</span>`;
       return `<tr>
-        ${sortCell(decisionIssueSortRank(decision), label)}
+        ${sortCell(decisionTaskSortRank(decision), label)}
         <td>${answer}</td>
         ${sortCell(author.toLowerCase(), escapeHtml(author))}
         <td>${comment}</td>
@@ -2213,33 +2455,33 @@ function renderResponses() {
     })
     .join("");
 
-  const issueEntries = (state.issues || []).map((issue) => ({
-    key: issue.key,
-    issue,
-    row: commentResponses[issue.key] || null,
-    rank: issueIdSortRank(issue),
+  const taskEntries = (state.tasks || []).map((task) => ({
+    key: task.key,
+    task,
+    row: commentResponses[task.key] || null,
+    rank: taskIdSortRank(task),
   }));
 
-  const knownIssueKeys = new Set(issueEntries.map((entry) => entry.key));
+  const knownTaskKeys = new Set(taskEntries.map((entry) => entry.key));
   Object.entries(commentResponses).forEach(([key, row]) => {
-    if (knownIssueKeys.has(key)) {
+    if (knownTaskKeys.has(key)) {
       return;
     }
-    issueEntries.push({
+    taskEntries.push({
       key,
-      issue: null,
+      task: null,
       row,
       rank: Number.MAX_SAFE_INTEGER,
     });
   });
 
-  const commentRows = issueEntries
+  const commentRows = taskEntries
     .sort((a, b) => a.rank - b.rank)
-    .map(({ key, row, issue }) => {
+    .map(({ key, row, task }) => {
       const normalized = row ? normalizeCommentClient(row) || row : null;
       const label = renderSummaryItemLabel(
-        issue ? [key] : [],
-        issue?.title,
+        task ? [key] : [],
+        task?.title,
         key,
       );
       const commentCell = normalized
@@ -2248,16 +2490,16 @@ function renderResponses() {
       const author = String(
         normalized?.messages?.[0]?.author || normalized?.author || "",
       ).trim();
-      const priority = String(issue?.priority || "");
+      const priority = String(task?.priority || "");
       const priorityRank =
         PRIORITY_SORT_RANK[priority] ?? PRIORITY_OPTIONS.length;
-      const priorityCell = issue
-        ? renderPriorityControl(issue, { editable: true })
+      const priorityCell = task
+        ? renderPriorityControl(task, { editable: true })
         : "";
-      const status = String(issue?.status || "");
+      const status = String(task?.status || "");
       const statusRank = STATUS_SORT_RANK[status] ?? STATUS_OPTIONS.length;
-      const statusCell = issue
-        ? renderStatusControl(issue, { editable: true })
+      const statusCell = task
+        ? renderStatusControl(task, { editable: true })
         : "";
       const updatedAt = normalized?.updatedAt
         ? Number(new Date(normalized.updatedAt)) || 0
@@ -2267,10 +2509,10 @@ function renderResponses() {
         rowClasses.push("summary-row--deferred");
       }
       const phaseStyle =
-        issue?.sprint != null ? phaseStyleAttr(issue.sprint) : "";
+        task?.sprint != null ? phaseStyleAttr(task.sprint) : "";
       const styleAttr = phaseStyle ? ` style="${phaseStyle}"` : "";
       return `<tr class="${rowClasses.join(" ")}"${styleAttr}>
-        ${sortCell(issueIdSortRank(issue), label)}
+        ${sortCell(taskIdSortRank(task), label)}
         ${sortCell(priorityRank, priorityCell)}
         ${sortCell(statusRank, statusCell)}
         ${sortCell(author.toLowerCase(), escapeHtml(author))}
@@ -2280,13 +2522,17 @@ function renderResponses() {
     })
     .join("");
 
-  return `
-    <div class="page">
-      <header class="page-header">
-        <h1>${escapeHtml(COPY.summaryTitle)}</h1>
-        <p class="lede">${escapeHtml(COPY.summaryLead)}</p>
-      </header>
-      <section class="section">
+  const answersSection = state.editMode
+    ? `<section class="section">
+        <div class="section__head">
+          <h2>${escapeHtml(COPY.questionsHeading)}</h2>
+          <button type="button" class="button button--ghost" data-author-add-decision>${escapeHtml(COPY.addQuestion)}</button>
+        </div>
+        <div class="issue-decisions issue-decisions--author">
+          ${(state.decisions || []).map((decision) => renderDecisionCard(decision)).join("") || `<p class="muted">${escapeHtml(COPY.noDecisionsYet)}</p>`}
+        </div>
+      </section>`
+    : `<section class="section">
         <h2>Answers</h2>
         <div class="table-wrap">
           <table class="summary-table summary-table--answers" data-sortable>
@@ -2302,14 +2548,22 @@ function renderResponses() {
             <tbody>${decisionRows || `<tr><td colspan="5">${escapeHtml(COPY.noDecisionsYet)}</td></tr>`}</tbody>
           </table>
         </div>
-      </section>
+      </section>`;
+
+  return `
+    <div class="page">
+      <header class="page-header">
+        <h1>${escapeHtml(COPY.summaryTitle)}</h1>
+        <p class="lede">${escapeHtml(COPY.summaryLead)}</p>
+      </header>
+      ${answersSection}
       <section class="section">
-        <h2>Feedback on issues</h2>
+        <h2>Feedback on tasks</h2>
         <div class="table-wrap">
           <table class="summary-table summary-table--feedback" data-sortable>
             <thead>
               <tr>
-                ${renderSortableTh("issue", "Issue", "ascending")}
+                ${renderSortableTh("task", "Task", "ascending")}
                 ${renderSortableTh("priority", "Priority")}
                 ${renderSortableTh("status", "Status")}
                 ${renderSortableTh("name", "Name")}
@@ -2671,16 +2925,16 @@ function renderEstimatesBucketStrip(summary, { compact = false } = {}) {
     </div>`;
 }
 
-function renderEstimatesIssueRow(issue) {
-  const estimateHours = issueEstimateHours(issue);
-  const actualHours = issueActualHours(issue);
+function renderEstimatesTaskRow(task) {
+  const estimateHours = taskEstimateHours(task);
+  const actualHours = taskActualHours(task);
   const estimateCost = hoursToCost(estimateHours, state.hourlyRate);
   const actualCost = hoursToCost(actualHours, state.hourlyRate);
 
   return `<tr>
-    <td><a href="#/issue/${escapeHtml(issue.key)}">${escapeHtml(issue.id)}</a></td>
-    <td>${escapeHtml(issue.title)}</td>
-    <td>${renderStatusControl(issue, { editable: true })}</td>
+    <td><a href="#/task/${escapeHtml(task.key)}">${escapeHtml(task.id)}</a></td>
+    <td>${escapeHtml(task.title)}</td>
+    <td>${renderStatusControl(task, { editable: true })}</td>
     <td>${renderEstimatesHoursCostCell(estimateHours, estimateCost)}</td>
     <td>${renderEstimatesHoursCostCell(actualHours, actualCost)}</td>
   </tr>`;
@@ -2690,7 +2944,7 @@ function renderEstimatesPhaseSection(phase) {
   const title = phase.sprint?.title
     ? String(phase.sprint.title).trim()
     : phasePillLabel(phase.sprintId);
-  const issueRows = phase.issues.map(renderEstimatesIssueRow).join("");
+  const issueRows = phase.tasks.map(renderEstimatesTaskRow).join("");
 
   return `
     <section class="estimates-phase" data-phase-id="${escapeHtml(phase.sprintId)}" style="${phaseStyleAttr(phase.sprintId)}">
@@ -2727,7 +2981,7 @@ function renderEstimatesDownloadButton(disabled = false) {
 }
 
 function renderEstimatesPage() {
-  if (!state.issues.length) {
+  if (!state.tasks.length) {
     return `
       <div class="page page--estimates">
         <header class="page-header">
@@ -2736,16 +2990,16 @@ function renderEstimatesPage() {
             ${renderEstimatesDownloadButton(true)}
           </div>
         </header>
-        <p>${escapeHtml(COPY.estimatesNoIssues)}</p>
+        <p>${escapeHtml(COPY.estimatesNoTasks)}</p>
       </div>`;
   }
 
-  const summary = summarizeEstimates(state.issues, state.hourlyRate);
+  const summary = summarizeEstimates(state.tasks, state.hourlyRate);
   const phases = summarizeEstimatesByPhase(
-    state.issues,
+    state.tasks,
     state.audit?.sprints || [],
     state.hourlyRate,
-  ).filter((phase) => phase.issues.length > 0);
+  ).filter((phase) => phase.tasks.length > 0);
   const rateBanner =
     state.hourlyRate === null
       ? `<p class="estimates-rate-banner" role="status">${escapeHtml(COPY.hourlyRateMissing)}</p>`
@@ -2815,14 +3069,14 @@ function renderRoute() {
     case "sprints":
     case "sprint":
       return renderOverview();
-    case "issue":
-      return renderIssueDetail(params.issueKey);
-    case "issues-by-priority":
-      return renderFilteredIssues("priority", params.priority);
-    case "issues-by-status":
-      return renderFilteredIssues("status", params.status);
-    case "issues-by-tag":
-      return renderFilteredIssues("tag", params.tag);
+    case "task":
+      return renderTaskDetail(params.taskKey);
+    case "tasks-by-priority":
+      return renderFilteredTasks("priority", params.priority);
+    case "tasks-by-status":
+      return renderFilteredTasks("status", params.status);
+    case "tasks-by-tag":
+      return renderFilteredTasks("tag", params.tag);
     case "evidence":
       return renderEvidenceGallery();
     case "evidence-item":
@@ -2853,13 +3107,14 @@ function updateActiveNav() {
   });
 }
 
-function render() {
+async function render() {
   if (!state.ready) {
     return;
   }
   if (state.route.name !== "overview") {
     state.phaseReorderMode = false;
   }
+  await syncTaskAuthorLock(state);
   motion.viewTransition(() => {
     main.innerHTML = renderRoute();
     updateActiveNav();
@@ -2939,7 +3194,7 @@ async function loadAppData() {
   if (state.audit && typeof state.audit === "object") {
     delete state.audit.title;
   }
-  state.issues = content.issues;
+  state.tasks = content.tasks;
   state.evidence = content.evidence;
   state.decisions = content.decisions;
   state.responses = await loadResponses();
@@ -3005,8 +3260,8 @@ function formatAuditAction(entry) {
   const action = String(entry?.action || "");
   const target = entry?.target && typeof entry.target === "object" ? entry.target : {};
   const bits = [action];
-  if (target.issueKey) {
-    bits.push(String(target.issueKey));
+  if (target.taskKey) {
+    bits.push(String(target.taskKey));
   }
   if (target.decisionId) {
     bits.push(String(target.decisionId));
@@ -3318,13 +3573,13 @@ function primeVideoThumbs(root = main) {
     });
 }
 
-function refreshIssueTagsRow(issueKey) {
-  const issue = issueByKey(issueKey);
-  const row = main.querySelector(`[data-issue-tags="${CSS.escape(issueKey)}"]`);
-  if (!issue || !row) {
+function refreshTaskTagsRow(taskKey) {
+  const task = taskByKey(taskKey);
+  const row = main.querySelector(`[data-task-tags="${CSS.escape(taskKey)}"]`);
+  if (!task || !row) {
     return;
   }
-  const html = renderIssueTags(issue, { editable: true });
+  const html = renderTaskTags(task, { editable: true });
   const template = document.createElement("template");
   template.innerHTML = html.trim();
   const next = template.content.firstElementChild;
@@ -3332,19 +3587,19 @@ function refreshIssueTagsRow(issueKey) {
     return;
   }
   row.replaceWith(next);
-  bindIssueTagsRow(next);
+  bindTaskTagsRow(next);
 }
 
-async function persistIssueTags(issueKey, nextTags, { rollbackTags } = {}) {
-  const issue = issueByKey(issueKey);
-  const row = main.querySelector(`[data-issue-tags="${CSS.escape(issueKey)}"]`);
-  if (!issue) {
+async function persistTaskTags(taskKey, nextTags, { rollbackTags } = {}) {
+  const task = taskByKey(taskKey);
+  const row = main.querySelector(`[data-task-tags="${CSS.escape(taskKey)}"]`);
+  if (!task) {
     return;
   }
   const previous = Array.isArray(rollbackTags)
     ? [...rollbackTags]
-    : [...(issue.tags || [])];
-  issue.tags = [...nextTags];
+    : [...(task.tags || [])];
+  task.tags = [...nextTags];
   if (row) {
     row.setAttribute("aria-busy", "true");
     row.querySelectorAll("button, input").forEach((el) => {
@@ -3352,26 +3607,26 @@ async function persistIssueTags(issueKey, nextTags, { rollbackTags } = {}) {
     });
   }
   try {
-    const result = await saveIssueTags(issueKey, nextTags);
-    issue.tags = Array.isArray(result.tags) ? result.tags : [...nextTags];
-    refreshIssueTagsRow(issueKey);
+    const result = await saveTaskTags(taskKey, nextTags);
+    task.tags = Array.isArray(result.tags) ? result.tags : [...nextTags];
+    refreshTaskTagsRow(taskKey);
   } catch (error) {
-    issue.tags = previous;
-    refreshIssueTagsRow(issueKey);
+    task.tags = previous;
+    refreshTaskTagsRow(taskKey);
     window.alert(error.message || "Could not save tags.");
   }
 }
 
 function closeTagCombobox(wrap) {
-  const issueKey = wrap?.dataset?.tagAddWrap;
-  if (!wrap || !issueKey) {
+  const taskKey = wrap?.dataset?.tagAddWrap;
+  if (!wrap || !taskKey) {
     return;
   }
   wrap.innerHTML = `<button
     type="button"
     class="chip chip--tag-add"
     data-tag-add-open
-    data-issue-key="${escapeHtml(issueKey)}"
+    data-task-key="${escapeHtml(taskKey)}"
     aria-label="${escapeHtml(COPY.addTag)}"
   ><span aria-hidden="true">+</span></button>`;
   const button = wrap.querySelector("[data-tag-add-open]");
@@ -3379,20 +3634,20 @@ function closeTagCombobox(wrap) {
 }
 
 function openTagCombobox(wrap) {
-  const issueKey = wrap.dataset.tagAddWrap;
-  const issue = issueByKey(issueKey);
-  if (!issue) {
+  const taskKey = wrap.dataset.tagAddWrap;
+  const task = taskByKey(taskKey);
+  if (!task) {
     return;
   }
 
-  const listId = `tag-list-${issueKey}`;
+  const listId = `tag-list-${taskKey}`;
   wrap.innerHTML = `
     <div class="combobox combobox--tag" data-tag-picker>
-      <label class="visually-hidden" for="tag-input-${escapeHtml(issueKey)}">${escapeHtml(COPY.addTag)}</label>
+      <label class="visually-hidden" for="tag-input-${escapeHtml(taskKey)}">${escapeHtml(COPY.addTag)}</label>
       <div class="combobox__control">
         <input
           type="text"
-          id="tag-input-${escapeHtml(issueKey)}"
+          id="tag-input-${escapeHtml(taskKey)}"
           class="combobox__input"
           role="combobox"
           aria-expanded="false"
@@ -3445,40 +3700,40 @@ function openTagCombobox(wrap) {
       closeTagCombobox(wrap);
       return;
     }
-    const current = (issue.tags || []).map(normalizeTagLabel).filter(Boolean);
+    const current = (task.tags || []).map(normalizeTagLabel).filter(Boolean);
     if (current.some((entry) => tagsMatch(entry, tag))) {
       closeTagCombobox(wrap);
       return;
     }
     const next = [...current, tag];
-    await persistIssueTags(issueKey, next, { rollbackTags: current });
+    await persistTaskTags(taskKey, next, { rollbackTags: current });
   };
 
   const renderOptions = () => {
     const query = normalizeTagLabel(input.value);
     const catalog = collectKnownTags();
-    const current = issue.tags || [];
+    const current = task.tags || [];
     const items = [];
 
     for (const tag of catalog) {
       if (query && !tag.toLowerCase().includes(query.toLowerCase())) {
         continue;
       }
-      const onIssue = current.some((entry) => tagsMatch(entry, tag));
+      const onTask = current.some((entry) => tagsMatch(entry, tag));
       items.push({
         value: tag,
         label: tag,
         create: false,
-        disabled: onIssue,
+        disabled: onTask,
       });
     }
 
     const exactInCatalog =
       Boolean(query) && catalog.some((tag) => tagsMatch(tag, query));
-    const exactOnIssue =
+    const exactOnTask =
       Boolean(query) && current.some((tag) => tagsMatch(tag, query));
 
-    if (query && !exactInCatalog && !exactOnIssue) {
+    if (query && !exactInCatalog && !exactOnTask) {
       items.push({
         value: query,
         label: COPY.createTag(query),
@@ -3630,23 +3885,23 @@ function openTagCombobox(wrap) {
   renderOptions();
 }
 
-function bindIssueTagsRow(row) {
+function bindTaskTagsRow(row) {
   if (!row) {
     return;
   }
-  const issueKey = row.dataset.issueTags;
+  const taskKey = row.dataset.taskTags;
   row.querySelectorAll("[data-tag-remove]").forEach((button) => {
     button.addEventListener("click", async () => {
-      const issue = issueByKey(issueKey);
-      if (!issue) {
+      const task = taskByKey(taskKey);
+      if (!task) {
         return;
       }
       const removeTag = button.dataset.tag || "";
-      const previous = (issue.tags || [])
+      const previous = (task.tags || [])
         .map(normalizeTagLabel)
         .filter(Boolean);
       const next = previous.filter((tag) => !tagsMatch(tag, removeTag));
-      await persistIssueTags(issueKey, next, { rollbackTags: previous });
+      await persistTaskTags(taskKey, next, { rollbackTags: previous });
     });
   });
 
@@ -3655,9 +3910,9 @@ function bindIssueTagsRow(row) {
   openButton?.addEventListener("click", () => openTagCombobox(wrap));
 }
 
-function bindIssueTags(root = main) {
-  root.querySelectorAll("[data-issue-tags]").forEach((row) => {
-    bindIssueTagsRow(row);
+function bindTaskTags(root = main) {
+  root.querySelectorAll("[data-task-tags]").forEach((row) => {
+    bindTaskTagsRow(row);
   });
 }
 
@@ -3747,17 +4002,17 @@ function bindPhaseReorderDrag(root = main) {
     });
 
     const previousSprints = structuredClone(state.audit.sprints);
-    const previousIssues = state.issues.map((issue) => ({
-      key: issue.key,
-      id: issue.id,
-      sprint: issue.sprint,
+    const previousTasks = state.tasks.map((task) => ({
+      key: task.key,
+      id: task.id,
+      sprint: task.sprint,
     }));
 
     try {
       const result = await savePhaseOrder(order.map(Number));
       state.audit.sprints = result.sprints;
-      const byKey = new Map((result.issues || []).map((row) => [row.key, row]));
-      for (const item of state.issues) {
+      const byKey = new Map((result.tasks || []).map((row) => [row.key, row]));
+      for (const item of state.tasks) {
         const next = byKey.get(item.key);
         if (!next) {
           continue;
@@ -3769,8 +4024,8 @@ function bindPhaseReorderDrag(root = main) {
       render();
     } catch (error) {
       state.audit.sprints = previousSprints;
-      const prevByKey = new Map(previousIssues.map((row) => [row.key, row]));
-      for (const item of state.issues) {
+      const prevByKey = new Map(previousTasks.map((row) => [row.key, row]));
+      for (const item of state.tasks) {
         const prev = prevByKey.get(item.key);
         if (!prev) {
           continue;
@@ -3789,12 +4044,12 @@ function bindPageHandlers() {
 
   main.querySelectorAll("[data-download-estimate]").forEach((button) => {
     button.addEventListener("click", () => {
-      if (!state.issues.length) {
+      if (!state.tasks.length) {
         return;
       }
       printEstimate(
         {
-          issues: state.issues,
+          tasks: state.tasks,
           sprints: state.audit?.sprints || [],
           rate: state.hourlyRate,
           clientName: clientName(),
@@ -3819,7 +4074,7 @@ function bindPageHandlers() {
   main.querySelectorAll("[data-comment-form]").forEach((form) => {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const issueId = form.dataset.commentForm;
+      const taskId = form.dataset.commentForm;
       const picker = form.querySelector("[data-author-picker]");
       const author = syncAuthorPicker(picker);
       if (!author) {
@@ -3834,11 +4089,11 @@ function bindPageHandlers() {
       const status = form.querySelector(".save-status");
       try {
         button.disabled = true;
-        const result = await postCommentReply(issueId, {
+        const result = await postCommentReply(taskId, {
           text: data.get("text"),
           author,
         });
-        state.responses.comments[issueId] =
+        state.responses.comments[taskId] =
           normalizeCommentClient(result) || result;
         status.textContent = `${COPY.lastSaved} ${new Date(result.updatedAt).toLocaleString()}`;
         status.classList.add("is-visible");
@@ -3907,8 +4162,8 @@ function bindPageHandlers() {
       const messageId = form.dataset.editForm;
       const panel = form.closest(".feedback-panel");
       const commentForm = panel?.querySelector("[data-comment-form]");
-      const issueId = commentForm?.dataset.commentForm;
-      if (!issueId) {
+      const taskId = commentForm?.dataset.commentForm;
+      if (!taskId) {
         return;
       }
       const data = new FormData(form);
@@ -3922,11 +4177,11 @@ function bindPageHandlers() {
       };
       try {
         button.disabled = true;
-        const result = await editCommentMessage(issueId, payload);
+        const result = await editCommentMessage(taskId, payload);
         if (result.cleared) {
-          delete state.responses.comments[issueId];
+          delete state.responses.comments[taskId];
         } else {
-          state.responses.comments[issueId] =
+          state.responses.comments[taskId] =
             normalizeCommentClient(result) || result;
         }
         render();
@@ -3993,22 +4248,22 @@ function bindPageHandlers() {
     });
   }
 
-  main.querySelectorAll("[data-issue-priority]").forEach((select) => {
+  main.querySelectorAll("[data-task-priority]").forEach((select) => {
     select.addEventListener("change", async () => {
-      const issueKey = select.dataset.issuePriority;
+      const taskKey = select.dataset.taskPriority;
       const priority = select.value;
-      const previous = state.issues.find(
-        (item) => item.key === issueKey,
+      const previous = state.tasks.find(
+        (item) => item.key === taskKey,
       )?.priority;
       const priorityRank =
         PRIORITY_SORT_RANK[priority] ?? PRIORITY_OPTIONS.length;
-      select.className = `pill-control__select pill pill--${priority}`;
+      syncPillControlChrome(select, `pill pill--${priority}`);
       select.disabled = true;
       try {
-        await saveIssuePriority(issueKey, priority);
-        const issue = state.issues.find((item) => item.key === issueKey);
-        if (issue) {
-          issue.priority = priority;
+        await saveTaskPriority(taskKey, priority);
+        const task = state.tasks.find((item) => item.key === taskKey);
+        if (task) {
+          task.priority = priority;
         }
         const sortCell = select.closest("td[data-sort-value]");
         if (sortCell) {
@@ -4017,7 +4272,7 @@ function bindPageHandlers() {
       } catch (error) {
         if (previous) {
           select.value = previous;
-          select.className = `pill-control__select pill pill--${previous}`;
+          syncPillControlChrome(select, `pill pill--${previous}`);
           const sortCell = select.closest("td[data-sort-value]");
           if (sortCell) {
             const previousRank =
@@ -4032,21 +4287,21 @@ function bindPageHandlers() {
     });
   });
 
-  main.querySelectorAll("[data-issue-status]").forEach((select) => {
+  main.querySelectorAll("[data-task-status]").forEach((select) => {
     select.addEventListener("change", async () => {
-      const issueKey = select.dataset.issueStatus;
+      const taskKey = select.dataset.taskStatus;
       const status = select.value;
-      const previous = state.issues.find(
-        (item) => item.key === issueKey,
+      const previous = state.tasks.find(
+        (item) => item.key === taskKey,
       )?.status;
       const statusRank = STATUS_SORT_RANK[status] ?? STATUS_OPTIONS.length;
-      select.className = `pill-control__select pill pill--status pill--${status}`;
+      syncPillControlChrome(select, `pill pill--status pill--${status}`);
       select.disabled = true;
       try {
-        await saveIssueStatus(issueKey, status);
-        const issue = state.issues.find((item) => item.key === issueKey);
-        if (issue) {
-          issue.status = status;
+        await saveTaskStatus(taskKey, status);
+        const task = state.tasks.find((item) => item.key === taskKey);
+        if (task) {
+          task.status = status;
         }
         if (state.route.name === "estimates") {
           render();
@@ -4063,7 +4318,10 @@ function bindPageHandlers() {
       } catch (error) {
         if (previous) {
           select.value = previous;
-          select.className = `pill-control__select pill pill--status pill--${previous}`;
+          syncPillControlChrome(
+            select,
+            `pill pill--status pill--${previous}`,
+          );
           const sortCellEl = select.closest("td[data-sort-value]");
           if (sortCellEl) {
             const previousRank =
@@ -4085,21 +4343,25 @@ function bindPageHandlers() {
     });
   });
 
-  main.querySelectorAll("[data-issue-phase]").forEach((select) => {
+  main.querySelectorAll("[data-task-phase]").forEach((select) => {
     select.addEventListener("change", async () => {
-      const issueKey = select.dataset.issuePhase;
+      const taskKey = select.dataset.taskPhase;
       const sprint = Number(select.value);
-      const issue = state.issues.find((item) => item.key === issueKey);
-      const previousSprint = issue?.sprint;
-      const previousId = issue?.id;
-      select.style.cssText = phaseStyleAttr(sprint);
+      const task = state.tasks.find((item) => item.key === taskKey);
+      const previousSprint = task?.sprint;
+      const previousId = task?.id;
+      syncPillControlChrome(
+        select,
+        "pill pill--phase",
+        phaseStyleAttr(sprint),
+      );
       select.disabled = true;
       try {
-        const result = await saveIssuePhase(issueKey, sprint);
+        const result = await saveTaskPhase(taskKey, sprint);
         const byKey = new Map(
-          (result.issues || []).map((row) => [row.key, row]),
+          (result.tasks || []).map((row) => [row.key, row]),
         );
-        for (const item of state.issues) {
+        for (const item of state.tasks) {
           const next = byKey.get(item.key);
           if (!next) {
             continue;
@@ -4112,7 +4374,7 @@ function bindPageHandlers() {
           sortCellEl.dataset.sortValue = String(sprint);
         }
         // Detail breadcrumb / Estimate need a full redraw when ids move.
-        if (state.route.name === "issue" || state.route.name === "estimates") {
+        if (state.route.name === "task" || state.route.name === "estimates") {
           render();
         } else if (state.route.name === "responses") {
           render();
@@ -4120,14 +4382,18 @@ function bindPageHandlers() {
       } catch (error) {
         if (previousSprint != null) {
           select.value = String(previousSprint);
-          select.style.cssText = phaseStyleAttr(previousSprint);
+          syncPillControlChrome(
+            select,
+            "pill pill--phase",
+            phaseStyleAttr(previousSprint),
+          );
           const sortCellEl = select.closest("td[data-sort-value]");
           if (sortCellEl) {
             sortCellEl.dataset.sortValue = String(previousSprint);
           }
-          if (issue && previousId) {
-            issue.sprint = previousSprint;
-            issue.id = previousId;
+          if (task && previousId) {
+            task.sprint = previousSprint;
+            task.id = previousId;
           }
         }
         window.alert(error.message || "Could not save phase.");
@@ -4137,7 +4403,7 @@ function bindPageHandlers() {
     });
   });
 
-  bindIssueTags();
+  bindTaskTags();
 
   const reorderBtn = main.querySelector("[data-phases-reorder]");
   if (reorderBtn) {
@@ -4206,6 +4472,42 @@ function bindPageHandlers() {
 
   if (state.phaseReorderMode) {
     bindPhaseReorderDrag();
+  }
+
+  bindAuthorModeHandlers({
+    state,
+    main,
+    render,
+    isAdmin,
+    escapeHtml,
+  });
+
+  main.querySelector("[data-task-lock-takeover]")?.addEventListener(
+    "click",
+    async (event) => {
+      const button = event.currentTarget;
+      const taskKey = button.dataset.taskLockTakeover;
+      if (!taskKey) {
+        return;
+      }
+      button.disabled = true;
+      try {
+        await takeoverTaskLock(state, taskKey);
+        render();
+      } catch (error) {
+        window.alert(error.message || "Could not take over.");
+        button.disabled = false;
+      }
+    },
+  );
+
+  const pendingDecisionScroll = takePendingDecisionScroll();
+  if (pendingDecisionScroll) {
+    requestAnimationFrame(() => {
+      document
+        .getElementById(`decision-${pendingDecisionScroll}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }
 
   main.querySelectorAll("details[data-evidence-group]").forEach((item) => {
@@ -4307,6 +4609,16 @@ function bindGlobalHandlers() {
 async function init() {
   applyTheme();
   applyBrand();
+  applyEditModeClass(state.editMode);
+  initAuthorMediaPicker();
+  bindTaskLockLifecycle(state);
+  bindAuthorEditToggle(state, {
+    copy: COPY,
+    onChange: () => {
+      syncAuthorEditToggle(state, COPY);
+      render();
+    },
+  });
   bindGlobalHandlers();
   bindAuthHandlers();
 
@@ -4333,7 +4645,7 @@ async function init() {
     render();
     if (shouldScrollPhases) {
       scrollToOpenPhase();
-    } else if (state.route.name === "issue") {
+    } else if (state.route.name === "task") {
       window.scrollTo(0, 0);
     }
     if (typeof main.focus === "function") {

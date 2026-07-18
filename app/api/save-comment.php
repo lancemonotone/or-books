@@ -18,16 +18,16 @@ editor_verify_honeypot($body['website'] ?? null);
 editor_verify_csrf($body['csrf'] ?? null);
 editor_release_session();
 
-$issueId = trim((string) ($body['issueId'] ?? ''));
-if ($issueId === '') {
-    respond_json(422, ['error' => 'issueId is required.']);
+$taskId = trim((string) ($body['taskId'] ?? ''));
+if ($taskId === '') {
+    respond_json(422, ['error' => 'taskId is required.']);
 }
 
 $action = trim((string) ($body['action'] ?? 'comment'));
 
 try {
     $all = load_comments();
-    $existing = isset($all[$issueId]) && is_array($all[$issueId]) ? $all[$issueId] : [];
+    $existing = isset($all[$taskId]) && is_array($all[$taskId]) ? $all[$taskId] : [];
     $record = normalize_comment_record($existing);
 
     if ($action === 'comment') {
@@ -60,14 +60,14 @@ try {
             ? $messages[array_key_last($messages)]['text']
             : $text;
 
-        $all[$issueId] = $record;
+        $all[$taskId] = $record;
         save_comments($all);
         try {
-            notify_comment_event($issueId, $author, $record);
+            notify_comment_event($taskId, $author, $record);
         } catch (Throwable $notifyError) {
             error_log('notify_comment_event: ' . $notifyError->getMessage());
         }
-        editor_log_activity('comment.save', ['issueKey' => $issueId]);
+        editor_log_activity('comment.save', ['taskKey' => $taskId]);
         respond_json(200, $record);
     }
 
@@ -87,14 +87,14 @@ try {
             $record['author'] = $author;
         }
 
-        $all[$issueId] = $record;
+        $all[$taskId] = $record;
         save_comments($all);
         try {
-            notify_comment_event($issueId, $author, $record);
+            notify_comment_event($taskId, $author, $record);
         } catch (Throwable $notifyError) {
             error_log('notify_comment_event: ' . $notifyError->getMessage());
         }
-        editor_log_activity('comment.reply', ['issueKey' => $issueId]);
+        editor_log_activity('comment.reply', ['taskKey' => $taskId]);
         respond_json(200, $record);
     }
 
@@ -125,9 +125,9 @@ try {
 
         if ($text === '') {
             if ($isOpening) {
-                unset($all[$issueId]);
+                unset($all[$taskId]);
                 save_comments($all);
-                editor_log_activity('comment.clear', ['issueKey' => $issueId]);
+                editor_log_activity('comment.clear', ['taskKey' => $taskId]);
                 respond_json(200, [
                     'text' => '',
                     'author' => '',
@@ -145,14 +145,14 @@ try {
         $record['text'] = $text;
         $record['updatedAt'] = $now;
 
-        $all[$issueId] = $record;
+        $all[$taskId] = $record;
         save_comments($all);
         try {
-            notify_comment_event($issueId, $author, $record);
+            notify_comment_event($taskId, $author, $record);
         } catch (Throwable $notifyError) {
             error_log('notify_comment_event: ' . $notifyError->getMessage());
         }
-        editor_log_activity('comment.edit', ['issueKey' => $issueId]);
+        editor_log_activity('comment.edit', ['taskKey' => $taskId]);
         respond_json(200, $record);
     }
 

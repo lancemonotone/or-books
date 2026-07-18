@@ -16,12 +16,12 @@ editor_verify_honeypot($body['website'] ?? null);
 editor_verify_csrf($body['csrf'] ?? null);
 editor_release_session();
 
-$issueKey = trim((string) ($body['issueKey'] ?? ''));
+$taskKey = trim((string) ($body['taskKey'] ?? ''));
 $sprintRaw = $body['sprint'] ?? $body['phaseId'] ?? null;
 $sprint = is_numeric($sprintRaw) ? (int) $sprintRaw : 0;
 
-if ($issueKey === '') {
-    respond_json(422, ['error' => 'issueKey is required.']);
+if ($taskKey === '') {
+    respond_json(422, ['error' => 'taskKey is required.']);
 }
 
 if ($sprint < 1) {
@@ -43,46 +43,46 @@ if (!in_array($sprint, $phaseIds, true)) {
     respond_json(422, ['error' => 'Phase is not in the audit plan.']);
 }
 
-$path = editor_data_path('issues');
+$path = editor_data_path('tasks');
 if (!file_exists($path)) {
-    respond_json(404, ['error' => 'Issues file not found.']);
+    respond_json(404, ['error' => 'Tasks file not found.']);
 }
 
 $lockPath = $path . '.lock';
 $lock = fopen($lockPath, 'c+');
 if ($lock === false) {
-    respond_json(500, ['error' => 'Could not lock issues file.']);
+    respond_json(500, ['error' => 'Could not lock tasks file.']);
 }
 
-$issueId = '';
-$issueIndex = [];
+$taskId = '';
+$taskIndex = [];
 
 try {
     if (!flock($lock, LOCK_EX)) {
-        respond_json(500, ['error' => 'Could not lock issues file.']);
+        respond_json(500, ['error' => 'Could not lock tasks file.']);
     }
 
     $content = file_get_contents($path);
     if ($content === false) {
-        respond_json(500, ['error' => 'Could not read issues file.']);
+        respond_json(500, ['error' => 'Could not read tasks file.']);
     }
 
-    $result = move_issue_to_phase_yaml($content, $issueKey, $sprint, $phaseIds);
-    editor_write_yaml('issues', $result['content']);
-    $issueId = $result['id'];
-    $issueIndex = $result['issues'];
+    $result = move_task_to_phase_yaml($content, $taskKey, $sprint, $phaseIds);
+    editor_write_yaml('tasks', $result['content']);
+    $taskId = $result['id'];
+    $taskIndex = $result['tasks'];
 } finally {
     flock($lock, LOCK_UN);
     fclose($lock);
 }
 
-editor_log_activity('issue.phase', ['issueKey' => $issueKey, 'sprint' => $sprint]);
+editor_log_activity('task.phase', ['taskKey' => $taskKey, 'sprint' => $sprint]);
 respond_json(200, [
     'ok' => true,
-    'issueKey' => $issueKey,
+    'taskKey' => $taskKey,
     'sprint' => $sprint,
-    'id' => $issueId,
-    'issues' => $issueIndex,
+    'id' => $taskId,
+    'tasks' => $taskIndex,
     'savedAt' => gmdate('c'),
 ]);
 
@@ -108,16 +108,16 @@ function parse_audit_phase_ids(string $auditContent): array
  * @param list<int> $phaseIds
  * @return array{content: string, id: string, issues: list<array{key: string, id: string, sprint: int}>}
  */
-function move_issue_to_phase_yaml(
+function move_task_to_phase_yaml(
     string $content,
-    string $issueKey,
+    string $taskKey,
     int $targetSprint,
     array $phaseIds
 ): array {
-    $escapedKey = preg_quote($issueKey, '/');
+    $escapedKey = preg_quote($taskKey, '/');
     $parts = preg_split('/(?=^- key:)/m', $content);
     if ($parts === false) {
-        respond_json(500, ['error' => 'Could not parse issues file.']);
+        respond_json(500, ['error' => 'Could not parse tasks file.']);
     }
 
     $prefix = '';
@@ -196,7 +196,7 @@ function move_issue_to_phase_yaml(
         $ordered
     );
 
-    $issues = [];
+    $tasks = [];
     $movedId = '';
     foreach ($ordered as $block) {
         $key = read_block_key($block);
@@ -205,24 +205,24 @@ function move_issue_to_phase_yaml(
         if ($key === null || $id === null || $sprint === null) {
             continue;
         }
-        $issues[] = [
+        $tasks[] = [
             'key' => $key,
             'id' => $id,
             'sprint' => $sprint,
         ];
-        if ($key === $issueKey) {
+        if ($key === $taskKey) {
             $movedId = $id;
         }
     }
 
     if ($movedId === '') {
-        respond_json(500, ['error' => 'Could not determine new Issue id.']);
+        respond_json(500, ['error' => 'Could not determine new Task id.']);
     }
 
     return [
         'content' => $prefix . implode('', $ordered),
         'id' => $movedId,
-        'issues' => $issues,
+        'tasks' => $tasks,
     ];
 }
 

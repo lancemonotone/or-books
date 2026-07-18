@@ -15,13 +15,13 @@ export function parseHours(value) {
 }
 
 /** @returns {number|null} */
-export function issueEstimateHours(issue) {
-  return parseHours(issue?.hours);
+export function taskEstimateHours(task) {
+  return parseHours(task?.hours);
 }
 
 /** @returns {number|null} */
-export function issueActualHours(issue) {
-  return parseHours(issue?.actual_hours);
+export function taskActualHours(task) {
+  return parseHours(task?.actual_hours);
 }
 
 /**
@@ -38,17 +38,17 @@ export function hoursToCost(hours, rate) {
   return parsedHours * parsedRate;
 }
 
-export function issueEstimateCost(issue, rate) {
-  return hoursToCost(issueEstimateHours(issue), rate);
+export function taskEstimateCost(task, rate) {
+  return hoursToCost(taskEstimateHours(task), rate);
 }
 
-export function issueActualCost(issue, rate) {
-  return hoursToCost(issueActualHours(issue), rate);
+export function taskActualCost(task, rate) {
+  return hoursToCost(taskActualHours(task), rate);
 }
 
 /** @returns {'done'|'remaining'|'deferred'|'other'} */
-export function issueQuoteBucket(issue) {
-  const status = issue?.status;
+export function taskQuoteBucket(task) {
+  const status = task?.status;
   if (status === "complete") {
     return "done";
   }
@@ -71,19 +71,19 @@ export function issueQuoteBucket(issue) {
  */
 
 /**
- * @param {object[]} issues
+ * @param {object[]} tasks
  * @param {'done'|'remaining'|'deferred'|'other'} bucket
  * @param {number|null|undefined} rate
  * @returns {BucketTotals}
  */
-function summarizeBucket(issues, bucket, rate) {
-  const inBucket = issues.filter((issue) => issueQuoteBucket(issue) === bucket);
+function summarizeBucket(tasks, bucket, rate) {
+  const inBucket = tasks.filter((task) => taskQuoteBucket(task) === bucket);
   let estimateHours = 0;
   let actualHours = 0;
 
-  for (const issue of inBucket) {
-    const estimate = issueEstimateHours(issue);
-    const actual = issueActualHours(issue);
+  for (const task of inBucket) {
+    const estimate = taskEstimateHours(task);
+    const actual = taskActualHours(task);
     if (estimate !== null) {
       estimateHours += estimate;
     }
@@ -130,7 +130,7 @@ function summarizeGrand(done, remaining, rate) {
 }
 
 /**
- * @param {object[]} issues
+ * @param {object[]} tasks
  * @param {number|null|undefined} rate
  * @returns {{
  *   done: BucketTotals,
@@ -141,25 +141,25 @@ function summarizeGrand(done, remaining, rate) {
  *   actualCompleteness: { set: number, total: number },
  * }}
  */
-export function summarizeEstimates(issues, rate) {
-  const list = issues || [];
+export function summarizeEstimates(tasks, rate) {
+  const list = tasks || [];
   const done = summarizeBucket(list, "done", rate);
   const remaining = summarizeBucket(list, "remaining", rate);
   const grand = summarizeGrand(done, remaining, rate);
   const deferred = summarizeBucket(list, "deferred", rate);
 
-  const quoted = list.filter((issue) => {
-    const bucket = issueQuoteBucket(issue);
+  const quoted = list.filter((task) => {
+    const bucket = taskQuoteBucket(task);
     return bucket === "done" || bucket === "remaining";
   });
 
   let estimateSet = 0;
   let actualSet = 0;
-  for (const issue of quoted) {
-    if (issueEstimateHours(issue) !== null) {
+  for (const task of quoted) {
+    if (taskEstimateHours(task) !== null) {
       estimateSet += 1;
     }
-    if (issueActualHours(issue) !== null) {
+    if (taskActualHours(task) !== null) {
       actualSet += 1;
     }
   }
@@ -175,23 +175,23 @@ export function summarizeEstimates(issues, rate) {
 }
 
 /**
- * @param {object[]} issues
+ * @param {object[]} tasks
  * @param {object[]} sprints audit.sprints
  * @param {number|null|undefined} rate
- * @returns {Array<{ sprintId: string, sprint: object|null, summary: ReturnType<typeof summarizeEstimates>, issues: object[] }>}
+ * @returns {Array<{ sprintId: string, sprint: object|null, summary: ReturnType<typeof summarizeEstimates>, tasks: object[] }>}
  */
-export function summarizeEstimatesByPhase(issues, sprints, rate) {
-  const list = issues || [];
+export function summarizeEstimatesByPhase(tasks, sprints, rate) {
+  const list = tasks || [];
   const auditSprints = sprints || [];
   const auditIds = auditSprints.map((sprint) => String(sprint.id));
   const groups = new Map();
 
-  for (const issue of list) {
-    const sprintId = String(issue.sprint ?? "");
+  for (const task of list) {
+    const sprintId = String(task.sprint ?? "");
     if (!groups.has(sprintId)) {
       groups.set(sprintId, []);
     }
-    groups.get(sprintId).push(issue);
+    groups.get(sprintId).push(task);
   }
 
   const orphanIds = [...groups.keys()]
@@ -219,12 +219,12 @@ export function summarizeEstimatesByPhase(issues, sprints, rate) {
     .map((sprintId) => {
       const sprint =
         auditSprints.find((item) => String(item.id) === sprintId) ?? null;
-      const phaseIssues = groups.get(sprintId) ?? [];
+      const phaseTasks = groups.get(sprintId) ?? [];
       return {
         sprintId,
         sprint,
-        summary: summarizeEstimates(phaseIssues, rate),
-        issues: phaseIssues,
+        summary: summarizeEstimates(phaseTasks, rate),
+        tasks: phaseTasks,
       };
     });
 }

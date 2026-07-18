@@ -72,9 +72,9 @@ function notify_other_team(string $team): ?string
     return null;
 }
 
-function notify_lookup_issue(string $issueKey): array
+function notify_lookup_task(string $taskKey): array
 {
-    $path = dirname(__DIR__) . '/data/issues.yaml';
+    $path = dirname(__DIR__) . '/data/tasks.yaml';
     if (!is_file($path)) {
         return ['id' => '', 'title' => '', 'tags' => []];
     }
@@ -82,7 +82,7 @@ function notify_lookup_issue(string $issueKey): array
     if ($content === false) {
         return ['id' => '', 'title' => '', 'tags' => []];
     }
-    $escaped = preg_quote($issueKey, '/');
+    $escaped = preg_quote($taskKey, '/');
     $parts = preg_split('/(?=^- key:)/m', $content);
     if ($parts === false) {
         return ['id' => '', 'title' => '', 'tags' => []];
@@ -218,20 +218,20 @@ function notify_render_email(array $event, array $settings): array
         }
         $link = notify_app_link('/decisions');
     } else {
-        $issueId = (string) ($event['issueId'] ?? '');
-        $issueTitle = (string) ($event['issueTitle'] ?? '');
-        $label = trim($issueId . ($issueTitle !== '' ? ' — ' . $issueTitle : ''));
-        $updateLabel = $label !== '' ? $label : 'Issue update';
+        $taskId = (string) ($event['taskId'] ?? '');
+        $taskTitle = (string) ($event['taskTitle'] ?? '');
+        $label = trim($taskId . ($taskTitle !== '' ? ' — ' . $taskTitle : ''));
+        $updateLabel = $label !== '' ? $label : 'Task update';
         $subject = $clientName !== ''
             ? '[' . $clientName . '] ' . $updateLabel
             : $updateLabel;
-        $chips = notify_render_chip($issueId) . notify_render_chip($issueTitle);
+        $chips = notify_render_chip($taskId) . notify_render_chip($taskTitle);
         $messages = is_array($event['messages'] ?? null) ? $event['messages'] : [];
         $bodyInner = '<p style="margin:0 0 12px;font-size:14px;"><strong>'
             . notify_escape((string) ($event['author'] ?? ''))
-            . '</strong> posted on this issue.</p>';
+            . '</strong> posted on this task.</p>';
         $bodyInner .= notify_render_conversation($messages);
-        $link = notify_app_link('/issue/' . rawurlencode((string) ($event['issueKey'] ?? '')));
+        $link = notify_app_link('/task/' . rawurlencode((string) ($event['taskKey'] ?? '')));
     }
 
     $body = ($chips !== '' ? '<div style="margin:0 0 12px;">' . $chips . '</div>' : '')
@@ -520,9 +520,9 @@ function notify_flush_due(): array
     return ['sent' => $sent, 'skipped' => $skipped];
 }
 
-function notify_comment_event(string $issueKey, string $author, array $record): void
+function notify_comment_event(string $taskKey, string $author, array $record): void
 {
-    $meta = notify_lookup_issue($issueKey);
+    $meta = notify_lookup_task($taskKey);
     $messages = is_array($record['messages'] ?? null) ? $record['messages'] : [];
     $slice = array_slice($messages, -3);
     $eventMessages = [];
@@ -537,9 +537,9 @@ function notify_comment_event(string $issueKey, string $author, array $record): 
     }
     notify_record_event([
         'type' => 'comment',
-        'issueKey' => $issueKey,
-        'issueId' => $meta['id'],
-        'issueTitle' => $meta['title'],
+        'taskKey' => $taskKey,
+        'taskId' => $meta['id'],
+        'taskTitle' => $meta['title'],
         'tags' => $meta['tags'],
         'author' => $author,
         'messages' => $eventMessages,
