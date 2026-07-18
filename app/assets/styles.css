@@ -355,9 +355,57 @@ code {
   gap: 1.25rem;
 }
 
+.settings-tabs {
+  --settings-tab-gap: 0.35rem;
+  --settings-tab-pad-block: 0.45rem;
+  --settings-tab-pad-inline: 0.75rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--settings-tab-gap);
+  padding: 0.2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius, 8px);
+  background: var(--color-muted-surface);
+
+  @media (min-width: 768px) {
+    --settings-tab-pad-inline: 1rem;
+  }
+}
+
+.settings-tabs__btn {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: var(--settings-tab-pad-block) var(--settings-tab-pad-inline);
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-text);
+  }
+
+  &.is-active {
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 0 0 1px var(--color-border);
+  }
+}
+
 .settings-section {
   display: grid;
   gap: 0.75rem;
+
+  &[hidden] {
+    display: none;
+  }
 }
 
 .settings-fieldset {

@@ -51,6 +51,10 @@ const COPY = {
   settings: "Settings",
   settingsLead:
     "Project name, appearance, and notification teams. Temp passwords give other people a review login — not for the admin account.",
+  settingsTabProject: "Project",
+  settingsTabAppearance: "Appearance",
+  settingsTabNotifications: "Users",
+  settingsTabActivity: "Activity",
   activityLog: "Activity log",
   activityLogLead: "Recent sign-ins and changes. Admin only.",
   openActivityLog: "View activity log",
@@ -2516,15 +2520,19 @@ function renderSettings() {
         <p class="lede">${escapeHtml(COPY.settingsLead)}</p>
       </header>
       <form class="settings-form" data-settings-form>
-        <section class="section settings-section">
-          <h2>Project</h2>
+        <div class="settings-tabs" role="tablist" aria-label="${escapeHtml(COPY.settings)}">
+          <button type="button" class="settings-tabs__btn is-active" role="tab" id="settings-tab-project" aria-selected="true" aria-controls="settings-panel-project" data-settings-tab="project">${escapeHtml(COPY.settingsTabProject)}</button>
+          <button type="button" class="settings-tabs__btn" role="tab" id="settings-tab-appearance" aria-selected="false" aria-controls="settings-panel-appearance" data-settings-tab="appearance" tabindex="-1">${escapeHtml(COPY.settingsTabAppearance)}</button>
+          <button type="button" class="settings-tabs__btn" role="tab" id="settings-tab-notifications" aria-selected="false" aria-controls="settings-panel-notifications" data-settings-tab="notifications" tabindex="-1">${escapeHtml(COPY.settingsTabNotifications)}</button>
+          <button type="button" class="settings-tabs__btn" role="tab" id="settings-tab-activity" aria-selected="false" aria-controls="settings-panel-activity" data-settings-tab="activity" tabindex="-1">${escapeHtml(COPY.settingsTabActivity)}</button>
+        </div>
+        <section class="section settings-section settings-panel" role="tabpanel" id="settings-panel-project" aria-labelledby="settings-tab-project" data-settings-panel="project">
           <label class="field">
             <span class="field__label">${escapeHtml(COPY.clientName)}</span>
             <input type="text" name="clientName" maxlength="120" value="${escapeHtml(settings.clientName || "")}">
           </label>
         </section>
-        <section class="section settings-section">
-          <h2>${escapeHtml(COPY.appearance)}</h2>
+        <section class="section settings-section settings-panel" role="tabpanel" id="settings-panel-appearance" aria-labelledby="settings-tab-appearance" data-settings-panel="appearance" hidden>
           <fieldset class="settings-theme">
             <legend class="visually-hidden">${escapeHtml(COPY.appearance)}</legend>
             <label class="settings-theme__option"><input type="radio" name="theme" value="light"${theme === "light" ? " checked" : ""}> ${escapeHtml(COPY.themeLight)}</label>
@@ -2532,8 +2540,7 @@ function renderSettings() {
             <label class="settings-theme__option"><input type="radio" name="theme" value="system"${theme === "system" ? " checked" : ""}> ${escapeHtml(COPY.themeSystem)}</label>
           </fieldset>
         </section>
-        <section class="section settings-section">
-          <h2>${escapeHtml(COPY.notifications)}</h2>
+        <section class="section settings-section settings-panel" role="tabpanel" id="settings-panel-notifications" aria-labelledby="settings-tab-notifications" data-settings-panel="notifications" hidden>
           <label class="settings-check">
             <input type="checkbox" name="notifyEnabled"${settings.notifyEnabled ? " checked" : ""}>
             <span>${escapeHtml(COPY.notifyEnabled)}</span>
@@ -2541,8 +2548,7 @@ function renderSettings() {
           ${renderTeamFields("client", settings.teams?.client)}
           ${renderTeamFields("developer", settings.teams?.developer)}
         </section>
-        <section class="section settings-section">
-          <h2>${escapeHtml(COPY.activityLog)}</h2>
+        <section class="section settings-section settings-panel" role="tabpanel" id="settings-panel-activity" aria-labelledby="settings-tab-activity" data-settings-panel="activity" hidden>
           <p class="lede">${escapeHtml(COPY.activityLogLead)}</p>
           <button type="button" class="button button--ghost" data-open-audit-log>
             ${escapeHtml(COPY.openActivityLog)}
@@ -2554,6 +2560,61 @@ function renderSettings() {
         </div>
       </form>
     </div>`;
+}
+
+function bindSettingsTabs(root) {
+  const tablist = root.querySelector(".settings-tabs");
+  if (!tablist) {
+    return;
+  }
+  const tabs = [...tablist.querySelectorAll("[data-settings-tab]")];
+  const panels = [...root.querySelectorAll("[data-settings-panel]")];
+
+  function activate(tabId) {
+    tabs.forEach((tab) => {
+      const selected = tab.dataset.settingsTab === tabId;
+      tab.classList.toggle("is-active", selected);
+      tab.setAttribute("aria-selected", selected ? "true" : "false");
+      tab.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.settingsPanel !== tabId;
+    });
+  }
+
+  tablist.addEventListener("click", (event) => {
+    const tab = event.target.closest("[data-settings-tab]");
+    if (!tab || !tablist.contains(tab)) {
+      return;
+    }
+    activate(tab.dataset.settingsTab);
+  });
+
+  tablist.addEventListener("keydown", (event) => {
+    const current = event.target.closest("[data-settings-tab]");
+    if (!current || !tablist.contains(current)) {
+      return;
+    }
+    const index = tabs.indexOf(current);
+    if (index < 0) {
+      return;
+    }
+    let next = -1;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      next = (index + 1) % tabs.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      next = (index - 1 + tabs.length) % tabs.length;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    activate(tabs[next].dataset.settingsTab);
+  });
 }
 
 const ESTIMATES_EM_DASH = "—";
@@ -3882,6 +3943,7 @@ function bindPageHandlers() {
 
   const settingsForm = main.querySelector("[data-settings-form]");
   if (settingsForm) {
+    bindSettingsTabs(settingsForm);
     bindTeamMemberRepeaters(settingsForm);
     settingsForm
       .querySelector("[data-open-audit-log]")
