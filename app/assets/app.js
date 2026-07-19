@@ -57,6 +57,8 @@ const AUTHOR_KEYS = {
 };
 
 const THEME_KEY = "or-audit-theme";
+const PALETTE_KEY = "or-audit-palette";
+const PALETTE_IDS = ["ostwald-green", "classic"];
 const BOOT_ENTER_MS = 700;
 const BOOT_LABEL_DELAY_MS = 500;
 const BOOT_HOLD_MS = 1000;
@@ -84,6 +86,10 @@ const COPY = {
   accountMenu: "Account",
   clientName: "Client / project name",
   appearance: "Appearance",
+  appearanceMode: "Light / dark",
+  colorPalette: "Color palette",
+  paletteOstwaldGreen: "Brand green",
+  paletteClassic: "Classic",
   themeLight: "Light",
   themeDark: "Dark",
   themeSystem: "System",
@@ -436,6 +442,26 @@ function applyTheme(pref = getThemePref()) {
   document.documentElement.dataset.theme = resolvedTheme(next);
 }
 
+function getPalette() {
+  try {
+    const stored = localStorage.getItem(PALETTE_KEY) || "ostwald-green";
+    return PALETTE_IDS.includes(stored) ? stored : "ostwald-green";
+  } catch {
+    return "ostwald-green";
+  }
+}
+
+/** Swap color theme file mapping. ids: ostwald-green | classic */
+function applyPalette(id = getPalette()) {
+  const next = PALETTE_IDS.includes(id) ? id : "ostwald-green";
+  try {
+    localStorage.setItem(PALETTE_KEY, next);
+  } catch {
+    /* ignore */
+  }
+  document.documentElement.dataset.palette = next;
+}
+
 const main = document.getElementById("main");
 const siteHeader = document.getElementById("site-header");
 const bootSplash = document.getElementById("boot-splash");
@@ -590,24 +616,41 @@ function renderSummaryDateCell(value) {
   return `<time datetime="${escapeHtml(iso)}" title="${escapeHtml(title)}">${escapeHtml(label)}</time>`;
 }
 
-/** Cool hues only (no priority reds). Consecutive phases take opposite ends, then advance inward. */
+/** Phase colors from active palette tokens (Ostwald-soft vs classic-vivid). */
 function phaseColorVars(sprintId) {
   const parsed = Number(sprintId);
   const index = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
-  // Teal → cyan → azure → blue → indigo → green → sky → violet-blue
-  const phaseHues = [165, 195, 225, 255, 140, 210, 240, 280];
-  const len = phaseHues.length;
-  const slot = (index - 1) % len;
-  // 0 → start, 1 → end, 2 → start+1, 3 → end-1, …
-  const hueIndex = slot % 2 === 0 ? slot / 2 : len - 1 - Math.floor(slot / 2);
-  const hue = phaseHues[hueIndex];
+  const cs = getComputedStyle(document.documentElement);
+  const read = (name, fallback) => {
+    const value = cs.getPropertyValue(name).trim();
+    return value || fallback;
+  };
+  const hueBase = Number.parseFloat(read("--phase-hue-base", "118")) || 118;
+  const hueStep = Number.parseFloat(read("--phase-hue-step", "36"));
+  const classicCoolHues = [165, 195, 225, 255, 140, 210, 240, 280];
+  let hue;
+  if (!Number.isFinite(hueStep) || hueStep === 0) {
+    const len = classicCoolHues.length;
+    const slot = (index - 1) % len;
+    const hueIndex = slot % 2 === 0 ? slot / 2 : len - 1 - Math.floor(slot / 2);
+    hue = classicCoolHues[hueIndex];
+  } else {
+    hue = (hueBase + (index - 1) * hueStep) % 360;
+  }
+  const hsl = (sToken, lToken, sFallback, lFallback) =>
+    `hsl(${hue} ${read(sToken, sFallback)} ${read(lToken, lFallback)})`;
   return {
-    "--phase-fg": `hsl(${hue} 52% 34%)`,
-    "--phase-bg": `hsl(${hue} 48% 92%)`,
-    "--phase-fg-dark": `hsl(${hue} 70% 78%)`,
-    "--phase-bg-dark": `hsl(${hue} 32% 18%)`,
-    "--phase-accent": `hsl(${hue} 52% 42%)`,
-    "--phase-accent-dark": `hsl(${hue} 65% 60%)`,
+    "--phase-fg": hsl("--phase-s-fg", "--phase-l-fg", "24%", "34%"),
+    "--phase-bg": hsl("--phase-s-bg", "--phase-l-bg", "14%", "92%"),
+    "--phase-fg-dark": hsl("--phase-s-fg-dark", "--phase-l-fg-dark", "26%", "70%"),
+    "--phase-bg-dark": hsl("--phase-s-bg-dark", "--phase-l-bg-dark", "12%", "18%"),
+    "--phase-accent": hsl("--phase-s-accent", "--phase-l-accent", "26%", "40%"),
+    "--phase-accent-dark": hsl(
+      "--phase-s-accent-dark",
+      "--phase-l-accent-dark",
+      "28%",
+      "55%",
+    ),
   };
 }
 
@@ -2767,6 +2810,7 @@ function bindTeamMemberRepeaters(root = main) {
 function renderSettings() {
   const settings = state.settings || {};
   const theme = getThemePref();
+  const palette = getPalette();
   return `
     <div class="page">
       <header class="page-header">
@@ -2788,10 +2832,15 @@ function renderSettings() {
         </section>
         <section class="section settings-section settings-panel" role="tabpanel" id="settings-panel-appearance" aria-labelledby="settings-tab-appearance" data-settings-panel="appearance" hidden>
           <fieldset class="settings-theme">
-            <legend class="visually-hidden">${escapeHtml(COPY.appearance)}</legend>
+            <legend>${escapeHtml(COPY.appearanceMode)}</legend>
             <label class="settings-theme__option"><input type="radio" name="theme" value="light"${theme === "light" ? " checked" : ""}> ${escapeHtml(COPY.themeLight)}</label>
             <label class="settings-theme__option"><input type="radio" name="theme" value="dark"${theme === "dark" ? " checked" : ""}> ${escapeHtml(COPY.themeDark)}</label>
             <label class="settings-theme__option"><input type="radio" name="theme" value="system"${theme === "system" ? " checked" : ""}> ${escapeHtml(COPY.themeSystem)}</label>
+          </fieldset>
+          <fieldset class="settings-theme">
+            <legend>${escapeHtml(COPY.colorPalette)}</legend>
+            <label class="settings-theme__option"><input type="radio" name="palette" value="ostwald-green"${palette === "ostwald-green" ? " checked" : ""}> ${escapeHtml(COPY.paletteOstwaldGreen)}</label>
+            <label class="settings-theme__option"><input type="radio" name="palette" value="classic"${palette === "classic" ? " checked" : ""}> ${escapeHtml(COPY.paletteClassic)}</label>
           </fieldset>
         </section>
         <section class="section settings-section settings-panel" role="tabpanel" id="settings-panel-notifications" aria-labelledby="settings-tab-notifications" data-settings-panel="notifications" hidden>
@@ -3218,6 +3267,7 @@ async function loadAppData() {
   state.ready = true;
   applyBrand();
   applyTheme();
+  applyPalette();
 }
 
 async function afterAuthenticated(auth) {
@@ -4212,13 +4262,22 @@ function bindPageHandlers() {
         }
       });
     });
+    settingsForm.querySelectorAll('input[name="palette"]').forEach((input) => {
+      input.addEventListener("change", () => {
+        if (input.checked) {
+          applyPalette(input.value);
+        }
+      });
+    });
     settingsForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(settingsForm);
       const status = settingsForm.querySelector(".save-status");
       const button = settingsForm.querySelector('button[type="submit"]');
       const theme = String(data.get("theme") || "system");
+      const palette = String(data.get("palette") || "ostwald-green");
       applyTheme(theme);
+      applyPalette(palette);
       const payload = {
         clientName: String(data.get("clientName") || "").trim(),
         notifyEnabled: data.get("notifyEnabled") === "on",
@@ -4608,6 +4667,7 @@ function bindGlobalHandlers() {
 
 async function init() {
   applyTheme();
+  applyPalette();
   applyBrand();
   applyEditModeClass(state.editMode);
   initAuthorMediaPicker();

@@ -6,6 +6,7 @@
   <title></title>
   <script>
     (function () {
+      var PALETTES = { "ostwald-green": 1, classic: 1 };
       try {
         var stored = localStorage.getItem("or-audit-theme") || "system";
         var dark =
@@ -15,12 +16,18 @@
             window.matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.dataset.theme = dark ? "dark" : "light";
         document.documentElement.dataset.themePref = stored;
+        var palette = localStorage.getItem("or-audit-palette") || "ostwald-green";
+        if (!PALETTES[palette]) {
+          palette = "ostwald-green";
+        }
+        document.documentElement.dataset.palette = palette;
         if (sessionStorage.getItem("or-audit-authed") === "1") {
           document.documentElement.dataset.skipSplash = "1";
         }
       } catch (e) {
         document.documentElement.dataset.theme = "light";
         document.documentElement.dataset.themePref = "system";
+        document.documentElement.dataset.palette = "ostwald-green";
       }
     })();
   </script>
@@ -42,14 +49,16 @@
     aria-label="Loading BriefBoard"
   >
     <div class="boot-splash__inner">
-      <img
+      <svg
         class="boot-splash__mark"
-        src="assets/briefboard-logo.svg"
+        viewBox="0 0 806 979"
         width="806"
         height="979"
-        alt=""
         aria-hidden="true"
+        focusable="false"
       >
+        <use href="assets/briefboard-logo.svg#briefboard-mark" width="806" height="979" />
+      </svg>
       <p class="boot-splash__label" aria-hidden="true">BRIEFBOARD</p>
     </div>
   </div>
@@ -57,14 +66,16 @@
   <section class="auth-panel" id="auth-panel" hidden>
     <div class="auth-panel__card">
       <div class="auth-panel__brand">
-        <img
+        <svg
           class="auth-panel__mark"
-          src="assets/briefboard-logo.svg"
+          viewBox="0 0 806 979"
           width="806"
           height="979"
-          alt=""
-          decoding="async"
+          aria-hidden="true"
+          focusable="false"
         >
+          <use href="assets/briefboard-logo.svg#briefboard-mark" width="806" height="979" />
+        </svg>
         <p class="auth-panel__wordmark">BRIEFBOARD</p>
       </div>
       <h1>Sign in</h1>
@@ -130,14 +141,16 @@
   <header class="site-header" data-view-transition="header" id="site-header" hidden>
     <div class="site-header__inner">
       <a class="site-header__brand" href="#/" data-nav>
-        <img
+        <svg
           class="site-header__mark"
-          src="assets/briefboard-logo.svg"
-          alt=""
+          viewBox="0 0 806 979"
           width="28"
-          height="28"
-          decoding="async"
+          height="34"
+          aria-hidden="true"
+          focusable="false"
         >
+          <use href="assets/briefboard-logo.svg#briefboard-mark" width="806" height="979" />
+        </svg>
         <span data-brand></span>
       </a>
       <nav class="site-nav" aria-label="Primary">

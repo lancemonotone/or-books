@@ -39,6 +39,13 @@ body {
   text-wrap: balance;
 }
 
+/* Logo green plate → theme interactive primary (--color-accent). */
+.boot-splash__mark,
+.auth-panel__mark,
+.site-header__mark {
+  color: var(--color-accent);
+}
+
 img,
 video {
   max-width: 100%;

@@ -72,7 +72,7 @@
   letter-spacing: 0.04em;
   text-align: center;
   text-transform: uppercase;
-  color: var(--color-brand);
+  color: var(--color-accent);
   opacity: 0;
   animation: boot-splash-label-in var(--splash-in-duration)
     var(--splash-ease-in) var(--splash-label-in-delay) both;
@@ -193,7 +193,7 @@ html[data-skip-splash] {
     letter-spacing: 0.04em;
     text-align: center;
     text-transform: uppercase;
-    color: var(--color-brand);
+    color: var(--color-accent);
   }
 
   & .auth-panel__card > h1 {

@@ -1,0 +1,139 @@
+/*
+  Ostwald isovalent harmony keyed to logo green #98b797.
+  - Neutrals: same hue, near-zero chroma (veiled greens)
+  - Interactive primary: shadow series of brand green
+  - Danger / critical: Ostwald complement (mauve), not green
+  Switch: html[data-palette="ostwald-green"] (default)
+*/
+
+html[data-palette="ostwald-green"] {
+  /* Page & surfaces */
+  --color-bg: #f2f7f2;
+  --color-surface: #fcfefc;
+  --color-muted-surface: #e3eae3;
+  --color-code-bg: #e9efe9;
+  --color-disabled-surface: #eff3ee;
+  --color-surface-translucent: rgb(252 254 252 / 90%);
+
+  /* Text */
+  --color-text: #161c16;
+  --color-muted: #586057;
+
+  /* Borders & chrome */
+  --color-border: #d3dad3;
+  --color-accent-border: #cadec9;
+  --color-header: rgb(252 254 252 / 92%);
+  --color-overlay: rgb(0 0 0 / 55%);
+  --color-overlay-subtle: rgb(0 0 0 / 4%);
+
+  /* Brand */
+  --color-brand: #98b797;
+
+  /*
+    Interactive primary = Ostwald shadow series of brand:
+    same hue + chroma as #98b797, darker for AA on white (not punchier).
+  */
+  --color-accent: #4f6c4f;
+  --color-accent-hover: #3a5539;
+  --color-accent-soft: #e1f0e1;
+  --color-accent-soft-strong: #c8dfc8;
+  --color-on-accent: #ffffff;
+  --color-success: #425e41;
+
+  /* Danger = complement (mauve), kept off the green primary */
+  --color-error: #793480;
+  --color-danger-text: #75227d;
+  --color-danger-border: #eccbee;
+
+  /* Issue status — text (isovalent weight, stepped hues) */
+  --color-critical: #833c89;
+  --color-high: #934400;
+  --color-medium: #715c00;
+  --color-low: #486079;
+  --color-planned: var(--color-medium);
+  --color-in-progress: #1a609e;
+  --color-blocked: var(--color-critical);
+  --color-complete: #98b797;
+  --color-deferred: var(--color-low);
+
+  /* Issue status — backgrounds */
+  --color-status-critical-bg: #fde0fe;
+  --color-status-high-bg: #ffe3cc;
+  --color-status-medium-bg: #f4ecca;
+  --color-status-low-bg: #e2edf8;
+  --color-status-planned-bg: var(--color-status-medium-bg);
+  --color-status-in-progress-bg: #d3efff;
+  --color-status-blocked-bg: var(--color-status-critical-bg);
+  --color-status-complete-bg: #dcf3db;
+  --color-status-deferred-bg: var(--color-status-low-bg);
+
+  /*
+    Phase chips / accordion rails — Ostwald isovalent with brand (~18% HSL sat).
+    Hue ring starts at logo green; JS reads these for every phase.
+  */
+  --phase-hue-base: 118;
+  --phase-hue-step: 36;
+  --phase-s-fg: 24%;
+  --phase-l-fg: 34%;
+  --phase-s-bg: 14%;
+  --phase-l-bg: 92%;
+  --phase-s-fg-dark: 26%;
+  --phase-l-fg-dark: 70%;
+  --phase-s-bg-dark: 12%;
+  --phase-l-bg-dark: 18%;
+  --phase-s-accent: 26%;
+  --phase-l-accent: 40%;
+  --phase-s-accent-dark: 28%;
+  --phase-l-accent-dark: 55%;
+}
+
+html[data-palette="ostwald-green"][data-theme="dark"] {
+  --color-bg: #0c110c;
+  --color-surface: #191f19;
+  --color-muted-surface: #272e26;
+  --color-code-bg: #272e26;
+  --color-disabled-surface: #212620;
+  --color-surface-translucent: rgb(25 31 25 / 92%);
+
+  --color-text: #ebf0ea;
+  --color-muted: #9fa79f;
+
+  --color-border: #3d453c;
+  --color-accent-border: #3b4e3a;
+  --color-header: rgb(25 31 25 / 92%);
+  --color-overlay: rgb(0 0 0 / 70%);
+  --color-overlay-subtle: rgb(255 255 255 / 4%);
+
+  --color-brand: #98b797;
+  /* Light series of brand — same chroma, sits on dark surfaces */
+  --color-accent: #98b797;
+  --color-accent-hover: #a2c1a1;
+  --color-accent-soft: #202d20;
+  --color-accent-soft-strong: #2b3d2b;
+  --color-on-accent: #0c110c;
+  --color-success: #98b797;
+
+  --color-error: #ca8acf;
+  --color-danger-text: #ca8acf;
+  --color-danger-border: #5a2a5e;
+
+  --color-critical: #ca8acf;
+  --color-high: #fb923c;
+  --color-medium: #fbbf24;
+  --color-low: #9ca3af;
+  --color-planned: var(--color-medium);
+  --color-in-progress: #60a5fa;
+  --color-blocked: var(--color-critical);
+  --color-complete: #88ba87;
+  --color-deferred: var(--color-low);
+
+  --color-status-critical-bg: #3a223c;
+  --color-status-high-bg: #3a2a18;
+  --color-status-medium-bg: #3a3418;
+  --color-status-low-bg: #2a2a2e;
+  --color-status-planned-bg: var(--color-status-medium-bg);
+  --color-status-in-progress-bg: #1a2740;
+  --color-status-blocked-bg: var(--color-status-critical-bg);
+  --color-status-complete-bg: #1a3328;
+  --color-status-deferred-bg: var(--color-status-low-bg);
+}
