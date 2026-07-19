@@ -1,8 +1,6 @@
 /* OR Books Mobile UX Audit: presentation deck */
 
 @import url("tokens.css");
-@import url("css/themes/theme-ostwald-green.css");
-@import url("css/themes/theme-classic.css");
 @import url("css/base.css");
 @import url("css/header.css");
 @import url("css/boot-auth.css");

@@ -50,6 +50,11 @@ import {
   taskAuthoringBlocked,
   renderTaskLockBanner,
 } from "./task-lock.js";
+import {
+  buildPaletteVars,
+  normalizeHex,
+  PALETTE_PRESETS,
+} from "./palette-engine.js";
 
 const AUTHOR_KEYS = {
   comment: "or-audit-author",
@@ -58,7 +63,8 @@ const AUTHOR_KEYS = {
 
 const THEME_KEY = "or-audit-theme";
 const PALETTE_KEY = "or-audit-palette";
-const PALETTE_IDS = ["ostwald-green", "classic"];
+const PALETTE_CUSTOMS_KEY = "or-audit-palette-customs";
+const PALETTE_CACHE_KEY = "or-audit-palette-cache";
 const BOOT_ENTER_MS = 700;
 const BOOT_LABEL_DELAY_MS = 500;
 const BOOT_HOLD_MS = 1000;
@@ -90,6 +96,14 @@ const COPY = {
   colorPalette: "Color palette",
   paletteOstwaldGreen: "Brand green",
   paletteClassic: "Classic",
+  palettePrimary: "Primary color",
+  paletteHarmony: "Harmony",
+  paletteHarmonyOstwald: "Ostwald (veiled neutrals)",
+  paletteHarmonyClassic: "Classic (vivid chips)",
+  paletteRemember: "Remember this color",
+  paletteDelete: "Remove",
+  paletteCustomName: "Name",
+  paletteHex: "Hex",
   themeLight: "Light",
   themeDark: "Dark",
   themeSystem: "System",
@@ -440,26 +454,165 @@ function applyTheme(pref = getThemePref()) {
   }
   document.documentElement.dataset.themePref = next;
   document.documentElement.dataset.theme = resolvedTheme(next);
+  applyActivePalette();
+}
+
+function getCustomPalettes() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(PALETTE_CUSTOMS_KEY) || "[]");
+    if (!Array.isArray(raw)) {
+      return [];
+    }
+    return raw
+      .map((item) => {
+        const hex = normalizeHex(item?.hex);
+        if (!hex || !item?.id) {
+          return null;
+        }
+        return {
+          id: String(item.id),
+          name: String(item.name || hex).trim() || hex,
+          hex,
+          harmony: item.harmony === "classic" ? "classic" : "ostwald",
+        };
+      })
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+function saveCustomPalettes(list) {
+  try {
+    localStorage.setItem(PALETTE_CUSTOMS_KEY, JSON.stringify(list));
+  } catch {
+    /* ignore */
+  }
+}
+
+function allPaletteDefs() {
+  return [...PALETTE_PRESETS, ...getCustomPalettes()];
+}
+
+function resolvePaletteDef(id) {
+  const found = allPaletteDefs().find((item) => item.id === id);
+  return found || PALETTE_PRESETS[0];
 }
 
 function getPalette() {
   try {
     const stored = localStorage.getItem(PALETTE_KEY) || "ostwald-green";
-    return PALETTE_IDS.includes(stored) ? stored : "ostwald-green";
+    if (allPaletteDefs().some((item) => item.id === stored)) {
+      return stored;
+    }
+    return "ostwald-green";
   } catch {
     return "ostwald-green";
   }
 }
 
-/** Swap color theme file mapping. ids: ostwald-green | classic */
-function applyPalette(id = getPalette()) {
-  const next = PALETTE_IDS.includes(id) ? id : "ostwald-green";
+function writePaletteVars(vars) {
+  if (!vars) {
+    return;
+  }
+  const root = document.documentElement.style;
+  Object.entries(vars).forEach(([key, value]) => {
+    root.setProperty(key, value);
+  });
+}
+
+function cachePalette(def) {
+  const light = buildPaletteVars(def.hex, def.harmony, "light");
+  const dark = buildPaletteVars(def.hex, def.harmony, "dark");
   try {
-    localStorage.setItem(PALETTE_KEY, next);
+    localStorage.setItem(
+      PALETTE_CACHE_KEY,
+      JSON.stringify({
+        id: def.id,
+        hex: def.hex,
+        harmony: def.harmony,
+        light,
+        dark,
+      }),
+    );
   } catch {
     /* ignore */
   }
-  document.documentElement.dataset.palette = next;
+  return { light, dark };
+}
+
+/** Apply stored palette id for current light/dark theme. */
+function applyActivePalette() {
+  const def = resolvePaletteDef(getPalette());
+  const theme = resolvedTheme();
+  const { light, dark } = cachePalette(def);
+  writePaletteVars(theme === "dark" ? dark : light);
+  document.documentElement.dataset.palette = def.id;
+  document.documentElement.dataset.paletteHarmony = def.harmony;
+}
+
+/** Select palette by id and persist. */
+function applyPalette(id = getPalette()) {
+  const def = resolvePaletteDef(id);
+  try {
+    localStorage.setItem(PALETTE_KEY, def.id);
+  } catch {
+    /* ignore */
+  }
+  applyActivePalette();
+}
+
+/** Live-preview a hex + harmony without changing the saved selection. */
+function previewPalette(hex, harmony) {
+  const normalized = normalizeHex(hex);
+  if (!normalized) {
+    return false;
+  }
+  const theme = resolvedTheme();
+  const vars = buildPaletteVars(
+    normalized,
+    harmony === "classic" ? "classic" : "ostwald",
+    theme,
+  );
+  writePaletteVars(vars);
+  return true;
+}
+
+function rememberPalette({ name, hex, harmony }) {
+  const normalized = normalizeHex(hex);
+  if (!normalized) {
+    return null;
+  }
+  const mode = harmony === "classic" ? "classic" : "ostwald";
+  const label = String(name || "").trim() || normalized;
+  const customs = getCustomPalettes();
+  const existing = customs.find(
+    (item) => item.hex === normalized && item.harmony === mode,
+  );
+  if (existing) {
+    existing.name = label;
+    saveCustomPalettes(customs);
+    applyPalette(existing.id);
+    return existing;
+  }
+  const entry = {
+    id: `custom-${Date.now().toString(36)}`,
+    name: label,
+    hex: normalized,
+    harmony: mode,
+  };
+  customs.push(entry);
+  saveCustomPalettes(customs);
+  applyPalette(entry.id);
+  return entry;
+}
+
+function deleteCustomPalette(id) {
+  const next = getCustomPalettes().filter((item) => item.id !== id);
+  saveCustomPalettes(next);
+  if (getPalette() === id) {
+    applyPalette("ostwald-green");
+  }
 }
 
 const main = document.getElementById("main");
@@ -2807,10 +2960,30 @@ function bindTeamMemberRepeaters(root = main) {
   });
 }
 
+function renderPaletteOptions(activeId) {
+  return allPaletteDefs()
+    .map((item) => {
+      const checked = item.id === activeId ? " checked" : "";
+      const isCustom = !PALETTE_PRESETS.some((preset) => preset.id === item.id);
+      const swatch = escapeHtml(item.hex);
+      const deleteBtn = isCustom
+        ? `<button type="button" class="settings-palette__delete" data-palette-delete="${escapeHtml(item.id)}" title="${escapeHtml(COPY.paletteDelete)}">${escapeHtml(COPY.paletteDelete)}</button>`
+        : "";
+      return `<label class="settings-palette__option">
+        <input type="radio" name="palette" value="${escapeHtml(item.id)}"${checked}>
+        <span class="settings-palette__swatch" style="background:${swatch}" aria-hidden="true"></span>
+        <span class="settings-palette__label">${escapeHtml(item.name)}</span>
+        ${deleteBtn}
+      </label>`;
+    })
+    .join("");
+}
+
 function renderSettings() {
   const settings = state.settings || {};
   const theme = getThemePref();
-  const palette = getPalette();
+  const paletteId = getPalette();
+  const active = resolvePaletteDef(paletteId);
   return `
     <div class="page">
       <header class="page-header">
@@ -2837,10 +3010,34 @@ function renderSettings() {
             <label class="settings-theme__option"><input type="radio" name="theme" value="dark"${theme === "dark" ? " checked" : ""}> ${escapeHtml(COPY.themeDark)}</label>
             <label class="settings-theme__option"><input type="radio" name="theme" value="system"${theme === "system" ? " checked" : ""}> ${escapeHtml(COPY.themeSystem)}</label>
           </fieldset>
-          <fieldset class="settings-theme">
+          <fieldset class="settings-theme settings-palette">
             <legend>${escapeHtml(COPY.colorPalette)}</legend>
-            <label class="settings-theme__option"><input type="radio" name="palette" value="ostwald-green"${palette === "ostwald-green" ? " checked" : ""}> ${escapeHtml(COPY.paletteOstwaldGreen)}</label>
-            <label class="settings-theme__option"><input type="radio" name="palette" value="classic"${palette === "classic" ? " checked" : ""}> ${escapeHtml(COPY.paletteClassic)}</label>
+            <div class="settings-palette__list" data-palette-list>
+              ${renderPaletteOptions(paletteId)}
+            </div>
+          </fieldset>
+          <fieldset class="settings-theme settings-palette-custom" data-palette-custom>
+            <legend>${escapeHtml(COPY.palettePrimary)}</legend>
+            <div class="settings-palette-custom__row">
+              <label class="field settings-palette-custom__color">
+                <span class="field__label">${escapeHtml(COPY.palettePrimary)}</span>
+                <input type="color" name="paletteColor" value="${escapeHtml(active.hex)}" data-palette-color>
+              </label>
+              <label class="field settings-palette-custom__hex">
+                <span class="field__label">${escapeHtml(COPY.paletteHex)}</span>
+                <input type="text" name="paletteHex" value="${escapeHtml(active.hex)}" maxlength="7" spellcheck="false" data-palette-hex>
+              </label>
+              <label class="field settings-palette-custom__name">
+                <span class="field__label">${escapeHtml(COPY.paletteCustomName)}</span>
+                <input type="text" name="paletteName" value="" maxlength="40" placeholder="${escapeHtml(active.hex)}" data-palette-name>
+              </label>
+            </div>
+            <div class="settings-palette-custom__harmony">
+              <span class="field__label">${escapeHtml(COPY.paletteHarmony)}</span>
+              <label class="settings-theme__option"><input type="radio" name="paletteHarmony" value="ostwald"${active.harmony === "ostwald" ? " checked" : ""} data-palette-harmony> ${escapeHtml(COPY.paletteHarmonyOstwald)}</label>
+              <label class="settings-theme__option"><input type="radio" name="paletteHarmony" value="classic"${active.harmony === "classic" ? " checked" : ""} data-palette-harmony> ${escapeHtml(COPY.paletteHarmonyClassic)}</label>
+            </div>
+            <button type="button" class="button button--ghost" data-palette-remember>${escapeHtml(COPY.paletteRemember)}</button>
           </fieldset>
         </section>
         <section class="section settings-section settings-panel" role="tabpanel" id="settings-panel-notifications" aria-labelledby="settings-tab-notifications" data-settings-panel="notifications" hidden>
@@ -2865,6 +3062,101 @@ function renderSettings() {
     </div>`;
 }
 
+let settingsAppearancePrefer = false;
+
+function bindPaletteAppearance(form) {
+  const colorInput = form.querySelector("[data-palette-color]");
+  const hexInput = form.querySelector("[data-palette-hex]");
+  const nameInput = form.querySelector("[data-palette-name]");
+  const list = form.querySelector("[data-palette-list]");
+
+  function readHarmony() {
+    const checked = form.querySelector('input[name="paletteHarmony"]:checked');
+    return checked?.value === "classic" ? "classic" : "ostwald";
+  }
+
+  function syncHexFromColor() {
+    if (!colorInput || !hexInput) {
+      return;
+    }
+    hexInput.value = colorInput.value;
+  }
+
+  function livePreview() {
+    const hex = hexInput?.value || colorInput?.value;
+    previewPalette(hex, readHarmony());
+  }
+
+  form.querySelectorAll('input[name="palette"]').forEach((input) => {
+    input.addEventListener("change", () => {
+      if (!input.checked) {
+        return;
+      }
+      applyPalette(input.value);
+      const def = resolvePaletteDef(input.value);
+      if (colorInput) {
+        colorInput.value = def.hex;
+      }
+      if (hexInput) {
+        hexInput.value = def.hex;
+      }
+      form.querySelectorAll('input[name="paletteHarmony"]').forEach((radio) => {
+        radio.checked = radio.value === def.harmony;
+      });
+    });
+  });
+
+  list?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-palette-delete]");
+    if (!button || !list.contains(button)) {
+      return;
+    }
+    event.preventDefault();
+    deleteCustomPalette(button.dataset.paletteDelete);
+    settingsAppearancePrefer = true;
+    render();
+  });
+
+  colorInput?.addEventListener("input", () => {
+    syncHexFromColor();
+    livePreview();
+  });
+
+  hexInput?.addEventListener("change", () => {
+    const normalized = normalizeHex(hexInput.value);
+    if (!normalized) {
+      return;
+    }
+    hexInput.value = normalized;
+    if (colorInput) {
+      colorInput.value = normalized;
+    }
+    livePreview();
+  });
+
+  form.querySelectorAll("[data-palette-harmony]").forEach((input) => {
+    input.addEventListener("change", () => {
+      if (input.checked) {
+        livePreview();
+      }
+    });
+  });
+
+  form.querySelector("[data-palette-remember]")?.addEventListener("click", () => {
+    const hex = hexInput?.value || colorInput?.value;
+    const entry = rememberPalette({
+      name: nameInput?.value,
+      hex,
+      harmony: readHarmony(),
+    });
+    if (entry && nameInput) {
+      nameInput.value = "";
+    }
+    settingsAppearancePrefer = true;
+    render();
+  });
+}
+
 function bindSettingsTabs(root) {
   const tablist = root.querySelector(".settings-tabs");
   if (!tablist) {
@@ -2883,6 +3175,11 @@ function bindSettingsTabs(root) {
     panels.forEach((panel) => {
       panel.hidden = panel.dataset.settingsPanel !== tabId;
     });
+  }
+
+  if (settingsAppearancePrefer) {
+    settingsAppearancePrefer = false;
+    activate("appearance");
   }
 
   tablist.addEventListener("click", (event) => {
@@ -4262,13 +4559,7 @@ function bindPageHandlers() {
         }
       });
     });
-    settingsForm.querySelectorAll('input[name="palette"]').forEach((input) => {
-      input.addEventListener("change", () => {
-        if (input.checked) {
-          applyPalette(input.value);
-        }
-      });
-    });
+    bindPaletteAppearance(settingsForm);
     settingsForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(settingsForm);
@@ -4667,7 +4958,7 @@ function bindGlobalHandlers() {
 
 async function init() {
   applyTheme();
-  applyPalette();
+  applyActivePalette();
   applyBrand();
   applyEditModeClass(state.editMode);
   initAuthorMediaPicker();

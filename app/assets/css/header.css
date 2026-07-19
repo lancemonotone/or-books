@@ -352,6 +352,100 @@
   cursor: pointer;
 }
 
+.settings-palette__list {
+  --palette-gap: 0.5rem;
+
+  display: grid;
+  gap: var(--palette-gap);
+  flex: 1 0 100%;
+}
+
+.settings-palette__option {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+
+  & input {
+    margin: 0;
+  }
+}
+
+.settings-palette__swatch {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.settings-palette__label {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-palette__delete {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.15rem 0.35rem;
+
+  &:hover {
+    color: var(--color-danger-text);
+  }
+}
+
+.settings-palette-custom {
+  margin-block-start: 1rem;
+}
+
+.settings-palette-custom__row {
+  --custom-gap: 0.75rem;
+  --custom-cols: 1fr;
+
+  display: grid;
+  grid-template-columns: var(--custom-cols);
+  gap: var(--custom-gap);
+  flex: 1 0 100%;
+  margin-block-end: 0.75rem;
+
+  @media (min-width: 768px) {
+    --custom-cols: auto minmax(0, 8rem) minmax(0, 1fr);
+  }
+}
+
+.settings-palette-custom__color {
+  & input[type="color"] {
+    inline-size: 3rem;
+    block-size: 2.35rem;
+    padding: 0.15rem;
+    cursor: pointer;
+  }
+}
+
+.settings-palette-custom__harmony {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  flex: 1 0 100%;
+  margin-block-end: 0.75rem;
+
+  & .field__label {
+    flex: 1 0 100%;
+  }
+}
+
 .settings-check {
   display: flex;
   align-items: flex-start;

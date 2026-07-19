@@ -6,7 +6,6 @@
   <title></title>
   <script>
     (function () {
-      var PALETTES = { "ostwald-green": 1, classic: 1 };
       try {
         var stored = localStorage.getItem("or-audit-theme") || "system";
         var dark =
@@ -14,13 +13,22 @@
           (stored === "system" &&
             window.matchMedia &&
             window.matchMedia("(prefers-color-scheme: dark)").matches);
-        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var theme = dark ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
         document.documentElement.dataset.themePref = stored;
         var palette = localStorage.getItem("or-audit-palette") || "ostwald-green";
-        if (!PALETTES[palette]) {
-          palette = "ostwald-green";
-        }
         document.documentElement.dataset.palette = palette;
+        var cacheRaw = localStorage.getItem("or-audit-palette-cache");
+        if (cacheRaw) {
+          var cache = JSON.parse(cacheRaw);
+          var vars = cache && cache[theme];
+          if (vars && typeof vars === "object") {
+            var root = document.documentElement.style;
+            Object.keys(vars).forEach(function (key) {
+              root.setProperty(key, vars[key]);
+            });
+          }
+        }
         if (sessionStorage.getItem("or-audit-authed") === "1") {
           document.documentElement.dataset.skipSplash = "1";
         }
