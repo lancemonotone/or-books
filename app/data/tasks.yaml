@@ -1,7 +1,7 @@
 - key: 5012d67c-61f1-4220-8e1d-baa07f4142cc
   id: '1.1'
   sprint: 1
-  title: Site audit and issue inventory
+  title: Site audit and task inventory
   priority: high
   status: complete
   hours: 2
@@ -10,8 +10,7 @@
     - discovery
   problem: |
     Before fixing specific pages, the storefront needed a structured pass to find mobile and UX problems and turn them into a clear list of work.
-  recommendation: |
-    Spend two hours reviewing the live site (with emphasis on phone layouts and key flows), document findings, and deliver this issue list for review.
+  recommendation: Review the live site (with emphasis on phone layouts and key flows), document findings, and deliver this task list for review.
 - key: d64e9880-9bd4-4b26-850b-f04a0b9b341b
   id: '2.1'
   sprint: 2
