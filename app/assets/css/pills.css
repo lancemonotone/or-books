@@ -1,0 +1,320 @@
+/* Pills & chips */
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.meta-row__dev {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: var(--color-muted-surface);
+}
+
+a.pill {
+  text-decoration: none;
+  transition:
+    filter var(--transition-fast),
+    box-shadow var(--transition-fast);
+
+  &:hover {
+    filter: brightness(0.97);
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 8%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+.pill--critical {
+  background: var(--color-status-critical-bg);
+  color: var(--color-critical);
+}
+.pill--high {
+  background: var(--color-status-high-bg);
+  color: var(--color-high);
+}
+.pill--medium {
+  background: var(--color-status-medium-bg);
+  color: var(--color-medium);
+}
+.pill--low {
+  background: var(--color-status-low-bg);
+  color: var(--color-low);
+}
+.pill--planned {
+  background: var(--color-status-planned-bg);
+  color: var(--color-planned);
+}
+.pill--in_progress {
+  background: var(--color-status-in-progress-bg);
+  color: var(--color-in-progress);
+}
+.pill--blocked {
+  background: var(--color-status-blocked-bg);
+  color: var(--color-blocked);
+}
+.pill--complete {
+  background: var(--color-status-complete-bg);
+  color: var(--color-complete);
+}
+.pill--deferred {
+  background: var(--color-status-deferred-bg);
+  color: var(--color-deferred);
+}
+
+.pill--phase {
+  /* background-color only — shorthand would wipe layered backgrounds if reintroduced. */
+  background-color: var(--phase-bg, var(--color-muted-surface));
+  color: var(--phase-fg, var(--color-muted));
+}
+
+html[data-theme="dark"] .pill--phase {
+  background-color: var(
+    --phase-bg-dark,
+    var(--phase-bg, var(--color-muted-surface))
+  );
+  color: var(--phase-fg-dark, var(--phase-fg, var(--color-muted)));
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  display: inline-block;
+  font-size: 0.8rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--color-muted-surface);
+  text-decoration: none;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.chip--tag {
+  font-size: 0.7rem;
+  border: 1px solid var(--color-border);
+
+  &:hover {
+    border-color: var(--color-accent-border);
+    color: var(--color-accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+.chip--tag-edit {
+  max-inline-size: 100%;
+
+  & .chip__label,
+  & .chip__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    block-size: 1em;
+    font-size: inherit;
+    line-height: 1;
+  }
+
+  & .chip__label {
+    color: inherit;
+    text-decoration: none;
+    min-inline-size: 0;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 1px;
+    }
+  }
+
+  & .chip__remove {
+    appearance: none;
+    flex: none;
+    inline-size: 1em;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-muted);
+    font: inherit;
+    cursor: pointer;
+
+    & span {
+      display: block;
+      line-height: 1;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: var(--color-accent-soft);
+      color: var(--color-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 1px;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.chip--tag-add {
+  appearance: none;
+  cursor: pointer;
+  padding-block: 0.2rem;
+  border: 1px solid var(--color-border);
+
+  &:hover,
+  &:focus-visible {
+    border-style: solid;
+    border-color: var(--color-accent-border);
+    color: var(--color-accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.issue-tags {
+  margin-block-start: 0.65rem;
+  align-items: center;
+
+  &[aria-busy="true"] {
+    opacity: 0.7;
+  }
+}
+
+.issue-tags__add {
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 1.55rem;
+}
+
+.combobox--tag {
+  --combobox-clear-size: 1.5rem;
+  min-inline-size: min(12rem, 70vw);
+
+  & .combobox__control {
+    min-block-size: 1.7rem;
+  }
+
+  & .combobox__input {
+    font-size: 0.8rem;
+    padding-block: 0.2rem;
+  }
+
+  & .combobox__list {
+    font-size: 0.85rem;
+  }
+}
+
+.pill-control {
+  --pill-control-caret-gutter: 1.15rem;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  flex-shrink: 0;
+  max-inline-size: 100%;
+}
+
+/* Pill chrome + caret on label — native <select> text ignores end padding. */
+.pill-control.pill {
+  padding-block: 0.35rem;
+  padding-inline: 0.55rem calc(0.45rem + var(--pill-control-caret-gutter));
+}
+
+.pill-control.pill::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 0.5rem;
+  translate: 0 -40%;
+  inline-size: 0.55rem;
+  block-size: 0.35rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    0 50%,
+    100% 50%;
+  background-size:
+    0.3rem 0.3rem,
+    0.3rem 0.3rem;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.pill-control__select {
+  appearance: none;
+  /* Hug selected label. letter-spacing on <select> under-sizes the box in Chrome
+     and paints into the caret gutter — keep spacing on read-only .pill only. */
+  inline-size: max-content;
+  max-inline-size: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: normal;
+  line-height: 1.2;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+}
+
+.muted {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
