@@ -731,6 +731,7 @@ html[data-skip-splash] {
     justify-items: center;
     gap: 0.75rem;
     margin-block-end: 1.25rem;
+    pointer-events: none;
   }
 
   & .auth-panel__mark {
@@ -1643,8 +1644,7 @@ html[data-theme="dark"] .pill--phase {
 /* Pill chrome + caret on label — native <select> text ignores end padding. */
 .pill-control.pill {
   padding-block: 0.35rem;
-  padding-inline: 0.55rem
-    calc(0.45rem + var(--pill-control-caret-gutter));
+  padding-inline: 0.55rem calc(0.45rem + var(--pill-control-caret-gutter));
 }
 
 .pill-control.pill::after {
@@ -3116,7 +3116,11 @@ html[data-theme="dark"] .pill--phase {
     --bucket-accent-width: 5px;
     --bucket-title-size: 0.82rem;
     --metric-value-size: 1.1rem;
-    background: color-mix(in srgb, var(--color-accent) 9%, var(--color-surface));
+    background: color-mix(
+      in srgb,
+      var(--color-accent) 9%,
+      var(--color-surface)
+    );
 
     & .estimates-bucket__title {
       color: var(--color-accent);
@@ -4064,4 +4068,3 @@ body.is-edit-mode .issue-card[data-author-task-drag] {
   font-size: 0.85rem;
   color: var(--color-muted);
 }
-
