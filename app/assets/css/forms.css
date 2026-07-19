@@ -24,22 +24,6 @@
   color: var(--color-text);
 }
 
-.stance-fieldset {
-  border: 0;
-  padding: 0;
-  margin: 0.5rem 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-
-  & legend {
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-block-end: 0.25rem;
-    inline-size: 100%;
-  }
-}
-
 .feedback-panel {
   margin-block-start: 1.5rem;
   padding-block-start: 1.25rem;

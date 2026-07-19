@@ -8,11 +8,6 @@
   margin-top: 0.5rem;
 }
 
-.meta-row__dev {
-  font-size: 0.85rem;
-  color: var(--color-muted);
-}
-
 .pill {
   display: inline-block;
   font-size: 0.75rem;
