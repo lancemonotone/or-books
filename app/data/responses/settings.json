@@ -40,5 +40,18 @@
                 }
             ]
         }
+    },
+    "appearance": {
+        "colorScheme": "system",
+        "palette": "ostwald-green",
+        "harmony": "ostwald",
+        "customs": [
+            {
+                "id": "custom-mrrat7gi",
+                "name": "Reason Orange",
+                "hex": "#ff5222",
+                "harmony": "ostwald"
+            }
+        ]
     }
 }

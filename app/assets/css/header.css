@@ -446,6 +446,13 @@
   }
 }
 
+.settings-appearance-hint {
+  flex: 1 0 100%;
+  margin-block: 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
 .settings-check {
   display: flex;
   align-items: flex-start;

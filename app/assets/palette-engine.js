@@ -474,3 +474,14 @@ export const PALETTE_PRESETS = [
     harmony: "classic",
   },
 ];
+
+export const PALETTE_HARMONIES = ["ostwald", "classic"];
+
+export function defaultPaletteId() {
+  return PALETTE_PRESETS[0]?.id || "";
+}
+
+export function normalizeHarmony(value) {
+  const next = String(value || "").trim().toLowerCase();
+  return PALETTE_HARMONIES.includes(next) ? next : PALETTE_HARMONIES[0];
+}

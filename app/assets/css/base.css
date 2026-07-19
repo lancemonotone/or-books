@@ -39,11 +39,11 @@ body {
   text-wrap: balance;
 }
 
-/* Logo green plate → theme interactive primary (--color-accent). */
+/* Logo plate + wordmark → seed brand color (--color-brand), not interactive accent. */
 .boot-splash__mark,
 .auth-panel__mark,
 .site-header__mark {
-  color: var(--color-accent);
+  color: var(--color-brand);
 }
 
 img,

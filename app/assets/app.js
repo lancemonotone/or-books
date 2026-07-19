@@ -53,6 +53,8 @@ import {
 import {
   buildPaletteVars,
   normalizeHex,
+  normalizeHarmony,
+  defaultPaletteId,
   PALETTE_PRESETS,
 } from "./palette-engine.js";
 
@@ -124,6 +126,8 @@ const COPY = {
   frequencyDaily: "Daily digest",
   saveSettings: "Save settings",
   settingsSaved: "Settings saved.",
+  appearanceSaveHint:
+    "Appearance is shared for everyone. Click Save settings to keep theme and colors.",
   phases: "Phases",
   phase: "Phase",
   screenshots: "Media",
@@ -427,12 +431,156 @@ function applyBrand() {
   document.title = name;
 }
 
-function getThemePref() {
-  try {
-    return localStorage.getItem(THEME_KEY) || "system";
-  } catch {
-    return "system";
+function defaultAppearance() {
+  const preset = PALETTE_PRESETS[0];
+  return {
+    colorScheme: "system",
+    palette: defaultPaletteId(),
+    harmony: normalizeHarmony(preset?.harmony),
+    customs: [],
+  };
+}
+
+function readAppearance() {
+  const settings = state.settings || {};
+  const raw = settings.appearance;
+  if (raw && typeof raw === "object") {
+    return {
+      colorScheme: raw.colorScheme,
+      palette: raw.palette,
+      harmony: raw.harmony,
+      customs: Array.isArray(raw.customs) ? raw.customs : [],
+    };
   }
+  // Legacy flat keys (pre-appearance object).
+  return {
+    colorScheme: settings.theme,
+    palette: settings.palette,
+    harmony: undefined,
+    customs: Array.isArray(settings.paletteCustoms)
+      ? settings.paletteCustoms
+      : [],
+  };
+}
+
+function writeAppearance(next) {
+  ensureAppearanceSettings(state.settings);
+  const merged = {
+    ...defaultAppearance(),
+    ...readAppearance(),
+    ...next,
+  };
+  const scheme = ["light", "dark", "system"].includes(merged.colorScheme)
+    ? merged.colorScheme
+    : "system";
+  const presetIds = new Set(PALETTE_PRESETS.map((item) => item.id));
+  const customs = (Array.isArray(merged.customs) ? merged.customs : [])
+    .map((item) => {
+      const hex = normalizeHex(item?.hex);
+      if (!hex || !item?.id) {
+        return null;
+      }
+      const id = String(item.id);
+      if (presetIds.has(id)) {
+        return null;
+      }
+      return {
+        id,
+        name: String(item.name || hex).trim() || hex,
+        hex,
+        harmony: normalizeHarmony(item.harmony),
+      };
+    })
+    .filter(Boolean);
+  let palette = String(merged.palette || "").trim();
+  const known = new Set([...presetIds, ...customs.map((item) => item.id)]);
+  if (!known.has(palette)) {
+    palette = defaultPaletteId();
+  }
+  const base =
+    [...PALETTE_PRESETS, ...customs].find((item) => item.id === palette) ||
+    PALETTE_PRESETS[0];
+  const harmony = String(merged.harmony || "").trim()
+    ? normalizeHarmony(merged.harmony)
+    : normalizeHarmony(base?.harmony);
+  state.settings.appearance = {
+    colorScheme: scheme,
+    palette,
+    harmony,
+    customs,
+  };
+  delete state.settings.theme;
+  delete state.settings.palette;
+  delete state.settings.paletteCustoms;
+}
+
+function ensureAppearanceSettings(settings) {
+  if (!settings || typeof settings !== "object") {
+    return;
+  }
+  if (!settings.appearance || typeof settings.appearance !== "object") {
+    settings.appearance = defaultAppearance();
+  }
+}
+
+let appearanceMigrated = false;
+
+/** One-time lift of old browser-only appearance into in-memory settings (persists on Save). */
+function migrateAppearanceFromLocalStorage() {
+  if (appearanceMigrated) {
+    return;
+  }
+  appearanceMigrated = true;
+  ensureAppearanceSettings(state.settings);
+  const current = readAppearance();
+  const serverIsDefault =
+    (!current.colorScheme || current.colorScheme === "system") &&
+    (!current.palette || current.palette === defaultPaletteId()) &&
+    !(current.customs && current.customs.length);
+  if (!serverIsDefault) {
+    writeAppearance(current);
+    return;
+  }
+  try {
+    const theme = localStorage.getItem(THEME_KEY);
+    const palette = localStorage.getItem(PALETTE_KEY);
+    const customsRaw = localStorage.getItem(PALETTE_CUSTOMS_KEY);
+    const next = { ...defaultAppearance() };
+    let touched = false;
+    if (theme && ["light", "dark", "system"].includes(theme) && theme !== "system") {
+      next.colorScheme = theme;
+      touched = true;
+    }
+    if (palette && palette !== defaultPaletteId()) {
+      next.palette = palette;
+      touched = true;
+    }
+    if (customsRaw) {
+      const parsed = JSON.parse(customsRaw);
+      if (Array.isArray(parsed) && parsed.length) {
+        next.customs = parsed;
+        touched = true;
+      }
+    }
+    writeAppearance(touched ? next : current);
+  } catch {
+    writeAppearance(current);
+  }
+}
+
+function syncAppearanceBootCache() {
+  try {
+    localStorage.setItem(THEME_KEY, getThemePref());
+    localStorage.setItem(PALETTE_KEY, getPalette());
+  } catch {
+    /* ignore */
+  }
+}
+
+function getThemePref() {
+  ensureAppearanceSettings(state.settings);
+  const pref = readAppearance().colorScheme || "system";
+  return ["light", "dark", "system"].includes(pref) ? pref : "system";
 }
 
 function resolvedTheme(pref = getThemePref()) {
@@ -447,47 +595,38 @@ function resolvedTheme(pref = getThemePref()) {
 
 function applyTheme(pref = getThemePref()) {
   const next = ["light", "dark", "system"].includes(pref) ? pref : "system";
-  try {
-    localStorage.setItem(THEME_KEY, next);
-  } catch {
-    /* ignore */
-  }
+  writeAppearance({ colorScheme: next });
+  syncAppearanceBootCache();
   document.documentElement.dataset.themePref = next;
   document.documentElement.dataset.theme = resolvedTheme(next);
   applyActivePalette();
 }
 
 function getCustomPalettes() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(PALETTE_CUSTOMS_KEY) || "[]");
-    if (!Array.isArray(raw)) {
-      return [];
-    }
-    return raw
-      .map((item) => {
-        const hex = normalizeHex(item?.hex);
-        if (!hex || !item?.id) {
-          return null;
-        }
-        return {
-          id: String(item.id),
-          name: String(item.name || hex).trim() || hex,
-          hex,
-          harmony: item.harmony === "classic" ? "classic" : "ostwald",
-        };
-      })
-      .filter(Boolean);
-  } catch {
-    return [];
-  }
+  ensureAppearanceSettings(state.settings);
+  const presetIds = new Set(PALETTE_PRESETS.map((item) => item.id));
+  return (readAppearance().customs || [])
+    .map((item) => {
+      const hex = normalizeHex(item?.hex);
+      if (!hex || !item?.id) {
+        return null;
+      }
+      const id = String(item.id);
+      if (presetIds.has(id)) {
+        return null;
+      }
+      return {
+        id,
+        name: String(item.name || hex).trim() || hex,
+        hex,
+        harmony: normalizeHarmony(item.harmony),
+      };
+    })
+    .filter(Boolean);
 }
 
 function saveCustomPalettes(list) {
-  try {
-    localStorage.setItem(PALETTE_CUSTOMS_KEY, JSON.stringify(list));
-  } catch {
-    /* ignore */
-  }
+  writeAppearance({ customs: list });
 }
 
 function allPaletteDefs() {
@@ -496,19 +635,32 @@ function allPaletteDefs() {
 
 function resolvePaletteDef(id) {
   const found = allPaletteDefs().find((item) => item.id === id);
-  return found || PALETTE_PRESETS[0];
+  const base = found || PALETTE_PRESETS[0];
+  const storedHarmony = String(readAppearance().harmony || "").trim();
+  return {
+    ...base,
+    harmony: storedHarmony
+      ? normalizeHarmony(storedHarmony)
+      : normalizeHarmony(base.harmony),
+  };
+}
+
+function getActiveHarmony() {
+  return resolvePaletteDef(getPalette()).harmony;
+}
+
+function applyHarmony(harmony) {
+  writeAppearance({ harmony: normalizeHarmony(harmony) });
+  applyActivePalette();
 }
 
 function getPalette() {
-  try {
-    const stored = localStorage.getItem(PALETTE_KEY) || "ostwald-green";
-    if (allPaletteDefs().some((item) => item.id === stored)) {
-      return stored;
-    }
-    return "ostwald-green";
-  } catch {
-    return "ostwald-green";
+  ensureAppearanceSettings(state.settings);
+  const stored = readAppearance().palette || defaultPaletteId();
+  if (allPaletteDefs().some((item) => item.id === stored)) {
+    return stored;
   }
+  return defaultPaletteId();
 }
 
 function writePaletteVars(vars) {
@@ -551,15 +703,30 @@ function applyActivePalette() {
   document.documentElement.dataset.paletteHarmony = def.harmony;
 }
 
-/** Select palette by id and persist. */
+/** Select palette by id and persist in settings (server on Save). */
 function applyPalette(id = getPalette()) {
-  const def = resolvePaletteDef(id);
-  try {
-    localStorage.setItem(PALETTE_KEY, def.id);
-  } catch {
-    /* ignore */
+  const found =
+    allPaletteDefs().find((item) => item.id === id) || PALETTE_PRESETS[0];
+  const previousId = readAppearance().palette;
+  const patch = { palette: found.id };
+  // Only adopt the preset/custom's built-in harmony when switching palettes.
+  if (previousId !== found.id) {
+    patch.harmony = normalizeHarmony(found.harmony);
   }
+  writeAppearance(patch);
+  syncAppearanceBootCache();
   applyActivePalette();
+}
+
+function applyAppearanceFromSettings({ migrate = false } = {}) {
+  ensureAppearanceSettings(state.settings);
+  if (migrate) {
+    migrateAppearanceFromLocalStorage();
+  } else {
+    writeAppearance(readAppearance());
+  }
+  applyTheme(getThemePref());
+  applyPalette(getPalette());
 }
 
 /** Live-preview a hex + harmony without changing the saved selection. */
@@ -571,7 +738,7 @@ function previewPalette(hex, harmony) {
   const theme = resolvedTheme();
   const vars = buildPaletteVars(
     normalized,
-    harmony === "classic" ? "classic" : "ostwald",
+    normalizeHarmony(harmony),
     theme,
   );
   writePaletteVars(vars);
@@ -583,7 +750,7 @@ function rememberPalette({ name, hex, harmony }) {
   if (!normalized) {
     return null;
   }
-  const mode = harmony === "classic" ? "classic" : "ostwald";
+  const mode = normalizeHarmony(harmony);
   const label = String(name || "").trim() || normalized;
   const customs = getCustomPalettes();
   const existing = customs.find(
@@ -611,7 +778,7 @@ function deleteCustomPalette(id) {
   const next = getCustomPalettes().filter((item) => item.id !== id);
   saveCustomPalettes(next);
   if (getPalette() === id) {
-    applyPalette("ostwald-green");
+    applyPalette(defaultPaletteId());
   }
 }
 
@@ -3038,6 +3205,7 @@ function renderSettings() {
               <label class="settings-theme__option"><input type="radio" name="paletteHarmony" value="classic"${active.harmony === "classic" ? " checked" : ""} data-palette-harmony> ${escapeHtml(COPY.paletteHarmonyClassic)}</label>
             </div>
             <button type="button" class="button button--ghost" data-palette-remember>${escapeHtml(COPY.paletteRemember)}</button>
+            <p class="lede settings-appearance-hint">${escapeHtml(COPY.appearanceSaveHint)}</p>
           </fieldset>
         </section>
         <section class="section settings-section settings-panel" role="tabpanel" id="settings-panel-notifications" aria-labelledby="settings-tab-notifications" data-settings-panel="notifications" hidden>
@@ -3072,7 +3240,7 @@ function bindPaletteAppearance(form) {
 
   function readHarmony() {
     const checked = form.querySelector('input[name="paletteHarmony"]:checked');
-    return checked?.value === "classic" ? "classic" : "ostwald";
+    return normalizeHarmony(checked?.value);
   }
 
   function syncHexFromColor() {
@@ -3136,8 +3304,16 @@ function bindPaletteAppearance(form) {
 
   form.querySelectorAll("[data-palette-harmony]").forEach((input) => {
     input.addEventListener("change", () => {
-      if (input.checked) {
-        livePreview();
+      if (!input.checked) {
+        return;
+      }
+      applyHarmony(input.value);
+      const def = resolvePaletteDef(getPalette());
+      if (colorInput) {
+        colorInput.value = def.hex;
+      }
+      if (hexInput) {
+        hexInput.value = def.hex;
       }
     });
   });
@@ -3563,8 +3739,7 @@ async function loadAppData() {
   state.responses.comments = normalizedComments;
   state.ready = true;
   applyBrand();
-  applyTheme();
-  applyPalette();
+  applyAppearanceFromSettings({ migrate: true });
 }
 
 async function afterAuthenticated(auth) {
@@ -4565,13 +4740,24 @@ function bindPageHandlers() {
       const data = new FormData(settingsForm);
       const status = settingsForm.querySelector(".save-status");
       const button = settingsForm.querySelector('button[type="submit"]');
-      const theme = String(data.get("theme") || "system");
-      const palette = String(data.get("palette") || "ostwald-green");
+      const theme = String(data.get("theme") || getThemePref());
+      const palette = String(data.get("palette") || getPalette());
+      const harmony = normalizeHarmony(
+        data.get("paletteHarmony") || getActiveHarmony(),
+      );
       applyTheme(theme);
-      applyPalette(palette);
+      writeAppearance({ palette, harmony });
+      syncAppearanceBootCache();
+      applyActivePalette();
       const payload = {
         clientName: String(data.get("clientName") || "").trim(),
         notifyEnabled: data.get("notifyEnabled") === "on",
+        appearance: {
+          colorScheme: getThemePref(),
+          palette: getPalette(),
+          harmony: getActiveHarmony(),
+          customs: getCustomPalettes(),
+        },
         teams: {
           client: {
             members: readTeamMembersFromForm(settingsForm, "client"),
@@ -4587,6 +4773,7 @@ function bindPageHandlers() {
         status.classList.remove("is-error");
         state.settings = await saveSettings(payload);
         applyBrand();
+        applyAppearanceFromSettings();
         status.textContent = COPY.settingsSaved;
         status.classList.add("is-visible");
       } catch (error) {
