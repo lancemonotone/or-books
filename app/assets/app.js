@@ -995,8 +995,9 @@ function phasePillLabel(sprintId) {
   const sprint = (state.audit?.sprints || []).find(
     (item) => String(item.id) === String(sprintId),
   );
-  if (sprint?.title && /uncategorized/i.test(String(sprint.title))) {
-    return sprint.title;
+  const title = String(sprint?.title ?? "").trim();
+  if (title) {
+    return title;
   }
   return `${COPY.phase} ${sprintId}`;
 }
@@ -2139,26 +2140,34 @@ function renderPhasesAccordion(openPhaseIds) {
         : "";
       const phaseTitle = editMode
         ? `<input class="author-field author-field--inline" type="text" data-author-phase="${escapeHtml(String(sprint.id))}" data-author-field="title" value="${escapeHtml(sprint.title)}" aria-label="Phase title">`
-        : `<span class="phases-accordion__title-text">${escapeHtml(sprint.title)}</span>`;
+        : "";
       const phaseSubtitle = editMode
         ? `<input class="author-field author-field--inline" type="text" data-author-phase="${escapeHtml(String(sprint.id))}" data-author-field="subtitle" value="${escapeHtml(sprint.subtitle || "")}" aria-label="Phase subtitle" placeholder="Subtitle">`
-        : `<span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>`;
+        : sprint.subtitle
+          ? `<span class="phases-accordion__subtitle">${escapeHtml(sprint.subtitle)}</span>`
+          : "";
       const phaseDesc = editMode
         ? `<textarea class="author-field" rows="2" data-author-phase="${escapeHtml(String(sprint.id))}" data-author-field="description" aria-label="Phase description">${escapeHtml(sprint.description.trim())}</textarea>`
-        : `<p class="phases-accordion__desc">${escapeHtml(sprint.description.trim())}</p>`;
+        : sprint.description.trim()
+          ? `<p class="phases-accordion__desc">${escapeHtml(sprint.description.trim())}</p>`
+          : "";
       const phaseActions = editMode
         ? `<div class="author-actions">
             <button type="button" class="button button--ghost button--small" data-author-add-task="${escapeHtml(String(sprint.id))}">${escapeHtml(COPY.addTask)}</button>
             <button type="button" class="button button--ghost button--small" data-author-delete-phase="${escapeHtml(String(sprint.id))}">${escapeHtml(COPY.deletePhase)}</button>
           </div>`
         : "";
+      // Edit mode: numbered pill + editable title. View mode: colored pill shows title only.
+      const phaseNamePill = editMode
+        ? `<span class="pill pill--phase" style="${phaseStyleAttr(sprint.id)}">${escapeHtml(COPY.phase)} ${escapeHtml(String(sprint.id))}</span>`
+        : renderPhasePill(sprint.id, { linked: false });
       const taskCards = tasks.map(renderTaskCard).join("");
       return `
         <details class="phases-accordion__item" data-phase-id="${escapeHtml(String(sprint.id))}" style="${phaseStyleAttr(sprint.id)}"${isOpen ? " open" : ""}>
           <summary class="phases-accordion__summary">
             ${dragHandle}
             <span class="phases-accordion__heading">
-              <span class="phases-accordion__title">${renderPhasePill(sprint.id, { linked: false })}${phaseTitle}</span>
+              <span class="phases-accordion__title">${phaseNamePill}${phaseTitle}</span>
               ${phaseSubtitle}
               ${phaseDesc}
             </span>
@@ -3463,15 +3472,12 @@ function renderEstimatesTaskRow(task) {
 }
 
 function renderEstimatesPhaseSection(phase) {
-  const title = phase.sprint?.title
-    ? String(phase.sprint.title).trim()
-    : phasePillLabel(phase.sprintId);
   const issueRows = phase.tasks.map(renderEstimatesTaskRow).join("");
 
   return `
     <section class="estimates-phase" data-phase-id="${escapeHtml(phase.sprintId)}" style="${phaseStyleAttr(phase.sprintId)}">
       <header class="estimates-phase__header">
-        <h2 class="estimates-phase__title">${renderPhasePill(phase.sprintId, { linked: false })} <span class="estimates-phase__title-text">${escapeHtml(title)}</span></h2>
+        <h2 class="estimates-phase__title">${renderPhasePill(phase.sprintId, { linked: false })}</h2>
       </header>
       ${renderEstimatesBucketStrip(phase.summary, { compact: true })}
       <div class="table-wrap">

@@ -1,32 +1,35 @@
-updated: '2026-07-16'
+updated: '2026-07-23'
 summary: This review covers orbooks.com. Each task links to related screenshots and recordings. Read through, add comments as needed, and answer the questions at the end to confirm next steps.
 sprints:
   - id: 1
-    subtitle: Site audit
     title: Discovery
-    description: Audit the mobile storefront to find issues and improvements.
+    subtitle: Audit & licensing
+    description: |
+      Site audit findings and the Helvetica licensing fix.
   - id: 2
-    subtitle: ''
-    title: ''
-    description: ''
+    title: Wave 1
+    subtitle: July — in budget
+    description: |
+      Phase 2 items approved for this month’s budget.
   - id: 3
-    title: Phase 2 (Deferred)
-    subtitle: Will be Phase 3
-    description: ''
+    title: Wave 1 deferred
+    subtitle: August with Wave 2
+    description: |
+      Phase 2 items deferred from this month; pick up next month with Wave 2.
   - id: 4
-    subtitle: ''
-    title: ''
+    title: Wave 2
+    subtitle: August
     description: ''
   - id: 5
-    subtitle: ''
-    title: ''
+    title: Wave 3
+    subtitle: Later
     description: ''
   - id: 6
-    subtitle: ''
-    title: ''
+    title: Wave 4
+    subtitle: Polish
     description: ''
   - id: 7
-    subtitle: Not in scope for now
-    title: Deferred
+    title: Parked
+    subtitle: Out of scope for now
     description: |
       Declined or parked issues. Shown on the Estimate side line; not included in Done, Remaining, or Grand totals.
