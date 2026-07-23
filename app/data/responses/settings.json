@@ -28,6 +28,11 @@
                     "name": "Jamie Stern-Weiner",
                     "email": "jamie.weiner@orbooks.com",
                     "frequency": "none"
+                },
+                {
+                    "name": "OR Books",
+                    "email": "infor@orbooks.com",
+                    "frequency": "none"
                 }
             ]
         },
@@ -42,7 +47,7 @@
         }
     },
     "appearance": {
-        "colorScheme": "system",
+        "colorScheme": "light",
         "palette": "ostwald-green",
         "harmony": "ostwald",
         "customs": [
