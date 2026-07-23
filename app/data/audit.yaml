@@ -1,28 +1,31 @@
-updated: "2026-07-16"
-summary: |
-  This review covers orbooks.com. Each issue links to related screenshots and recordings. Read through, add comments as needed, and answer the questions at the end to confirm next steps.
+updated: '2026-07-16'
+summary: This review covers orbooks.com. Each task links to related screenshots and recordings. Read through, add comments as needed, and answer the questions at the end to confirm next steps.
 sprints:
   - id: 1
     subtitle: Site audit
     title: Discovery
     description: Audit the mobile storefront to find issues and improvements.
   - id: 2
-    subtitle: ""
-    title: ""
-    description: ""
+    subtitle: ''
+    title: ''
+    description: ''
   - id: 3
-    subtitle: ""
-    title: ""
-    description: ""
+    title: Phase 2 (Deferred)
+    subtitle: Will be Phase 3
+    description: ''
   - id: 4
-    subtitle: ""
-    title: ""
-    description: ""
+    subtitle: ''
+    title: ''
+    description: ''
   - id: 5
-    subtitle: ""
-    title: ""
-    description: ""
+    subtitle: ''
+    title: ''
+    description: ''
   - id: 6
+    subtitle: ''
+    title: ''
+    description: ''
+  - id: 7
     subtitle: Not in scope for now
     title: Deferred
     description: |
