@@ -2,6 +2,8 @@
    Fallbacks below = Brand green / Ostwald light until JS applies. */
 
 :root {
+  color-scheme: light;
+
   /* briefboard-logo.svg intrinsic ratio */
   --logo-aspect: 806 / 979;
 
@@ -81,6 +83,7 @@
 }
 
 html[data-theme="dark"] {
+  color-scheme: dark;
   --shadow: 0 1px 3px rgb(0 0 0 / 35%);
   --shadow-dialog: 0 20px 50px rgb(0 0 0 / 55%);
 }

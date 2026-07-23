@@ -297,6 +297,13 @@ html[data-theme="dark"] .pill--phase {
   color: inherit;
   background: transparent;
   cursor: pointer;
+  /* Native dropdown list follows page theme (not OS light chrome). */
+  color-scheme: inherit;
+
+  & option {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+  }
 
   &:focus-visible {
     outline: 2px solid var(--color-accent);
