@@ -1,0 +1,37 @@
+Helvetica removal — status
+==========================
+
+DONE (2026-07-20): base.html cutover live on production.
+- Monotype Helvetica files no longer served via @font-face
+- Condensed CSS name → Archivo Narrow or Roboto Condensed (client trial)
+- Helvetica / Helvetica Bold / HelveticaNeue → local() system only
+- Also fixed missing </script> + </body> in base.html
+
+Files
+-----
+base.helvetica.hbs          = pre-cutover backup (Helvetica embeds; clean rollback)
+base.achivonarrow.hbs       = Archivo Narrow condensed trial
+base.robotocondensed.hbs    = Roboto Condensed trial
+
+BLOCKED / TODO — finish correctly with Stencil CLI
+-------------------------------------------------
+GitHub: https://github.com/lancemonotone/or-books/issues/1
+
+Edit Theme Files cannot fully own compiled theme SCSS the way CLI can.
+When you have theme zip or `stencil` access:
+
+1. Search assets/scss (and any custom partials) for:
+   - Helvetica Condensed
+   - HelveticaNeue / Helvetica Bold
+   - font-family: Helvetica
+2. Replace with honest stacks, e.g.:
+   - Body: Helvetica, Arial, sans-serif
+   - Condensed: "Roboto Condensed" or "Archivo Narrow" (client pick), Helvetica, sans-serif
+   - Drop fake family names Helvetica Bold / HelveticaNeue where possible
+3. Then simplify base.html @font-face aliases (or remove local() shims
+   if CSS stacks are enough on their own).
+4. Delete assets/fonts/helvetica* binaries from theme.
+5. Rebuild / upload / verify Network → Font still clean.
+
+Until then: alias approach in base.html is the production contract.
+Do not remove those @font-face remaps until SCSS uses real family names.
