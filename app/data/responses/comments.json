@@ -504,5 +504,19 @@
                 "updatedAt": "2026-07-17T19:40:18+00:00"
             }
         ]
+    },
+    "2d1a8876-4cd6-4ecb-a5ab-4dd69c2d0bdd": {
+        "text": "Stencil CLI still needs to be configured for theme cleanup (SCSS family names + deleting leftover font binaries) and future tasks",
+        "author": "Rus Miller",
+        "updatedAt": "2026-07-23T21:56:44+00:00",
+        "messages": [
+            {
+                "id": "ede1cad792bc19209ea9f100d85e0920",
+                "author": "Rus Miller",
+                "text": "Stencil CLI still needs to be configured for theme cleanup (SCSS family names + deleting leftover font binaries) and future tasks",
+                "createdAt": "2026-07-23T21:56:44+00:00",
+                "updatedAt": "2026-07-23T21:56:44+00:00"
+            }
+        ]
     }
 }

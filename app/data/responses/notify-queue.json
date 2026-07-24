@@ -1,1 +1,28 @@
-{"events":[]}
+{
+    "events": [
+        {
+            "type": "comment",
+            "taskKey": "2d1a8876-4cd6-4ecb-a5ab-4dd69c2d0bdd",
+            "taskId": "1.2",
+            "taskTitle": "Helvetica Removal",
+            "tags": [
+                "typography",
+                "Trust & polish"
+            ],
+            "author": "Rus Miller",
+            "messages": [
+                {
+                    "author": "Rus Miller",
+                    "text": "Stencil CLI still needs to be configured for theme cleanup (SCSS family names + deleting leftover font binaries) and future tasks"
+                }
+            ],
+            "id": "be830fe6de2ea7c5",
+            "targetTeam": "client",
+            "pendingEmails": [
+                "antara.ghosh@orbooks.com",
+                "olivia.heffernan@orbooks.com"
+            ],
+            "createdAt": "2026-07-23T21:56:44+00:00"
+        }
+    ]
+}
