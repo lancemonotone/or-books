@@ -1,5 +1,5 @@
 {
-  "name": "OR Books_21072026",
+  "name": "OR Books_260724",
   "version": "6.11.0",
   "template_engine": "handlebars_v4",
   "meta": {
@@ -38,11 +38,7 @@
   },
   "css_compiler": "scss",
   "autoprefixer_cascade": true,
-  "autoprefixer_browsers": [
-    "> 1%",
-    "last 2 versions",
-    "Firefox ESR"
-  ],
+  "autoprefixer_browsers": ["> 1%", "last 2 versions", "Firefox ESR"],
   "settings": {
     "sale_category_id": "323",
     "new_category_id": "322",
@@ -405,11 +401,7 @@
       "unionpay",
       "visa"
     ],
-    "supported_payment_methods": [
-      "card",
-      "paypal",
-      "bank"
-    ],
+    "supported_payment_methods": ["card", "paypal", "bank"],
     "lazyload_mode": "lazyload+lqip",
     "checkout-paymentbuttons-paypal-color": "black",
     "checkout-paymentbuttons-paypal-shape": "rect",
@@ -454,9 +446,7 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": [
-          "home_garden"
-        ]
+        "industries": ["home_garden"]
       },
       "images": {},
       "settings": {
@@ -821,11 +811,7 @@
           "unionpay",
           "visa"
         ],
-        "supported_payment_methods": [
-          "card",
-          "paypal",
-          "bank"
-        ],
+        "supported_payment_methods": ["card", "paypal", "bank"],
         "lazyload_mode": "lazyload+lqip",
         "checkout-paymentbuttons-paypal-color": "black",
         "checkout-paymentbuttons-paypal-shape": "rect",
@@ -836,11 +822,7 @@
         "afterpay-button-color": "black-mint",
         "amazon-button-color": "Gold",
         "masterpass-button-color": "black",
-        "paymentbuttons-provider-sorting": [
-          "paypal",
-          "sepa",
-          "googlepay"
-        ],
+        "paymentbuttons-provider-sorting": ["paypal", "sepa", "googlepay"],
         "show_product_price": true
       }
     },
@@ -858,9 +840,7 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": [
-          "fashion_jewelry"
-        ]
+        "industries": ["fashion_jewelry"]
       },
       "settings": {
         "homepage_featured_products_count": 6,
@@ -1070,9 +1050,7 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": [
-          "food_beverage"
-        ]
+        "industries": ["food_beverage"]
       },
       "settings": {
         "body-font": "Google_Roboto_400",
