@@ -4,7 +4,7 @@ Local Stencil theme for **orbooks.com** lives at repo root:
 
 `orbooks-theme/`
 
-This is **not** part of the Briefboard / mobile-review app under `app/`. Same client, different product. Prefer a **separate git repo** for the theme long-term (see below). Until then, treat this folder as a local workspace only — do not commit secrets or `node_modules`.
+This repo is the OR Books Stencil theme workspace. Briefboard lives in a separate repo. Do not commit secrets or `node_modules`.
 
 ## Secrets
 
