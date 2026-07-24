@@ -2,3 +2,6 @@
 node_modules/
 
 orbooks-theme/secrets.stencil.json
+
+# Separate Briefboard repo (clone into this folder; own .git)
+briefboard/
