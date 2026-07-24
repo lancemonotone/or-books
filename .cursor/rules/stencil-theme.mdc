@@ -1,0 +1,31 @@
+---
+description: BigCommerce Stencil theme (orbooks-theme) — CLI, secrets, font cutover, keep separate from Briefboard
+globs: orbooks-theme/**/*
+alwaysApply: false
+---
+
+# OR Books Stencil theme
+
+When working under `orbooks-theme/`, read **`docs/agents/stencil-theme.md`** first.
+
+## Hard rules
+
+- Run Stencil CLI from `orbooks-theme/`.
+- Never commit or echo `secrets.stencil.json` / access tokens.
+- Store URL = storefront homepage (`https://www.orbooks.com`), not the API `/v3/` path.
+- This theme is **not** Briefboard (`app/`). Prefer separate git repo; do not mix theme dumps into Briefboard history without an explicit user decision.
+
+## Common commands
+
+```bash
+stencil --help
+stencil debug
+stencil start
+stencil download -o
+stencil pull
+stencil bundle
+stencil push          # upload only
+stencil push -a       # upload + activate
+```
+
+Full command list + Helvetica cutover notes: `docs/agents/stencil-theme.md`.

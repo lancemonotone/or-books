@@ -1,19 +1,4 @@
-# Audit presentation — large media (keep local / sync on deploy)
-app/media/*
-!app/media/.gitkeep
-
-# Optional local API config (app root)
-/app/config.php
-
-# Auth password hashes (local / deploy host only)
-/app/data/responses/users.json
-
-# Per-task Author soft locks (runtime)
-/app/data/responses/task-locks.json
-/app/data/responses/task-locks.json.lock
-
-# Admin audit trail (local / deploy host only)
-/app/data/responses/audit-log.json
-
 # Local Node deps for one-shot scripts
-app/node_modules/
+node_modules/
+
+orbooks-theme/secrets.stencil.json

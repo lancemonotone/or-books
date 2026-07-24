@@ -1,0 +1,71 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Briefboard: Start",
+      "detail": "PHP on 127.0.0.1:8080 + open browser",
+      "type": "shell",
+      "command": "bash \"${workspaceFolder}/briefboard/scripts/start-briefboard.sh\"",
+      "options": {
+        "cwd": "${workspaceFolder}/briefboard",
+        "env": {}
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "briefboard",
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "(Briefboard →|already running|Development Server .* started)"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true,
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Briefboard: Serve (static)",
+      "detail": "UI only — no sign-in / saves",
+      "type": "shell",
+      "command": "npx --yes serve -l tcp://127.0.0.1:8080",
+      "options": {
+        "cwd": "${workspaceFolder}/briefboard"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "briefboard-static",
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Accepting connections|Local:"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": false
+      }
+    },
+    {
+      "label": "Briefboard: Open browser",
+      "detail": "http://127.0.0.1:8080/#/",
+      "type": "shell",
+      "command": "powershell.exe -NoProfile -Command \"Start-Process 'http://127.0.0.1:8080/#/'\"",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "close": true
+      }
+    }
+  ]
+}
