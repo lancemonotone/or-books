@@ -1,4 +1,4 @@
-# Audit presentation — large media (link via app/scripts/link-media.* or copy on deploy)
+# Audit presentation — large media (keep local / sync on deploy)
 app/media/*
 !app/media/.gitkeep
 

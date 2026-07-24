@@ -24,20 +24,17 @@ or-books/                 ← repo root
 ## Local preview
 
 ```bash
-# From repo root
-./app/scripts/link-media.sh     # or: pwsh app/scripts/link-media.ps1
-
 cd app && npx --yes serve -p 8080
 ```
 
 Open http://localhost:8080/#/
 
-Saving feedback requires PHP on the deployed host.
+Screenshots and videos live in `media/`. Saving feedback requires PHP on the deployed host.
 
 ## Deploy
 
 1. Upload **`app/`** contents to `public_html/audit/` on the server.
-2. Copy or sync `_office/screenshots/*` into `media/` on the server.
+2. Sync `media/` (PNG/MP4) onto the server.
 3. Make `data/responses/` writable by PHP.
 4. Make `data/` writable by PHP if you use the editor.
 5. Copy `config.example.php` to `config.php` (in this `app/` folder) and set `admin_email` plus `editor_password` (admin bootstrap).
@@ -106,7 +103,7 @@ This is not hidden from humans who know the URL. It blocks casual crawlers and d
 6. **Reorder phases:** use **Reorder phases** on Overview; drag the ⠿ handle. Phase numbers become dense `1…N`; Task display ids Compact to match (`n.x`). Task keys are unchanged.
 7. **Reorder tasks:** in Edit mode, drag task cards within a phase list on Overview.
 
-**Media files:** copy PNG or MP4 files into `media/` on the server (or run `scripts/link-media.sh` locally). Use **Add media** or **Change file** to open the image picker — it refreshes the file list when it opens.
+**Media files:** put PNG or MP4 files in `media/` (same on the server). Use **Add media** or **Change file** to open the image picker — it refreshes the file list when it opens.
 
 When you save tasks, media, or Questions, overview counts in `audit.yaml` are recalculated automatically. The presentation app also counts live from the data files.
 
@@ -189,7 +186,7 @@ The filename must match a file in `media/`. Both directions help: notes pull ima
 
 ### Add a new screenshot or video
 
-1. Copy the file into `_office/screenshots/` (source) and `app/media/` (for the app).
+1. Put the file in `app/media/`.
 2. Name it `{HHMMSS}.png` or `{HHMMSS}.mp4` (see [`../_office/mobile-ux-audit/inventory/filename-convention.md`](../_office/mobile-ux-audit/inventory/filename-convention.md)).
 3. Add a row to `data/evidence.yaml`.
 4. Reference it from the relevant note(s) in `tasks.yaml`.
