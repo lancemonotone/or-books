@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="{{ locale_name }}">
+<head>
+    <title>{{ head.title }}</title>
+    {{{ head.meta_tags }}}
+    {{{ head.config }}}
+
+    <link href="{{ head.favicon }}" rel="shortcut icon">
+    {{#block "head"}}{{/block}}
+    <meta name="google-site-verification" content="k8DplZOmy49J4s9I-GcbQHbH_13_DqebSO6wUF3gANA" />
+</head>
+<body>
+    {{#block "page"}}{{/block}}
+</body>
+</html>

@@ -1,0 +1,56 @@
+{{inject "bearerToken" settings.storefront_api.token}}
+{{inject "currency_code" currency_selector.active_currency_code}}
+{{inject "ShowEventsPage" theme_settings.show_events_per_page}}
+
+{{#partial "page"}}
+
+{{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+
+<section class="page custom-page">
+    {{#unless theme_settings.hide_page_heading }}
+        <h1 class="page-heading">{{ page.title }}</h1>
+    {{/unless}}
+
+    {{#if page.sub_pages}}
+    <nav class="navBar navBar--sub">
+        <ul class="navBar-section account-navigation">
+        {{#each page.sub_pages}}
+            <li class="navBar-item"><a class="navBar-action" href="{{url}}">{{title}}</a></li>
+        {{/each}}
+        </ul>
+    </nav>
+    {{/if}}
+
+    {{{region name="page_builder_content"}}}
+
+    <div class="page-content page-content--centered">
+        {{#replace '%%Syndicate%%' page.content}}
+            {{> components/page/rss_feed}}
+        {{else}}
+            <p>{{{page.content}}}</p>
+        {{/replace}}
+    </div>
+
+    <input type='hidden' id='current_page' class="current_page" />
+    <input type='hidden' id='show_per_page' class="show_per_page" />
+
+    <div class="video-page custom-page-data">
+        {{> components/orbooks/video}}
+    </div>
+    
+    <nav class="pagination pagination-custom"><ul class="page_navigation pagination-list"></ul></nav>
+
+    {{#if page.feed}}
+        <ul>
+            {{#each page.feed}}
+                <li>
+                    <h6><a href="{{url}}" target="_blank">{{title}}</a></h6>
+                    <p>{{content}}</p>
+                </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+</section>
+{{/partial}}
+
+{{> layout/base}}

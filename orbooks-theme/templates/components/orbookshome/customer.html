@@ -1,0 +1,120 @@
+{{#unless theme_settings.hide_customer}}
+    {{#if theme_settings.customer_number '!=' 0}}
+        <div class="cust-main">
+            <ul class="cust-sub">
+                {{#if theme_settings.customer_number '>=' 1}}
+                    <li class="cust-list-item first-cust">
+                        <a href="{{theme_settings.first_cust_link}}">
+                            <div class="cust-element">
+                                {{#if theme_settings.first_cust_image}}
+                                <div class="cust-img">
+                                    <img 
+                                    class="show lazyload" 
+                                    data-sizes="auto" 
+                                    src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" 
+                                    data-src="{{theme_settings.first_cust_image}}" 
+                                    alt="{{theme_settings.first_cust_title}}" 
+                                    title="{{theme_settings.first_cust_title}}"
+                                    />
+                                </div>
+                                {{/if}}
+                                <span class="cust-content">
+                                    {{#if theme_settings.first_cust_title}}
+                                        <label class="cust-content-main">{{theme_settings.first_cust_title}}</label>
+                                    {{/if}}
+                                    {{#if theme_settings.first_cust_sub_title}}
+                                        <br/><label class="cust-content-sub">{{theme_settings.first_cust_sub_title}}</label>
+                                    {{/if}}						
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                {{/if}}
+                {{#if theme_settings.customer_number '>=' 2}}
+                    <li class="cust-list-item second-cust">
+                        <a href="{{theme_settings.second_cust_link}}">
+                            <div class="cust-element">
+                                {{#if theme_settings.second_cust_image}}
+                                <div class="cust-img">
+                                    <img 
+                                    class="show lazyload" 
+                                    data-sizes="auto" 
+                                    src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" 
+                                    data-src="{{theme_settings.second_cust_image}}" 
+                                    alt="{{theme_settings.second_cust_title}}" 
+                                    title="{{theme_settings.second_cust_title}}"
+                                    />
+                                </div>
+                                {{/if}}
+                                <span class="cust-content">
+                                    {{#if theme_settings.second_cust_title}}
+                                        <label class="cust-content-main">{{theme_settings.second_cust_title}}</label>
+                                    {{/if}}
+                                    {{#if theme_settings.second_cust_sub_title}}
+                                        <br/><label class="cust-content-sub">{{theme_settings.second_cust_sub_title}}</label>
+                                    {{/if}}						
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                {{/if}}
+                {{#if theme_settings.customer_number '>=' 3}}
+                    <li class="cust-list-item third-cust">
+                        <a href="{{theme_settings.third_cust_link}}">
+                            <div class="cust-element">
+                                {{#if theme_settings.third_cust_image}}
+                                <div class="cust-img">
+                                    <img 
+                                    class="show lazyload" 
+                                    data-sizes="auto" 
+                                    src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" 
+                                    data-src="{{theme_settings.third_cust_image}}" 
+                                    alt="{{theme_settings.third_cust_title}}" 
+                                    title="{{theme_settings.third_cust_title}}"
+                                    />
+                                {{/if}}
+                                </div>
+                                <span class="cust-content">
+                                    {{#if theme_settings.third_cust_title}}
+                                        <label class="cust-content-main">{{theme_settings.third_cust_title}}</label>
+                                    {{/if}}
+                                    {{#if theme_settings.third_cust_sub_title}}
+                                        <br/><label class="cust-content-sub">{{theme_settings.third_cust_sub_title}}</label>
+                                    {{/if}}						
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                {{/if}}
+                {{#if theme_settings.customer_number '>=' 4}}
+                    <li class="cust-list-item fourth-cust">
+                        <a href="{{theme_settings.fourth_cust_link}}">
+                            <div class="cust-element">
+                                {{#if theme_settings.fourth_cust_image}}
+                                <div class="cust-img">
+                                    <img 
+                                    class="show lazyload" 
+                                    data-sizes="auto" 
+                                    src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" 
+                                    data-src="{{theme_settings.fourth_cust_image}}" 
+                                    alt="{{theme_settings.fourth_cust_title}}" 
+                                    title="{{theme_settings.fourth_cust_title}}"
+                                    />
+                                {{/if}}
+                                </div>
+                                <span class="cust-content">
+                                    {{#if theme_settings.fourth_cust_title}}
+                                        <label class="cust-content-main">{{theme_settings.fourth_cust_title}}</label>
+                                    {{/if}}
+                                    {{#if theme_settings.fourth_cust_sub_title}}
+                                        <br/><label class="cust-content-sub">{{theme_settings.fourth_cust_sub_title}}</label>
+                                    {{/if}}						
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                {{/if}}
+            </ul>
+        </div>
+    {{/if}}
+{{/unless}}

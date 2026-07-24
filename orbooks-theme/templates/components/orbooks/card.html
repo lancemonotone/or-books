@@ -1,0 +1,189 @@
+<article
+    class="card
+    {{#if alternate}} card--alternate{{/if}}"
+    data-test="card-{{id}}"
+    data-entity-id="{{id}}"
+    {{#if settings.data_tag_enabled}}
+    data-event-type="{{event}}"
+    data-entity-id="{{id}}"
+    data-position="{{position}}"
+    data-name="{{name}}"
+    data-product-category="
+        {{#each category}}
+            {{#if @last}}
+                {{this}}
+            {{else}}
+                {{this}},
+            {{/if}}
+        {{/each}}"
+    data-product-brand="{{brand.name}}"
+    data-product-price="
+        {{#or customer (unless settings.hide_price_from_guests)}}
+            {{#if price.with_tax}}
+                {{price.with_tax.value}}
+            {{else}}
+                {{price.without_tax.value}}
+            {{/if}}
+        {{else}}
+            {{lang 'common.login_for_pricing'}}
+        {{/or}}"
+    {{/if}}>
+    <div class="sub-card">
+        <figure class="card-figure">
+            {{#if stock_level '===' 0}}
+            {{#if theme_settings.pdp_sold_out_label '===' ''}}
+            {{> components/products/product-badge
+            badge-type='sold-out'
+            badge_view=theme_settings.product_sold_out_badges
+            badge_label=(lang "page_builder.pdp_sold_out_label")
+            }}
+            {{else}}
+            {{> components/products/product-badge
+            badge-type='sold-out'
+            badge_view=theme_settings.product_sold_out_badges
+            badge_label=theme_settings.pdp_sold_out_label
+            }}
+            {{/if}}
+            {{else}}
+            {{#or price.sale_price_with_tax.value
+            price.sale_price_without_tax.value}}
+            {{#if theme_settings.pdp_sale_badge_label '===' ''}}
+            {{> components/products/product-badge
+            badge-type='sale'
+            badge_view=theme_settings.product_sale_badges
+            badge_label=(lang "page_builder.pdp_sale_badge_label")
+            }}
+            {{else}}
+            {{> components/products/product-badge
+            badge-type='sale'
+            badge_view=theme_settings.product_sale_badges
+            badge_label=theme_settings.pdp_sale_badge_label
+            }}
+            {{/if}}
+            {{/or}}
+            {{/if}}
+            <a target="_blank" href="{{url}}"
+                class="card-figure__link"
+                aria-label="{{> components/products/product-info}}"
+                {{#if settings.data_tag_enabled}}
+                data-event-type="product-click" {{/if}}>
+                <div class="card-img-container">
+                    {{> components/common/responsive-img
+                    image=image
+                    class="card-image"
+                    fallback_size=theme_settings.productgallery_size
+                    lazyload=theme_settings.lazyload_mode
+                    default_image=theme_settings.default_image_product
+                    }}
+                </div>
+            </a>
+
+            <figcaption class="card-figcaption">
+                <div class="card-figcaption-body">                    
+                    {{#if show_compare}}
+                    <label class="button button--small card-figcaption-button"
+                        for="compare-{{id}}">
+                        {{lang 'products.compare'}} <input type="checkbox"
+                            name="products[]" value="{{id}}" id="compare-{{id}}"
+                            data-compare-id="{{id}}">
+                    </label>
+                    {{/if}}
+                    {{#if show_cart_action}}
+                    {{#if has_options}}
+                    <a href="{{url}}" data-event-type="product-click"
+                        class="button button--small card-figcaption-button"
+                        data-product-id="{{id}}">{{lang
+                        'products.choose_options'}}</a>
+                    {{/if}}
+                    {{#if pre_order}}
+                    <a href="{{pre_order_add_to_cart_url}}"
+                        data-event-type="product-click"
+                        class="button button--small card-figcaption-button">{{lang
+                        'products.pre_order'}}</a>
+                    {{/if}}
+                    {{#if add_to_cart_url }}
+                    <a href="{{add_to_cart_url}}"
+                        data-event-type="product-click"
+                        data-button-type="add-cart"
+                        class="button button--small card-figcaption-button">{{lang
+                        'products.add_to_cart'}}</a>
+                    <span
+                        class="product-status-message aria-description--hidden">{{lang
+                        'category.add_cart_announcement'}}</span>
+                    {{/if}}
+                    {{#if out_of_stock_message }}
+                    <a href="{{url}}" data-event-type="product-click"
+                        class="button button--small card-figcaption-button"
+                        data-product-id="{{id}}">{{out_of_stock_message}}</a>
+                    {{/if}}
+                    {{/if}}
+                </div>
+            </figcaption>
+        </figure>
+        <div class="card-body">
+            <div>
+                {{#if theme_settings.show_product_discount}}
+                {{#if price.non_sale_price_without_tax }}
+                <div class="discount_off">
+                    <span>
+                {{round (multiply (divide (subtract price.non_sale_price_without_tax.value price.without_tax.value)
+                price.non_sale_price_without_tax.value)100)}}% off</span>
+            </div>
+                {{/if}}
+                {{/if}}
+                {{#and rating show_rating}}
+                <p class="card-text" data-test-info-type="productRating">
+                    <span class="rating--small">
+                        {{> components/products/ratings rating_target=name
+                        rating=rating}}
+                    </span>
+                </p>
+                {{/and}}
+                <h3 class="card-title">
+                    <a target="_blank" class="card-title-name"
+                        aria-label="{{> components/products/product-info}}"
+                        href="{{url}}"
+                        {{#if settings.data_tag_enabled}}
+                        data-event-type="product-click" {{/if}}>
+                        {{name}}
+                    </a>
+                </h3>
+                <div class="card-category custom-author-field">
+                    {{#each custom_fields}}
+                    {{#if name '===' 'sub-heading'}}
+                    <div class="card-category-title" style="display: none;">{{name}}</div>
+                    <div class="card-category-name">{{{value}}}</div>
+                    {{/if}}
+                    {{/each}}
+                    {{#each custom_fields}}
+                    {{#if name '===' 'Author'}}
+                    <div class="card-category-title" style="display: none;">{{name}}</div>
+                    <div class="card-text">{{{value}}}</div>
+                    {{/if}}
+                    {{/each}}
+                </div>
+                {{#if theme_settings.show_product_price}}
+                <div class="card-text card-text-price"
+                    data-test-info-type="price">
+                    {{#or customer (unless settings.hide_price_from_guests)}}
+                    {{> components/products/price price=price}}
+                    {{else}}
+                    {{> components/common/login-for-pricing}}
+                    {{/or}}
+                </div>
+                {{/if}}
+                {{> components/products/bulk-discount-rates}}
+            </div>
+        </div>
+        <div class="card-link">
+            <!-- <a href="{{url}}" target="_blank" class="button button--primary">find out more</a> -->
+            <button type="button" class="button button--primary quickview"
+                data-event-type="product-click" data-product-id="{{id}}">
+                <svg>
+                    <use href="#icon-search" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</article>
+

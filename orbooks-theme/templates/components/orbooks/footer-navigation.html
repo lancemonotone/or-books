@@ -1,0 +1,79 @@
+<div class="footer-nav">
+    <ul class="footer-info-list">
+        <li>
+            <a href="/about/">About</a>
+        </li>
+        <li>
+            <a href="/authors/">Authors</a>
+        </li>
+        <li>
+            <a href="/booksellers/">Booksellers</a>
+        </li>
+        <li>
+            <a href="/catalog/">Catalog</a>
+        </li>
+        <!--<li>
+            <a href="/imprints/">Imprints</a>
+        </li>-->
+        <li>
+            <a href="/merchandise/">Merchandise</a>
+        </li>
+    </ul>
+    <ul class="footer-info-list">
+        <li>
+            <a href="{{urls.home}}">Home</a>
+        </li>
+      <li>
+            <a href="/news/">News</a>
+        </li>
+        <li>
+            <a href="/events/">Events</a>
+        </li>
+        <li>
+            <a href="/reading-lists/">Reading Lists</a>
+        </li>
+        <li>
+            <a href="/videos/">Videos</a>
+        </li>
+        <!--<li>
+            <a href="/subsidiary-rights/">Subsidiary Rights</a>
+        </li>-->
+        <li>
+            <a href="/terms-conditions/">Terms & Conditions</a>
+        </li>        
+    </ul>
+    <ul class="footer-info-list">
+        <li>
+            <a href="/faq/">FAQ</a>
+        </li>
+        <li>
+            <a href="/contact-us/">Contact us</a>
+        </li>
+        <li>
+            {{#if customer}}
+                <a 
+                   href="{{urls.account.index}}"
+                   aria-label="{{lang 'common.account'}}"
+                >
+                My Account
+                </a>
+            {{else}}
+                <a
+                   href="{{urls.auth.login}}"
+                   aria-label="{{lang 'common.login'}}"
+                >
+                My Account
+                </a>
+            {{/if}}
+        </li>
+        <li>
+            <a href="/cart.php">My Cart</a>
+        </li>
+        <li>
+            <a href="/giftcertificates.php">Gift Certificates</a>
+        </li>
+        <li>
+            <a href="{{urls.sitemap}}">{{lang 'sitemap.page_title'}}</a>
+        </li>
+    </ul>
+</div>

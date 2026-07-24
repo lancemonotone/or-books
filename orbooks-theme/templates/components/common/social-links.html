@@ -1,0 +1,102 @@
+{{#if social_media}}
+    <ul class="socialLinks socialLinks--alt">
+        {{#each social_media}}
+            {{#if display_name '==' 'facebook'}}
+                <li class="socialLinks-item facebook">            	
+                    <a class="icon icon--{{display_name}}" href="{{url}}" target="_blank" rel="noopener">
+                        <svg width="32" height="31" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_679_2580)">
+                            <path d="M15.5 0.500031H15.8125C24.0968 0.500031 30.8125 7.21574 30.8125 15.4998C30.8125 23.7843 24.0968 30.5 15.8125 30.5H15.5C7.2157 30.5 0.5 23.7843 0.5 15.4998C0.5 7.21574 7.21569 0.500031 15.5 0.500031Z" fill="black" fill-opacity="0.01" stroke="black"/>
+                            <path d="M22.7812 15.75C22.7812 12.0039 19.7461 8.96875 16 8.96875C12.2539 8.96875 9.21875 12.0039 9.21875 15.75C9.21875 19.1406 11.6797 21.957 14.9336 22.4492V17.7188H13.2109V15.75H14.9336V14.2734C14.9336 12.5781 15.9453 11.6211 17.4766 11.6211C18.2422 11.6211 19.0078 11.7578 19.0078 11.7578V13.4258H18.1602C17.3125 13.4258 17.0391 13.9453 17.0391 14.4922V15.75H18.9258L18.625 17.7188H17.0391V22.4492C20.293 21.957 22.7812 19.1406 22.7812 15.75Z" fill="black"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_679_2580">
+                            <rect width="32" height="31" fill="white"/>
+                            </clipPath>
+                            </defs>
+                        </svg>                            
+                    </a>
+                </li>
+                {{else if display_name '==' 'twitter'}}
+                <li class="socialLinks-item twitter">        	
+                    <a class="icon icon--{{display_name}} telBold" href="{{url}}" target="_blank" rel="noopener">
+                        <svg width="32" height="31" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_679_2583)">
+                            <path d="M15.7812 0.500031H16.0938C24.378 0.500031 31.0938 7.21574 31.0938 15.4998C31.0938 23.7843 24.378 30.5 16.0938 30.5H15.7812C7.49694 30.5 0.781216 23.7843 0.781216 15.4998C0.781216 7.21574 7.49694 0.500031 15.7812 0.500031Z" fill="black" fill-opacity="0.01" stroke="black"/>
+                            <path d="M21.5508 13.9062C22.0977 13.4961 22.5898 13.0039 22.9727 12.4297C22.4805 12.6484 21.9062 12.8125 21.332 12.8672C21.9336 12.5117 22.3711 11.9648 22.5898 11.2812C22.043 11.6094 21.4141 11.8555 20.7852 11.9922C20.2383 11.418 19.5 11.0898 18.6797 11.0898C17.0938 11.0898 15.8086 12.375 15.8086 13.9609C15.8086 14.1797 15.8359 14.3984 15.8906 14.6172C13.5117 14.4805 11.3789 13.332 9.95703 11.6094C9.71094 12.0195 9.57422 12.5117 9.57422 13.0586C9.57422 14.043 10.0664 14.918 10.8594 15.4375C10.3945 15.4102 9.92969 15.3008 9.54688 15.082V15.1094C9.54688 16.5039 10.5312 17.6523 11.8438 17.9258C11.625 17.9805 11.3516 18.0352 11.1055 18.0352C10.9141 18.0352 10.75 18.0078 10.5586 17.9805C10.9141 19.1289 11.9805 19.9492 13.2383 19.9766C12.2539 20.7422 11.0234 21.207 9.68359 21.207C9.4375 21.207 9.21875 21.1797 9 21.1523C10.2578 21.9727 11.7617 22.4375 13.4023 22.4375C18.6797 22.4375 21.5508 18.0898 21.5508 14.2891C21.5508 14.1523 21.5508 14.043 21.5508 13.9062Z" fill="black"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_679_2583">
+                            <rect width="32" height="31" fill="white"/>
+                            </clipPath>
+                            </defs>
+                        </svg>                            
+                   </a>
+               </li>
+               {{else if display_name '=='  'instagram'}}	
+                <li class="socialLinks-item instagram">
+            		<a class="icon icon--{{display_name}}" href="{{url}}" target="_blank" rel="noopener">
+                    	<svg width="32" height="31" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_679_2586)">
+                            <path d="M15.9062 0.500031H16.2188C24.5031 0.500031 31.2188 7.21574 31.2188 15.4998C31.2188 23.7843 24.5031 30.5 16.2188 30.5H15.9062C7.622 30.5 0.906272 23.7843 0.906272 15.4998C0.906272 7.21574 7.622 0.500031 15.9062 0.500031Z" fill="black" fill-opacity="0.01" stroke="black"/>
+                            <path d="M16.125 12.6055C14.375 12.6055 12.9805 14.0273 12.9805 15.75C12.9805 17.5 14.375 18.8945 16.125 18.8945C17.8477 18.8945 19.2695 17.5 19.2695 15.75C19.2695 14.0273 17.8477 12.6055 16.125 12.6055ZM16.125 17.8008C15.0039 17.8008 14.0742 16.8984 14.0742 15.75C14.0742 14.6289 14.9766 13.7266 16.125 13.7266C17.2461 13.7266 18.1484 14.6289 18.1484 15.75C18.1484 16.8984 17.2461 17.8008 16.125 17.8008ZM20.1172 12.4961C20.1172 12.0859 19.7891 11.7578 19.3789 11.7578C18.9688 11.7578 18.6406 12.0859 18.6406 12.4961C18.6406 12.9062 18.9688 13.2344 19.3789 13.2344C19.7891 13.2344 20.1172 12.9062 20.1172 12.4961ZM22.1953 13.2344C22.1406 12.25 21.9219 11.375 21.2109 10.6641C20.5 9.95312 19.625 9.73438 18.6406 9.67969C17.6289 9.625 14.5938 9.625 13.582 9.67969C12.5977 9.73438 11.75 9.95312 11.0117 10.6641C10.3008 11.375 10.082 12.25 10.0273 13.2344C9.97266 14.2461 9.97266 17.2812 10.0273 18.293C10.082 19.2773 10.3008 20.125 11.0117 20.8633C11.75 21.5742 12.5977 21.793 13.582 21.8477C14.5938 21.9023 17.6289 21.9023 18.6406 21.8477C19.625 21.793 20.5 21.5742 21.2109 20.8633C21.9219 20.125 22.1406 19.2773 22.1953 18.293C22.25 17.2812 22.25 14.2461 22.1953 13.2344ZM20.8828 19.3594C20.6914 19.9062 20.2539 20.3164 19.7344 20.5352C18.9141 20.8633 17 20.7812 16.125 20.7812C15.2227 20.7812 13.3086 20.8633 12.5156 20.5352C11.9688 20.3164 11.5586 19.9062 11.3398 19.3594C11.0117 18.5664 11.0938 16.6523 11.0938 15.75C11.0938 14.875 11.0117 12.9609 11.3398 12.1406C11.5586 11.6211 11.9688 11.2109 12.5156 10.9922C13.3086 10.6641 15.2227 10.7461 16.125 10.7461C17 10.7461 18.9141 10.6641 19.7344 10.9922C20.2539 11.1836 20.6641 11.6211 20.8828 12.1406C21.2109 12.9609 21.1289 14.875 21.1289 15.75C21.1289 16.6523 21.2109 18.5664 20.8828 19.3594Z" fill="black"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_679_2586">
+                            <rect width="32" height="31" fill="white"/>
+                            </clipPath>
+                            </defs>
+                        </svg>                            
+                	</a>
+                </li>
+                {{else if display_name '=='  'pinterest'}}	
+                <li class="socialLinks-item pinterest">
+            		<a class="icon icon--{{display_name}}" href="{{url}}" target="_blank" rel="noopener">
+                    	<svg style="padding:8px;" width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.86488 0.800034C2.90369 0.800034 0 2.75499 0 5.94618C0 7.95863 1.12123 9.10861 1.81121 9.10861C2.09871 9.10861 2.2712 8.33237 2.2712 8.10238C2.2712 7.84363 1.58122 7.26865 1.58122 6.14742C1.58122 3.84747 3.33493 2.20875 5.60613 2.20875C7.58984 2.20875 9.02731 3.32998 9.02731 5.37119C9.02731 6.8949 8.42357 9.74109 6.43986 9.74109C5.72113 9.74109 5.08864 9.22361 5.08864 8.50487C5.08864 7.41239 5.86488 6.34867 5.86488 5.22744C5.86488 3.32998 3.16243 3.67497 3.16243 5.97492C3.16243 6.46366 3.21993 6.98115 3.44993 7.44114C3.04744 9.13736 2.24245 11.6961 2.24245 13.4498C2.24245 13.996 2.29995 14.5135 2.35745 15.0597C2.4437 15.1747 2.41495 15.1747 2.5587 15.1172C3.99617 13.1335 3.96742 12.731 4.5999 10.1436C4.97364 10.8048 5.86488 11.1786 6.61236 11.1786C9.6598 11.1786 11.0398 8.18863 11.0398 5.51493C11.0398 2.66874 8.56732 0.800034 5.86488 0.800034Z" fill="white"/>
+                            </svg>                                                                                 
+                	</a>
+                </li>
+                {{else if display_name '=='  'youtube'}}	
+	                <li class="socialLinks-item youtube">
+	            		<a class="icon icon--{{display_name}}" href="{{url}}" target="_blank" rel="noopener">
+	                    	<svg width="32" height="31" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_679_2589)">
+                                <path d="M16.1875 0.500031H16.5C24.7843 0.500031 31.5 7.21574 31.5 15.4998C31.5 23.7843 24.7843 30.5 16.5 30.5H16.1875C7.90325 30.5 1.18752 23.7843 1.18752 15.4998C1.18752 7.21574 7.90324 0.500031 16.1875 0.500031Z" stroke="black"/>
+                                <path d="M23.6869 11.7183C23.6016 11.3856 23.4341 11.0821 23.2014 10.8384C22.9688 10.5946 22.679 10.4191 22.361 10.3293C21.1908 10 16.5 10 16.5 10C16.5 10 11.8092 10 10.639 10.3275C10.3209 10.417 10.031 10.5925 9.79822 10.8363C9.56549 11.0801 9.39817 11.3837 9.31306 11.7166C9 12.9427 9 15.5 9 15.5C9 15.5 9 18.0573 9.31306 19.2817C9.48549 19.9578 9.99442 20.4903 10.639 20.6707C11.8092 21 16.5 21 16.5 21C16.5 21 21.1908 21 22.361 20.6707C23.0073 20.4903 23.5145 19.9578 23.6869 19.2817C24 18.0573 24 15.5 24 15.5C24 15.5 24 12.9427 23.6869 11.7183ZM15.01 17.8471V13.1529L18.894 15.4825L15.01 17.8471Z" fill="black"/>
+                                </g>
+                                <defs>
+                                <clipPath id="clip0_679_2589">
+                                <rect width="32" height="31" fill="white"/>
+                                </clipPath>
+                                </defs>
+                            </svg>                                
+	                	</a>
+	                </li>
+                	{{else}}
+                    <li class="socialLinks-item">
+    	                <a class="icon icon--{{display_name}}" href="{{url}}" target="_blank" rel="noopener">
+    	                    <svg><use xlink:href="#icon-{{display_name}}" /></svg>
+	                   </a>
+                   </li>
+                  
+            {{/if}}
+          
+        {{/each}}
+        <li class="socialLinks-item soundcloud">
+            <a class="icon " href="https://soundcloud.com/ordiobooks" target="_blank" rel="noopener">
+                   <?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg enable-background="new 0 0 1024 1024" height="1024px" id="Layer_1" version="1.1" viewBox="0 0 1024 1024" width="1024px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Background"><path d="M983.766,312.727c-25.785-60.972-62.694-115.728-109.705-162.744   C827.05,102.966,772.299,66.049,711.329,40.257C648.194,13.548,581.14,0.004,512,0c-69.104,0-136.155,13.54-199.289,40.243   c-60.969,25.787-115.721,62.699-162.735,109.71c-47.014,47.011-83.929,101.761-109.72,162.728   C13.548,375.814,0.004,442.865,0,511.97c-0.004,69.109,13.533,136.165,40.234,199.304   c25.785,60.973,62.696,115.728,109.707,162.743c47.011,47.018,101.762,83.935,162.732,109.727   c63.136,26.708,130.19,40.253,199.323,40.257h0.009c69.104,0,136.153-13.54,199.288-40.243   c60.969-25.787,115.72-62.699,162.733-109.709c47.013-47.01,83.929-101.76,109.72-162.728   c26.708-63.134,40.251-130.186,40.255-199.29C1024.004,442.921,1010.467,375.866,983.766,312.727z M512.004,976.328h-0.03   c-124.026-0.007-240.627-48.313-328.323-136.019C95.957,752.604,47.665,635.999,47.672,511.973   c0.015-256.016,208.312-464.3,464.356-464.3c124.026,0.007,240.626,48.312,328.32,136.017   c87.695,87.706,135.986,204.311,135.979,328.337C976.313,768.043,768.018,976.328,512.004,976.328z" /></g><g id="Soundcloud"><path d="M865.563,561.094c-16.953-83.23-99.413-71.672-117.909-63.194c0,0-4.625-105.965-114.059-134.479   c0,0-57.413-16.184-105.58,12.331v289.383c7.289,0,14.577-0.001,21.866-0.004c17.822-0.003,35.646-0.006,53.466,0.002   c22.664,0.01,45.327-0.005,67.991,0.008c21.918,0.013,43.835,0.028,65.752,0.004c16.852-0.018,33.703-0.065,50.557-0.065   c13.423,0,21.609-4.155,31.513-9.331C843.573,642.983,876.597,615.256,865.563,561.094z" /><polygon points="481.775,665.126 504.511,665.126 504.511,389.622 481.775,410.429  "/><polygon points="435.536,665.126 457.693,665.126 457.693,429.504 435.536,416.402  "/><polygon points="389.296,665.126 411.26,665.126 411.26,411.201 389.296,407.732  "/><polygon points="342.094,665.126 364.25,665.126 364.25,411.201 342.094,420.063  "/><polygon points="295.662,665.126 317.818,665.126 317.818,435.476 295.662,458.596  "/><polygon points="248.362,665.126 270.904,665.126 270.904,496.165 248.362,491.252  "/><polygon points="201.834,655.402 224.376,665.126 224.376,493.275 201.834,502.234  "/><path d="M179.581,636.907V520.152C179.581,520.152,127.08,573.231,179.581,636.907z"/></g></svg>                          
+            </a>
+        </li>
+        <li class="socialLinks-item tiktok">
+            <a class="icon" href="https://www.tiktok.com/@.orbooks" target="_blank" rel="noopener">
+              <?xml version="1.0" ?><svg height="128" id="svg8" version="1.1" viewBox="0 0 33.866666 33.866668" width="128" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs id="defs2"><linearGradient id="linearGradient2202"><stop id="stop2198" offset="0" style="stop-color:#f6f600;stop-opacity:1;"/><stop id="stop2200" offset="1" style="stop-color:#f69134;stop-opacity:1"/></linearGradient><linearGradient gradientTransform="matrix(0.39352029,0,0,0.39352035,-185.27183,93.82285)" gradientUnits="userSpaceOnUse" id="linearGradient3363" x1="12.262755" x2="12.262755" xlink:href="#linearGradient2202" y1="9.0164375" y2="14.680936"/><clipPath clipPathUnits="userSpaceOnUse" id="clipPath5369"><rect height="62.674702" id="rect5371" rx="1.3229166" ry="1.3229166" style="fill:#ffb93f;fill-opacity:1;stroke:none;stroke-width:4.49792;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke" width="75.958" x="58.55875" y="-39.475708"/></clipPath></defs><g id="layer1"><path d="m 22.912602,1.0567933 -5.289176,0.00154 V 22.894399 c 0,1.879824 -1.122255,3.556703 -2.858986,4.276081 -1.736733,0.719377 -3.714028,0.325441 -5.0432639,-1.003798 C 8.3919396,24.837447 7.998002,22.858082 8.7173793,21.121352 9.436757,19.38462 11.113635,18.264949 12.993459,18.264949 h 1.710535 v -5.289692 h -1.710535 c -4.0043223,0 -7.6309355,2.424009 -9.1633233,6.12352 -1.5323881,3.699511 -0.6818199,7.977799 2.149664,10.809282 2.8314833,2.831484 7.1102863,3.682051 10.8097973,2.149663 3.699513,-1.532388 6.123005,-5.159 6.123005,-9.163323 V 10.78633 c 1.440079,0.858005 3.141229,1.487871 5.23338,1.487871 h 2.643553 V 6.982964 h -2.643553 c -2.974623,0 -3.781104,-1.2098821 -4.487379,-2.7453293 C 22.953,2.7036478 22.912602,1.0567933 22.912602,1.0567933 Z" id="path5550" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-opacity:1;vector-effect:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.999725;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"/></g></svg>                   
+            </a>
+        </li>
+        <li class="socialLinks-item bluesky">
+            <a class="icon" href="https://bsky.app/profile/orbooks.bsky.social" target="_blank" rel="noopener">
+                <svg viewBox="0 0 64 57"><path d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805ZM50.127 3.805C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745Z"></path></svg>                  
+            </a>
+        </li>
+    </ul>
+{{/if}}

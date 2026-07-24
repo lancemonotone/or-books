@@ -1,0 +1,89 @@
+{{inject 'outOfStockDefaultMessage' (lang 'products.out_of_stock_default_message')}}
+
+<div class="productView home-pdp"
+    product-id="{{product.id}}"
+    {{#if settings.data_tag_enabled}}
+    data-event-type="product"
+    data-entity-id="{{product.id}}"
+    data-name="{{product.title}}"
+    data-product-category="
+    {{#each product.category}}
+        {{#if @last}}{{this}}{{else}}{{this}}, {{/if}}
+    {{/each}}"
+    data-product-brand="{{product.brand.name}}"
+    data-product-price="
+    {{#or customer (unless settings.hide_price_from_guests)}}
+        {{#if product.price.with_tax}}
+            {{product.price.with_tax.value}}
+        {{else}}
+            {{product.price.without_tax.value}}
+        {{/if}}
+    {{else}}
+        {{lang 'common.login_for_pricing'}}
+    {{/or}}"
+    data-product-variant="single-product-option"{{/if}}>
+
+    
+    <h2 class="mobile-featured">Featured Title</h2>
+    <figure class="productView-image"
+                data-image-gallery-main
+                {{#if product.main_image}}
+                data-zoom-image="{{getImageSrcset product.main_image (cdn theme_settings.default_image_product) 1x=theme_settings.zoom_size }}"
+                {{/if}}
+                >
+            <div class="productView-img-container">
+                {{!-- Remove the surrounding a-element if there is no main image. --}}
+                {{#if product.main_image}}
+                    <a href="{{product.url}}"
+                        target="_blank">
+                {{/if}}
+                {{> components/common/responsive-img
+                    image=product.main_image
+                    class="productView-image--default"
+                    fallback_size=theme_settings.product_size
+                    lazyload=theme_settings.lazyload_mode
+                    default_image=theme_settings.default_image_product
+                    otherAttributes="data-main-image"
+                }}
+                {{!-- Remove the surrounding a-element if there is no main image. --}}
+                {{#if product.main_image}}
+                    </a>
+                {{/if}}
+            </div>
+        </figure>
+    <section class="productView-details product-data">
+        <div class="productView-product">
+            <a href="{{product.url}}" target="_blank">
+            <p class="desktop-featured">Featured Title</p>
+            </a>
+            <h1 class="productView-title">
+                <a href="{{product.url}}" target="_blank">
+                    {{product.title}}
+                </a>
+            </h1>
+            <div class="sub-productView-title">
+                {{#each product.custom_fields}}
+                    {{#if name '===' 'sub-heading'}}
+                    <div class="productView-info-name">{{name}}:</div>
+                    <div class="productView-info-value">{{{value}}}</div>
+                    {{/if}}
+                {{/each}}
+            </div>
+            {{#each product.custom_fields}}
+                {{#if name '===' 'Author'}}
+                    <h2 class="productView-brand">{{{value}}}</h2>
+                {{/if}}
+            {{/each}}
+            
+        </div>
+        <div>
+            
+        </div>
+            <div class="pdp-content">
+                <p>{{{ellipsis product.description 250}}}
+                    <a href="{{product.url}}" target="_blank">more</a>
+               </p>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,36 @@
+{{#each product.custom_fields}}
+    {{#if name '===' 'Editor'}}
+    <div class="other-book-details">
+        {{{value}}}
+    </div>
+    {{/if}}
+{{/each}}
+{{#each product.custom_fields}}
+    {{#if name '===' 'Contributor Role'}}
+    <div class="other-book-details">
+        {{{value}}}
+    </div>
+    {{/if}}
+{{/each}}
+{{#each product.custom_fields}}
+    {{#if name '===' 'With Contributions by'}}
+    <div class="other-book-details book-extra-details">
+        <div class="extra-name">{{name}}</div>
+        <div class="sub-title">{{{value}}}</div>
+    </div>
+    {{/if}}
+{{/each}}
+{{#each product.custom_fields}}
+{{#if name '===' 'Short Description'}}
+<div class="author-title other-book-details">
+<div class="title-main short-dec">{{{value}}}</div>
+</div>
+{{/if}}
+{{/each}}
+{{#each product.custom_fields}}
+    {{#inArray (split 'Shout 1,Shout 2,Shout 3,Shout 4,Shout 5') name }}
+    <div class="book-review-details">
+        {{{value}}}
+    </div>
+    {{/inArray}}
+{{/each}}

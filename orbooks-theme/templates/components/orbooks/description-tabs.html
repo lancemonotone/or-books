@@ -1,0 +1,87 @@
+<div class="accordion-custom-tabs {{#each breadcrumbs}}{{#if name '==' 'Merchandise'}}Merchandise{{/if}}{{/each}}">
+    
+   
+    {{#eachIndex (split product.description '<!-- pagebreak -->')}}
+        {{#if index '==' '0' }}
+            {{#if item '!=' '' }}
+                <div class="tab-1 accordion-tab accordion-desc-main">
+                    <h3 class="product-desc-title"><span class="normal">about the book</span><span class="special">about</span></h3>
+                    <div class="product-desc" {{#if settings.data_tag_enabled}} data-event-type="product" {{/if}}>
+                        {{{item}}}
+                    </div>
+                </div>
+            {{/if}}
+        {{/if}}
+    {{/eachIndex}}
+    {{#eachIndex (split product.description '<!-- pagebreak -->')}}
+        {{#if index '==' '1' }}
+            {{#if item '!=' '' }}
+                <div class="tab-2 accordion-tab">
+                    <h3 class="accordion-title">About The Author / Editor
+                        <svg class="icon" aria-hidden="true">
+                            <use href="#icon-chevron-down"/>
+                        </svg>
+                    </h3>
+                    <div class="accordion-desc" {{#if settings.data_tag_enabled}} data-event-type="product" {{/if}}>
+                        {{{item}}}
+                    </div>
+                </div>
+            {{/if}}
+        {{/if}}
+    {{/eachIndex}}
+    {{#eachIndex (split product.description '<!-- pagebreak -->')}}
+        {{#if index '==' '2' }}
+            {{#if item '!=' '' }}
+                <div class="tab-3 accordion-tab ">
+                    <h3 class="accordion-title">Preview
+                        <svg class="icon" aria-hidden="true">
+                            <use href="#icon-chevron-down"/>
+                        </svg>
+                    </h3>
+                    <div class="accordion-desc" {{#if settings.data_tag_enabled}} data-event-type="product" {{/if}}>
+                        {{{item}}}
+                    </div>
+                </div>
+            {{/if}}
+        {{/if}}
+    {{/eachIndex}}   
+    <div class="tab-4 accordion-tab">
+        <h3 class="accordion-title">in the media
+            
+            <svg class="icon" aria-hidden="true">
+                <use href="#icon-chevron-down"/>
+            </svg>
+        </h3>
+        <div class="accordion-desc" {{#if settings.data_tag_enabled}} data-event-type="product" {{/if}}>
+            <div class="blog-list custom-blog-list">  
+                <div class="catename" style="display: none;">{{product.brand.name}}</div>              
+                        
+            </div>
+        </div>
+    </div>
+   
+    {{#if product.videos.list.length}}
+    <div class="tab-5 accordion-tab">
+        <h3 class="accordion-title">{{lang 'products.videos.header'}}
+            <svg class="icon" aria-hidden="true">
+                <use href="#icon-chevron-down"/>
+            </svg>
+        </h3>
+        <div class="accordion-desc" {{#if settings.data_tag_enabled}} data-event-type="product" {{/if}}>
+            {{> components/products/videos product.videos}}
+        </div>
+    </div>
+    {{/if}}
+    {{#all settings.show_product_reviews theme_settings.show_product_reviews (if theme_settings.show_product_details_tabs '!==' true)}}
+    <div class="tab-6 accordion-tab">
+        <h3 class="accordion-title">{{lang 'products.reviews.header' total=reviews.total}}
+            <svg class="icon" aria-hidden="true">
+                <use href="#icon-chevron-down"/>
+            </svg>
+        </h3>
+        <div class="accordion-desc" {{#if settings.data_tag_enabled}} data-event-type="product" {{/if}}>
+            {{> components/products/reviews reviews=product.reviews product=product urls=urls}}
+        </div>
+    </div>
+    {{/all}}
+</div>

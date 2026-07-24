@@ -1,0 +1,76 @@
+{{#if page_type '===' 'brand'}}
+
+{{else}}
+    {{#if banners.top}}
+    <div class="banners" data-banner-location="top">
+        {{#each (limit banners.top_metadata 1)}}
+        <div class="banner" data-event-type="promotion" data-entity-id="{{this.id}}" data-name="{{this.banner-name}}" data-position="{{this.location}}" data-banner-id="{{this.banner-name}}">
+            <div data-event-type="promotion-click">
+                {{{this.content}}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
+{{/if}}
+<header class="header" role="banner">
+
+    <div class="header-left">
+        <a href="#" class="mobileMenu-toggle" data-mobile-menu-toggle="menu">
+            <span class="mobileMenu-toggleIcon">Toggle menu</span>
+        </a>
+
+        <div class="header-logo-main">
+            {{#if page_type '===' 'default'}}
+                <h1 class="header-logo header-logo--{{theme_settings.logo-position}}">
+                    {{> components/common/store-logo}}
+                </h1>
+            {{else}}
+                <div class="header-logo header-logo--{{theme_settings.logo-position}}">
+                    {{> components/common/store-logo}}
+                </div>
+            {{/if}}
+        </div>
+        <div class="header-menu">
+            <div class="navPages-container" id="menu" data-menu>
+                {{> components/common/navigation-menu}}
+            </div>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <div class="header-login">
+            {{> components/common/navigation}}
+            <li class="navUser-item serc-bar mobile">
+                <button class="navUser-action navUser-action--quickSearch"
+                   type="button"
+                   id="quick-search-expand"
+                   data-search="quickSearch"
+                   aria-controls="quickSearch"
+                   aria-label="{{lang 'common.search'}}"
+                >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.9424 15.0401L18.4188 18.4001M9.4105 5.2001C11.4006 5.2001 13.0138 6.81187 13.0138 8.8001M17.2977 9.4401C17.2977 13.77 13.7844 17.2801 9.45054 17.2801C5.11665 17.2801 1.60333 13.77 1.60333 9.4401C1.60333 5.11018 5.11665 1.6001 9.45054 1.6001C13.7844 1.6001 17.2977 5.11018 17.2977 9.4401Z" stroke="#2B2B2B" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                </button>
+            </li>
+        </div>
+        <div class="header-mail">
+            <button class="join-mail">
+              <a href="/sign-up/">Join Our Mailing List</a>
+            </button>
+        </div>
+        <div class="header-currency">
+            <div class="currency-main">
+                {{> components/orbooks/currency-selector}}
+            </div>
+        </div>
+        <div class="head-icon">
+            {{#if theme_settings.social_icon_placement_top}}
+                <li class="navUser-item navUser-item--social">
+                    {{> components/common/social-links}}
+                </li>
+            {{/if}}
+        </div>
+    </div>
+</header>

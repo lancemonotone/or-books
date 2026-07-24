@@ -1,0 +1,1334 @@
+.header {
+    flex-direction: inherit;
+    justify-content: space-between;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+    padding: 20px 30px 16px;
+    height: auto;
+    display: flex;
+    align-items: self-start;
+    background: linear-gradient(90.35deg, #F8F8F8 0%, #FCFCFC 99.38%);
+    border: none;
+    @include small{ 
+        max-width: 100%;
+    }
+    @include breakpoint(800px) {
+        padding: 20px 15px 10px;
+        align-items: center;
+        background: initial;
+    }
+    @include medium{ 
+        max-width: 930px;
+    }
+    @include large{
+        max-width: 1130px;
+    }
+    @include xlarge{
+        max-width: 1230px;
+    }
+    @include xxlarge{
+        max-width: 1470px;
+        padding: 30px 15px 12px;
+    }
+    @include xxxlarge{
+        max-width: 1820px;
+        padding: 30px 0 12px;
+    }
+    
+    .header-left {
+        width: 68%;
+        display: inline-block;
+        vertical-align: middle;
+        @include xxsmall {
+            width: 58%;
+        }
+        @include small {
+            width: 75%;
+        }
+        @include breakpoint(800px) {
+            width: 55%;
+        }
+        .header-logo-main {
+            .header-logo {
+                margin: 0;
+                text-align: left;
+                height: auto;
+                @include breakpoint(800px) {
+                    width: 50%;
+                }
+                @include xxlarge {
+                    width: auto;
+                }
+                .header-logo__link {
+                    width: auto;
+                }
+                .header-logo-image-container {
+                    min-height: auto;
+                    width: auto;
+                    .header-logo-image {
+                        max-height: 100%;
+                        width: 54%;
+                        margin-right: 30px;
+                        @include xxsmall {
+                            width: 55%;
+                            margin-right: 0;
+                        }
+                        @include breakpoint(800px) {
+                            width: 85%;
+                            margin: 0;
+                        }
+                        @include breakpoint(1200px) {
+                            width: 84%;
+                        }
+                        @include xxlarge {
+                            width: auto;
+                        }
+                    }
+                }
+            }
+        }
+        .header-menu {
+            @include breakpoint(800px) {
+                margin-top: 5px;
+            }
+            .navPages-container {
+                &.is-open {
+                    padding-top: 70px;  
+                    @include small {
+                        padding-top: 80px;
+                    }
+                    .navPages-quickSearch {
+                        display: none;
+                    } 
+                }
+            }
+            
+            .navPages-list {
+                @include breakpoint(800px) {
+                    display: block;
+                }
+                .navPages-item {
+                    margin: 0 0 14px;
+                    @include breakpoint(800px) {
+                        margin: 0;
+                        padding-right: 11px;
+                    }
+                    @include medium {
+                        padding-right: 18px;
+                    }
+                    @include large {
+                        padding-right: 32px;
+                    }
+                    @include xxlarge {
+                        padding-right: 39px;
+                    }
+                    .navPages-action {
+                        font-family: Helvetica Condensed;
+                        font-weight: 400;
+                        color: stencilColor("text_color");
+                        font-size: 16px;
+                        text-transform: none;
+                        padding: 0;
+                        line-height: 1.28;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        @include breakpoint(800px) {
+                            font-size: 14px;
+                        }
+                        @include medium {
+                            transition: .35s ease-in-out;
+                            font-size: 16px;
+                        }
+                        @include large {
+                            font-size: 17px;
+                        }
+                        @include xxlarge {
+                            font-size: 18px;
+                        }
+                        &.has-subMenu {
+                            .icon {
+                                height: 0.8rem;
+                                width: 0.8rem;
+                                border: none;
+                                margin-right: 21px;
+                                @include breakpoint(800px) {
+                                    display: none;
+                                }
+                            }
+                            &.is-open {
+                                background-color: inherit;
+                                border: none;
+                                .icon {
+                                    transform: rotate(0deg);
+                                    height: 0.8rem;
+                                    width: 0.8rem;
+                                }
+                            }
+                        }
+                    }
+                    &:hover {
+                        @include breakpoint(800px) {
+                            .navPages-action {
+                                transform: translate(0px, -8px);
+                            }
+                        }
+                    }
+                    .navPage-subMenu {
+                        &.is-open {
+                            @include medium {
+                                left: auto;
+                                width: 100%;
+                                max-width: 200px;
+                                padding: 0 !important;
+                                border: 1px solid #cccccc;
+                                background-color: #f0f0f0;
+                            }
+                            @include xlarge {
+                                max-width: 250px;
+                            }
+                            ul {
+                                margin-left: 25px;
+                                margin-top: 12px; 
+                                @include medium {
+                                    margin: 0;
+                                }
+                                li {
+                                    padding: 0px 0 12px;
+                                    @include medium {
+                                        width: 100%;
+                                        padding: 0 !important;
+                                        position: relative;
+                                    }
+                                    .navPage-subMenu-action {
+                                        transform: none;
+                                        @include medium {
+                                            padding: 10px;
+                                            margin: 0;
+                                            font-size: 14px;
+                                        }
+                                        @include xlarge {
+                                            font-size: 15px;
+                                        }
+                                        @include xxlarge {
+                                            font-size: 17px;
+                                        }
+                                    }
+                                    .navPage-subMenu {
+                                        @include medium {
+                                            transform: translate(100%, 0);
+                                            width: 100%;
+                                            max-width: 200px;
+                                            border: 1px solid #cccccc;
+                                            background-color: #f0f0f0;
+                                            margin-left: auto !important;
+                                            height: auto;
+                                            right: 0;
+                                            top: 0;
+                                        }
+                                        li {
+                                            .navPage-subMenu-action {
+                                                transform: none;
+                                            }
+                                        }
+                                        li:nth-last-child(1) {
+                                            padding-bottom: 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .socialLinks {
+                        margin: 0 !important;
+                        .socialLinks-item {
+                            vertical-align: top;
+                            .icon {
+                                height: 1.8rem;
+                                width: 1.8rem;
+                                svg {
+                                    fill: none;
+                                    stroke: none;
+                                }
+                            }
+                            &.pinterest {
+                                display: none;
+                            }
+                           
+                        }
+                    }
+                    &.hide_menu {
+                        display: none;
+                    }
+                }
+                &.navPages-list--user {
+                    @include breakpoint(800px) {
+                        display: none;
+                    }
+                }
+            }
+        }
+        .mobileMenu-toggle {
+            left: 12px;
+            top: 14px;
+            @include small {
+                top: 20px;
+            }
+            .mobileMenu-toggleIcon {
+                width: 1.5rem !important;
+                height: 3px;
+                border-radius: 5px;
+                &:before {
+                    width: 1.2rem !important;
+                    height: 3px;
+                    border-radius: 5px;
+                }
+                &:after {
+                    width: 1.8rem;
+                    height: 3px;
+                    border-radius: 5px;
+                }
+            }
+            &.is-open {
+                .mobileMenu-toggleIcon {
+                    width: 1.8rem !important;
+                    &:before {
+                        width: 1.8rem !important;
+                    }
+                }
+            }
+        }
+    }    
+    .header-right {
+        width: 29%;
+        display: inline-block;
+        vertical-align: middle;
+        @include xxsmall {
+            width: 23%;
+        }
+        @include xsmall {
+            width: 20%;
+        }
+        @include small {
+            width: 16%;
+        }
+        @include breakpoint(800px) {
+            width: 45%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        @include large {
+            width: 38%;
+        }
+        @include xxlarge {
+            max-width: 528px;
+        }
+        .header-login {
+            @include breakpoint(800px) {
+                width: 100%;
+            }
+        }
+        .serc-bar.mobile {
+            display: inline-block;
+            z-index: 99;
+            position: relative;
+            @include breakpoint(800px) {
+                display: none;
+            }
+            .navUser-action {
+                background-color: stencilColor("mobile_color");
+                border-radius: 5px;
+                padding: 9.5px 13px;
+                @include small {
+                    padding: 11px 14px;
+                }
+                svg {
+                    fill: none;
+                    stroke: none;
+                    width: 14px;
+                    height: 14px;
+                    @include small {
+                        width: 18px;
+                        height: 18px;
+                    }
+                }
+                &:hover {
+                    svg {
+                        path {
+                            stroke: $color-greyDarker;
+                        }
+                    }
+                }
+            }
+        }
+        .navUser {
+            transform: none;
+            right: 30px;
+            top: 20px;
+            @include breakpoint(800px) {
+                padding: 0;
+                top: 0;
+                right: 0;
+                position: relative;
+            }
+            .navUser-section--alt {
+                &:before, &:after {
+                    content: none;
+                }
+                @include breakpoint(800px) {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                }
+                &.navUser_gift_certificates_not_enabled{
+                    @include breakpoint(800px) {
+                        justify-content: flex-end; 
+                    } 
+                    .navUser-item.serc-bar{                        
+                        margin-right: 11px;
+                        margin-left: 11px;
+                        @include breakpoint(1440px) {                                   
+                            margin-right: 13px;
+                            margin-left: 13px;
+                        }                               
+                        @include xxlarge {
+                            margin-right: 15px;     
+                            margin-left: 15px;                                  
+                        }                                             
+                    }                    
+                               
+                }
+                .navUser-item {
+                    margin-right: 11px;
+                    position: relative;  
+                    overflow: hidden;                 
+                    @include breakpoint(1440px) {
+                        margin-right: 13px;
+                    }
+                    @include xxlarge {
+                        margin-right: 15px;
+                    }
+                    &.navUser-item--account {
+                        @include breakpoint(800px) {
+                            display: flex;
+                            width: 27%;
+                            max-width: 147px;
+                            margin: 0;
+                        }
+                        @include medium {
+                            width: 28%;
+                        }
+                        .navUser-action {
+                            @include hc-400;
+                            background-color: stencilColor("bg_color");
+                            border-radius: 5px;
+                            text-transform: capitalize;
+                            font-size: 13px;
+                            color: stencilColor("text_color");
+                            padding: 11px 24px;
+                            @include breakpoint(800px) {
+                                padding: 11px 0px;
+                                width: 100%;
+                                text-align: center;
+                            }
+                            @include xlarge {
+                                font-size: 14px;
+                                padding: 13px 0;
+                            }
+                            @include breakpoint(1440px) {
+                                padding: 13px 0;
+                            }
+                            @include breakpoint(1500px) {
+                                padding: 13px 0;
+                            }
+                            @include xxlarge {
+                                padding: 15px 0;
+                                font-size: 15px;
+                            }
+                            &:hover {
+                                color: $color-greyDarker;
+                                svg {
+                                    fill: $color-greyDarker;                                   
+                                    path {
+                                        fill: $color-greyDarker;
+                                    }
+                                }
+                            }
+                            svg {
+                                vertical-align: middle;
+                                margin-right: 4px;
+                                fill: stencilColor("text_color");
+                                max-width: 12px;
+                                width: 100%;                               
+                                @include xlarge {
+                                    margin-right: 9px;                    
+                                    max-width: 15px;
+                                }
+                                @include xxlarge {
+                                    max-width: 18px;
+                                }
+                            }
+                            &.logedin {
+                                padding: 12px 0 !important;
+                                margin-right: 11px;
+                                @include medium {
+                                    padding: 12px 17px !important;
+                                }
+                                @include breakpoint(1200px) {
+                                    padding: 12px 18px !important;
+                                }
+                                @include breakpoint(1280px) {
+                                    padding: 12px 0 !important;
+                                }
+                                @include xlarge {
+                                    padding: 13.5px 20px !important;
+                                }
+                                @include breakpoint(1440px) {
+                                    padding: 13.5px 20px !important;
+                                    margin-right: 13px;
+                                }
+                                @include breakpoint(1500px) {
+                                    padding: 13.5px 20px !important;
+                                }
+                                @include xxlarge {
+                                    margin-right: 15px;
+                                    padding: 15.2px 24px !important;
+                                }
+                                &:nth-last-child(1) {
+                                    margin-right: 0;
+                                }
+                                svg {
+                                    margin: 0;
+                                    max-width: 14px;
+                                    @include medium{
+                                        width: 15px;
+                                        max-width: 16px;
+                                    }
+                                    @include xxlarge {
+                                        max-width: 18px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    .navUser-action{
+                        position: relative;
+                        &:hover{
+                        
+                            .hovername{
+                                transform: translateY(0);
+                            }
+                        }
+                    }
+                    .hovername{
+                        position: absolute;
+                        bottom: 3px;
+                        left: 0;
+                        width: 100%;                        
+                        font-size: 10px;
+                        font-weight: 400;                       
+                        transform: translateY(100px);
+                        transition: .3s ease-in-out;
+                        line-height: 1;
+                        text-transform: capitalize;
+                        color: #2b2b2b;
+                        @include medium {
+                            font-size: 12px;  
+                        }
+                        @include xxlarge {
+                            font-size: 15px;  
+                        }
+                    }
+                    &.gift-cer {
+                        @include breakpoint(800px) {
+                            width: 22%;
+                            max-width: 134px;
+                            margin: 0;
+                        }
+                        @include xxlarge {
+                            width: 26%;
+                        }
+                        .navUser-action {
+                            background-color: stencilColor("bg_color");
+                            border-radius: 5px;
+                            padding: 10px 30px;
+                            @include breakpoint(800px) {
+                                text-align: center;
+                                padding: 10px 0;
+                            }
+                            @include xlarge {
+                                padding: 12px 0;
+                            }
+                            @include breakpoint(1440px) {
+                                padding: 12px 0;
+                            }
+                            @include xxlarge {
+                                padding: 14.5px 0;
+                            }
+                            svg {
+                                fill: none;
+                                stroke: none;
+                                vertical-align: middle;
+                                max-width: 15px;
+                                @include medium {
+                                    width: 16px;
+                                    max-width: 16px;
+                                }
+                                @include xlarge {
+                                    max-width: 18px;
+                                }
+                                @include xxlarge {
+                                    max-width: 24px;
+                                }
+                            }
+                            &:hover {
+                                svg {
+                                    path {
+                                        stroke: $color-greyDarker;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    &.serc-bar {
+                        background-color: stencilColor("bg_color");
+                        border-radius: 5px;
+                        @include breakpoint(800px) {
+                            width: 20%;
+                            max-width: 53px;
+                            margin: 0;
+                        }
+                        button {
+                            padding: 11.1px 17px;
+                            @include breakpoint(800px) {
+                                padding: 11.1px 0;
+                                margin: 0 auto;
+                                width: 100%;
+                            }
+                            @include xlarge {
+                                padding: 13.5px 17px;
+                            }
+                            @include breakpoint(1440px) {
+                                padding: 13.5px 17px;
+                            }
+                            @include xxlarge {
+                                padding: 14.5px;
+                            }
+                            &:hover {
+                                svg {
+                                    path {
+                                        stroke: $color-greyDarker;
+                                    }
+                                }
+                            }
+                        }
+                        svg {
+                            vertical-align: middle;
+                            fill: none;
+                            stroke: none;
+                            max-width: 16px;
+                            @include xlarge {
+                                max-width: 18px;
+                            }
+                            @include xxlarge {
+                                max-width: 24px;
+                                width: 24px;
+                                height: 24px;
+                            }
+                        }
+                    }
+                    &.compare-btn {
+                        display: none;
+                    }
+                    &.navUser-item--cart {
+                        margin-right: 0;
+                        @include breakpoint(800px) {
+                            width: 22%;
+                            max-width: 149px;
+                            position: static;
+                            overflow: visible;
+                        }
+                        
+                        @include medium {
+                            width: 30%;
+                        }
+                        .navUser-action {
+                            @include hc-400;
+                            background-color: stencilColor("mobile_color");
+                            border-radius: 5px;
+                            text-transform: capitalize;
+                            font-size: 0;
+                            color: stencilColor("text_color");
+                            padding: 12px;
+                            display: block;
+                            position: relative;
+                            @include small {
+                                padding: 14px;
+                            }
+                            @include breakpoint(800px) {
+                                background-color: stencilColor("bg_color");
+                                font-size: 13px;
+                                padding: 12.1px 0;
+                                text-align: center;
+                            }
+                            @include xlarge {
+                                font-size: 14px;
+                                padding: 13.8px 0;
+                            }
+                            @include xxlarge {
+                                font-size: 15px;
+                                padding: 14.5px 0;
+                            }
+                            .navUser-item-cartLabel {
+                                display: block;
+                            }
+                            svg {
+                                vertical-align: middle;
+                                fill: none;
+                                stroke: none;
+                                width: 16px;
+                                height: 16px;
+                                @include small {
+                                    width: 18px;
+                                    height: 18px;
+                                }
+                                @include breakpoint(800px) {
+                                    margin-right: 0;
+                                    width: 16px;
+                                    height: auto;
+                                }
+                                @include medium {
+                                    margin-right: 5px;
+                                }
+                                @include large {
+                                    // margin-right: 10px;
+                                }
+                                @include xlarge {
+                                    width: 18px;
+                                }
+                                @include xxlarge {
+                                    margin-right: 12px;
+                                    width: 24px;
+                                }
+                            }
+                            .countPill--positive {
+                                position: absolute;
+                                right: 3px;
+                                width: 19px;
+                                height: 19px;
+                                line-height: 1.8;
+                                font-size: 10px;
+                                top: 3px;
+                                @include hn-400;
+                                @include breakpoint(800px) {
+                                    right: 0px;
+                                    width: 20px;
+                                    height: 20px;
+                                    line-height: 1.8;
+                                    font-size: 11px;
+                                    top: 0px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                }
+                                @include medium {
+                                    width: 18px;
+                                    height: 18px;
+                                    line-height: 1;
+                                }
+                                @include large {
+                                    // font-size: 12px;
+                                    // width: 20px;
+                                    // height: 20px;
+                                    right: 4px;
+                                    top: 2px;
+                                }
+                                @include xlarge {
+                                    font-size: 12px;
+                                    width: 20px;
+                                    height: 20px;
+                                    right: 5px;
+                                    top: 3px;
+                                }
+                                @include breakpoint(1440px){
+                                    right: 8px;
+                                    top: 5px;
+                                }
+                                @include xxlarge {
+                                    width: 22px;
+                                    height: 22px;
+                                    right: 5px;
+                                }
+                            }
+                            &:hover {
+                                color: $color-greyDarker;
+                                svg {
+                                    path {
+                                        stroke: $color-greyDarker;
+                                    }
+                                }
+                            }
+                        }
+                        .button {
+                            letter-spacing: 0;
+                        }
+                        .dropdown-menu {
+                            &.is-open {
+                                @include small {
+                                    top: 60px !important;
+                                }
+                                @include medium {
+                                    top: 55px !important;
+                                }
+                                @include xxlarge {
+                                    top: 60px !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .dropdown--quickSearch {
+                @include medium {
+                    background: transparent;
+                }
+                &.is-open {
+                    top: 150% !important;
+                    left: auto !important;
+                    right: -30px !important;
+                    overflow: scroll;
+                    height: 90vh;
+                    padding: 0 10px;
+                    @include xsmall {
+                        padding: 30px 10px;
+                    }
+                    @include small {
+                        top: 80px !important;
+                    }
+                    @include breakpoint(800px) {
+                        width: 100% !important;
+                        overflow: hidden;
+                        right: 0 !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                        height: auto;
+                        padding: 0;
+                    }
+                    .container {
+                        padding: 0;
+                    }
+                    .form-close {
+                        z-index: 1;
+                        position: absolute;
+                        font-size: 18px;
+                        right: 7px;
+                        top: 7px;
+                        line-height: 1;
+                        background: #000;
+                        border-radius: 50%;
+                        color: #fff;
+                        width: 25px;
+                        height: 25px;
+                        text-align: center;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        @include  medium {
+                            right: 5px;
+                            top: 10px;
+                        }
+                        @include xlarge {
+                            top: 12px;
+                        }
+                        @include xxlarge {
+                            top: 14px;
+                        }
+                        span{
+                            margin-top: -1px;
+                        }
+                    }
+                    .form {
+                        max-width: 100%;
+                        width: 100%;
+                        height: 100%;
+                        @include  medium {
+                            margin: 0;
+                            max-width: 100%;
+                        }
+                        .form-fieldset {
+                            height: 100%;
+                        }
+                        .form-field {
+                            height: 100%;
+                        }
+                        .form-input {
+                            font-size: 14px;
+                            border-radius: 5px;
+                            height: 100%;
+                            @include medium {
+                                height: 43px;
+                            }
+                            @include xlarge {
+                                height: 48px;
+                            }
+                            @include xxlarge {
+                                height: 53px;
+                            }
+                        }
+                    }
+                    
+                    .quickSearchResults {
+                        background: #e5e5e5;
+                        margin: 0;
+                        position: relative;
+                        
+                        .close_search_popup {
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            font-size: 18px;
+                            &:hover {
+                                color: #D2230E;
+                            }
+                        }
+                        .quickSearchMessage {
+                            font-size: 18px;
+                            @include hn-400;
+                            margin: 0;
+                            padding: 1.5rem 0 0;
+                        }
+                        .productGrid {
+                            margin: 0 -10px;
+                            padding: 2rem 10px 0;
+                            height: 80vh;
+                            overflow-y: auto;
+                            .product {
+                                margin-bottom: 15px;
+                                @include medium {
+                                    margin-bottom: 10px;
+                                    width: 50%;
+                                }
+                                .card {
+                                    padding: 10px;
+                                    border-radius: 0;
+                                    background-color: $color-white;
+                                    
+                                    .sub-card {
+                                        @include medium {
+                                            padding: 15px 10px 0;
+                                        }
+                                    }
+                                    .card-body {
+                                        padding: 16px 0 0;
+                                        @include xsmall {
+                                            padding: 22px 0 0;
+                                        }
+                                        .card-text {
+                                            font-size: 13px;
+                                            // text-transform: capitalize;
+                                            margin-bottom: 10px;
+                                            @include xsmall {
+                                                font-size: 15px;
+                                            }
+                                            @include breakpoint(1440px) {
+                                                font-size: 20px;
+                                            }
+                                        }
+                                        .card-title {
+                                            margin-bottom: 7px;
+                                            line-height: 1;
+                                            @include small {
+                                                margin-bottom: 13px;
+                                            }
+                                            @include medium {
+                                                margin-bottom: 9px;
+                                            }
+                                            @include xxlarge {
+                                                margin-bottom: 13px;
+                                            }
+                                            a {
+                                                @include hc-700;
+                                                color: $color-greyDarkest;
+                                                font-size: 14px;
+                                                text-transform: uppercase;
+                                                transition: 0.3s ease-in-out;
+                                                &:hover {
+                                                    color: #D2230E;
+                                                }
+                                                @include small {
+                                                    font-size: 18px;
+                                                }
+                                                @include large {
+                                                    font-size: 20px;
+                                                }
+                                                @include xxlarge {
+                                                    line-height: 1.1;
+                                                    font-size: 24px;
+                                                }
+                                            }
+                                        }
+                                        .price-section {
+                                            display: none;
+                                        }
+                                    }
+                                    .card-link {
+                                        @include medium {
+                                            margin-top: 10px;
+                                        }
+                                        .button {
+                                            @include large {
+                                                padding: 10px 0;
+                                            }
+                                        }
+                                    }
+                                    &:hover {
+                                        .card-body {
+                                            background-color: $color-white;
+                                            .card-text {
+                                                color: $color-greyDarkest;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+            
+        }
+        .header-mail {
+            margin: 10px 0 7px;
+            display: none;
+            @include breakpoint(800px) {
+                display: block;
+                width: 100%;
+            }
+            .join-mail {
+                background-color: #D2230E;
+                border-radius: 5px;
+                transition: 0.35s ease-in-out;
+                width: 100%;
+                &:hover {
+                    letter-spacing: 1px;
+                    transition: 0.35s ease-in-out;
+                    background: #333333;
+                }
+                a {
+                    color: #fff;
+                    font-size: 15px;
+                    @include hc-700;
+                    // text-transform: capitalize;
+                    padding: 11px 10px;
+                    display: inline-block;
+                    @include xlarge {
+                        font-size: 17px;
+                    }
+                    @include xxlarge {
+                        font-size: 25px;
+                        padding: 8px;
+                    }
+                }
+            }
+        }
+        .header-currency {
+            .currencyBoxUl {
+                margin: 0;
+                @include breakpoint(800px) {
+                    width: 100%;
+                }
+                .navUser-item {
+                    @include breakpoint(800px) {                   
+                        width: 100%;
+                    }
+                    .navUser-action {
+                        border: 1px solid #000000;
+                        border-radius: 5px;
+                        @include hc-400;
+                        text-transform: capitalize;
+                        font-size: 13px;
+                        padding: 7px 30px;
+                        @include breakpoint(800px) {
+                            padding: 7px 0;
+                            text-align: center;
+                        }
+                        @include medium {
+                            padding: 7px 0;
+                            
+                        }
+                        @include xlarge {
+                            font-size: 14px;
+                            padding: 8px 30px;
+                        }
+                        @include breakpoint(1440px) {
+                            padding: 8px 0;
+                        }
+                        @include breakpoint(1500px) {
+                            padding: 8px 0;
+                        }
+                        @include xxlarge {
+                            padding: 7px 73px;
+                            font-size: 15px;
+                        }
+                        img {
+                            margin-right: 6px;
+                            width: 17px;
+                            @include xlarge {
+                                margin-right: 10px;
+                                width: 18px;
+                            }
+                            @include xxlarge {
+                                width: 20px;
+                            }
+                        }
+                        .icon {
+                            margin-left: 10px;
+                            @include xlarge {
+                                margin-left: 20px;
+                            }
+                            @include breakpoint(1440px) {
+                                margin-left: 25px;
+                            }
+                            @include xxlarge {
+                                margin-left: 30px;
+                            }
+                            svg {
+                                @include medium {
+                                    width: 6px;
+                                    height: 6px;
+                                }
+                                @include xlarge {
+                                    width: 8px;
+                                    height: 8px;
+                                }
+                            }
+                        }
+                        &:hover {
+                            color: stencilColor('button--primary-backgroundColorHover');
+                            svg {
+                                fill: stencilColor('button--primary-backgroundColorHover');
+                                stroke: stencilColor('button--primary-backgroundColorHover');
+                                path {
+                                    fill: stencilColor('button--primary-backgroundColorHover');
+                                    stroke: stencilColor('button--primary-backgroundColorHover');
+                                }
+                            }
+                        }
+                    }
+                }
+                .dropdown-menu {
+                    &.is-open {
+                        background-color: #f5f5f5;
+                        width: 100%;
+                        max-width: 100%;
+                        right: 0;
+                        left: auto !important;
+                        position: relative;
+                        box-shadow: 1px 4px 8px 3px #ececec;
+                        top: calc(100% + 10px) !important;;
+                        // @include xlarge {
+                        //     top: 46px !important;
+                        // }
+                        @include breakpoint(1440px) {
+                            width: 90%;
+                            transform: translate(-50%, 0);
+                            left: 50% !important;
+                            right: auto;
+                        }
+                        &:before {
+                            border: inset 10px;
+                            content: "";
+                            display: block;
+                            height: 0;
+                            width: 0;
+                            border-color: transparent transparent #ccc transparent;
+                            border-bottom-style: solid;
+                            bottom: 100%;
+                            left: 0.78571rem;
+                            position: absolute;
+                            right: 22px;
+                            @include xlarge {
+                                right: 20px;
+                            }
+                            @include breakpoint(1440px) {
+                                right: 28px;
+                            }
+                            @include breakpoint(1500px) {
+                                right: 42px;
+                            }
+                            @include xxlarge {
+                                right: 50px;
+                            }
+                        }
+                    }
+                    li {
+                        padding: 5px 10px;
+                        @include breakpoint(1440px) {
+                            padding: 8px 10px;
+                        }
+                        a {
+                            font-size: 14px;
+                            @include hn-400;
+                            display: block;
+                            z-index: 999;
+                            position: relative;
+                            @include breakpoint(1440px) {
+                                font-size: 16px;
+                            }
+                            .flag {
+                                z-index: -1;
+                                position: relative;
+                                margin-right: 8px;
+                            }
+                            .code {
+                                z-index: -1;
+                                position: relative;
+                            }
+                            &:hover {
+                                color: $color-greyDarker;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .header-currency, .head-icon {
+            display: none;
+            @include breakpoint(800px) {
+                display: inline-block;
+                width: 49%;
+            }
+            @include xxlarge {
+                width: auto;
+            }
+        }
+        .head-icon {
+            .navUser-item {
+                margin: 0;
+                @include breakpoint(800px) {
+                    padding: 0;
+                    width: 100%;
+                }
+                .socialLinks {         
+                    line-height: initial;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+                .socialLinks-item {
+                    margin-right: 10px;
+                    margin-bottom: 0;
+                    @include breakpoint(800px) {
+                        margin-right: 3px;
+                    }
+                    @include medium {
+                        margin-right: 10px;
+                    }
+                    @include xlarge {  
+                        margin-right: 9px;
+                    }
+                    @include xxlarge {
+                        margin-right: 3px;
+                    }
+                    .icon {
+                        width: 2rem;
+                        height: 2rem;
+                        @include xlarge {                 
+                            width: 2.2rem;
+                            height: 2.2rem;
+                        }
+                        @include xxlarge {
+                            width: 32px;
+                            height: 30px;
+                        }
+                        svg {
+                            fill: none;
+                            stroke: none;
+                            @include xxlarge {
+                                width: 32px;
+                                height: 30px;
+                            }
+                        }
+                        &:hover {
+                            @include breakpoint(800px) {
+                                transform: scale(1.15);
+                                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                                border-radius: 50%;
+                            }
+                        }
+                    }
+                    &:nth-last-child(1) {
+                        margin: 0;
+                    }
+                    &.pinterest {
+                        display: none;
+                    }
+                    &.soundcloud{
+                    display: none;
+                        .icon{
+                            svg{
+                        fill:#000;
+                            }
+                        }
+                    }
+                    &.tiktok{
+                        margin: 0;
+                        .icon{
+                            padding: 7px;
+                            border: 1px solid #000;
+                            border-radius: 50%;
+
+                            svg{
+                                fill:#000;
+                                width: 16px;
+                                height: 16px;
+                            }
+                        }
+                    }
+                    &.bluesky{
+                        display: none;
+                    }
+                }
+            }  
+        }
+    }
+}
+
+// cart popup
+.previewCart {
+    .previewCartList {
+        .previewCartItem {
+            .previewCartItem-content {
+                .previewCartItem-brand  {
+                    @include hc-700;
+                    color: $color-greyDarkest;
+                    text-transform: uppercase;
+                }
+                .previewCartItem-name {
+                    a {
+                        @include hc-700;
+                        color: $color-greyDarkest;
+                        text-transform: uppercase;
+                    }
+                }
+                .previewCartItem-price {
+                    @include hc-400;
+                    color: $color-greyDarkest;
+                    text-transform: uppercase;
+                }
+            }
+        }
+    }
+}
+
+.navPages-list-depth-max.subMenu-is-open .is-hidden{
+    display: block;
+}
+.navPages-list-depth-max.subMenu-is-open .navPages-item-page{
+    display: block;
+}

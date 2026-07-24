@@ -1,0 +1,80 @@
+---
+blog:
+    posts:
+        limit: 18
+        pages: 10
+        summary: 70
+---
+{{#partial "head"}}
+    {{#if pagination.blog.previous}}
+        <link rel="prev" href="{{pagination.blog.previous}}">
+    {{/if}}
+    {{#if pagination.blog.next}}
+        <link rel="next" href="{{pagination.blog.next}}">
+    {{/if}}
+{{/partial}}
+
+{{#partial "page"}}
+
+{{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+
+<section class="page">
+    {{#unless theme_settings.hide_blog_featured }}
+           <!--<div class="blog-featured">
+            <h2 class="blog-featured-title">featured news</h2>
+            <div class="blog-featured-data" data-slick='{
+                "arrows": true,
+                "dots": false,
+                "slidesToShow": 1,
+                "slidesToScroll": 1,
+                "autoplay": false
+            }'>
+                <div class="blog-featured-card">
+                    <img src="https://store-4rbj5oww8j.mybigcommerce.com/content/featured_blog/blog-featured-1.jpg" alt="img">
+                </div>-->
+                <!--<div class="blog-featured-card">
+                    <img src="https://store-4rbj5oww8j.mybigcommerce.com/content/featured_blog/blog-featured-1.jpg" alt="img">
+                </div>
+                <div class="blog-featured-card">
+                    <img src="https://store-4rbj5oww8j.mybigcommerce.com/content/featured_blog/blog-featured-1.jpg" alt="img">
+                </div> 
+            </div>
+        </div>-->
+    {{/unless}}
+    {{#unless theme_settings.hide_blog_page_heading }}
+        <h1 class="page-heading">{{ blog.name }}</h1>
+    {{/unless}}
+    {{#unless theme_settings.hide_blog_banner }}
+    <div class="author-banner is-loader">
+        
+        <div class="author-banner-main">
+            <div class="brand-cnt">
+                <a href="https://orbooks.com/authors/f/norman-g.-finkelstein/">
+                    <img src="{{cdn 'https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/author-banners.jpg?t=1702382521'}}">
+                </a>
+            </div>
+            <div class="brand-cnt">
+                <a href="https://orbooks.com/authors/d/mike-davis/">
+                    <img src="{{cdn 'https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/featured-author.jpg?t=1691503022'}}">
+                </a>
+            </div>
+            <div class="brand-cnt">
+                <a href="https://orbooks.com/authors/z/slavoj-zizek/">
+                    <img src="{{cdn 'https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/author-banners2.jpg?t=1702382523'}}">
+                </a>
+            </div>
+        </div>
+        
+    </div> 
+    {{/unless}}
+    <div class="blog-list">
+        {{#each blog.posts}}
+            {{> components/blog/post post=this theme_settings=../theme_settings}}
+        {{/each}}
+    </div>
+
+    {{> components/common/paginator pagination.blog}}
+</section>
+
+{{/partial}}
+{{> layout/base}}

@@ -1,0 +1,101 @@
+---
+category:
+  shop_by_price: true
+  products:
+    limit: {{theme_settings.number_of_product_lists}}
+---
+{{inject "bearerToken" settings.storefront_api.token}}
+{{inject "currency_code" currency_selector.active_currency_code}}
+{{inject "ReadingListPerPage" theme_settings.reading_list_per_page}}
+
+{{#partial "page"}}
+    <div class="reading-page">
+        <section  class="product-list contained" data-facet-content >
+            <!-- <div class="category-nav">
+                {{#if category.subcategories}}
+                    <ul class="category-navlist">
+                        {{#each categories}}
+                            {{#if ../breadcrumbs.[1].name  '===' name}}
+                                    <li class="category-list-item btn btn-main">
+                                        <a class="navList-action " href="{{url}}" title="All">All</a>
+                                    </li>
+                                    {{#if children}}
+                                        {{#each children}}
+                                        <li class="btn category-list-item{{#if children}}{{#each children}}{{/each}}{{else}} no-active{{/if}} ">
+                                            <a class="navList-action btn" href="{{url}}" title="{{name}}">{{name}}</a>
+                                        </li>
+                                        {{/each}}
+                                    {{else}}
+
+                                    {{/if}}
+                            {{/if}}
+                        {{/each}}
+                    </ul>
+                {{/if}}
+            </div> -->
+            <h1 class="page-title large-title">{{category.name}}</h1>
+            <input type='hidden' id='reading_current_page' class="reading_current_page"/>
+            <input type='hidden' id='reading_show_per_page' class="reading_show_per_page"/>
+            <div class="reading-cnt">
+                <div class="reading-grid reading-page-data">
+                    {{#if category.name '===' 'readings'}}
+                        {{#if category.subcategories}}
+                            {{#each categories}}
+                                {{#if ../breadcrumbs.[1].name  '===' name}}
+                                    {{#if children}}
+                                        {{#each children}}
+                                                {{#if children}}
+                                                    {{#each children}}
+                                                        <div class="reading-card brand">
+                                                            <a class="reading-link" href="{{url}}">
+                                                                {{#if image}}
+                                                                    <div class="reading-card-img-container">
+                                                                        <img class="reading-card-image" src="{{getImage image 'zoom_size'}}" width="250" height="250">
+                                                                    </div>
+                                                                {{else}}
+                                                                    <div class="reading-card-img-container">
+                                                                        <img class="reading-card-image" src="{{cdn '/assets/img/noimage.png'}}" width="250" height="250">
+                                                                    </div>
+                                                                {{/if}}
+                                                                <div class="card-body">
+                                                                    <h3 class="card-title">{{name}}</h3>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    {{/each}}
+                                                {{/if}}
+                                        {{/each}}
+                                    {{/if}}
+                                {{/if}}
+                            {{/each}}
+                        {{/if}}
+                    {{else}}
+                        {{#if category.subcategories}}
+                            {{#each category.subcategories}}
+                                <div class="reading-card brand">
+                                    <a class="reading-link" href="{{url}}">
+                                        {{#if image}}
+                                        <div class="reading-card-img-container">
+                                            <img class="reading-card-image" src="{{getImage image 'zoom_size'}}" width="250" height="250">
+                                        </div>
+                                        {{else}}
+                                        <div class="reading-card-img-container">
+                                            <img class="reading-card-image" src="{{cdn '../img/noimage.png'}}" width="250" height="250">
+                                        </div>
+                                        {{/if}}
+                                        <div class="card-body">
+                                            <h3 class="card-title">{{name}}</h3>
+                                        </div>
+                                    </a>
+                                </div>
+                            {{/each}}
+                        {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+        </section>
+    </div>
+    <nav class="pagination pagination-reading"><ul class="reading_page_navigation pagination-list"></ul></nav>
+{{/partial}}
+
+{{> layout/base}}

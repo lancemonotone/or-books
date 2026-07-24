@@ -1,0 +1,178 @@
+{{inject "bearerToken" settings.storefront_api.token}}
+{{inject "currency_code" currency_selector.active_currency_code}}
+{{inject "ShowEventsPage" theme_settings.show_events_per_page}}
+
+{{#partial "page"}}
+
+{{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+
+<!--SIDEBAR TOP-->
+<section class="page custom-page event-main-page">
+    <aside class="page-sidebar custom-sidebar stickthis" id="faceted-search-container">
+        <div class="sidebarBlock">
+            <div class="cat-top-product event-featured">
+                <div class="featured-event">
+                      <h2 class="sidebarBlock-heading"> Live on Ave C 2026</h2> 
+                    <figure>
+                        <div class="">
+                            <a href="" target="_blank">
+                                <img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/loac-events-2026.jpg?t=1774537269"
+                                    alt="img">
+                            </a>
+
+                        </div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+
+        <!--SIDEBAR REST-->
+        <!--Videos widget hidden for now [AG]<div class="video-home main-loader">
+            <a class="sidebar-heading" href="/videos/">{{lang 'common.home_video'}}</a>
+            {{> components/orbooks/pre-loading}}
+            <ul class="videomain ">
+            </ul>
+        </div> -->
+        <div class="subscribe-link">
+            <p>Sign-up for our Events newsletter</p>
+            <a href="https://mailchi.mp/orbooks.com/gijb1sdulu" class="button button--primary">{{lang
+                'page.subscribe'}}</a>
+        </div>
+
+    </aside>
+
+    <!--CAROUSEL-->
+    <div class="page-content custom-content">
+        <div class="event-slider">
+            <ul class="slider-inner">
+                <!--<li>
+                    <img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/spring-2026-schedule.jpg?t=1764814066"
+                        alt="event">
+                </li>
+                 <li>
+            <img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/live-on-avenue-c-banner.jpg?t=1743434532" alt="event">
+        </li>-->
+        <li>
+            <img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/screenshot-2026-01-29-at-2.45.25-pm.png?t=1769715950" alt="event">
+        </li>
+            </ul>
+        </div>
+
+        <!--UPCOMING EVENTS CAROUSEL-->
+
+                <div class="event-page custom-page-data">
+                    
+                <div class="upcomming-events other-events">
+        <h2>Upcoming Events</h2>
+        <div class="upcoming-events">
+        
+</div>
+                    <!--OTHER EVENTS CAROUSEL-->
+
+<!--               <div class="upcomming-events other-events">
+    <h2>Other events</h2>
+    <div class="upcoming-events">
+        <div class="event-card">
+            <div class="event-img"><img
+                    src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/loac-americancarnage.jpg?t=1764883043"
+                    alt="img" /></div>
+            <div class="event-details">
+                <span>November 3, 2024</span>
+                <a href="#">OR Books: Live on Ave C <em> Political Art </em></a>
+                <p> Eli Valley and Sue Coe </p>
+            </div>
+            <a href="https://www.youtube.com/watch?v=b1hW8fJWMEg&t=257s" target="_blank" rel="noreferrer noopener" class="button button--primary sub-btn"> Watch on YouTube </a>
+        </div>
+        
+        <div class="event-card">
+            <div class="event-img"><img
+                    src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/events-poster-11.3.jpg?t=1729106836"
+                    alt="img" /></div>
+            <div class="event-details">
+                <span>November 3, 2024</span>
+                <a href="#">OR Books: Live on Ave C <em> PROGRAM OR BE PROGRAMMED </em></a>
+                <p> Douglas Rushkoff and Marissa Feinberg </p>
+            </div>
+            <a href="https://www.youtube.com/watch?v=mk4oXlq7tgY&t=3425s" target="_blank" rel="noreferrer noopener" class="button button--primary sub-btn"> Watch on YouTube </a>
+        </div>
+        <div class="event-card">
+            <div class="event-img"><img
+                    src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/live-on-avenue-c-nov-20.jpg?t=1729106829"
+                    alt="img" /></div>
+            <div class="event-details">
+                <span>November 3, 2024</span>
+                <a href="#">OR Books: Live on Ave C <em> Political Art </em></a>
+                <p> Eli Valley and Sue Coe </p>
+            </div>
+            <a href="https://www.youtube.com/watch?v=b1hW8fJWMEg&t=257s" target="_blank" rel="noreferrer noopener" class="button button--primary sub-btn"> Watch on YouTube </a>
+        </div>
+        
+        <div class="event-card">
+            <div class="event-img"><img
+                    src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/events-poster-11.3.jpg?t=1729106836"
+                    alt="img" /></div>
+            <div class="event-details">
+                <span>November 3, 2024</span>
+                <a href="#">OR Books: Live on Ave C <em> PROGRAM OR BE PROGRAMMED </em></a>
+                <p> Douglas Rushkoff and Marissa Feinberg </p>
+            </div>
+            <a href="https://www.youtube.com/watch?v=mk4oXlq7tgY&t=3425s" target="_blank" rel="noreferrer noopener" class="button button--primary sub-btn"> Watch on YouTube </a>
+        </div>
+
+    </div>
+   </div> 
+
+ -->           <!--PAST EVENTS SECTION-->
+
+  <!--          <div class="past-events">
+                  <h2>Past events</h2>
+                  <ul>
+        <li><span>October 23, 2024:</span>OR Books: Live on Ave C <em> BEAUTIFUL SOLUTIONS </em> </li>
+        <li><span>October 2, 2024:</span>OR Books: Live on Ave C <em> UNDERSTANDING HAMAS </em></li>
+        <li><span>April 10, 2024:</span> OR Books Live on Avenue C <em>Deluge</em></li>
+        
+                </ul> 
+    -->
+                <div class="event-link">
+                    <a class="" href="/past-events/"><h2><center>Past Events' Archive</center</h2></a>
+                </div>
+
+<!--  {{> components/orbooks/photo-grid}} -->
+  
+            </div>
+            {{#if page.sub_pages}}
+            <nav class="navBar navBar--sub">
+                <ul class="navBar-section account-navigation">
+                    {{#each page.sub_pages}}
+                    <li class="navBar-item"><a class="navBar-action" href="{{url}}">{{title}}</a></li>
+                    {{/each}}
+                </ul>
+            </nav>
+            {{/if}}
+
+            {{{region name="page_builder_content"}}}
+
+            <div class="page-content page-content--centered">
+                {{#replace '%%Syndicate%%' page.content}}
+                {{> components/page/rss_feed}}
+                {{else}}
+                <p>{{{page.content}}}</p>
+                {{/replace}}
+            </div>
+
+        </div>
+        {{#if page.feed}}
+        <ul>
+            {{#each page.feed}}
+            <li>
+                <h6><a href="{{url}}" target="_blank">{{title}}</a></h6>
+                <p>{{content}}</p>
+            </li>
+            {{/each}}
+        </ul>
+        {{/if}}
+    </div>
+</section>
+{{/partial}}
+
+{{> layout/base}} 

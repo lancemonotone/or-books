@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="no-js" lang="{{ locale_name }}">
+    <head>
+        <title>{{ head.title }}</title>
+        {{{ resourceHints }}}
+        {{{ head.meta_tags }}}
+        {{{ head.config }}}
+        {{#block "head"}} {{/block}}
+
+        <link href="{{ head.favicon }}" rel="shortcut icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1 , maximum-scale=1">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" type="text/css" media="screen" />
+
+        <!-- lightbox css -->
+        <link href="{{cdn '/assets/lightbox.css'}}" rel="stylesheet">
+
+        <!-- orbooks font audit: stencil deploy probe 2026-07-24 -->
+
+        {{!-- Font cutover: keep theme CSS family names; stop serving Monotype files.
+             Condensed → Roboto Condensed. Body/UI → system Helvetica/Arial only (no web font). --}}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <style>
+            /* Helvetica Condensed → Roboto Condensed (replacement for condensed headings) */
+            @font-face {
+                font-family: 'Helvetica Condensed';
+                src: url('https://fonts.gstatic.com/s/robotocondensed/v31/ieVo2ZhZI2eCN5jzbjEETS9weq8-_d6T_POl0fRJeyWyovBJ.ttf') format('truetype');
+                font-weight: 400;
+                font-style: normal;
+                font-display: swap;
+            }
+            @font-face {
+                font-family: 'Helvetica Condensed';
+                src: url('https://fonts.gstatic.com/s/robotocondensed/v31/ieVo2ZhZI2eCN5jzbjEETS9weq8-_d6T_POl0fRJeyVVpfBJ.ttf') format('truetype');
+                font-weight: 700;
+                font-style: normal;
+                font-display: swap;
+            }
+
+            /* Body / bold / Neue → system only (no file download = no embed license) */
+            @font-face {
+                font-family: 'Helvetica';
+                src: local('Helvetica'), local('Arial');
+                font-weight: 400;
+                font-style: normal;
+                font-display: swap;
+            }
+            @font-face {
+                font-family: 'Helvetica Bold';
+                src: local('Helvetica Bold'), local('Helvetica-Bold'), local('Arial Bold'), local('Arial');
+                font-weight: 700;
+                font-style: normal;
+                font-display: swap;
+            }
+            @font-face {
+                font-family: 'HelveticaNeue';
+                src: local('Helvetica Neue'), local('HelveticaNeue'), local('Arial');
+                font-weight: 400;
+                font-style: normal;
+                font-display: swap;
+            }
+            @font-face {
+                font-family: 'HelveticaNeue';
+                src: local('Helvetica Neue Medium'), local('HelveticaNeue-Medium'), local('Arial');
+                font-weight: 500;
+                font-style: normal;
+                font-display: swap;
+            }
+        </style>
+
+        <script>
+            {{!-- Change document class from no-js to js so we can detect this in css --}}
+            document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+        </script>
+
+        {{> components/common/polyfill-script }}
+        <script>window.consentManagerTranslations = `{{{langJson 'consent_manager'}}}`;</script>
+
+        {{!-- Load Lazysizes script ASAP so images will appear --}}
+        <script>
+            {{!-- Only load visible elements until the onload event fires, after which preload nearby elements. --}}
+            window.lazySizesConfig = window.lazySizesConfig || {};
+            window.lazySizesConfig.loadMode = 1;
+        </script>
+        <script async src="{{cdn 'assets/dist/theme-bundle.head_async.js' resourceHint='preload' as='script'}}"></script>
+   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+        <script type="text/javascript" src="{{cdn '/assets/slick.min.js'}}"></script> 
+        <script type="text/javascript" src="{{cdn '/assets/lightbox.js'}}"></script>                  
+        <script type="text/javascript" src="{{cdn '/assets/jquery.zoom.js'}}"></script> 
+        
+        <script>
+            function close_popup() {
+                $(".quickSearchResults").empty();
+                $("#search_query").val("");
+            };
+             
+            $(document).ready(function(){
+              /*product slider*/
+              $('.slider-for').not('.slick-initialized').slick({
+                  "slidesToShow": 1,
+                  "slidesToScroll": 1,
+                  "arrows": false,
+                  "fade": true,         
+                  "asNavFor": '.slider-nav',
+                  "adaptiveHeight": true,
+              });
+              $('.slider-nav').not('.slick-initialized').slick({
+                  "slidesToShow": 2,
+                  "slidesToScroll": 1,
+                  "arrows": false,
+                  "dots": true,           
+                  "focusOnSelect": true,
+                  "infinite": false,
+                  "vertical":false,
+                  "mobileFirst": true,           
+                  "asNavFor": '.slider-for',
+                  "responsive": [            
+                    {
+                         "breakpoint":500,
+                         "settings": {
+                            "arrows": true,
+                            "dots": false,    
+                            "slidesToScroll": 1,
+                            "slidesToShow": 3,
+                         }
+                    },
+                    {
+                         "breakpoint":991,
+                         "settings": {
+                            "arrows": true,
+                            "dots": false,                             
+                             "slidesToScroll": 1,
+                             "slidesToShow": 4,
+                         }
+                    }
+                 ]          
+              });
+
+              $('.zoom').zoom();      
+              
+              $('.form-field').on('click', '.form-option-swatch', function () {
+                  $('.slider-for').slick('slickGoTo', 0);
+              });
+
+              $(".zoom-icon").click(function(){
+                  $(".productView-image .slick-current a").trigger("click");
+              });
+              
+            
+                //calc hieght and add scroll
+                $('div[data-product-option-change]').each(function() {
+                    var $this = $(this);
+                    if($this.height() >= 386) {
+                        $this.addClass('maxed');
+                    }
+                });
+                
+                // search result page product count
+                  setTimeout(function(){ 
+                  var count = $('.listingview .productGrid li').length;
+                  //alert(count);
+                  $(".per-page").append(count);
+                  }, 1000); 
+
+                  // lightbnox js
+  $('.slider-for').slickLightbox({
+    caption: 'caption'
+  }); 
+            
+          });  
+
+            $(document).ready(function () {
+                $.ajax({
+                    url: "/events",
+                    success: function (data) {
+                        const parsedHTML = $('<div>').html(data);
+                        const eventCards = parsedHTML.find('.event-page .event-card');
+
+                        if (eventCards.length > 0) {
+                            $('.event-carousel .eventgrid').html(eventCards);
+                        } else {
+                            console.warn("No .event-card elements found in AJAX response.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX error:", status, error);
+                    },
+                    complete: function () {
+                        $(".event-carousel.main-loader").removeClass('main-loader');
+                        $(".event-carousel").children(".waviy").remove();
+
+                        const extraCards = $(".event-carousel .eventgrid .event-card:nth-child(n+5)");
+                        extraCards.remove();
+
+                        $('.event-carousel .eventgrid').slick({
+                            infinite: true,
+                            slidesToShow: 1,
+                            centerMode: false,
+                            slidesToScroll: 1,
+                            adaptiveHeight: true
+                        });
+                    }
+                });
+            });
+            
+            $(document).ready(function () {
+            $('.category-banner-main').slick({
+              dots: false,
+              arrows: true,
+              infinite: true,
+              slidesToShow: 1,
+              slidesToScroll: 1
+            });
+            setTimeout(() => {
+      if ($(".category-banner-main ").length) {
+          $(".author-banner").removeClass('is-loader');
+          $(".author-banner .category-banner-main").css('display', 'block');
+      }
+    }, 100);
+                
+            });
+        </script>
+        
+        {{getFontsCollection font-display='block'}}
+        
+        <script async src="{{cdn 'assets/dist/theme-bundle.font.js' resourceHint='preload' as='script'}}"></script>
+{{{stylesheet '/assets/css/theme.css'}}}
+ 
+      
+
+        {{{head.scripts}}}
+
+        {{~inject 'zoomSize' theme_settings.zoom_size}}
+        {{~inject 'productSize' theme_settings.product_size}}
+        {{~inject 'genericError' (lang 'common.generic_error')}}
+        {{~inject 'urls' urls}}
+        {{~inject 'secureBaseUrl' settings.secure_base_url}}
+        {{~inject 'cartId' cart_id}}
+        {{~inject 'template' template}}
+        {{~inject 'validationDictionaryJSON' (langJson 'validation_messages')}}
+        {{~inject 'validationFallbackDictionaryJSON' (langJson 'validation_fallback_messages')}}
+        {{~inject 'validationDefaultDictionaryJSON' (langJson 'validation_default_messages')}}
+        {{~inject 'carouselArrowAndDotAriaLabel' (lang 'carousel.arrow_and_dot_aria_label')}}
+        {{~inject 'carouselActiveDotAriaLabel' (lang 'carousel.active_dot_aria_label')}}
+        {{~inject 'carouselContentAnnounceMessage' (lang 'carousel.content_announce_message')}}
+
+        {{inject "bearerToken" settings.storefront_api.token}}
+        <meta name="google-site-verification" content="k8DplZOmy49J4s9I-GcbQHbH_13_DqebSO6wUF3gANA" />
+    </head>
+    <body class="custom {{page_type}}-page {{category.name}}-category">
+        <svg data-src="{{cdn 'img/icon-sprite.svg'}}" class="icons-svg-sprite"></svg>
+
+        {{> components/orbooks/header }}
+        {{> components/common/body }}
+        {{> components/common/footer }}
+
+        <script>window.__webpack_public_path__ = "{{cdn 'assets/dist/'}}";</script>
+        <script>
+            {{!-- Exported in app.js --}}
+            function onThemeBundleMain() {
+                window.stencilBootstrap("{{page_type}}", {{jsContext}}).load();
+            }
+        </script>
+        <script async defer src="{{cdn 'assets/dist/theme-bundle.main.js' resourceHint='preload' as='script'}}" onload="onThemeBundleMain()"></script>
+
+        {{{footer.scripts}}}
+        <script>
+        // Function to add a class to the body if the current URL matches
+        function addClassToBodyIfUrlMatches() {
+            // Define the target URL
+            var targetUrl = 'https://orbooks.com/sitemap/categories';
+            var targetUrlnew = 'https://orbooks.com/sitemap/brands/';
+            // Get the current page URL
+            var currentUrl = window.location.href;
+            
+            // Check if the current URL matches the target URL
+            if (currentUrl === targetUrl) {
+                // Add the desired class to the body
+                document.body.classList.add('sitemap'); // Replace 'your-class-name' with the class you want to add
+            }
+            if (currentUrl === targetUrlnew) {
+                // Add the desired class to the body
+                document.body.classList.add('sitemap'); // Replace 'your-class-name' with the class you want to add
+            }
+        }
+
+        // Call the function to check the URL and add the class if it matches
+        addClassToBodyIfUrlMatches();
+        </script>
+        <script>
+        (function(g,e,o,t,a,r,ge,tl,y){
+        t=g.getElementsByTagName(e)[0];y=g.createElement(e);y.async=true;
+        y.src='https://g792337341.co/gl?privacy&id=-OZNnWHz-adEyNv5EZfa&refurl='+g.referrer+'&winurl='+encodeURIComponent(window.location);
+        t.parentNode.insertBefore(y,t);
+        })(document,'script');
+        </script>
+    </body>
+</html>

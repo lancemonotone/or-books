@@ -1,0 +1,56 @@
+---
+category:
+    shop_by_price: true
+    products:
+        limit: {{theme_settings.categorypage_products_per_page}}
+---
+{{inject "SidebarProductId" theme_settings.sidebar_product_id}}
+{{inject "categoryProductsPerPage" theme_settings.categorypage_products_per_page}}
+{{#partial "head"}}
+    {{#if pagination.category.previous}}
+        <link rel="prev" href="{{pagination.category.previous}}">
+    {{/if}}
+    {{#if pagination.category.next}}
+        <link rel="next" href="{{pagination.category.next}}">
+    {{/if}}
+{{/partial}}
+
+{{#partial "page"}}
+{{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+
+<div class="page merchandise-page">
+    <div class="page-content custom-content" id="product-listing-container">
+        <div class="category-header">
+            <div class="category-title">
+                {{#unless theme_settings.hide_category_page_heading }}
+                <h1 class="page-heading">{{category.name}}</h1>
+                {{/unless}}
+            </div>
+        </div>
+        <div class="cat-desc">
+            {{{category.description}}}
+        </div>
+        <div class="merch-list-product">
+            {{> components/orbooks/category-listing}}
+        </div>
+        
+        {{#unless theme_settings.get_percentage}}
+            <div class="percentage-main">
+                <div class="perc-left">
+                    {{#if theme_settings.percentage_text}}
+                        <h3>Get <span>{{theme_settings.percentage_text}}</span> % off!</h3>
+                    {{/if}}
+                </div>
+                <div class="perc-right">
+                    <div class="news-main" data-section-type="newsletterSubscription">
+                        {{#if settings.show_newsletter_box}}
+                            {{> components/common/subscription-form}}
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        {{/unless}}
+    </div>
+</div>
+{{/partial}}
+{{> layout/base}}

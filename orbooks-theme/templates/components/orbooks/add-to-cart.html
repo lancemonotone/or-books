@@ -1,0 +1,52 @@
+<div class="pre-text" id="preorder_text">
+
+</div>
+<div id="add-to-cart-custom" class="add-to-cart-wrapper">
+        <div class="form-field form-field--increments">
+            <div class="form-increment">
+                <button id="btn-dec" class="button button--icon button-minus">
+                    <i class="icon" aria-hidden="true">
+                        <svg>
+                            <use href="#icon-remove"/>
+                        </svg>
+                    </i>
+                </button>
+                <input class="form-input form-input--incrementTotal"
+                        id="qty-custom"
+                        type="tel"
+                        value="1"
+                        data-quantity-min=""
+                        data-quantity-max=""
+                        min="1"
+                        pattern="[0-9]*"
+                    >
+                <button id="btn-inc" class="button button--icon button-plus" >
+                    <i class="icon" aria-hidden="true">
+                        <svg>
+                            <use href="#icon-add"/>
+                        </svg>
+                    </i>
+                </button>
+            </div>
+        </div>
+
+    {{#or customer (unless settings.hide_price_from_guests)}}
+        <div class="add-to-cart-buttons">
+            <div class="form-action">
+                <input
+                    id="form-action-addToCart-custom"
+                    class="button button-over rtest-btn"
+                    type="button"
+                    value=""
+                >
+                <div class="button button--primary">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="#icon-cart"/>
+                    </svg>
+                    <p id="cart-btn-txt"></p>
+                </div>
+                <span class="product-status-message aria-description--hidden">{{lang 'products.adding_to_cart'}} {{lang 'category.add_cart_announcement'}}</span>
+            </div>
+        </div>
+    {{/or}}
+</div>

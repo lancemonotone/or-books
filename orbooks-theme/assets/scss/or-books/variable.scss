@@ -1,0 +1,87 @@
+$screen-xxxsmall-min: 320px;
+$screen-xxsmall-min: 480px;
+$screen-xsmall-min: 569px;
+$screen-small-min: 768px;
+$screen-medium-min: 1024px;
+$screen-large-min: 1200px;
+$screen-xlarge-min: 1366px;
+$screen-xxlarge-min: 1700px;
+$screen-xxxlarge-min: 2560px;
+
+@mixin xxxsmall {
+   @media (min-width: #{$screen-xxxsmall-min}) {
+      @content;
+   }
+}
+@mixin xxsmall {
+   @media (min-width: #{$screen-xxsmall-min}) {
+      @content;
+   } 
+}
+@mixin xsmall {
+   @media (min-width: #{$screen-xsmall-min}) { 
+      @content;
+   }
+}
+@mixin small {
+   @media (min-width: #{$screen-small-min}) {
+      @content;
+   }
+}
+@mixin medium {
+   @media (min-width: #{$screen-medium-min}) {
+      @content;
+   }
+}
+@mixin large {
+   @media (min-width: #{$screen-large-min}) {
+      @content;
+   }
+}
+@mixin xlarge {
+   @media (min-width: #{$screen-xlarge-min}) {
+      @content;
+   }
+}
+@mixin xxlarge {
+   @media (min-width: #{$screen-xxlarge-min}) {
+      @content;
+   }
+}
+
+@mixin xxxlarge {
+   @media (min-width: #{$screen-xxxlarge-min}) {
+      @content;
+   }
+}
+
+ 
+@mixin hc-400 {
+   font-family: Helvetica Condensed;
+   font-weight: 400;
+}
+@mixin hc-700 {
+   font-family: Helvetica Condensed;
+   font-weight: 700;
+}
+
+@mixin hn-400 {
+   font-family: HelveticaNeue;
+   font-weight: 400;
+}
+@mixin hn-500 {
+   font-family: HelveticaNeue;
+   font-weight: 500;
+}
+@mixin hn-700 {
+   font-family: HelveticaNeue;
+   font-weight: 700;
+}
+@mixin hs-400 {
+   font-family: Helvetica;
+   font-weight: 400;
+}
+@mixin hs-700 {
+   font-family: Helvetica Bold;
+   font-weight: 700;
+}
