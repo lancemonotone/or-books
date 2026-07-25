@@ -1046,7 +1046,7 @@ h6 {
             .author-pagination-link,
             .pagination-link {
                 color: #919191;
-                font-family: Helvetica Condensed;
+                font-family: $or-font-condensed;
                 font-weight: 400;
                 font-size: 13px;
                 width: 16px;
@@ -1448,7 +1448,7 @@ h6 {
                 .card-category-name {
                     font-size: 14px;
                     color: stencilColor("sub_title_color");
-                    font-family: Helvetica Condensed;
+                    font-family: $or-font-condensed;
                     font-weight: 400;
                     line-height: 1;
 
@@ -1569,7 +1569,7 @@ h6 {
                 p {
                     color: stencilColor("title_color");
                     font-size: 16px;
-                    font-family: Helvetica;
+                    font-family: $or-font-body;
                     font-weight: 400;
                     line-height: 1.5;
                     margin: 0;
@@ -1586,7 +1586,7 @@ h6 {
                 a {
                     color: $color-greyLighter;
                     font-size: 16px;
-                    font-family: Helvetica;
+                    font-family: $or-font-body;
                     font-weight: 400;
                     line-height: 1.5;
                     margin: 0;
@@ -2352,7 +2352,7 @@ h6 {
     h2,
     h5 {
         // @include hc-400;
-        font-family: Helvetica;
+        font-family: $or-font-body;
 
         a {
             &:hover {
@@ -2831,7 +2831,7 @@ h6 {
 
 
 .button {
-    font-family: Helvetica Condensed;
+    font-family: $or-font-condensed;
 }
 
 .modal--large {
@@ -2863,7 +2863,7 @@ h6 {
     clear: both;
 
     a {
-        font-family: 'Helvetica Condensed';
+        font-family: $or-font-condensed;
         font-size: 16px;
         text-transform: capitalize;
         color: #000;
@@ -2890,7 +2890,7 @@ h6 {
                     font-size: 16px;
                     line-height: 1.5;
                     text-transform: uppercase;
-                    font-family: Helvetica Condensed;
+                    font-family: $or-font-condensed;
                     font-weight: 700;
                 }
             }
@@ -2944,12 +2944,12 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: Helvetica;
+    font-family: $or-font-body;
 }
 
 .accordion-custom-tabs {
     h2 {
-        font-family: Helvetica Condensed;
+        font-family: $or-font-condensed;
     }
 }
 
@@ -2960,18 +2960,18 @@ h6 {
 
 .cart-additionalCheckoutButtons .FloatRight p,
 .previewCart-additionalCheckoutButtons .FloatRight p {
-    font-family: Helvetica Condensed;
+    font-family: $or-font-condensed;
 }
 
 
 .author-pagination-link {
-    font-family: Helvetica Condensed;
+    font-family: $or-font-condensed;
 }
 
 .account_downloaditem_page {
     .account-sidebar {
         figcaption {
-            font-family: Helvetica Condensed;
+            font-family: $or-font-condensed;
             font-weight: 700;
             color: #000;
             text-transform: uppercase;
@@ -3030,7 +3030,7 @@ h6 {
 }
 .photo-grid{
     text-align: center;
-    font-family: Helvetica Condensed;
+    font-family: $or-font-condensed;
     font-weight: 700;
     font-size: 24px;
     letter-spacing: 2px;

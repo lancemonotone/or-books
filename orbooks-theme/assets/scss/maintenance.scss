@@ -2,6 +2,8 @@
     box-sizing: border-box;
 }
 
+@import "or-books/variable";
+
 body {
     -webkit-align-items: center;
     align-items: center;
@@ -15,7 +17,7 @@ body {
     display: flex;
     -ms-flex-align: center;
     -ms-flex-pack: space-around;
-    font-family: Helvetica, Arial, Sans-Serif;
+    font-family: $or-font-body;
     font-size: 0.8em;
     height: 100vh;
 

@@ -54,7 +54,7 @@
                 h3 {
                     color: stencilColor("footer_color");
                     font-size: 18px;
-                    font-family: HelveticaNeue;
+                    font-family: $or-font-neue;
                     font-weight: 400;
                     margin-bottom: 6px;
                     @include xsmall {
@@ -264,7 +264,7 @@
                     padding: 0;
                 }
                 .powered-by {
-                    font-family: HelveticaNeue;
+                    font-family: $or-font-neue;
                     font-weight: 400;
                     font-size: 14px;
                     color: #EDEDED;

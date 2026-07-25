@@ -74,19 +74,25 @@ stencil init
 
 ## Helvetica / font licensing work
 
-Context: Monotype detected embedded Helvetica webfonts. Goal: stop serving `assets/fonts/helvetica*` files; keep theme CSS family names via `@font-face` aliases (system `local()` + free condensed web font).
+Context: Monotype detected embedded Helvetica webfonts.
 
-Notes / cutover drafts: `_office/helvetica-removal/`  
+**Finished in theme (2026-07-24):** SCSS uses honest stacks; `base.html` loads
+**Roboto Condensed** under its real name; `assets/fonts/helvetica*` removed;
+checkout no longer embeds Helvetica files. Tracker: issue #1.
+
+Stacks: condensed → `"Roboto Condensed", Helvetica, Arial, sans-serif`;
+body → `Helvetica, Arial, sans-serif`; Neue → `"Helvetica Neue", Helvetica, Arial, sans-serif`.
+
+Notes / older paste trials: `_office/helvetica-removal/`  
 Email thread: `_office/helvetica.md`
 
-Atomic cutover approach: change `@font-face` in `templates/layout/base.html` only so appearance flips in one save/push; then delete unused font binaries under `assets/fonts/`.
+Deploy when ready: `stencil push -a`, then Network → Font check (no store CDN Helvetica).
 
 Invisible deploy probe (View Source):
 
 ```html
 <!-- orbooks font audit: stencil deploy probe 2026-07-24 -->
 ```
-
 ## What must stay in the theme tree
 
 Stencil needs essentially the **whole theme package** (not just `base.html`):

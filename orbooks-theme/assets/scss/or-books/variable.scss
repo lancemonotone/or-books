@@ -56,32 +56,37 @@ $screen-xxxlarge-min: 2560px;
 }
 
  
+// Brand font stacks (post-Helvetica-embed removal — issue #1)
+$or-font-body: Helvetica, Arial, sans-serif;
+$or-font-condensed: "Roboto Condensed", Helvetica, Arial, sans-serif;
+$or-font-neue: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 @mixin hc-400 {
-   font-family: Helvetica Condensed;
+   font-family: $or-font-condensed;
    font-weight: 400;
 }
 @mixin hc-700 {
-   font-family: Helvetica Condensed;
+   font-family: $or-font-condensed;
    font-weight: 700;
 }
 
 @mixin hn-400 {
-   font-family: HelveticaNeue;
+   font-family: $or-font-neue;
    font-weight: 400;
 }
 @mixin hn-500 {
-   font-family: HelveticaNeue;
+   font-family: $or-font-neue;
    font-weight: 500;
 }
 @mixin hn-700 {
-   font-family: HelveticaNeue;
+   font-family: $or-font-neue;
    font-weight: 700;
 }
 @mixin hs-400 {
-   font-family: Helvetica;
+   font-family: $or-font-body;
    font-weight: 400;
 }
 @mixin hs-700 {
-   font-family: Helvetica Bold;
+   font-family: $or-font-body;
    font-weight: 700;
 }

@@ -1,37 +1,37 @@
 Helvetica removal — status
 ==========================
 
-DONE (2026-07-20): base.html cutover live on production.
-- Monotype Helvetica files no longer served via @font-face
-- Condensed CSS name → Archivo Narrow or Roboto Condensed (client trial)
-- Helvetica / Helvetica Bold / HelveticaNeue → local() system only
-- Also fixed missing </script> + </body> in base.html
+DONE (alias cutover, 2026-07-20): stopped serving Helvetica webfonts via base.html
+DONE (proper finish, 2026-07-24): SCSS stacks + real Roboto Condensed + font binaries deleted
 
-Files
------
-base.helvetica.hbs          = pre-cutover backup (Helvetica embeds; clean rollback)
-base.achivonarrow.hbs       = Archivo Narrow condensed trial
-base.robotocondensed.hbs    = Roboto Condensed trial
-
-BLOCKED / TODO — finish correctly with Stencil CLI
--------------------------------------------------
 GitHub: https://github.com/lancemonotone/or-books/issues/1
 
-Edit Theme Files cannot fully own compiled theme SCSS the way CLI can.
-When you have theme zip or `stencil` access:
+What landed in orbooks-theme/
+-----------------------------
+1. Mixins in assets/scss/or-books/variable.scss use honest stacks
+2. Hardcoded Helvetica Condensed / Bold / Neue / Helvetica families replaced in
+   or-books/*.scss + optimized-checkout.scss
+3. base.html loads Roboto Condensed under its real name (no Helvetica aliases)
+4. checkout.html no longer embeds Helvetica files
+5. assets/fonts/helvetica* binaries deleted
 
-1. Search assets/scss (and any custom partials) for:
-   - Helvetica Condensed
-   - HelveticaNeue / Helvetica Bold
-   - font-family: Helvetica
-2. Replace with honest stacks, e.g.:
-   - Body: Helvetica, Arial, sans-serif
-   - Condensed: "Roboto Condensed" or "Archivo Narrow" (client pick), Helvetica, sans-serif
-   - Drop fake family names Helvetica Bold / HelveticaNeue where possible
-3. Then simplify base.html @font-face aliases (or remove local() shims
-   if CSS stacks are enough on their own).
-4. Delete assets/fonts/helvetica* binaries from theme.
-5. Rebuild / upload / verify Network → Font still clean.
+Stacks (SCSS vars in assets/scss/or-books/variable.scss)
+--------------------------------------------------------
+$or-font-condensed  → "Roboto Condensed", Helvetica, Arial, sans-serif
+$or-font-body       → Helvetica, Arial, sans-serif
+$or-font-neue       → "Helvetica Neue", Helvetica, Arial, sans-serif
 
-Until then: alias approach in base.html is the production contract.
-Do not remove those @font-face remaps until SCSS uses real family names.
+Mixins (hc-*/hs-*/hn-*) and hardcoded rules use these vars.
+
+Still needed (deploy)
+---------------------
+From orbooks-theme/:
+  stencil bundle   # or
+  stencil push -a  # upload + activate when ready
+
+Then verify Network → Font: no helvetica* from store CDN; Roboto from gstatic OK.
+
+Office paste files (historical)
+-------------------------------
+base.helvetica.hbs / base.achivonarrow.hbs / base.robotocondensed.hbs
+= earlier Edit Theme Files trials; theme tree is now source of truth.

@@ -2,6 +2,8 @@
 // Stencil Checkout - Customize the Optimized Single-Page Checkout experience
 // =============================================================================
 
+@import "or-books/variable";
+
 // =============================================================================
 //
 // IMPORTANT DISCLAIMER
@@ -381,11 +383,11 @@ $optimizedCheckout-input--error-boxShadow: 0 0 3px transparentize(stencilColor("
 }
 
  @mixin hc-700 {
-    font-family: Helvetica Condensed;
+    font-family: $or-font-condensed;
     font-weight: 700;
  }
  @mixin hs-400 {
-    font-family: Helvetica;
+    font-family: $or-font-body;
     font-weight: 400;
  }
 
@@ -595,7 +597,7 @@ $optimizedCheckout-input--error-boxShadow: 0 0 3px transparentize(stencilColor("
     }
 }
 .optimizedCheckout-buttonSecondary{
-    font-family: Helvetica;
+    font-family: $or-font-body;
 }
 .checkout-button-container {
     display: none !important;
