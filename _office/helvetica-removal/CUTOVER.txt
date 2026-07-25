@@ -1,37 +1,14 @@
 Helvetica removal — status
 ==========================
 
-DONE (alias cutover, 2026-07-20): stopped serving Helvetica webfonts via base.html
-DONE (proper finish, 2026-07-24): SCSS stacks + real Roboto Condensed + font binaries deleted
+DONE (1.2 shipped in Briefboard + GitHub issue #1 closed 2026-07-25).
+Deploy held for Wave 1 batch push with tasks 2.1–2.7.
 
-GitHub: https://github.com/lancemonotone/or-books/issues/1
-
-What landed in orbooks-theme/
------------------------------
-1. Mixins in assets/scss/or-books/variable.scss use honest stacks
-2. Hardcoded Helvetica Condensed / Bold / Neue / Helvetica families replaced in
-   or-books/*.scss + optimized-checkout.scss
-3. base.html loads Roboto Condensed under its real name (no Helvetica aliases)
-4. checkout.html no longer embeds Helvetica files
-5. assets/fonts/helvetica* binaries deleted
+Branch: feature/helvetica-font-removal (commit a820202)
+Local verify: stencil start Network → Font clean (Roboto + Karla only).
 
 Stacks (SCSS vars in assets/scss/or-books/variable.scss)
 --------------------------------------------------------
 $or-font-condensed  → "Roboto Condensed", Helvetica, Arial, sans-serif
 $or-font-body       → Helvetica, Arial, sans-serif
 $or-font-neue       → "Helvetica Neue", Helvetica, Arial, sans-serif
-
-Mixins (hc-*/hs-*/hn-*) and hardcoded rules use these vars.
-
-Still needed (deploy)
----------------------
-From orbooks-theme/:
-  stencil bundle   # or
-  stencil push -a  # upload + activate when ready
-
-Then verify Network → Font: no helvetica* from store CDN; Roboto from gstatic OK.
-
-Office paste files (historical)
--------------------------------
-base.helvetica.hbs / base.achivonarrow.hbs / base.robotocondensed.hbs
-= earlier Edit Theme Files trials; theme tree is now source of truth.
