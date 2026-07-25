@@ -130,7 +130,7 @@ h6 {
 
     @include medium {
         width: 26%;
-        overflow: visible;
+        overflow-y: scroll;
         padding-right: 25px;
         clear: left;
         float: left;
@@ -266,6 +266,9 @@ h6 {
         }
     }
 
+    &:hover {
+        letter-spacing: 1px;
+    }
 }
 
 
@@ -1843,6 +1846,7 @@ h6 {
 
                     &:hover {
                         background-color: #333333;
+                        letter-spacing: 1px;
                     }
                 }
             }
@@ -2779,11 +2783,32 @@ h6 {
     }
 }
 
-// Sidebar: full height with page scroll (no inner scrollbar / sticky)
+// Sidebar scroll css
 .custom-sidebar {
+
     &.stickthis {
+
         position: static;
-        height: auto;
+
+        @include medium {
+            height: 69vh;
+        }
+
+        &.fixed {
+            width: 26%;
+            position: sticky;
+            height: 95vh;
+            left: 30px;
+            top: 25px;
+
+            @include xxlarge {
+                left: 58px;
+            }
+
+            &.bottom {
+                height: 42vh;
+            }
+        }
     }
 }
 

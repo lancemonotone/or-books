@@ -30,10 +30,6 @@ blog:
 <div class="main full home-page">
     <div class="home-main">
         <div class="custom-sidebar stickthis" id="stickthis">
-            {{#unless theme_settings.home_subject}}
-                {{> components/orbookshome/subject_sidebar}}
-            {{/unless}}
-
             {{#unless theme_settings.home_product}}
             <div class="top-product main-loader">
                 {{> components/orbooks/pre-loading}}
@@ -60,6 +56,10 @@ blog:
                 <ul class="videomain ">
                 </ul>
             </div>
+            {{/unless}}
+
+            {{#unless theme_settings.home_subject}}
+                {{> components/orbookshome/subject_sidebar}}
             {{/unless}}
             
             {{#if theme_settings.show_category_sidebar_image}}

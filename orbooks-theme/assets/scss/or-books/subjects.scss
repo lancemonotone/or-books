@@ -1,0 +1,89 @@
+// Molecule: .or-subjects — Catalog children as text list
+// Design language: docs/design-language.md
+
+.or-subjects {
+    --or-subjects-gap: 0.35rem;
+    --or-subjects-title-size: 1.125rem;
+    --or-subjects-link-size: 0.9375rem;
+    --or-subjects-line: 1.35;
+    --or-subjects-cta-mt: 1rem;
+
+    text-align: center;
+
+    @include small {
+        --or-subjects-title-size: 1.25rem;
+        --or-subjects-link-size: 1rem;
+        text-align: left;
+    }
+
+    @include medium {
+        --or-subjects-title-size: 1.5rem;
+        --or-subjects-link-size: 1.0625rem;
+        --or-subjects-gap: 0.4rem;
+    }
+
+    @include large {
+        --or-subjects-link-size: 1.125rem;
+    }
+
+    .or-subjects-title {
+        margin: 0 0 0.5rem;
+        line-height: 1;
+        text-transform: uppercase;
+        font-size: var(--or-subjects-title-size);
+        @include hc-700;
+    }
+
+    .or-subjects-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--or-subjects-gap);
+        max-width: 20rem;
+        margin-inline: auto;
+
+        @include small {
+            margin-inline: 0;
+        }
+    }
+
+    .or-subjects-item {
+        margin: 0;
+        padding: 0;
+    }
+
+    .or-subjects-link {
+        display: inline-block;
+        color: #000;
+        font-size: var(--or-subjects-link-size);
+        line-height: var(--or-subjects-line);
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 0;
+        @include hc-400;
+        box-shadow: none;
+        border-radius: 0;
+        transition: color 0.2s ease;
+
+        &:hover,
+        &:focus {
+            color: $color-greyDarker;
+            box-shadow: none;
+            text-decoration: underline;
+        }
+    }
+
+    .or-subjects-catalog-cta {
+        margin-block-start: var(--or-subjects-cta-mt);
+    }
+}
+
+.home-subj-sidebar {
+    margin-block-start: 1.25rem;
+
+    @include medium {
+        margin-block-start: 1rem;
+    }
+}

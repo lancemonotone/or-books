@@ -886,6 +886,7 @@
                                 &:hover {
                                     + .button--primary {
                                         background-color: #000;
+                                        letter-spacing: 1px;
                                     }
                                 }
                             }
@@ -1288,7 +1289,12 @@
                     top: 50%;
                     transform: translateY(-50%);
                 }
+                &:hover {
+                    letter-spacing: 1px;
+                }
                 &.is-open {
+                    letter-spacing: 1px;
+
                     .icon {
                         transform: translateY(-50%) rotate(180deg);
                     }
@@ -1773,6 +1779,7 @@
                 &:hover {
                     + .button--primary {
                         background-color: #000;
+                        letter-spacing: 1px;
                     }
                 }
             }

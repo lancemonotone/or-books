@@ -1,0 +1,26 @@
+// Atom: .or-btn — OR Books button type (design language)
+// Keep BigCommerce `.button` / `.button--primary` for theme editor colors.
+// Conversion: add `or-btn` (and `or-btn-block` if full-width) next to existing classes.
+
+.or-btn {
+    --or-btn-letter-spacing: 0;
+    --or-btn-line-height: 1;
+
+    text-transform: uppercase;
+    letter-spacing: var(--or-btn-letter-spacing);
+    line-height: var(--or-btn-line-height);
+    text-align: center;
+    transform: none;
+    @include hc-700;
+
+    &:hover,
+    &:focus {
+        letter-spacing: var(--or-btn-letter-spacing);
+    }
+}
+
+.or-btn-block {
+    display: block;
+    inline-size: 100%;
+    box-sizing: border-box;
+}

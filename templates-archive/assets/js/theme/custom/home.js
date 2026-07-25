@@ -375,8 +375,29 @@ export default (function (context) {
          });
         }
       }
+    }  else {
+      if ($(window).width() > 1000) {
+        if ($(".stickthis").length > 0) {
+
+          $(window).scroll(function () {   
+              var height_2 = $('.header').height();
+            var threshold = height_2 + 50;
+        
+            if($(window).scrollTop() > threshold) {
+              $('.stickthis').addClass('fixed');
+            }
+      
+            else if ($(window).scrollTop() <= 200) {
+            $('.stickthis').removeClass('fixed');
+            }  
+              if ($('.stickthis').offset().top + $(".stickthis").height() > $(".footer").offset().top) {
+                  $('.stickthis').css('top',-($(".stickthis").offset().top + $(".stickthis").height() - $(".footer").offset().top));
+                  $('.stickthis').addClass('bottom');
+              }
+          });
+        }
+      }
     }
-    // Home/category .stickthis: no sticky / inner scroll — sidebar scrolls with page
 
     if ($(window).width() > 1024) {
       $('.navPages-container .navPages-list .navPages-item').mouseover(function () {

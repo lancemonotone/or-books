@@ -1,0 +1,25 @@
+{{!--
+  Molecule: Subjects nav — Catalog children as text list (full list, no accordion).
+  @param variant {String} "home" | "category"
+    home     — no title; "View Catalog" CTA
+    category — "subjects" title; no CTA
+--}}
+<nav class="or-subjects" aria-label="Subjects">
+    {{#if variant '===' 'category'}}
+        <h2 class="or-subjects-title">subjects</h2>
+    {{/if}}
+    <ul class="or-subjects-list">
+        {{#each categories}}
+            {{#if name '===' 'Catalog'}}
+                {{#each children}}
+                    <li class="or-subjects-item">
+                        <a class="or-subjects-link" href="{{url}}" title="{{name}}">{{name}}</a>
+                    </li>
+                {{/each}}
+            {{/if}}
+        {{/each}}
+    </ul>
+    {{#if variant '===' 'home'}}
+        <a class="or-subjects-catalog-cta button button--primary or-btn or-btn-block" href="/catalog/">View Catalog</a>
+    {{/if}}
+</nav>

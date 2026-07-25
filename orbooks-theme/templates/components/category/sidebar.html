@@ -1,21 +1,7 @@
 <nav>
     {{#if theme_settings.show_sidebar_sub_category}}
     <div class="sidebarBlock">
-        <h2 class="sidebarBlock-heading">subjects</h2>
-        <ul class="navList subject-category">
-            {{#each categories}}
-                {{#if name '===' 'Catalog'}}
-                    {{#each children}}                       
-                        <li class="navList-item {{@index}} {{#if @index '<' 10}}navlist-visible {{else}}navlist-hidden{{/if}}">
-                            <a class="navList-action" href="{{url}}" title="{{name}}">{{name}}</a>
-                        </li>                        
-                    {{/each}}
-                {{/if}}
-            {{/each}}
-        </ul>            
-            <div class="cat-btn {{@index}}">
-                <a href="/catalog/" class="button button--primary navlist-show-btn">view all</a>
-            </div> 
+        {{> components/orbooks/subjects-nav variant="category"}}
     </div>
     {{/if}}
 
