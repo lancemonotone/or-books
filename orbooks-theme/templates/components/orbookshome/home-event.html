@@ -1,5 +1,9 @@
 <div class="blog-main-home blog-list">
-    <a class="sidebar-heading" href="/news/">{{lang 'common.home_news'}}</a>
+    {{> components/orbooks/section-head
+        url="/news/"
+        title=(lang 'common.home_news')
+        title_class="sidebar-heading"
+    }}
     <div class="blog-cont">
         {{#each blog.recent_posts }}
             {{> components/blog/post post=this theme_settings=../theme_settings show_tags=true}}

@@ -321,9 +321,9 @@
                         margin-top: 30px;
                     }            
                     .blog-cont {
-                        padding-top: 30px;
+                        padding-top: 0.5rem;
                         @include xxlarge {
-                            padding-top: 30px;
+                            padding-top: 0.75rem;
                         }
                         .slick-list {
                             margin: 0 -5px;
@@ -574,6 +574,7 @@
         }
     }
 }
+
 .custom-content {
     display: block;
     order: 1;
@@ -1097,27 +1098,6 @@
             }
         }
         &.new-product,&.best-seller-product{
-            .innersection,.sale-innersection {
-            position: relative;
-            }
-            span.cate_link{
-                top:4px;
-                left: 50%;
-                transform: translateX(-50%);
-                @include medium{
-                    right: 40px;
-                    top: -20px;
-                    left: auto;
-                    transform: none;
-                }
-                position: absolute; 
-                font-size: 14px;    
-                   
-                text-transform: initial;
-                a{
-                    color: rgba(51, 51, 51, 0.6);
-                }
-                }
             .slick-arrow.slick-prev{
                 @include medium{
                 right: 100px;
@@ -1125,51 +1105,13 @@
             }
         }
     }
+
     .sale-home {
         @include xlarge {
             margin-top: 50px;
         }
     }
     .featured{
-        .page-heading{
-        position: relative;
-        }
-        span{
-            top: 39px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: $or-font-body;
-            font-weight: normal;
-            letter-spacing: initial;
-            
-            @include medium{
-                right: 39px;
-                left: auto;
-                transform: none;
-                top: 12px;
-                
-              
-            }
-              @include large{
-                top: 12px;
-            }
-            @include large{
-                top: 16px;
-            }
-            @include xxlarge{
-                top: 26px;
-            }
-            @include xxxlarge{
-                top: 26px;
-            }
-            position: absolute; 
-            font-size: 14px;    
-               
-            text-transform: initial;
-            a{
-                color: rgba(51, 51, 51, 0.6);
-            }
-            }
         .slick-arrow.slick-prev{
             @include medium{
             right: 100px;
@@ -1179,9 +1121,9 @@
     .recent-main {
         margin-top: 35px;
         .recent-slide {
-            padding-top: 20px;
+            padding-top: 0.5rem;
             @include xxlarge {
-                padding-top: 36px;
+                padding-top: 0.75rem;
             }
             .slick-list {
                 margin: 0 -5px;
@@ -1214,7 +1156,7 @@
             margin-top: 75px;
         }
         .video-slide {
-            padding-top: 20px;
+            padding-top: 0.5rem;
             .slick-list {
                 margin: 0 -5px;
                 .vid-main {
@@ -1373,25 +1315,6 @@
 .default-page{
     .side-category-image {
             margin: 40px 0 0;
-        .reading-list-title h2{
-            font-size: 24px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin: 0;
-            line-height: 1;
-            color: $color-greyDarkest;
-            cursor: pointer;
-            margin-bottom: 20px;
-            @include medium {
-                font-size: 21px;
-            }
-            @include xlarge {
-                font-size: 24px;
-            }
-            @include xxlarge {
-                font-size: 30px;
-            }
-        }
         .side-category-image-data {           
             .side-category-image-card {               
                 padding: 10px 0px 10px 0;

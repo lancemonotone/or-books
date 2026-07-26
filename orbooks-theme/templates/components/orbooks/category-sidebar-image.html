@@ -1,5 +1,9 @@
 <div class="side-category-image">
-    <div class="reading-list-title"><h2><a href="/reading-lists/">reading lists</a></h2></div>
+    {{> components/orbooks/section-head
+        url="/reading-lists/"
+        title="Reading Lists"
+        title_class="sidebar-heading"
+    }}
     <div class="side-category-image-data">
         
          <div class="side-category-image-card">
@@ -29,8 +33,5 @@
             </a>
         </div>
       
-    </div>
-    <div class="reading-btn cat-btn">
-        <a class="button button--primary" href="/reading-lists/">view all</a>
     </div>
 </div>

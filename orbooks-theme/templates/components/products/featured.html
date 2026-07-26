@@ -1,4 +1,7 @@
-<h2 class="page-heading">{{lang 'products.featured' }} <span class="cate_link"><a href="reading-lists/the-palestine-list/" target="_blank">See all</a></span></h2>
+{{> components/orbooks/section-head
+    title=(lang 'products.featured')
+    url="/reading-lists/the-palestine-list/"
+}}
 <h5 class="feature-heading"></h5>
 
 <ul class="productGrid productGrid--maxCol{{ columns }} productCarousel newprd-sale" data-product-type="featured" {{#if settings.data_tag_enabled}} data-list-name="Featured Products" {{/if}}

@@ -1,0 +1,75 @@
+// Molecule: .or-section-head — title + mini See all as one link
+// Design language: docs/design-language.md
+// Template: templates/components/orbooks/section-head.html
+// Atom deps: .or-btn / .or-btn-sm (buttons.scss) + BC button--primary colors
+
+.or-section-head {
+    --or-section-head-min-size: 44px;
+    --or-section-head-gap: 0.25rem;
+    --or-section-head-pad-block: 0.25rem;
+    --or-section-head-dir: column;
+    --or-section-head-justify: center;
+    --or-section-head-align: center;
+    --or-section-head-margin-end: 0.5rem;
+
+    display: flex;
+    flex-direction: var(--or-section-head-dir);
+    flex-wrap: wrap;
+    align-items: var(--or-section-head-align);
+    justify-content: var(--or-section-head-justify);
+    gap: var(--or-section-head-gap);
+    box-sizing: border-box;
+    min-block-size: var(--or-section-head-min-size);
+    padding-block: var(--or-section-head-pad-block);
+    margin-block-end: var(--or-section-head-margin-end);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+
+    @media (min-width: 768px) {
+        --or-section-head-dir: row;
+        --or-section-head-justify: space-between;
+        --or-section-head-align: center;
+        --or-section-head-gap: 0.75rem;
+        --or-section-head-pad-block: 0.15rem;
+        --or-section-head-margin-end: 0.35rem;
+    }
+
+    &[data-or-section-head-pending] {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .or-section-head-title,
+    .page-heading,
+    .sidebar-heading {
+        margin: 0;
+        text-align: inherit;
+    }
+
+    // CTA size/type in buttons.scss; no pointer — whole head is the hit target
+    .or-section-head-cta.button {
+        margin: 0;
+        pointer-events: none;
+    }
+
+    &:hover .or-section-head-cta.button--primary,
+    &:focus-visible .or-section-head-cta.button--primary {
+        background-color: stencilColor("button--primary-backgroundColorHover");
+        border-color: stencilColor("button--primary-backgroundColorHover");
+        color: stencilColor("button--primary-color");
+    }
+
+    &:focus-visible {
+        outline: 2px solid $color-greyDarkest;
+        outline-offset: 2px;
+    }
+}
+
+.custom-sidebar .or-section-head {
+    @media (min-width: 768px) {
+        --or-section-head-dir: column;
+        --or-section-head-justify: flex-start;
+        --or-section-head-align: flex-start;
+    }
+}

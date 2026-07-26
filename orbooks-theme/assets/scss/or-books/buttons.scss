@@ -1,11 +1,15 @@
 // Atom: .or-btn — OR Books button type (design language)
-// Keep BigCommerce `.button` / `.button--primary` for theme editor colors.
-// Conversion: add `or-btn` (and `or-btn-block` if full-width) next to existing classes.
+// Keep BigCommerce `.button` / `.button--primary` for Theme Editor colors.
+// Conversion: add `or-btn` (and `or-btn-block` / `or-btn-sm` as needed) next to existing classes.
 
 .or-btn {
     --or-btn-letter-spacing: 0;
     --or-btn-line-height: 1;
 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
     text-transform: uppercase;
     letter-spacing: var(--or-btn-letter-spacing);
     line-height: var(--or-btn-line-height);
@@ -20,7 +24,19 @@
 }
 
 .or-btn-block {
-    display: block;
+    display: flex;
     inline-size: 100%;
     box-sizing: border-box;
+}
+
+// Compact CTA (e.g. section-head “See all”) — same chrome as primary, smaller padding
+.or-btn-sm {
+    --or-btn-sm-pad-block: 0.35rem;
+    --or-btn-sm-pad-inline: 0.75rem;
+    --or-btn-sm-font-size: 0.75rem;
+
+    padding-block: var(--or-btn-sm-pad-block);
+    padding-inline: var(--or-btn-sm-pad-inline);
+    font-size: var(--or-btn-sm-font-size);
+    line-height: 1;
 }

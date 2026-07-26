@@ -1,6 +1,6 @@
 {{#unless theme_settings.recent_home_events}}
 <div class="recent-main main-loader">
-    <a href="/events/" class="page-heading">{{lang 'common.recent_title'}}</a>
+    {{> components/orbooks/section-head url="/events/" title=(lang 'common.recent_title')}}
     {{> components/orbooks/pre-loading}}
     <div class="recent-slide">
         <div class="rec-img">
@@ -21,3 +21,4 @@
     </div>
 </div>
 {{/unless}}
+

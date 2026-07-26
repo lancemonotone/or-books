@@ -4,5 +4,9 @@ node_modules/
 orbooks-theme/secrets.stencil.json
 orbooks-theme/assets/dist/
 
+# Briefboard Agent API token (local only; see .cursor/secrets.briefboard.example.json)
+.cursor/secrets.briefboard.json
+
+
 # Separate Briefboard repo (clone into this folder; own .git)
 briefboard/

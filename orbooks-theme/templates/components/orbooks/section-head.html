@@ -1,0 +1,14 @@
+{{!--
+  Unified home slider / section head (Briefboard 2.2).
+  Whole control is one link; "See all" is a visual CTA only (not a nested link).
+  Pass: title (required), url and/or category_id, cta (optional), title_class (optional).
+--}}
+<a
+    class="or-section-head"
+    {{#if url}}href="{{url}}"
+    {{else if category_id}}href="/categories.php?category={{category_id}}"
+    {{else}}data-or-section-head-pending{{/if}}
+>
+    <h2 class="or-section-head-title {{#if title_class}}{{title_class}}{{else}}page-heading{{/if}}">{{title}}</h2>
+    <span class="or-section-head-cta button button--primary or-btn or-btn-sm">{{#if cta}}{{cta}}{{else}}See all{{/if}}</span>
+</a>

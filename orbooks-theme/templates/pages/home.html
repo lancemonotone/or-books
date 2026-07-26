@@ -46,7 +46,11 @@ blog:
 
             {{#unless theme_settings.home_events}}
             <div class="event-carousel main-loader">
-                <a class="sidebar-heading" href="/events/">{{lang 'common.home_events'}}</a>
+                {{> components/orbooks/section-head
+                    url="/events/"
+                    title=(lang 'common.home_events')
+                    title_class="sidebar-heading"
+                }}
                 {{> components/orbooks/pre-loading}}
                 <ul class="eventgrid ">
                 </ul>
@@ -55,7 +59,11 @@ blog:
 
             {{#unless theme_settings.home_videos}}
             <div class="video-home main-loader">
-                <a class="sidebar-heading" href="/videos/">{{lang 'common.home_video'}}</a>
+                {{> components/orbooks/section-head
+                    url="/videos/"
+                    title=(lang 'common.home_video')
+                    title_class="sidebar-heading"
+                }}
                 {{> components/orbooks/pre-loading}}
                 <ul class="videomain ">
                 </ul>
@@ -83,7 +91,10 @@ blog:
     {{#unless theme_settings.hide_new_products}}
         {{#if products.new}}
             <div class="home-new new-product">
-                <h2 class="page-heading">{{lang 'products.new' }}</h2>
+                {{> components/orbooks/section-head
+                    title=(lang 'products.new')
+                    category_id=theme_settings.new_category_id
+                }}
                 <div class="category-product-section">
 
                 </div>
@@ -95,7 +106,10 @@ blog:
     
         {{#unless theme_settings.hide_bestsellers_products_homepage}}
             <div class="home-new best-seller-product">
-                <h2 class="page-heading">{{lang 'products.top' }}</h2>
+                {{> components/orbooks/section-head
+                    title=(lang 'products.top')
+                    category_id=theme_settings.sale_category_id
+                }}
                 <div class="sale-product-section">
 
                 </div>

@@ -1,6 +1,6 @@
 {{#unless theme_settings.hide_recent_video}}
 <div class="home-video-main main-loader">
-    <a href="/videos/" class="page-heading">{{lang 'common.video_title'}}</a>
+    {{> components/orbooks/section-head url="/videos/" title=(lang 'common.video_title')}}
     {{> components/orbooks/pre-loading}}
     <div class="video-slide">
         <div class="vid-main">

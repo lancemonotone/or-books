@@ -78,6 +78,10 @@ export default (function (context) {
 
                       $('.category-product-section').append('<div class="innersection custom-list-detail-'+[i]+'">' + response + '</div>');
                       $(".category-product-section .innersection .product:nth-child(n+30)").remove();
+                      const newUrl = $('.category-product-section .innersection').last().find('[data-category-url]').attr('data-category-url');
+                      if (newUrl) {
+                        $('.home-new.new-product > .or-section-head').attr('href', newUrl);
+                      }
                       var viewportWidth = $(window).width();
                       if (viewportWidth > 1000) {
                         var Rows = 2;
@@ -154,6 +158,10 @@ export default (function (context) {
 
                       $('.sale-product-section').append('<div class="sale-innersection custom-list-detail-'+[i]+'">' + response + '</div>');
                       $(".sale-product-section .sale-innersection .product:nth-child(n+30)").remove();
+                      const saleUrl = $('.sale-product-section .sale-innersection').last().find('[data-category-url]').attr('data-category-url');
+                      if (saleUrl) {
+                        $('.home-new.best-seller-product > .or-section-head').attr('href', saleUrl);
+                      }
                       var viewportWidth = $(window).width();
                       if (viewportWidth > 1000) {
                         var Rows = 2;
