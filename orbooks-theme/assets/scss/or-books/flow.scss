@@ -1,0 +1,56 @@
+// Layout utility: .or-flow — vertical section stack (gap owns spacing)
+// Design language: docs/design-language.md
+// Not wired into live page templates yet — add class to a column wrapper when enabling.
+//
+// Intended wrappers (when wiring):
+//   home     → .custom-content  (and optionally .custom-sidebar)
+//   category → .page-content
+//   CMS page → .page / .page-content
+//   product  → .pdp-js
+//   blog     → .page
+
+.or-flow {
+    --or-flow-gap: 1.25rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--or-flow-gap);
+
+    @media (min-width: 768px) {
+        --or-flow-gap: 1.75rem;
+    }
+
+    @media (min-width: 1024px) {
+        --or-flow-gap: 2.25rem;
+    }
+
+    // Gap is the only vertical rhythm between direct children
+    > * {
+        margin-block: 0;
+    }
+}
+
+.or-flow-tight {
+    --or-flow-gap: 0.75rem;
+
+    @media (min-width: 768px) {
+        --or-flow-gap: 1rem;
+    }
+
+    @media (min-width: 1024px) {
+        --or-flow-gap: 1.25rem;
+    }
+}
+
+.or-flow-loose {
+    --or-flow-gap: 1.75rem;
+
+    @media (min-width: 768px) {
+        --or-flow-gap: 2.5rem;
+    }
+
+    @media (min-width: 1024px) {
+        --or-flow-gap: 3rem;
+    }
+}

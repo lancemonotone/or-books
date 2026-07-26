@@ -35,6 +35,16 @@ We do **not** need a full Storybook yet. Start by naming things in templates + S
 
 Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 
+## Layout: Vertical flow (`.or-flow`)
+
+- **Styles:** `orbooks-theme/assets/scss/or-books/flow.scss`
+- **Partial (optional later):** `templates/components/orbooks/flow.html`
+- **Archive notes:** `templates-archive/or-flow/README.md`
+- **Job:** Column stack whose **gap** owns vertical spacing between direct children (margins zeroed on those children).
+- **Modifiers:** `or-flow-tight` · `or-flow-loose`
+- **Status:** Scaffolded and imported. **Not wired** into live page templates yet.
+- **Wire later on:** home `.custom-content`, category `.page-content`, CMS `.page` / `.page-content`, product `.pdp-js`, blog `.page`.
+
 ## Molecule: Section head (`.or-section-head`)
 
 - **Template:** `orbooks-theme/templates/components/orbooks/section-head.html`

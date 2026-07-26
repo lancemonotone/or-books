@@ -1,0 +1,14 @@
+{{!--
+  Vertical flow wrapper (scaffold — not used by live pages yet).
+
+  Usage when wiring a template:
+    <div class="custom-content or-flow"> … </div>
+    <div class="page-content or-flow"> … </div>
+    <section class="page or-flow"> … </section>
+
+  Modifiers: or-flow-tight | or-flow-loose
+  Styles: assets/scss/or-books/flow.scss
+--}}
+<div class="or-flow{{#if tight}} or-flow-tight{{/if}}{{#if loose}} or-flow-loose{{/if}}">
+    {{> @partial-block}}
+</div>
