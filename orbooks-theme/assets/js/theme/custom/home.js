@@ -11,6 +11,45 @@ export default (function (context) {
       .removeAttr('data-or-section-head-pending');
   }
 
+  /**
+   * Product carousel: advance a full page (slidesToScroll === slidesToShow)
+   * at each breakpoint. Pass extra keys (e.g. rows, adaptiveHeight) as needed.
+   */
+  function orProductCarouselSettings(extra) {
+    const settings = Object.assign({
+      dots: false,
+      arrows: true,
+      infinite: true,
+      slidesToShow: 3,
+      slidesToScroll: 3,
+      responsive: [
+        {
+          breakpoint: 1000,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+          },
+        },
+        {
+          breakpoint: 500,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+          },
+        },
+      ],
+    }, extra || {});
+
+    return settings;
+  }
+
   if ($(".top-product").length) {
     var product_id = context.SidebarProductId
 
@@ -75,43 +114,8 @@ export default (function (context) {
                       $section.find('.newprd .product:nth-child(n+30)').remove();
                       const newUrl = $section.find('[data-category-url]').last().attr('data-category-url');
                       orSetSectionHeadHref($section, newUrl);
-                      var viewportWidth = $(window).width();
-                      if (viewportWidth > 1000) {
-                        var Rows = 2;
-                        var Slides = 1;
-                      } else if (viewportWidth > 567) {
-                        var Rows = 1;
-                        var Slides = 1;
-                      }
                       const $newCarousel = $section.find('.newprd').not('.slick-initialized');
-                      $newCarousel.slick({
-                        dots: false,
-                        arrows: true,
-                        infinite: true,
-                        slidesToShow: 3,
-                        slidesToScroll: Slides,
-                        adaptiveHeight: true,
-                        responsive: [
-                          {
-                            breakpoint: 1000,
-                            settings: {
-                              slidesToShow: 3
-                            }
-                          },
-                          {
-                            breakpoint: 600,
-                            settings: {
-                              slidesToShow: 2
-                            }
-                          },
-                          {
-                            breakpoint: 500,
-                            settings: {
-                              slidesToShow: 1
-                            }
-                          }
-                        ]
-                      });
+                      $newCarousel.slick(orProductCarouselSettings({ adaptiveHeight: true }));
                       return;
                     })
                   }
@@ -159,43 +163,8 @@ export default (function (context) {
                       $saleSliderHost.find('.newprd .product:nth-child(n+30)').remove();
                       const saleUrl = $saleSliderHost.find('[data-category-url]').last().attr('data-category-url');
                       orSetSectionHeadHref($('.home-new.best-seller-product'), saleUrl);
-                      var viewportWidth = $(window).width();
-                      if (viewportWidth > 1000) {
-                        var Rows = 2;
-                        var Slides = 1;
-                      } else if (viewportWidth > 567) {
-                        var Rows = 1;
-                        var Slides = 1;
-                      }
                       const $saleCarousel = $saleSliderHost.find('.newprd').not('.slick-initialized');
-                      $saleCarousel.slick({
-                        dots: false,
-                        arrows: true,
-                        infinite: true,
-                        slidesToShow: 3,
-                        slidesToScroll: Slides,
-                        responsive: [
-                          {
-                            breakpoint: 1000,
-                            settings: {
-                              slidesToShow: 3
-                            }
-                          },
-                          {
-                            breakpoint: 600,
-                            settings: {
-                              slidesToShow: 2
-                            }
-                          },
-                          {
-                            breakpoint: 500,
-                            settings: {
-                              slidesToShow: 1
-                            }
-                          }
-                        ]
-                      });
-
+                      $saleCarousel.slick(orProductCarouselSettings());
                       return;
                     })
                   }
@@ -211,108 +180,27 @@ export default (function (context) {
   }
 
   var viewportWidth = $(window).width();
+  var Rows = 1;
   if (viewportWidth > 1000) {
-    var Rows = 2;
-    var Slides = 1;
-  } else if (viewportWidth > 567) {
-    var Rows = 1;
-    var Slides = 1;
+    Rows = 2;
   }
   $(document).ready(function () {
     $('.newprd').each(function () {
       const $carousel = $(this);
       if ($carousel.hasClass('slick-initialized')) return;
-      $carousel.slick({
-        dots: false,
-        arrows: true,
-        infinite: true,
-        slidesToShow: 3,
-        slidesToScroll: Slides,
-        rows: Rows,
-        responsive: [
-          {
-            breakpoint: 1000,
-            settings: {
-              slidesToShow: 3
-            }
-          },
-          {
-            breakpoint: 600,
-            settings: {
-              slidesToShow: 2
-            }
-          },
-          {
-            breakpoint: 500,
-            settings: {
-              slidesToShow: 1
-            }
-          }
-        ]
-      });
+      $carousel.slick(orProductCarouselSettings({ rows: Rows }));
     });
 
     $('.newprd-sale').each(function () {
       const $carousel = $(this);
       if ($carousel.hasClass('slick-initialized')) return;
-      $carousel.slick({
-        dots: false,
-        arrows: true,
-        infinite: true,
-        slidesToShow: 3,
-        responsive: [
-          {
-            breakpoint: 1000,
-            settings: {
-              slidesToShow: 3
-            }
-          },
-          {
-            breakpoint: 600,
-            settings: {
-              slidesToShow: 2
-            }
-          },
-          {
-            breakpoint: 500,
-            settings: {
-              slidesToShow: 1
-            }
-          }
-        ]
-      });
+      $carousel.slick(orProductCarouselSettings());
     });
    
     $('.singleprd').each(function () {
       const $carousel = $(this);
       if ($carousel.hasClass('slick-initialized')) return;
-      $carousel.slick({
-        dots: false,
-        arrows: true,
-        infinite: true,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        responsive: [
-          {
-            breakpoint: 1000,
-            settings: {
-              slidesToShow: 3
-            }
-          },
-          {
-            breakpoint: 600,
-            settings: {
-              slidesToShow: 2
-            }
-          },
-          {
-            breakpoint: 500,
-            settings: {
-              slidesToShow: 1
-            }
-          }
-        ]
-      });
+      $carousel.slick(orProductCarouselSettings());
     });
     setTimeout(() => {
       $(".recent-main.main-loader").removeClass('main-loader');
