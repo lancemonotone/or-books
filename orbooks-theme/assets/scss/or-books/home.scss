@@ -834,37 +834,21 @@
         .productCarousel {
             .slick-list {
                 .slick-track {
-                        @include medium {
-                            display: flex;
-                            flex-wrap: wrap;
-                        }
+                        // Equal-height flex track: slider-chrome.scss (do not flex-wrap here)
                         .slick-slide {
                             padding-top: 10px;
                             padding-bottom: 10px;
-                            
-                            @include medium {
-                                // height: 100%;
-                                height: auto;
-                            }
+                            // Equal height: slider-chrome.scss (.productCarousel stretch chain)
                             .productCarousel-slide {
                                 @include medium {
-                                    padding: 9px 10px;                            
-                                    height: auto;
-                                }                                
+                                    padding: 9px 10px;
+                                }
                                 @include xlarge {
                                     padding: 9px 16px;
-                                }
-                                @include xxlarge {
-                                    height: 100%;
                                 }
                             }
                             .sub-card {
                                 padding: 21px 21px;
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                                width: 100%;
-                                height: 100%;
                                 @include small {
                                     padding: 15px 15px;
                                 }
@@ -874,14 +858,10 @@
                                 @include xlarge {
                                     padding: 22px 18px 15px;
                                 }
-                                // @include xxlarge {
-                                //     padding: 31px 28px 0;
-                                // }
                                 .card-figure {
                                     width: 100%;
                                 }
                                 .card-body {
-                                    flex: 0 0 auto;
                                     text-align: center;
                                     padding-top: 14px;
                                     @include medium {
@@ -911,23 +891,10 @@
                                         }
                                     }
                                 }
-                                .card-link {
-                                    // Pin quick-view to bottom of equal-height cards; gap sits above icon
-                                    margin-top: auto;
-                                    align-self: stretch;
-                                }
-                            }
-                            .product {
-                                @include xxlarge {
-                                    height: 100%;
-                                }
+                                // .card-link pin: slider-chrome.scss
                             }
                         }
-                        .slick-slide > div {
-                            @include medium {
-                                min-height: 50%;
-                            }
-                        }
+                        // Equal height wrappers: slider-chrome.scss
                     }
                 }
         }
