@@ -8,8 +8,9 @@
 | **taskKey** | `553ddbd1-fe57-4788-ad5f-0d2727de1ebf` |
 | **Briefboard URL** | https://lancemonotone.com/or-books/app/?i=1#/task/553ddbd1-fe57-4788-ad5f-0d2727de1ebf |
 | **Branch** | `feature/wave1-2.2-section-heads` |
-| **Commits** | `3376838` — first section-head pass; `170f8c7` — `or-flow` scaffold (not wired); `5b5850c` — heads identical, arrows on carousel; `620e05c` — kill card-body equal-height; `67e6820` — `.or-heading` + no letter-spacing |
+| **Commits** | `3376838` — first section-head pass; `170f8c7` — `or-flow` scaffold (not wired); `5b5850c` — heads identical, arrows on carousel; `620e05c` — kill card-body equal-height; `67e6820` — `.or-heading` + no letter-spacing; `1642878` — refresh office NOTES |
 | **Deploy** | Local only until Wave 1 batch `stencil push` |
+| **Briefboard status** | `complete` (updated 2026-07-27) — delivery comment posted |
 
 ## Client ask (original)
 
