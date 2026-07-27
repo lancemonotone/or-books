@@ -207,7 +207,7 @@
                     padding: 0 60px;
                 }
 
-                .read-btn-link {
+                .read-btn-link:not(.or-btn) {
                     @include hc-400;
                     width: 100%;
                     margin: 0;

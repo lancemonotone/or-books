@@ -29,7 +29,7 @@ blog:
 
 <div class="main full home-page">
     <div class="home-main">
-        <div class="custom-sidebar stickthis" id="stickthis">
+        <div class="custom-sidebar stickthis or-flow" id="stickthis">
             {{#unless theme_settings.home_subject}}
                 {{> components/orbookshome/subject_sidebar}}
             {{/unless}}
@@ -45,13 +45,13 @@ blog:
             {{/unless}}
 
             {{#unless theme_settings.home_events}}
-            <div class="event-carousel main-loader or-section">
+            <div class="event-carousel main-loader or-section or-section--slider">
                 {{> components/orbooks/section-head
                     url="/events/"
                     title=(lang 'common.home_events')
                 }}
                 {{> components/orbooks/pre-loading}}
-                <ul class="eventgrid ">
+                <ul class="eventgrid">
                 </ul>
             </div>
             {{/unless}}
@@ -63,8 +63,7 @@ blog:
                     title=(lang 'common.home_video')
                 }}
                 {{> components/orbooks/pre-loading}}
-                <ul class="videomain ">
-                </ul>
+                <ul class="videomain"></ul>
             </div>
             {{/unless}}
             
@@ -75,8 +74,8 @@ blog:
                 {{> components/orbookshome/percentage}}
             </div>
         </div>
-        <div class="custom-content">
-            {{!-- or-flow: when enabling vertical flow, add class "or-flow" on this wrapper (see docs/design-language.md) --}}
+        <div class="custom-content or-flow">
+            {{!-- Vertical rhythm: .or-flow gap (see docs/design-language.md) --}}
             <div class="statix-text">
                 <h3>“A radical, exciting response to Amazonian hegemony.” <span>—Dazed</span></h3>
                 <h4>OR Books is a publishing company that embraces progressive change in politics, culture, and the way we do business.</h4>
@@ -89,14 +88,12 @@ blog:
 
     {{#unless theme_settings.hide_new_products}}
         {{#if products.new}}
-            <div class="home-new new-product or-section or-section--slider">
+            {{!-- Body = slick root injected as next sibling of head (home.js) --}}
+            <div class="home-new new-product or-section or-section--slider" data-or-slider-ajax="new">
                 {{> components/orbooks/section-head
                     title=(lang 'products.new')
                     category_id=theme_settings.new_category_id
                 }}
-                <div class="category-product-section">
-
-                </div>
             </div>
         {{/if}}
     {{/unless}}
@@ -104,14 +101,11 @@ blog:
     {{> components/orbookshome/recent-home}}
     
         {{#unless theme_settings.hide_bestsellers_products_homepage}}
-            <div class="home-new best-seller-product or-section or-section--slider">
+            <div class="home-new best-seller-product or-section or-section--slider" data-or-slider-ajax="sale">
                 {{> components/orbooks/section-head
                     title=(lang 'products.top')
                     category_id=theme_settings.sale_category_id
                 }}
-                <div class="sale-product-section">
-
-                </div>
             </div>
         {{/unless}}
     
@@ -119,11 +113,9 @@ blog:
 
     {{#unless theme_settings.hide_onsale_products}}
     <div class="home-new sale-home featured or-section or-section--slider">
-        <div class="inner-featured">
         {{#if products.featured}}
             {{> components/products/featured products=products.featured columns=theme_settings.homepage_featured_products_column_count}}
         {{/if}}
-    </div>
     </div>
     {{/unless}}
     {{> components/orbookshome/percentage}}

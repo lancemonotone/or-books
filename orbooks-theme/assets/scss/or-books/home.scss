@@ -29,12 +29,14 @@
                 @include medium {
                     order: 1;
                 }
+                &.or-flow {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: stretch;
+                }
                 // Section arrows: .or-section--slider in slider-chrome.scss
                 .top-product {
-                    margin-top: 36px;
-                    @include medium {
-                        margin-top: 0;
-                    }
+                    // Vertical spacing: parent .or-flow gap
                     .productView {
                         margin: 0;
                         padding: 0;
@@ -240,11 +242,11 @@
                 }
                 // Home subjects layout: see subjects.scss (.or-subjects / .home-subj-sidebar)
                 .blog-main-home {
-                    margin: 40px 0 auto;
+                    // Vertical spacing: parent .or-flow gap
+                    margin: 0;
                     justify-content: center;
                     @include medium {
                         justify-content: flex-start;
-                        margin-top: 30px;
                     }            
                     .blog-cont {
                         padding-top: 0.5rem;
@@ -274,13 +276,6 @@
                                         position: static;
                                         transform: none;
                                         padding: 0;
-                                    }
-                                    // Sizing/type: .or-btn / .or-btn-block (+ container queries)
-                                    .read-btn-link {
-                                        position: static;
-                                        transform: none;
-                                        max-width: 100%;
-                                        margin: 0;
                                     }
                                     &:after {
                                         content: none;
@@ -348,7 +343,7 @@
                     }
                 }
                 .event-carousel, .video-home {
-                    margin-top: 40px;
+                    // Vertical spacing: parent .or-flow gap
                     text-align: center;
                     @include medium {
                         text-align: left;
@@ -444,11 +439,11 @@
                                         }
                                     }
                                 }
-                                .sub-btn {
+                                // Layout hook only — type/size from .or-btn / .or-btn-block
+                                .sub-btn:not(.or-btn) {
                                     display: block;
                                     text-align: center;
-                                    color: stencilColor("color-secondary"); 
-                                    margin-top: 23px; 
+                                    color: stencilColor("color-secondary");
                                     line-height: 1;
                                     transform: none;
                                     padding: 10px 0;
@@ -620,14 +615,8 @@
     }
     .heroCarousel {
         max-height: 100%;
-        margin-top: 30px;
-        margin-bottom: 0;
-        @include medium {
-            margin-top: 25px;
-        }
-        @include xxlarge {
-            margin-top: 40px;
-        }
+        // Vertical spacing: parent .or-flow gap
+        margin-block: 0;
         .slick-arrow {
             @include medium {
                 top: -15px;
@@ -686,13 +675,7 @@
     }
     .cust-main {
         display: block;
-        margin-top: 30px;
-        @include small {
-            margin-top: 35px;
-        }
-        @include xxlarge {
-            margin-top: 50px;
-        }
+        // Vertical spacing: parent .or-flow gap
         .cust-sub {
             margin: 0;
             list-style: none;
@@ -846,51 +829,11 @@
         }
     }
     .home-new {
-        margin-top: 35px;
-        @include xlarge {
-            margin-top: 65px;
-        }
-        @include xxlarge {
-            margin-top: 100px;
-        }
-        .feature-heading {
-            @include hc-400;
-            color: $color-greyDarkest;
-            font-size: 15px;
-            margin: 5px 0 0;
-            line-height: 1;
-            display: none;
-            text-transform: none;
-            @include medium {
-                display: block;
-            }
-            @include xxlarge {
-                font-size: 16px;
-                margin: 11px 0 0;
-            }
-        }
+        // Vertical spacing: parent .or-flow gap
+        // Carousel shell (margin / padding-block / arrows): slider-chrome.scss
         .productCarousel {
-            &.newprd, &.singleprd, &.newprd-sale {
-                padding-block-start: 20px;
-                margin: 0;
-                justify-content: center;
-                @include xlarge {
-                    padding-block-start: 26px;
-                }
-                @include xxlarge {
-                    padding-block-start: 55px;
-                }
-                &:before, &:after {
-                    display: none;
-                }
-                .slick-list {
-                    margin-left: -10px;
-                    margin-right: -10px;
-                    @include xlarge {
-                        margin-left: -16px;
-                        margin-right: -16px;
-                    }
-                    .slick-track {
+            .slick-list {
+                .slick-track {
                         @include medium {
                             display: flex;
                             flex-wrap: wrap;
@@ -987,17 +930,11 @@
                         }
                     }
                 }
-            }
         }
     }
 
-    .sale-home {
-        @include xlarge {
-            margin-top: 50px;
-        }
-    }
     .recent-main {
-        margin-top: 35px;
+        // Vertical spacing: parent .or-flow gap
         .recent-slide {
             padding-top: 0.5rem;
             @include xxlarge {
@@ -1029,10 +966,7 @@
         }
     }
     .home-video-main {
-        margin-top: 35px;
-        @include xlarge {
-            margin-top: 75px;
-        }
+        // Vertical spacing: parent .or-flow gap
         .video-slide {
             padding-top: 0.5rem;
             .slick-list {
@@ -1192,7 +1126,7 @@
 }
 .default-page{
     .side-category-image {
-            margin: 40px 0 0;
+            // Vertical spacing on home: parent .or-flow gap
         .side-category-image-data {           
             .side-category-image-card {               
                 padding: 10px 0px 10px 0;

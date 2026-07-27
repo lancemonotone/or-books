@@ -336,11 +336,11 @@
                             }
                         }
                     }
-                    .sub-btn {
+                    // Layout hook only — type/size from .or-btn / .or-btn-block
+                    .sub-btn:not(.or-btn) {
                         display: block;
                         text-align: center;
-                        color: stencilColor("color-secondary"); 
-                        margin-top: 23px; 
+                        color: stencilColor("color-secondary");
                         line-height: 1;
                         transform: none;
                         padding: 10px 0;

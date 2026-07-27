@@ -46,7 +46,7 @@ export default (function (context) {
       });
     }
   });
-  if ($('.category-product-section').length) {
+  if ($('.home-new.new-product[data-or-slider-ajax="new"]').length) {
     
     var product_viewidss = [];
     product_viewidss.push(context.new_category_id);
@@ -69,10 +69,12 @@ export default (function (context) {
                       
                       if (err) return;
 
-                      $('.category-product-section').append('<div class="innersection custom-list-detail-'+[i]+'">' + response + '</div>');
-                      $(".category-product-section .innersection .product:nth-child(n+30)").remove();
-                      const newUrl = $('.category-product-section .innersection').last().find('[data-category-url]').attr('data-category-url');
-                      orSetSectionHeadHref($('.home-new.new-product'), newUrl);
+                      const $section = $('.home-new.new-product[data-or-slider-ajax="new"]');
+                      // Contract: slick root is direct sibling of .or-section-head (no inner wrappers)
+                      $section.append(response);
+                      $section.find('.newprd .product:nth-child(n+30)').remove();
+                      const newUrl = $section.find('[data-category-url]').last().attr('data-category-url');
+                      orSetSectionHeadHref($section, newUrl);
                       var viewportWidth = $(window).width();
                       if (viewportWidth > 1000) {
                         var Rows = 2;
@@ -81,7 +83,7 @@ export default (function (context) {
                         var Rows = 1;
                         var Slides = 1;
                       }
-                      const $newCarousel = $('.innersection .newprd');
+                      const $newCarousel = $section.find('.newprd').not('.slick-initialized');
                       $newCarousel.slick({
                         dots: false,
                         arrows: true,
@@ -117,14 +119,19 @@ export default (function (context) {
               datacount++;              
           }
             if(datacount == 0){
-              document.querySelectorAll(".category-product-section").style.display = "none";
+              $('.home-new.new-product[data-or-slider-ajax="new"]').hide();
         }
       } 
 
     })
   }
 
-  if ($('.sale-product-section').length) {
+  // Home bestsellers (or-section) or Catalog page host (.sale-product-section)
+  const $saleSliderHost = $('.home-new.best-seller-product[data-or-slider-ajax="sale"]').length
+    ? $('.home-new.best-seller-product[data-or-slider-ajax="sale"]')
+    : $('.sale-product-section');
+
+  if ($saleSliderHost.length) {
     
     var product_viewidss = [];
     product_viewidss.push(context.sale_category_id);
@@ -147,9 +154,10 @@ export default (function (context) {
                       
                       if (err) return;
 
-                      $('.sale-product-section').append('<div class="sale-innersection custom-list-detail-'+[i]+'">' + response + '</div>');
-                      $(".sale-product-section .sale-innersection .product:nth-child(n+30)").remove();
-                      const saleUrl = $('.sale-product-section .sale-innersection').last().find('[data-category-url]').attr('data-category-url');
+                      // Contract: append ul.newprd directly (no sale-innersection wrapper)
+                      $saleSliderHost.append(response);
+                      $saleSliderHost.find('.newprd .product:nth-child(n+30)').remove();
+                      const saleUrl = $saleSliderHost.find('[data-category-url]').last().attr('data-category-url');
                       orSetSectionHeadHref($('.home-new.best-seller-product'), saleUrl);
                       var viewportWidth = $(window).width();
                       if (viewportWidth > 1000) {
@@ -159,7 +167,7 @@ export default (function (context) {
                         var Rows = 1;
                         var Slides = 1;
                       }
-                      const $saleCarousel = $('.sale-innersection .newprd');
+                      const $saleCarousel = $saleSliderHost.find('.newprd').not('.slick-initialized');
                       $saleCarousel.slick({
                         dots: false,
                         arrows: true,
@@ -195,7 +203,7 @@ export default (function (context) {
               datacount++;
           }
             if(datacount == 0){
-              document.querySelectorAll(".category-product-section").style.display = "none";
+              $saleSliderHost.hide();
         }
       } 
 

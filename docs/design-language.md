@@ -38,11 +38,11 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 ## Layout: Vertical flow (`.or-flow`)
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/flow.scss`
-- **Partial (optional later):** `templates/components/orbooks/flow.html`
 - **Job:** Column stack whose **gap** owns vertical spacing between direct children (margins zeroed on those children).
 - **Modifiers:** `or-flow-tight` · `or-flow-loose`
-- **Status:** Scaffolded and imported. **Not wired** into live page templates yet.
-- **Wire later on:** home `.custom-content`, category `.page-content`, CMS `.page` / `.page-content`, product `.pdp-js`, blog `.page`.
+- **Home:** Wired on `.custom-sidebar` + `.custom-content` — one responsive gap for main + sidebar strips (replaces per-block `margin-top` one-offs).
+- **Wire later on:** category `.page-content`, CMS `.page` / `.page-content`, product `.pdp-js`, blog `.page`.
+- **Gap tokens:** `1.5rem` → `1.75rem` (768) → `2rem` (1024).
 
 ## Organism: Section (`.or-section`)
 
@@ -73,9 +73,18 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Styles:** `orbooks-theme/assets/scss/or-books/slider-chrome.scss`
 - **Job:** Shared Slick **arrow** look + placement: on the **carousel**, left/right, vertically centered. Not in the title row.
 - **Track pad:** `padding-inline` on `.slick-slider` so arrows sit in a gutter and do not cover slide text.
+- **DOM contract (all section sliders — main + sidebar):**
+  ```
+  .or-section.or-section--slider
+    .or-section-head
+    [slick root — direct sibling; may keep a semantic class]
+  ```
+  No intermediate wrappers (`innersection`, `inner-featured`, empty AJAX hosts). AJAX injects the slick root as the next sibling of the head. Optional loader may exist until removed.
+- **Slick root classes (semantic, not structure):** `.blog-cont`, `.eventgrid`, `.videomain`, `.productCarousel` / `.newprd`, `.recent-slide`, `.video-slide` — these *are* the carousel element.
 - **DOM:** Arrows stay Slick children of the slider (default). No `appendArrows` into the head.
+- **Out of contract:** Hero `.heroCarousel`, PDP galleries, page-only banners.
 - **4.8 (when approved):** style `.slick-dots` in this same file; heads stay unchanged.
-- **Usage:** add `or-section or-section--slider` on the section wrapper (e.g. Latest News, Forthcoming). Non-sliders use `or-section` only (e.g. Reading Lists).
+- **Usage:** add `or-section or-section--slider` on the section wrapper. Non-sliders use `or-section` only (e.g. Reading Lists).
 
 ## Atom: Button (`.or-btn`)
 

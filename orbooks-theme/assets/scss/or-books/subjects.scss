@@ -79,11 +79,3 @@
         margin-block-start: var(--or-subjects-cta-mt);
     }
 }
-
-.home-subj-sidebar {
-    margin-block-start: 1.25rem;
-
-    @include medium {
-        margin-block-start: 1rem;
-    }
-}
