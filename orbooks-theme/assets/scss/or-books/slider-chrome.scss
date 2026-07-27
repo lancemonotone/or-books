@@ -45,6 +45,59 @@
         margin-right: 0;
     }
 
+    // Equal-height product cards: stretch slides → fill chain → pin quick-view
+    // Markup: li.product.productCarousel-slide.slick-slide > article.card > .sub-card
+    // Slick `float: left` breaks flex stretch; do not set height:100% on the slide itself
+    // (that fights stretch when the slide is also .product).
+    .productCarousel.slick-initialized {
+        .slick-track {
+            display: flex !important;
+            align-items: stretch;
+            flex-wrap: nowrap;
+        }
+
+        .slick-slide {
+            float: none !important;
+            display: flex !important;
+            flex-direction: column;
+            flex-grow: 0;
+            flex-shrink: 0;
+            align-self: stretch;
+            height: auto !important;
+            min-height: 0 !important;
+            box-sizing: border-box;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            min-block-size: 0;
+            block-size: 100%;
+        }
+
+        .sub-card {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            inline-size: 100%;
+            min-block-size: 0;
+            block-size: 100%;
+            align-items: center;
+        }
+
+        .card-body {
+            flex: 1 1 auto;
+            inline-size: 100%;
+        }
+
+        .card-link {
+            margin-block-start: auto;
+            align-self: stretch;
+            flex-shrink: 0;
+        }
+    }
+
     .slick-arrow {
         position: absolute;
         z-index: 2;
