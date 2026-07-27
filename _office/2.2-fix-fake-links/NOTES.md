@@ -17,20 +17,21 @@
 
 ## Delivered (final state)
 
-- **Unified section head** on homepage strips: one tappable row = section title + mini **See all** (real `button button--primary or-btn or-btn-sm` styling — same stack as View Catalog).
-- **Whole row is the link** — not a separate nested link on See all. Meets ≥44px tap target on phone/tablet.
-- **Applied to:** Forthcoming, Bestsellers, In Focus, Latest News, Recent events, Recent video, sidebar Events/Videos (when shown), **Reading Lists** sidebar block.
-- **Molecule:** `section-head.html` + `section-head.scss`; button sizing in `buttons.scss` (`.or-btn-sm`).
-- **Category carousel heads** get `href` from theme category ids; AJAX may upgrade to pretty category URL when products load.
-- **Reading Lists:** removed duplicate bottom “view all” button; same section-head pattern as other strips.
+- **Unified section head:** plain title + See all minibutton — **identical** for every section (slider or not). Title not a link.
+- **Slider chrome:** arrows stay on the **carousel**, left/right, vertically centered (`.or-section--slider` in `slider-chrome.scss`). Never in the title row.
+- **Organism:** `.or-section` wrapper; add `--slider` only when a Slick body is present.
+- **Applied to:** Forthcoming, Bestsellers, In Focus, Latest News, Recent events/video, sidebar Videos; **Reading Lists** = same head, no slider class.
+- **Molecule files:** `section.scss`, `section-head.html` / `.scss`, `slider-chrome.scss`, `buttons.scss`.
+- **Category heads:** AJAX upgrades See all `href` when category URL resolves.
 
 ## Diverged from ask (if any)
 
 | Original expectation | What we shipped | Why |
 |--------------------|-----------------|-----|
 | Fix taps on existing “See all” links | Rebuilt as one shared **section head** pattern sitewide on touched strips | Absolute-positioned See all sat under Slick on mobile; markup was inconsistent (title only, See all in carousel partial, In Focus different again). One molecule is easier to maintain and matches design-language modularization. |
-| See all as its own link | Entire title row navigates; See all is visual CTA only | Clearer affordance, single hit target, no double-link confusion. Hover on row highlights button via parent. |
-| Task scope = link fix only | Also scaffolded **`.or-flow`** vertical spacing utility (not wired to live templates yet) | Prep for tightening section spacing without another refactor; documented in `docs/design-language.md`. |
+| See all as its own link | Title plain; only See all links | Clear CTA; heads match with/without sliders. |
+| Task scope = link fix only | Also **`.or-section`** + **slider-chrome** (side arrows) + **`.or-flow`** scaffold | Shared design system, not per-strip one-offs. |
+| Sidebar heads different | Same head molecule as main | One pattern sitewide. |
 
 ## Client action needed
 
@@ -52,7 +53,7 @@ Local: `http://localhost:3000/` — hard refresh.
 |------|----------|
 | Pre-change files (2.2 first touch) | `templates-archive/` — `category-sidebar-image.html`, `categoty-products.html`, `home-event.html`, `recent-home.html`, `recent-video.html`, `featured.html` (baseline `9a14f93`) |
 | Also changed (archived earlier by 2.1) | `home.html`, `home.scss`, `home.js` — same tree; restore undoes all project edits on that path |
-| New files (delete to undo) | `templates/components/orbooks/section-head.html`, `assets/scss/or-books/section-head.scss`, `assets/scss/or-books/flow.scss`, `templates/components/orbooks/flow.html` |
+| New files (delete to undo) | `templates/components/orbooks/section-head.html`, `assets/scss/or-books/section.scss`, `assets/scss/or-books/section-head.scss`, `assets/scss/or-books/slider-chrome.scss`, `assets/scss/or-books/flow.scss`, `templates/components/orbooks/flow.html` |
 | Restore one file | `cp templates-archive/<path> orbooks-theme/<path>` |
 
 ## Screenshots / media
@@ -61,6 +62,6 @@ None in `_office/2.2-fix-fake-links/` yet. Briefboard task has client media `120
 
 ## Related / follow-up
 
-- **4.8** — Use one slider style (dots sitewide per client decision).
+- **4.8** — Switch `.or-slider-nav` to dots sitewide when client approves (slot + SCSS stub ready).
 - **5.2** — Featured Author slider typography (separate).
 - **`or-flow`** — wire on `.custom-content`, `.page-content`, etc. when ready to replace ad-hoc section margins.

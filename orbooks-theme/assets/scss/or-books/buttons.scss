@@ -4,7 +4,7 @@
 
 .or-btn {
     --or-btn-letter-spacing: 0;
-    --or-btn-line-height: 1;
+    --or-btn-line-height: 1.2;
 
     display: inline-flex;
     align-items: center;
@@ -14,6 +14,7 @@
     letter-spacing: var(--or-btn-letter-spacing);
     line-height: var(--or-btn-line-height);
     text-align: center;
+    vertical-align: middle;
     transform: none;
     @include hc-700;
 
@@ -23,20 +24,82 @@
     }
 }
 
+// Beat BigCommerce `.button` (inline-block, line-height: 1rem, margin-bottom)
+.or-btn.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: var(--or-btn-line-height);
+    margin-block-end: 0;
+    vertical-align: middle;
+}
+
 .or-btn-block {
+    --or-btn-block-font-size: 0.875rem;
+    --or-btn-block-pad-block: 0.625rem;
+
     display: flex;
     inline-size: 100%;
     box-sizing: border-box;
+    font-size: var(--or-btn-block-font-size);
+    padding-block: var(--or-btn-block-pad-block);
+    padding-inline: 1rem;
 }
 
-// Compact CTA (e.g. section-head “See all”) — same chrome as primary, smaller padding
+// Beat `.button` padding / `.blog-list … .read-btn-link` capitalize one-offs
+.or-btn.or-btn-block.button {
+    display: flex;
+    inline-size: 100%;
+    margin-block-end: 0;
+    font-size: var(--or-btn-block-font-size);
+    line-height: var(--or-btn-line-height);
+    padding-block: var(--or-btn-block-pad-block);
+    padding-inline: 1rem;
+    text-transform: uppercase;
+}
+
+// Equal/higher specificity than `.blog-list .blog .read-btn .read-sub-btn .read-btn-link` (news.scss)
+.blog-list .blog .read-btn .or-btn.or-btn-block.read-btn-link {
+    font-size: var(--or-btn-block-font-size);
+    padding-block: var(--or-btn-block-pad-block);
+    padding-inline: 1rem;
+    text-transform: uppercase;
+}
+
+// Fluid block CTA by section container width (sidebar vs main)
+@container or-section (min-width: 22rem) {
+    .or-btn.or-btn-block {
+        --or-btn-block-font-size: 1rem;
+        --or-btn-block-pad-block: 0.75rem;
+    }
+}
+
+@container or-section (min-width: 40rem) {
+    .or-btn.or-btn-block {
+        --or-btn-block-font-size: 1.125rem;
+        --or-btn-block-pad-block: 0.75rem;
+    }
+}
+
+// Compact CTA (e.g. section-head “See all”) — height + matching line-height; see CodyHouse vertical button alignment
 .or-btn-sm {
-    --or-btn-sm-pad-block: 0.35rem;
     --or-btn-sm-pad-inline: 0.75rem;
     --or-btn-sm-font-size: 0.75rem;
+    --or-btn-sm-block-size: 1.625rem;
 
-    padding-block: var(--or-btn-sm-pad-block);
+    display: inline-block;
+    block-size: var(--or-btn-sm-block-size);
+    padding-block: 0;
     padding-inline: var(--or-btn-sm-pad-inline);
     font-size: var(--or-btn-sm-font-size);
-    line-height: 1;
+    line-height: var(--or-btn-sm-block-size);
+    text-align: center;
+    vertical-align: middle;
+}
+
+// Highest-specificity: win over `.button { line-height: 1rem }` and `.or-btn { inline-flex }`
+.or-btn.or-btn-sm.button {
+    display: inline-block;
+    margin-block-end: 0;
+    line-height: var(--or-btn-sm-block-size);
 }

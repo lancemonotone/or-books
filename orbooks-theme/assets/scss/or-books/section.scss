@@ -1,0 +1,22 @@
+// Organism: .or-section — shared section shell (head + body)
+// Design language: docs/design-language.md
+// Pair with .or-section-head; add .or-section--slider when body is a Slick carousel.
+
+.or-section {
+    --or-section-head-min-size: 44px;
+    --or-section-head-gap: 0.25rem;
+    --or-section-head-pad-block: 0.25rem;
+    --or-section-head-margin-end: 0.5rem;
+
+    box-sizing: border-box;
+    position: relative;
+    // Size CTAs (e.g. Read Now) by section width — sidebar vs main
+    container-type: inline-size;
+    container-name: or-section;
+
+    @media (min-width: 768px) {
+        --or-section-head-gap: 0.75rem;
+        --or-section-head-pad-block: 0.15rem;
+        --or-section-head-margin-end: 0.35rem;
+    }
+}

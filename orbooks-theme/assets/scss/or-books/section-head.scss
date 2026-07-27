@@ -1,63 +1,81 @@
-// Molecule: .or-section-head — title + mini See all as one link
+// Molecule: .or-section-head — plain title + See all (shared by all section types)
 // Design language: docs/design-language.md
 // Template: templates/components/orbooks/section-head.html
-// Atom deps: .or-btn / .or-btn-sm (buttons.scss) + BC button--primary colors
+// Tokens: prefer parent .or-section custom properties when present
+// Slider arrows: never here — carousel sides via slider-chrome.scss (.or-section--slider)
 
 .or-section-head {
-    --or-section-head-min-size: 44px;
-    --or-section-head-gap: 0.25rem;
-    --or-section-head-pad-block: 0.25rem;
     --or-section-head-dir: column;
     --or-section-head-justify: center;
-    --or-section-head-align: center;
-    --or-section-head-margin-end: 0.5rem;
+    --or-section-head-wrap: wrap;
 
     display: flex;
     flex-direction: var(--or-section-head-dir);
-    flex-wrap: wrap;
-    align-items: var(--or-section-head-align);
+    flex-wrap: var(--or-section-head-wrap);
+    align-items: center;
     justify-content: var(--or-section-head-justify);
-    gap: var(--or-section-head-gap);
+    gap: var(--or-section-head-gap, 0.25rem);
     box-sizing: border-box;
-    min-block-size: var(--or-section-head-min-size);
-    padding-block: var(--or-section-head-pad-block);
-    margin-block-end: var(--or-section-head-margin-end);
-    text-decoration: none;
+    inline-size: 100%;
+    min-block-size: var(--or-section-head-min-size, 44px);
+    padding-block: var(--or-section-head-pad-block, 0.25rem);
+    margin-block-end: var(--or-section-head-margin-end, 0.5rem);
+    text-align: center;
     color: inherit;
-    cursor: pointer;
 
     @media (min-width: 768px) {
         --or-section-head-dir: row;
         --or-section-head-justify: space-between;
-        --or-section-head-align: center;
-        --or-section-head-gap: 0.75rem;
-        --or-section-head-pad-block: 0.15rem;
-        --or-section-head-margin-end: 0.35rem;
+        --or-section-head-wrap: nowrap;
+        text-align: left;
     }
+}
+
+.or-section-head-title,
+.or-section-head .page-heading,
+.or-section-head .sidebar-heading {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    margin: 0;
+    text-align: inherit;
+    @include hc-700;
+    font-size: 24px;
+    color: $color-greyDarkest;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1;
+
+    @media (min-width: 1024px) {
+        font-size: 27px;
+    }
+
+    @media (min-width: 1440px) {
+        font-size: 30px;
+    }
+}
+
+.or-section-head-actions {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-sizing: border-box;
+
+    @media (min-width: 768px) {
+        justify-content: flex-end;
+    }
+}
+
+.or-section-head-cta.button {
+    flex-shrink: 0;
+    margin: 0;
+    text-decoration: none;
 
     &[data-or-section-head-pending] {
         pointer-events: none;
         cursor: default;
-    }
-
-    .or-section-head-title,
-    .page-heading,
-    .sidebar-heading {
-        margin: 0;
-        text-align: inherit;
-    }
-
-    // CTA size/type in buttons.scss; no pointer — whole head is the hit target
-    .or-section-head-cta.button {
-        margin: 0;
-        pointer-events: none;
-    }
-
-    &:hover .or-section-head-cta.button--primary,
-    &:focus-visible .or-section-head-cta.button--primary {
-        background-color: stencilColor("button--primary-backgroundColorHover");
-        border-color: stencilColor("button--primary-backgroundColorHover");
-        color: stencilColor("button--primary-color");
     }
 
     &:focus-visible {
@@ -66,10 +84,9 @@
     }
 }
 
-.custom-sidebar .or-section-head {
-    @media (min-width: 768px) {
-        --or-section-head-dir: column;
-        --or-section-head-justify: flex-start;
-        --or-section-head-align: flex-start;
-    }
+.or-section-head-cta.button--primary:hover,
+.or-section-head-cta.button--primary:focus-visible {
+    background-color: stencilColor("button--primary-backgroundColorHover");
+    border-color: stencilColor("button--primary-backgroundColorHover");
+    color: stencilColor("button--primary-color");
 }

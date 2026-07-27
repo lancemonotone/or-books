@@ -1,0 +1,104 @@
+// Shared slider chrome for any .or-section--slider
+// Design language: docs/design-language.md
+// Arrows stay on the Slick carousel (DOM). Side-mounted, vertically centered — never in the section head.
+// Track padding keeps slide text clear of arrows.
+// 4.8: style .slick-dots here the same shared way — no per-page one-offs.
+
+.or-section.or-section--slider {
+    --or-slider-arrow-size: 1.25rem;
+    --or-slider-arrow-inset: 0;
+    --or-slider-track-pad: calc(var(--or-slider-arrow-size) + 0.35rem);
+
+    @media (min-width: 1024px) {
+        --or-slider-arrow-size: 1.4375rem;
+    }
+
+    // Position relative to the carousel; pad so arrows sit in the gutter
+    // Match ≥4-class specificity so legacy `.home-new .productCarousel` padding shorthand cannot zero the sides
+    .slick-slider.slick-initialized {
+        position: relative;
+        box-sizing: border-box;
+        padding-inline: var(--or-slider-track-pad);
+        padding-left: var(--or-slider-track-pad);
+        padding-right: var(--or-slider-track-pad);
+    }
+
+    .slick-arrow {
+        position: absolute;
+        z-index: 2;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        // Physical + logical: beat legacy `width/height: auto` overrides (e.g. sidebar)
+        width: var(--or-slider-arrow-size);
+        height: var(--or-slider-arrow-size);
+        inline-size: var(--or-slider-arrow-size);
+        block-size: var(--or-slider-arrow-size);
+        min-width: var(--or-slider-arrow-size);
+        min-height: var(--or-slider-arrow-size);
+        margin: 0;
+        padding: 0;
+        border: none;
+        font-size: 0;
+        line-height: 0;
+        background-color: transparent;
+        background-image: none;
+        box-shadow: none;
+
+        &::before {
+            content: "";
+            display: block;
+            width: var(--or-slider-arrow-size);
+            height: var(--or-slider-arrow-size);
+            inline-size: var(--or-slider-arrow-size);
+            block-size: var(--or-slider-arrow-size);
+            background-image: url("../img/left-slider.svg");
+            background-position: 50%;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 1;
+        }
+
+        &:hover,
+        &:focus {
+            background-color: transparent;
+            background-image: none;
+        }
+
+        &.slick-disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+    }
+
+    .slick-arrow.slick-prev {
+        left: var(--or-slider-arrow-inset);
+        right: auto;
+    }
+
+    .slick-arrow.slick-next {
+        right: var(--or-slider-arrow-inset);
+        left: auto;
+
+        &::before {
+            transform: rotate(180deg);
+        }
+    }
+
+    // 4.8 prep — shared dots when enabled
+    .slick-dots {
+        position: static;
+        display: flex;
+        justify-content: center;
+        gap: 0.35rem;
+        margin: 0.75rem 0 0;
+        padding: 0;
+        list-style: none;
+        inset: auto;
+        transform: none;
+        inline-size: auto;
+        block-size: auto;
+    }
+}

@@ -51,53 +51,7 @@
                         color: $color-greyDarker;
                     }
                 }
-                .slick-arrow {
-                    width: auto;
-                    height: auto;
-                    padding: 0;
-                    background-color: initial;
-                    border: none;
-                    top: 5px;
-                    &:before {
-                        background-image: url('../img/left-slider.svg');
-                        width: 23px;
-                        height: 23px;
-                        width: 20px;
-                        height: 20px;
-                        opacity: 1;
-                        @include medium {
-                            width: 18px;
-                            height: 18px;
-                             opacity: 1;
-                        }
-                        @include xxlarge {
-                            width: 23px;
-                            height: 23px;
-                        }
-                    }
-                    &.slick-prev {
-                        //
-                        //right: 26px;
-                        @include medium {
-                            right: 22px;
-                            left: auto;
-                        }
-                        @include xxlarge {
-                            right: 29px;
-                        }
-                    }
-                    &.slick-next {
-                            right: 0;
-                        &:before {
-                            transform: rotate(180deg);
-                        }
-                    }
-                    // &:hover {
-                    //     &:before {
-                    //         background-image: url('../img/arrow-hover.svg');
-                    //     }
-                    // }
-                }
+                // Section arrows: .or-section--slider in slider-chrome.scss
                 .top-product {
                     margin-top: 36px;
                     @include medium {
@@ -349,27 +303,12 @@
                                         transform: none;
                                         padding: 0;
                                     }
+                                    // Sizing/type: .or-btn / .or-btn-block (+ container queries)
                                     .read-btn-link {
                                         position: static;
                                         transform: none;
-                                        width: 100%;
-                                        padding: 10px 0;
                                         max-width: 100%;
                                         margin: 0;
-                                        @include hc-400;
-                                        transition: 0.35s ease-in-out;
-                                        font-size: 14px;
-
-                                        @include medium {
-                                            font-size: 16px;
-                                        }
-                                        @include xlarge {
-                                            font-size: 18px;
-                                        }
-                                        @include xxlarge {
-                                            padding: 12px 0;
-                                            font-size: 22px;
-                                        }
                                     }
                                     &:after {
                                         content: none;
@@ -601,57 +540,52 @@
             font-size: 30px;
         }
     }
-    .slick-arrow {
-        width: auto;
-        height: auto;
-        padding: 0;
-        background-color: initial;
-        border: none;       
-        @include medium {
-            top: 5px;
-            display: inline-block !important;
-        }
-        &:before {
-            background-image: url('../img/left-slider.svg');
-            width: 20px;
-            height: 20px;
-            //opacity: .5;
+    // Section carousels (Forthcoming, etc.): .or-section--slider in slider-chrome.scss
+    // Hero carousel keeps its own arrow placement below.
+    .heroCarousel {
+        .slick-arrow {
+            width: auto;
+            height: auto;
+            padding: 0;
+            background-color: initial;
+            border: none;
             @include medium {
+                top: -15px;
+                display: inline-block !important;
+            }
+            &:before {
+                background-image: url('../img/left-slider.svg');
                 width: 20px;
                 height: 20px;
-                opacity: 1;
+                @include medium {
+                    width: 20px;
+                    height: 20px;
+                    opacity: 1;
+                }
+                @include xxlarge {
+                    width: 23px;
+                    height: 23px;
+                }
             }
-            @include xxlarge {
-                width: 23px;
-                height: 23px;
+            &.slick-prev {
+                left: -10px;
+                @include medium {
+                    right: 26px;
+                    left: auto;
+                }
+                @include xxlarge {
+                    right: 29px;
+                }
             }
-        }
-        // &:hover {
-        //     &:before {
-        //         background-image: url('../img/arrow-hover.svg');
-        //     }
-        // }
-     &.slick-prev {
-            left: -10px;
-            @include medium {
-                right: 26px;
-                left: auto;
-            }
-            @include xxlarge {
-                right: 29px;
-            }
-           
-            
-        }
-        &.slick-next {
-            right: -10px;
-            @include medium {
-                left: auto;
-                right: 0;
-            }
-           
-            &:before {
-                transform: rotate(180deg);
+            &.slick-next {
+                right: -10px;
+                @include medium {
+                    left: auto;
+                    right: 0;
+                }
+                &:before {
+                    transform: rotate(180deg);
+                }
             }
         }
     }
@@ -984,14 +918,14 @@
         }
         .productCarousel {
             &.newprd, &.singleprd, &.newprd-sale {
-                padding: 20px 0 0;
+                padding-block-start: 20px;
                 margin: 0;
                 justify-content: center;
                 @include xlarge {
-                    padding: 26px 0 0;
+                    padding-block-start: 26px;
                 }
                 @include xxlarge {
-                    padding: 55px 0 0;
+                    padding-block-start: 55px;
                 }
                 &:before, &:after {
                     display: none;
@@ -1097,25 +1031,11 @@
                 }
             }
         }
-        &.new-product,&.best-seller-product{
-            .slick-arrow.slick-prev{
-                @include medium{
-                right: 100px;
-                }
-            }
-        }
     }
 
     .sale-home {
         @include xlarge {
             margin-top: 50px;
-        }
-    }
-    .featured{
-        .slick-arrow.slick-prev{
-            @include medium{
-            right: 100px;
-            }
         }
     }
     .recent-main {

@@ -79,7 +79,7 @@ function buildBlogPostHTML(post) {
       </div>
       <div class="read-btn">
         <div class="read-sub-btn">
-          <a class="button button--primary read-btn-link" href="${url}" aria-label="${name} read now">read now</a>
+          <a class="button button--primary or-btn or-btn-block read-btn-link" href="${url}" aria-label="${name} read now">read now</a>
         </div>
       </div>
       <div class="blog-post-body with-img">

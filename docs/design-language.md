@@ -44,14 +44,35 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Status:** Scaffolded and imported. **Not wired** into live page templates yet.
 - **Wire later on:** home `.custom-content`, category `.page-content`, CMS `.page` / `.page-content`, product `.pdp-js`, blog `.page`.
 
+## Organism: Section (`.or-section`)
+
+- **Styles:** `orbooks-theme/assets/scss/or-books/section.scss`
+- **Job:** Shared shell for any homepage (etc.) block that uses `.or-section-head` + body.
+- **Modifier:** `.or-section--slider` when the body is a Slick carousel — enables shared arrow chrome only (does not change the head).
+
 ## Molecule: Section head (`.or-section-head`)
 
 - **Template:** `orbooks-theme/templates/components/orbooks/section-head.html`
 - **Styles:** `orbooks-theme/assets/scss/or-books/section-head.scss`
-- **Job:** One link for a home slider / list section — title + mini **See all** CTA (not a nested link).
-- **CTA:** `button button--primary or-btn or-btn-sm` (styles in `buttons.scss`; section-head paints hover via parent link).
-- **Tap:** Whole control ≥ 44px tall on phone/tablet; CTA is visual only (`pointer-events: none`).
-- **Variants:** pass `title_class="sidebar-heading"` in the sidebar; omit `url` when AJAX fills `data-or-section-head-pending`.
+- **Job:** Plain title + **See all** link. **Same for every section** — whether or not a slider follows.
+- **CTA:** Only See all is a link (`button button--primary or-btn or-btn-sm`). Title is not linked.
+- **Omit `url`** when AJAX fills `data-or-section-head-pending` on the See all link.
+- **Never** includes carousel arrows.
+
+## Molecule: Slider chrome (`.or-section--slider`)
+
+- **Styles:** `orbooks-theme/assets/scss/or-books/slider-chrome.scss`
+- **Job:** Shared Slick **arrow** look + placement: on the **carousel**, left/right, vertically centered. Not in the title row.
+- **Track pad:** `padding-inline` on `.slick-slider` so arrows sit in a gutter and do not cover slide text.
+- **DOM:** Arrows stay Slick children of the slider (default). No `appendArrows` into the head.
+- **4.8 (when approved):** style `.slick-dots` in this same file; heads stay unchanged.
+- **Usage:** add `or-section or-section--slider` on the section wrapper (e.g. Latest News, Forthcoming). Non-sliders use `or-section` only (e.g. Reading Lists).
+
+## Atom: Button (`.or-btn`)
+
+- **Styles:** `orbooks-theme/assets/scss/or-books/buttons.scss`
+- **Block CTA:** `.or-btn-block` — full width; font/padding via **container queries** on parent `.or-section` (`container-name: or-section`) so sidebar vs main sizes correctly.
+- **Compact:** `.or-btn-sm` for section-head See all.
 
 ## Molecule: Subjects
 
@@ -73,6 +94,7 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - Featured / “big book” block
 - News card / byline
 - Other CTAs → add `or-btn` as you touch them
+- **4.8:** dots sitewide via `slider-chrome.scss` (heads stay title + See all only)
 
 ## Naming
 

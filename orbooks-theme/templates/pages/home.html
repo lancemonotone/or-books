@@ -45,11 +45,10 @@ blog:
             {{/unless}}
 
             {{#unless theme_settings.home_events}}
-            <div class="event-carousel main-loader">
+            <div class="event-carousel main-loader or-section">
                 {{> components/orbooks/section-head
                     url="/events/"
                     title=(lang 'common.home_events')
-                    title_class="sidebar-heading"
                 }}
                 {{> components/orbooks/pre-loading}}
                 <ul class="eventgrid ">
@@ -58,11 +57,10 @@ blog:
             {{/unless}}
 
             {{#unless theme_settings.home_videos}}
-            <div class="video-home main-loader">
+            <div class="video-home main-loader or-section or-section--slider">
                 {{> components/orbooks/section-head
                     url="/videos/"
                     title=(lang 'common.home_video')
-                    title_class="sidebar-heading"
                 }}
                 {{> components/orbooks/pre-loading}}
                 <ul class="videomain ">
@@ -91,7 +89,7 @@ blog:
 
     {{#unless theme_settings.hide_new_products}}
         {{#if products.new}}
-            <div class="home-new new-product">
+            <div class="home-new new-product or-section or-section--slider">
                 {{> components/orbooks/section-head
                     title=(lang 'products.new')
                     category_id=theme_settings.new_category_id
@@ -106,7 +104,7 @@ blog:
     {{> components/orbookshome/recent-home}}
     
         {{#unless theme_settings.hide_bestsellers_products_homepage}}
-            <div class="home-new best-seller-product">
+            <div class="home-new best-seller-product or-section or-section--slider">
                 {{> components/orbooks/section-head
                     title=(lang 'products.top')
                     category_id=theme_settings.sale_category_id
@@ -120,7 +118,7 @@ blog:
     {{> components/orbookshome/recent-video}}
 
     {{#unless theme_settings.hide_onsale_products}}
-    <div class="home-new sale-home featured">
+    <div class="home-new sale-home featured or-section or-section--slider">
         <div class="inner-featured">
         {{#if products.featured}}
             {{> components/products/featured products=products.featured columns=theme_settings.homepage_featured_products_column_count}}

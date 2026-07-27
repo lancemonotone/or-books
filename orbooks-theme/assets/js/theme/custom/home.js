@@ -2,6 +2,15 @@ import utils from '@bigcommerce/stencil-utils';
 import $ from 'jquery';
 export default (function (context) {
 
+  /** Set pending See all href after AJAX category URL resolves. */
+  function orSetSectionHeadHref($section, url) {
+    if (!url) return;
+    $section
+      .find('.or-section-head-cta')
+      .attr('href', url)
+      .removeAttr('data-or-section-head-pending');
+  }
+
   function cardheight(){
     if (window.innerWidth > 1023) {
       var cards = $('.productCarousel .card-body');
@@ -49,8 +58,10 @@ export default (function (context) {
         slidesToShow: 1,
         centerMode: false,
         slidesToScroll: 1,
-        adaptiveHeight: true
-      });
+        adaptiveHeight: true,
+        arrows: true,
+        dots: false
+      }));
     }
   });
   if ($('.category-product-section').length) {
@@ -79,9 +90,7 @@ export default (function (context) {
                       $('.category-product-section').append('<div class="innersection custom-list-detail-'+[i]+'">' + response + '</div>');
                       $(".category-product-section .innersection .product:nth-child(n+30)").remove();
                       const newUrl = $('.category-product-section .innersection').last().find('[data-category-url]').attr('data-category-url');
-                      if (newUrl) {
-                        $('.home-new.new-product > .or-section-head').attr('href', newUrl);
-                      }
+                      orSetSectionHeadHref($('.home-new.new-product'), newUrl);
                       var viewportWidth = $(window).width();
                       if (viewportWidth > 1000) {
                         var Rows = 2;
@@ -90,7 +99,8 @@ export default (function (context) {
                         var Rows = 1;
                         var Slides = 1;
                       }
-                      $('.innersection .newprd').slick({
+                      const $newCarousel = $('.innersection .newprd');
+                      $newCarousel.slick({
                         dots: false,
                         arrows: true,
                         infinite: true,
@@ -159,9 +169,7 @@ export default (function (context) {
                       $('.sale-product-section').append('<div class="sale-innersection custom-list-detail-'+[i]+'">' + response + '</div>');
                       $(".sale-product-section .sale-innersection .product:nth-child(n+30)").remove();
                       const saleUrl = $('.sale-product-section .sale-innersection').last().find('[data-category-url]').attr('data-category-url');
-                      if (saleUrl) {
-                        $('.home-new.best-seller-product > .or-section-head').attr('href', saleUrl);
-                      }
+                      orSetSectionHeadHref($('.home-new.best-seller-product'), saleUrl);
                       var viewportWidth = $(window).width();
                       if (viewportWidth > 1000) {
                         var Rows = 2;
@@ -170,7 +178,8 @@ export default (function (context) {
                         var Rows = 1;
                         var Slides = 1;
                       }
-                      $('.sale-innersection .newprd').slick({
+                      const $saleCarousel = $('.sale-innersection .newprd');
+                      $saleCarousel.slick({
                         dots: false,
                         arrows: true,
                         infinite: true,
@@ -224,79 +233,122 @@ export default (function (context) {
     cardheight();
     
    
-    $('.newprd').slick({
-      dots: false,
-      arrows: true,
-      infinite: true,
-      slidesToShow: 3,
-      slidesToScroll: Slides,
-      rows: Rows,
-      responsive: [
-        {
-          breakpoint: 1000,
-          settings: {
-            slidesToShow: 3
+    $('.newprd').each(function () {
+      const $carousel = $(this);
+      if ($carousel.hasClass('slick-initialized')) return;
+      $carousel.slick({
+        dots: false,
+        arrows: true,
+        infinite: true,
+        slidesToShow: 3,
+        slidesToScroll: Slides,
+        rows: Rows,
+        responsive: [
+          {
+            breakpoint: 1000,
+            settings: {
+              slidesToShow: 3
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 2
+            }
+          },
+          {
+            breakpoint: 500,
+            settings: {
+              slidesToShow: 1
+            }
           }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2
+        ]
+      });
+    });
+
+    $('.newprd-sale').each(function () {
+      const $carousel = $(this);
+      if ($carousel.hasClass('slick-initialized')) return;
+      $carousel.slick({
+        dots: false,
+        arrows: true,
+        infinite: true,
+        slidesToShow: 3,
+        responsive: [
+          {
+            breakpoint: 1000,
+            settings: {
+              slidesToShow: 3
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 2
+            }
+          },
+          {
+            breakpoint: 500,
+            settings: {
+              slidesToShow: 1
+            }
           }
-        },
-        {
-          breakpoint: 500,
-          settings: {
-            slidesToShow: 1
-          }
-        }
-      ]
+        ]
+      });
     });
    
-    $('.singleprd').slick({
-      dots: false,
-      arrows: true,
-      infinite: true,
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      responsive: [
-        {
-          breakpoint: 1000,
-          settings: {
-            slidesToShow: 3
+    $('.singleprd').each(function () {
+      const $carousel = $(this);
+      if ($carousel.hasClass('slick-initialized')) return;
+      $carousel.slick({
+        dots: false,
+        arrows: true,
+        infinite: true,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        responsive: [
+          {
+            breakpoint: 1000,
+            settings: {
+              slidesToShow: 3
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 2
+            }
+          },
+          {
+            breakpoint: 500,
+            settings: {
+              slidesToShow: 1
+            }
           }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2
-          }
-        },
-        {
-          breakpoint: 500,
-          settings: {
-            slidesToShow: 1
-          }
-        }
-      ]
+        ]
+      });
     });
     setTimeout(() => {
       $(".recent-main.main-loader").removeClass('main-loader');
       $(".recent-main").children(".waviy").remove();
-      $('.recent-slide').slick({
-        dots: false,
-        arrows: true,
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        responsive: [
-          {
-            breakpoint: 769,
-            settings: {
-              arrows: false,
+      $('.recent-slide').each(function () {
+        const $carousel = $(this);
+        if ($carousel.hasClass('slick-initialized')) return;
+        $carousel.slick({
+          dots: false,
+          arrows: true,
+          infinite: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          responsive: [
+            {
+              breakpoint: 769,
+              settings: {
+                arrows: false,
+              }
             }
-          }
-        ]
+          ]
+        });
       });
     }, 100);
 
@@ -304,29 +356,37 @@ export default (function (context) {
 
       $(".home-video-main.main-loader").removeClass('main-loader');
       $(".home-video-main").children(".waviy").remove();
-      $('.video-slide').slick({
+      $('.video-slide').each(function () {
+        const $carousel = $(this);
+        if ($carousel.hasClass('slick-initialized')) return;
+        $carousel.slick({
+          dots: false,
+          arrows: true,
+          infinite: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          responsive: [
+            {
+              breakpoint: 769,
+              settings: {
+                arrows: false,
+              }
+            }
+          ]
+        });
+      });
+    }, 100);
+    $('.blog-cont').each(function () {
+      const $carousel = $(this);
+      if ($carousel.hasClass('slick-initialized')) return;
+      $carousel.slick({
         dots: false,
         arrows: true,
         infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,
-        responsive: [
-          {
-            breakpoint: 769,
-            settings: {
-              arrows: false,
-            }
-          }
-        ]
+        adaptiveHeight: true
       });
-    }, 100);
-    $('.blog-cont').slick({
-      dots: false,
-      arrows: true,
-      infinite: true,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      adaptiveHeight: true
     });
     $('.author-banner-main').slick({
       dots: false,
