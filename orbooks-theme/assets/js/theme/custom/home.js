@@ -11,24 +11,6 @@ export default (function (context) {
       .removeAttr('data-or-section-head-pending');
   }
 
-  function cardheight(){
-    if (window.innerWidth > 1023) {
-      var cards = $('.productCarousel .card-body');
-      var maxHeight = 0;
-
-      // Loop all cards and check height, if bigger than max then save it
-      for (var i = 0; i < cards.length; i++) {
-        if (maxHeight < $(cards[i]).outerHeight()) {
-          maxHeight = $(cards[i]).outerHeight();
-        }
-      }
-      // Set ALL card bodies to this height
-      for (var i = 0; i < cards.length; i++) {
-        $(cards[i]).height(maxHeight);
-      }
-    }
-  }
-
   if ($(".top-product").length) {
     var product_id = context.SidebarProductId
 
@@ -61,7 +43,7 @@ export default (function (context) {
         adaptiveHeight: true,
         arrows: true,
         dots: false
-      }));
+      });
     }
   });
   if ($('.category-product-section').length) {
@@ -128,7 +110,6 @@ export default (function (context) {
                           }
                         ]
                       });
-                      cardheight();
                       return;
                     })
                   }
@@ -230,9 +211,6 @@ export default (function (context) {
     var Slides = 1;
   }
   $(document).ready(function () {
-    cardheight();
-    
-   
     $('.newprd').each(function () {
       const $carousel = $(this);
       if ($carousel.hasClass('slick-initialized')) return;
