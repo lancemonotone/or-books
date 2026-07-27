@@ -37,4 +37,4 @@ The old sidebar locked to a short sticky box with an inner scroll. With a full s
 
 ## Rollback (theme originals)
 
-Pre-change theme files live in repo-root `templates-archive/` (not zipped with Stencil). See `templates-archive/README.md`.
+Pre-change theme files live in repo-root `templates-archive/` (not zipped with Stencil). **Write-once** per path from baseline `9a14f93`; see `templates-archive/README.md`. Later tasks skip paths already archived.

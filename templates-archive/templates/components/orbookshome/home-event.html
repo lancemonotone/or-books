@@ -1,0 +1,8 @@
+<div class="blog-main-home blog-list">
+    <a class="sidebar-heading" href="/news/">{{lang 'common.home_news'}}</a>
+    <div class="blog-cont">
+        {{#each blog.recent_posts }}
+            {{> components/blog/post post=this theme_settings=../theme_settings show_tags=true}}
+        {{/each}}
+    </div>
+</div>

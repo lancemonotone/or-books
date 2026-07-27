@@ -83,7 +83,7 @@ checkout no longer embeds Helvetica files. Tracker: issue #1.
 Stacks: condensed → `"Roboto Condensed", Helvetica, Arial, sans-serif`;
 body → `Helvetica, Arial, sans-serif`; Neue → `"Helvetica Neue", Helvetica, Arial, sans-serif`.
 
-Notes / older paste trials: `_office/helvetica-removal/`  
+Notes / older paste trials: `_office/1.2-helvetica-removal/`  
 Email thread: `_office/helvetica.md`
 
 Deploy when ready: `stencil push -a`, then Network → Font check (no store CDN Helvetica).

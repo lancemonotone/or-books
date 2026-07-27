@@ -131,7 +131,46 @@ You have access to edit theme files in our account but let me know in case you h
 Best,
 Antara
 
---
+---
 
-lewis.fender@lux-magazine.com zapier-demo@squarespace.com
-Page 1 of 1
+Antara Ghosh
+(latest — retroactive licensing)
+
+Also, on another front, the Monotype guys have asked us to pay them a fee for retroactive usage from 2024 January when this website was launched. Do you know if the company who designed this should have a license for the fonts they have used in the website?
+
+---
+
+## Draft reply to Antara (retroactive licensing — not sent)
+
+Hi Antara,
+
+On the retroactive fee: **I'm not a lawyer**, so take this as general background, not legal advice. Before you pay anything or reply to Monotype in a way that commits you, I'd get someone who handles IP or licensing to read their letter.
+
+**Who Monotype usually goes after**
+
+When font files are hosted on the site and downloaded by visitors' browsers (which is what the embedded Helvetica was doing), foundries usually contact whoever owns and runs the website. That's OR Books, even if the agency put the fonts in the theme.
+
+**Whether the original designers should have had a license**
+
+The original designers might have had a license, but there are different kinds:
+
+- A **desktop or design license** covers mockups and internal work. It doesn't automatically let you serve the font to everyone who visits orbooks.com.
+- A **webfont license** (often tied to your domain) is what you normally need when font files are hosted on the site and downloaded by browsers. That's the piece that was missing here.
+
+So the build team should either have not embedded proprietary Helvetica files, or made sure you had the right webfont license for orbooks.com before launch. A lot of agencies don't check that. It doesn't automatically mean Monotype goes after them instead of you, but it might matter under your contract with them.
+
+**What I'd do**
+
+1. **Don't pay or admit fault over email** until someone qualified has read Monotype's letter. These are often negotiable, especially once the fonts are off the site.
+
+2. **Dig up your contract or statement of work** with whoever built the site. See if it says anything about fonts, licensed assets, or who's responsible if something like this comes up.
+
+3. **Ask the original developers in writing** whether they bought a webfont license for orbooks.com, who added the Helvetica files, and what they thought the licensing situation was at launch.
+
+4. **Hang on to a record of the fix.** We've documented that the theme was serving Helvetica files, and the updated theme removes them so the site won't distribute those files after deploy. That helps if you need to show Monotype you've fixed it. It doesn't wipe out past use, which is what they're asking retroactive fees for.
+
+5. **Get a short legal consult** before you respond to Monotype. They can tell you what's normal, what's worth pushing back on, and whether you have any leverage with the original builders.
+
+I'm happy to put together technical notes for your lawyer or Monotype (what was embedded, when we removed it, how the site works now) if that would help.
+
+Rus

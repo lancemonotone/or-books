@@ -19,6 +19,14 @@ Live board: `https://lancemonotone.com/or-books/app/` — docs `API.md`, endpoin
 - Token file: `.cursor/secrets.briefboard.json` (gitignored). Copy from `.cursor/secrets.briefboard.example.json`.
 - Fields: `baseUrl`, `agent_api_token` (from that install’s `config.php`). Never commit or paste the token in chat.
 
+### Task delivery notes (client copy source)
+
+Per-task outcome memos for agents: `_office/<task-slug>/NOTES.md`. Index + template: `_office/README.md`, `_office/TASK-NOTES-TEMPLATE.md`.
+
+Use these (plus Briefboard API) to draft what changed, scope divergences, and client action items — not play-by-play dev logs.
+
+Theme rollback snapshots: `templates-archive/` — **write-once** pre-change originals per path (baseline `9a14f93`); single tree, no per-task folders; never put shipped code or later edits there (`templates-archive/README.md` → Agent contract).
+
 ### Testing / TDD
 
 Do **not** use TDD (`/tdd`, red-green-refactor, failing tests first) in this repo.

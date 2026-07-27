@@ -1,0 +1,60 @@
+{{#unless theme_settings.hide_recent_video}}
+<div class="home-video-main main-loader">
+    <a href="/videos/" class="page-heading">{{lang 'common.video_title'}}</a>
+    {{> components/orbooks/pre-loading}}
+    <div class="video-slide">
+        <div class="vid-main">
+            <div class="vid-img">
+                <img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/recent-videos-banner-new-size.jpg?t=1704458082">
+            </div>
+            <div class="vid-content">
+                <h4>Jeremy Corbyn and Len McCluskey - Poetry for the Many</h4>
+                <h5>Live at The Casa, Liverpool</h5>
+                <p>Jeremy Corbyn and Len McCluskey read from their latest collaboration - Poetry For The Many - a selection of poems that have shaped them over the years.  With Karie Murphy.  Live from Liverpool.  </p>
+                {{#if theme_settings.video_first_url}}
+                    <a href="{{theme_settings.video_first_url}}" target="_blank">Watch Video</a>
+                {{/if}}
+            </div>
+        </div>
+        <div class="vid-main">
+            <div class="vid-img">
+                <img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/recent-videos-banner-new-size.jpg?t=1704458082">
+            </div>
+            <div class="vid-content">
+                <h4>Black Lives Matter & The Question of Violence</h4>
+                <h5>Gary Younge</h5>
+                <p>Full 33 minute interview with Gary Younge on Double Down News</p>
+                {{#if theme_settings.video_second_url}}
+                    <a href="{{theme_settings.video_second_url}}" target="_blank">Watch Video</a>
+                {{/if}}
+            </div>
+        </div>
+       <!--  <div class="vid-main">
+            <div class="vid-img">
+                <img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/recent-videos-banner3.jpg?t=1703753991">
+            </div>
+            <div class="vid-content">
+                <h4>ReDiscovering Earth</h4>
+                <h5>Anders Dunker</h5>
+                <p>Dialogues on the future of nature, with Jared Diamond, Bill McKibben, Kim Stanley Robinson, and more.</p>
+                {{#if theme_settings.video_third_url}}
+                    <a href="{{theme_settings.video_third_url}}" target="_blank">Watch Video</a>
+                {{/if}}
+            </div>
+        </div>
+       <div class="vid-main">
+            <div class="vid-img">
+                <img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/recent-video-img.png">
+            </div>
+            <div class="vid-content">
+                <h4>ReDiscovering Earth</h4>
+                <h5>Anders Dunker</h5>
+                <p>Dialogues on the future of nature, with Jared Diamond, Bill McKibben, Kim Stanley Robinson, and more.</p>
+                {{#if theme_settings.video_fourth_url}}
+                    <a href="{{theme_settings.video_fourth_url}}" target="_blank">Watch Video</a>
+                {{/if}}
+            </div>
+        </div>-->
+    </div>
+</div>
+{{/unless}}
