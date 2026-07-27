@@ -938,7 +938,7 @@
                                     width: 100%;
                                 }
                                 .card-body {
-                                    flex: 1 0 auto;
+                                    flex: 0 0 auto;
                                     text-align: center;
                                     padding-top: 14px;
                                     @include medium {
@@ -967,6 +967,11 @@
                                             font-size: 18px;
                                         }
                                     }
+                                }
+                                .card-link {
+                                    // Pin quick-view to bottom of equal-height cards; gap sits above icon
+                                    margin-top: auto;
+                                    align-self: stretch;
                                 }
                             }
                             .product {
