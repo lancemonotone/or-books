@@ -106,6 +106,7 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - Full Catalog-child list always visible — no expand/collapse.
 - No drop-shadow hover on links (underline / color only).
 - Home CTA label: **View Catalog** → `/catalog/`.
+- **Alignment:** centered below two-column layout; left-aligned from `medium` (1024) when sidebar is a column.
 
 ## Next candidates (later chunks)
 

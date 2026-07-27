@@ -8,18 +8,19 @@
     --or-subjects-line: 1.35;
     --or-subjects-cta-mt: 1rem;
 
+    // Stay centered until two-column layout (medium / 1024)
     text-align: center;
 
     @include small {
         --or-subjects-title-size: 1.25rem;
         --or-subjects-link-size: 1rem;
-        text-align: left;
     }
 
     @include medium {
         --or-subjects-title-size: 1.5rem;
         --or-subjects-link-size: 1.0625rem;
         --or-subjects-gap: 0.4rem;
+        text-align: left;
     }
 
     @include large {
@@ -44,7 +45,7 @@
         max-width: 20rem;
         margin-inline: auto;
 
-        @include small {
+        @include medium {
             margin-inline: 0;
         }
     }
