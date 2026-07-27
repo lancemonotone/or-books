@@ -78,16 +78,10 @@
         .past-events{
             margin-top: 80px;
             h2{
+                // type: add .or-heading in markup when wiring this block
                 text-align: center;
-                font-family: $or-font-condensed;
-                font-weight: 700;
-                font-size: 24px;
-                letter-spacing: 2px;
-                text-transform: uppercase;
-                margin: 0;
-                line-height: 1;
-                color: black;
-                margin-bottom: 30px;
+                margin: 0 0 30px;
+                letter-spacing: 0;
             }
             li{
                 list-style: none;
@@ -143,16 +137,10 @@
         
         margin-top: 80px;
         h2{
+            // type: add .or-heading in markup when wiring this block
             text-align: center;
-            font-family: $or-font-condensed;
-            font-weight: 700;
-            font-size: 24px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin: 0;
-            line-height: 1;
-            color: black;
-            margin-bottom: 30px;
+            margin: 0 0 30px;
+            letter-spacing: 0;
         }
         .upcoming-events{
            
@@ -189,24 +177,11 @@
     }
     .featured-event{
         .sidebarBlock-heading{
+            // type: .or-heading (headings.scss) — add class in markup
             text-align: center;
-            @include hc-700;
-        font-size: 24px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin: 0;
-        line-height: 1;
-        color: $color-greyDarkest;
-        cursor: pointer;
-        @include medium {
-            font-size: 21px;
-        }
-        @include xlarge {
-            font-size: 24px;
-        }
-        @include xxlarge {
-            font-size: 30px;
-        }
+            margin: 0;
+            cursor: pointer;
+            letter-spacing: 0;
         }
 
     }
@@ -218,23 +193,11 @@
         }
    
         .sidebar-heading {
-            @include hc-700;
-            font-size: 24px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            // type: .or-heading (headings.scss)
             margin: 0;
-            line-height: 1;
-            color: $color-greyDarkest;
             cursor: pointer;
-            @include medium {
-                font-size: 21px;
-            }
-            @include xlarge {
-                font-size: 24px;
-            }
-            @include xxlarge {
-                font-size: 30px;
-            }
+            letter-spacing: 0;
+
             &:hover {
                 color: $color-greyDarker;
             }

@@ -50,10 +50,19 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Job:** Shared shell for any homepage (etc.) block that uses `.or-section-head` + body.
 - **Modifier:** `.or-section--slider` when the body is a Slick carousel — enables shared arrow chrome only (does not change the head).
 
+## Atom: Heading (`.or-heading`)
+
+- **Styles:** `orbooks-theme/assets/scss/or-books/headings.scss`
+- **Job:** Shared strip / section title type (Roboto Condensed bold, uppercase, fluid size). **No letter-spacing.**
+- **Also zeros** letter-spacing on `h1–h6`, `.page-heading`, `.sidebar-heading`, and related legacy title classes.
+- **Use** `or-heading` on section strip titles (via `section-head.html`) and other matching uppercase strip titles.
+- Page H1s that need a different scale (category, blog, CMS) may keep `.page-heading` with page-file size overrides — do not re-declare the strip title recipe there.
+
 ## Molecule: Section head (`.or-section-head`)
 
 - **Template:** `orbooks-theme/templates/components/orbooks/section-head.html`
-- **Styles:** `orbooks-theme/assets/scss/or-books/section-head.scss`
+- **Styles:** `orbooks-theme/assets/scss/or-books/section-head.scss` (layout only)
+- **Title type:** `.or-heading` from `headings.scss`
 - **Job:** Plain title + **See all** link. **Same for every section** — whether or not a slider follows.
 - **CTA:** Only See all is a link (`button button--primary or-btn or-btn-sm`). Title is not linked.
 - **Omit `url`** when AJAX fills `data-or-section-head-pending` on the See all link.

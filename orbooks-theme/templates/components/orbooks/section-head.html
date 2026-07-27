@@ -1,11 +1,11 @@
 {{!--
   Shared section head (design language).
   Plain title + See all link — identical for every section (slider or not).
-  Slider arrows are NOT part of this molecule; they live on the carousel (slider-chrome.scss).
-  Pass: title, url and/or category_id, cta, title_class.
+  Title type: .or-heading (headings.scss). Slider arrows stay on the carousel.
+  Pass: title, url and/or category_id, cta.
 --}}
 <div class="or-section-head">
-    <h2 class="or-section-head-title {{#if title_class}}{{title_class}}{{else}}page-heading{{/if}}">{{title}}</h2>
+    <h2 class="or-heading">{{title}}</h2>
     <div class="or-section-head-actions">
         <a
             class="or-section-head-cta button button--primary or-btn or-btn-sm"

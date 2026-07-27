@@ -54,6 +54,7 @@ Task delivery notes: `_office/<task-slug>/NOTES.md` — see `_office/README.md`.
 | `templates/components/orbooks/section-head.html` | 2.2 |
 | `assets/scss/or-books/section-head.scss` | 2.2 |
 | `assets/scss/or-books/section.scss` | 2.2 |
+| `assets/scss/or-books/headings.scss` | 2.2 |
 | `assets/scss/or-books/slider-chrome.scss` | 2.2 |
 | `assets/scss/or-books/flow.scss` | 2.2 |
 | `templates/components/orbooks/flow.html` | 2.2 |

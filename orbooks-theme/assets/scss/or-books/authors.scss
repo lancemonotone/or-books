@@ -19,7 +19,7 @@
             @include hc-400;
             font-size: 24px;
             color: $color-greyDarkest;
-            letter-spacing: 2px;
+            letter-spacing: 0;
             text-transform: capitalize;
             line-height: 1;
             margin: 0;
@@ -454,7 +454,7 @@
             @include hc-700;
             font-size: 18px;
             color: $color-greyDarkest;
-            letter-spacing: 2px;
+            letter-spacing: 0;
             text-transform: uppercase;
             line-height: 1.2;
             margin: 0;

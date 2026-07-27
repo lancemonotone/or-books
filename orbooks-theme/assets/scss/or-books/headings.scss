@@ -1,0 +1,37 @@
+// Atom: .or-heading — shared strip / section title type
+// Design language: docs/design-language.md
+// Layout for section heads stays in section-head.scss; type lives here only.
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    letter-spacing: 0;
+}
+
+.page-heading,
+.sidebar-heading,
+.sidebarBlock-heading,
+.page-subheading,
+.or-section-head-title,
+.mobile-featured {
+    letter-spacing: 0;
+}
+
+.or-heading {
+    --or-heading-size: 1.5rem;
+
+    margin: 0;
+    color: $color-greyDarkest;
+    font-size: var(--or-heading-size);
+    letter-spacing: 0;
+    line-height: 1;
+    text-transform: uppercase;
+    @include hc-700;
+
+    @media (min-width: 1024px) {
+        --or-heading-size: 1.875rem;
+    }
+}

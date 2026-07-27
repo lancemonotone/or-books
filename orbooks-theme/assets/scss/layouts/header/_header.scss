@@ -146,7 +146,7 @@
     font-family: $fontFamily-hero;
     font-size: $fontSize-logo-small;   // 1
     font-weight: stencilFontWeight("headings-font");
-    letter-spacing: remCalc(2px);
+    letter-spacing: 0;
     margin-left: auto;
     margin-right: auto;
     overflow: hidden;

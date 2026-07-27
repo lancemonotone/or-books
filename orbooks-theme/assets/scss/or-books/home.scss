@@ -23,33 +23,11 @@
             @include medium {
                 justify-content: flex-end;
             }
-            .custom-sidebar {
+                .custom-sidebar {
                 display: block;
                 order: 2;
                 @include medium {
                     order: 1;
-                }
-                .sidebar-heading {
-                    @include hc-700;
-                    font-size: 24px;
-                    letter-spacing: 2px;
-                    text-transform: uppercase;
-                    margin: 0;
-                    line-height: 1;
-                    color: $color-greyDarkest;
-                    cursor: pointer;
-                    @include medium {
-                        font-size: 21px;
-                    }
-                    @include xlarge {
-                        font-size: 24px;
-                    }
-                    @include xxlarge {
-                        font-size: 30px;
-                    }
-                    &:hover {
-                        color: $color-greyDarker;
-                    }
                 }
                 // Section arrows: .or-section--slider in slider-chrome.scss
                 .top-product {
@@ -61,12 +39,6 @@
                         margin: 0;
                         padding: 0;
                         .mobile-featured {
-                            @include hc-700;
-                            font-size: 24px;
-                            color: $color-greyDarkest;
-                            letter-spacing: 2px;
-                            text-transform: uppercase;
-                            line-height: 1;
                             margin: 0 0 25px;
                             text-align: center;
                             display: block;
@@ -520,26 +492,7 @@
     @include medium {
         order: 2;
     }
-    .page-heading {
-        @include hc-700;
-        font-size: 24px;
-        color: $color-greyDarkest;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        line-height: 1;
-        margin: 0;
-        text-align: center;
-        display: block;
-        @include medium {
-            text-align: left;
-        }
-        @include xlarge {
-            font-size: 27px;
-        }
-        @include xxlarge {
-            font-size: 30px;
-        }
-    }
+    // Section titles: .or-heading in headings.scss
     // Section carousels (Forthcoming, etc.): .or-section--slider in slider-chrome.scss
     // Hero carousel keeps its own arrow placement below.
     .heroCarousel {

@@ -84,7 +84,7 @@ $header-line-height:            null;
 $header-top-margin:             spacing("double");
 $header-bottom-margin:          spacing("half");
 $header-text-rendering:         null;
-$header-letter-spacing:         letterSpacing("small");
+$header-letter-spacing:         0;
 
 // We use these to control header font sizes
 $h1-font-size:                  fontSize("largest");

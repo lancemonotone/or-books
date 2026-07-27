@@ -1,7 +1,7 @@
 // Molecule: .or-section-head — plain title + See all (shared by all section types)
 // Design language: docs/design-language.md
 // Template: templates/components/orbooks/section-head.html
-// Tokens: prefer parent .or-section custom properties when present
+// Title type: .or-heading in headings.scss
 // Slider arrows: never here — carousel sides via slider-chrome.scss (.or-section--slider)
 
 .or-section-head {
@@ -31,27 +31,10 @@
     }
 }
 
-.or-section-head-title,
-.or-section-head .page-heading,
-.or-section-head .sidebar-heading {
+.or-section-head .or-heading {
     flex: 1 1 auto;
     min-inline-size: 0;
-    margin: 0;
     text-align: inherit;
-    @include hc-700;
-    font-size: 24px;
-    color: $color-greyDarkest;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    line-height: 1;
-
-    @media (min-width: 1024px) {
-        font-size: 27px;
-    }
-
-    @media (min-width: 1440px) {
-        font-size: 30px;
-    }
 }
 
 .or-section-head-actions {
