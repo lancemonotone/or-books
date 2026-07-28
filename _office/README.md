@@ -21,6 +21,8 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | 1.2 | `1.2-helvetica-removal/` | `feature/helvetica-font-removal` | Complete locally; deploy with Wave 1 batch |
 | 2.1 | `2.1-label-or-replace-subjects-icons/` | `feature/wave1-2.1-subjects-icons` | Complete locally; deploy with Wave 1 batch |
 | 2.2 | `2.2-fix-fake-links/` | `feature/wave1-2.2-section-heads` | Complete locally; deploy with Wave 1 batch |
+| 2.3 | `2.3-stop-squashing-media-list-images/` | `feature/wave1-2.3-media-list-images` | Complete locally; deploy with Wave 1 batch |
+| 2.5 | `2.5-make-headings-easier-to-tell-apart/` | — | Research / parked (NOTES only; not implemented) |
 
 ## Theme rollback archives
 
@@ -38,4 +40,4 @@ Pre-change theme file snapshots: `templates-archive/` — **one write-once tree*
 
 ## Generating client copy from NOTES
 
-Read the task’s `NOTES.md` + live Briefboard task (`api/agent.php` GET). Output should cover: what changed (plain language), any intentional scope change vs the card, what we need from the client (or “nothing — please review on staging when we push”).
+Read the task’s `NOTES.md` + live Briefboard task (`api/agent.php` GET). **Briefboard comment** (if posting): what changed in plain language; scope divergences vs the card when relevant. No internal git/deploy state; no review or next-step nudges unless the user asks. See `.cursor/rules/briefboard-comments.mdc`. **NOTES.md** may hold internal detail (branches, commits, deploy batch) for agents only.
