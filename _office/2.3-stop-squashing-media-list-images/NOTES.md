@@ -8,6 +8,7 @@
 | **taskKey** | `b57d706d-de6d-46d7-8e3f-6452f175c362` |
 | **Briefboard URL** | https://lancemonotone.com/or-books/app/?i=1#/task/b57d706d-de6d-46d7-8e3f-6452f175c362 |
 | **Branch** | `feature/wave1-2.3-media-list-images` |
+| **Commits** | `a5d3a34` Stop squashing media-list thumbnails in In the media accordions |
 | **Deploy** | Local only until Wave 1 batch `stencil push` |
 | **Briefboard status** | Delivery comment posted; storefront pending Wave 1 push |
 
