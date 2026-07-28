@@ -1,0 +1,38 @@
+---
+description: Briefboard Agent API — always use browser fetch (cookie gate)
+alwaysApply: true
+---
+
+# Briefboard Agent API (mandatory)
+
+## Always API — never scrape the DOM for task data
+
+Read/write Briefboard through **`api/agent.php` only**. Do not rediscover this by probing `board.php`, SPA stores, or parsing the task page a11y tree for fields the API already returns.
+
+Docs: `{baseUrl}API.md` or `GET api/agent.php?docs=1` (Bearer).
+
+## How to call (this host)
+
+Freehosting runs a **JS cookie gate**. Bare `curl` / Node HTTPS often never reaches PHP.
+
+**Required pattern:**
+
+1. `list_pages` — reuse existing Briefboard tab if open (`no-duplicate-browser-tabs`).
+2. If none: `new_page` → `{baseUrl}` (e.g. `https://lancemonotone.com/or-books/app/`).
+3. `evaluate_script` → `fetch` same-origin `api/agent.php` with:
+   - `Authorization: Bearer {agent_api_token}` from `.cursor/secrets.briefboard.json`
+   - `credentials: 'include'`
+   - `cache: 'no-store'`
+4. Reads: `GET`. Writes: `POST` JSON `{ "action": "…", … }`.
+5. Reference tasks by **`taskKey`** (UUID), not display id (`2.3`).
+
+**Do not** put the token in chat, commits, or NOTES.
+
+## Secrets
+
+- File: `.cursor/secrets.briefboard.json` (`baseUrl`, `agent_api_token`) — gitignored
+- Example: `.cursor/secrets.briefboard.example.json`
+
+## Comments
+
+Client-facing only — see `briefboard-comments.mdc`.

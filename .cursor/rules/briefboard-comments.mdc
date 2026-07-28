@@ -1,0 +1,33 @@
+---
+description: Briefboard Agent API — client-facing comments only; no internal state; safe reply mode
+alwaysApply: true
+---
+
+# Briefboard comments (Agent API)
+
+When posting to Briefboard via `api/agent.php` (`add_comment`, `edit_comment`), treat the thread as **client-facing**. Internal detail belongs in `_office/<task>/NOTES.md`, not on the card.
+
+## Write only what changed
+
+- Plain language: what is different on the site (behavior, layout, copy).
+- Intentional scope changes vs the card, when relevant.
+- **Do not** add review prompts, next steps, or “nothing needed from you” unless the **user explicitly asks** for that in the comment.
+
+## Never put internal state in Briefboard comments
+
+Do **not** include:
+
+- Git commit SHAs, branch names, or repo paths
+- `main` / `staging` / merge or deploy workflow
+- “Pending push”, “Wave 1 batch”, stencil CLI status, or other dev pipeline state
+- Play-by-play dev logs (those go in `_office/` NOTES)
+
+## API: do not overwrite existing comments
+
+- Default `add_comment` `mode` is `comment` — it **replaces** the latest Rus message. Do **not** use that for follow-ups.
+- After Rus already has a message on the task, use `add_comment` with **`mode: "reply"`** only.
+- Use `edit_comment` only to fix the **latest** Rus message when the user asks; never to silently replace history.
+
+## Auth
+
+- Token: `.cursor/secrets.briefboard.json` (`baseUrl`, `agent_api_token`). Never commit or paste the token in chat.

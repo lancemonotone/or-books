@@ -1,8 +1,16 @@
 {
   "customLayouts": {
     "brand": {},
-    "category": {},
-    "page": {},
+    "category": {
+      "authors.html": ["/authors/", "/authors/h/"],
+      "single-author.html": ["/authors/h/theodore-hamm/"],
+      "merchandise.html": ["/merchandise/"],
+      "booksellers.html": ["/booksellers/"],
+      "subsidiary-rights.html": ["/subsidiary-rights/"]
+    },
+    "page": {
+      "new-events.html": ["/events/"]
+    },
     "product": {}
   },
   "normalStoreUrl": "https://www.orbooks.com",

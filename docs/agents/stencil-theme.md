@@ -40,9 +40,111 @@ stencil debug              # env + theme settings dump
 
 ```bash
 stencil start              # http://localhost:3000 (needs valid token + config)
+stencil start -n           # no API cache — use when template/layout looks wrong
 ```
 
-### Sync with store
+Restart `stencil start` after any edit to `config.stencil.json`.
+
+## Custom templates (local vs production)
+
+Production assigns Stencil custom templates in BigCommerce admin (**Custom Template Associations**). Local `stencil start` does **not** read those assignments automatically — map URLs in `orbooks-theme/config.stencil.json` → `customLayouts`.
+
+Client-facing layout guide (which template for which page type): `_office/OR Books Website Documentation AG.md` → **Category Page Documentation** / **Author Page Documentation**.
+
+### Why localhost can show the wrong layout
+
+| Layer | Role |
+|-------|------|
+| **Production storefront** | Uses admin template associations → e.g. author pages render `single-author.html`. |
+| **Stencil CLI local** | Checks `customLayouts` first (exact URL match), then may fall back to `template_file` from the store API — often the **default** category/product/page template even when production uses a custom one. |
+| **`stencil pull` / `stencil download`** | Theme files and Page Builder `config.json` only — **not** per-URL template assignments. |
+
+Symptom: production author page has photo sidebar + **In the media** accordion; localhost shows catalog sidebar + flat product grid (`category.html`).
+
+### Configure local mappings
+
+File: `orbooks-theme/config.stencil.json`
+
+```json
+{
+  "customLayouts": {
+    "brand": {},
+    "category": {
+      "authors.html": ["/authors/", "/authors/h/"],
+      "single-author.html": ["/authors/h/theodore-hamm/"]
+    },
+    "page": {
+      "about.html": ["/about/"]
+    },
+    "product": {
+      "custom-pdp.html": ["/some-merchandise-product-slug/"]
+    }
+  },
+  "normalStoreUrl": "https://www.orbooks.com",
+  "port": 3000,
+  "packageManager": "npm"
+}
+```
+
+Rules:
+
+- **Key** = filename under `templates/pages/custom/{category|page|product|brand}/` (e.g. `single-author.html`).
+- **Value** = full store path(s), no domain. Trailing slash optional (Stencil normalizes).
+- **Arrays OK** — one template → many exact URLs ([BC docs](https://developer.bigcommerce.com/docs/storefront/stencil/themes/templates/custom-templates)).
+- **No wildcards** — `/authors/[slug]/` or `/authors/*/*/` do not work; each path is literal.
+- **Restart** `stencil start` after edits.
+
+Add mappings **when you need to test that page type locally** — not every author/product URL unless you want full parity.
+
+### Verify which template is active
+
+**Production (read-only):** View Source → find `stencilBootstrap("category", "...")` (or `page` / `product`) → parse JSON → **`template`** field.
+
+Example: `pages/custom/category/single-author` on https://orbooks.com/authors/h/theodore-hamm/
+
+**Local:** Same check on `http://localhost:3000/...` after restart. Should match production for mapped URLs.
+
+Quick DOM check: `single-author.html` → `.single-author-page` wrapper; default category → no that class, catalog sidebar widgets.
+
+### Production source of truth (bulk export)
+
+To list **all** assignments without guessing URLs:
+
+1. **GET** [Custom Template Associations](https://developer.bigcommerce.com/docs/rest-content/custom-template-associations) — `?type=category` (and `page`, `product`, `brand`); paginate.
+2. **GET** [Categories](https://developer.bigcommerce.com/docs/rest-catalog/categories) (etc.) — join `entity_id` → `url`.
+3. Build `customLayouts` arrays from `file_name` + paths. Store hash from CDN (`s-4rbj5oww8j` → `4rbj5oww8j`). Token: `secrets.stencil.json` (never commit or paste in chat).
+
+Do **not** use Categories API `layout_file` for Stencil themes — Blueprint only; Stencil uses Custom Template Associations.
+
+### OR Books custom template files (theme tree)
+
+Under `orbooks-theme/templates/pages/custom/`:
+
+| Type | File | Typical use |
+|------|------|-------------|
+| category | `authors.html` | `/authors/`, letter buckets |
+| category | `single-author.html` | Individual author pages |
+| category | `merchandise.html` | `/merchandise/` |
+| category | `booksellers.html` | `/booksellers/` |
+| category | `subsidiary-rights.html` | `/subsidiary-rights/` |
+| category | `reading-list.html` | One URL per reading list under `/reading-lists/.../` |
+| category | `categroy-no-sidebar.html`, `category-no-sidebar-2.html`, `category-no-sidebar-3.html` | Per-category admin assignment — URL varies |
+| page | `about.html`, `events.html`, `new-events.html`, `videos.html`, `sign-up.html` | Static pages — map when testing |
+| product | `custom-pdp.html` | Merchandise PDPs — one URL per product |
+
+Defaults (`category.html`, `product.html`, `home.html`, …) need no `customLayouts` entry.
+
+### Currently mapped locally (check file for latest)
+
+See `orbooks-theme/config.stencil.json`. As of 2026-07-28: authors index + `/authors/h/`, Theodore Hamm single-author, merchandise, booksellers, subsidiary-rights. Page/product/reading-list/no-sidebar templates unmapped until needed.
+
+### References
+
+- [Custom Templates (local `customLayouts`)](https://developer.bigcommerce.com/docs/storefront/stencil/themes/templates/custom-templates)
+- [Custom Template Associations API (production assignments)](https://developer.bigcommerce.com/docs/rest-content/custom-template-associations)
+- [Apply a custom template locally (BC Support)](https://support.bigcommerce.com/s/question/0D51B00004mno5ZSAQ/how-do-i-apply-a-custom-template-locally)
+
+## Helvetica / font licensing work
 
 ```bash
 stencil download -o        # pull live theme; overwrite local

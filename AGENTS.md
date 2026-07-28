@@ -10,14 +10,17 @@ Default five labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for
 
 ### BigCommerce Stencil theme
 
-Local theme at `orbooks-theme/` (orbooks.com storefront). CLI, secrets, sync/push, font cutover: `docs/agents/stencil-theme.md`. Cursor rule: `.cursor/rules/stencil-theme.mdc` (applies when editing theme files).
+Local theme at `orbooks-theme/` (orbooks.com storefront). CLI, secrets, sync/push, font cutover, **local custom template mapping (`config.stencil.json`)**: `docs/agents/stencil-theme.md`. Cursor rule: `.cursor/rules/stencil-theme.mdc` (applies when editing theme files).
 
 ### Briefboard Agent API
 
 Live board: `https://lancemonotone.com/or-books/app/` — docs `API.md`, endpoint `api/agent.php`.
 
+- **Always API** — never scrape the DOM for task fields. Rule: `.cursor/rules/briefboard-api.mdc`.
+- Host has a JS cookie gate → call via Chrome DevTools `evaluate_script` `fetch` on an open Briefboard tab (`credentials: 'include'` + Bearer). Bare `curl` usually fails.
 - Token file: `.cursor/secrets.briefboard.json` (gitignored). Copy from `.cursor/secrets.briefboard.example.json`.
 - Fields: `baseUrl`, `agent_api_token` (from that install’s `config.php`). Never commit or paste the token in chat.
+- **Comments are client-facing:** what changed in plain language only. No commit SHAs, branches, deploy/push status, or review nudges unless the user asks for those in the comment. Follow-ups use `add_comment` with `mode: "reply"` (default `comment` overwrites). Rule: `.cursor/rules/briefboard-comments.mdc`.
 
 ### Task delivery notes (client copy source)
 
