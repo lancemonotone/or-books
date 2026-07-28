@@ -122,10 +122,6 @@
             @include xxlarge {
                 padding-right: 0;
             }
-            &::-webkit-scrollbar {
-                width: 0;
-            }
-
             .productView-images {
                 padding: 0;
                 position: relative;
@@ -494,26 +490,6 @@
                 font-size: 28px;
             }
         }
-        .related-sidebar {
-            &::-webkit-scrollbar {
-                width: 10px;
-                
-            }
-            &::-webkit-scrollbar-track {
-                background: #f9f9f9;
-                border-radius: 10px;
-                box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.25);
-            }
-            &::-webkit-scrollbar-thumb {
-                background: #3e3e3e;
-                border-radius: 10px;
-            }
-            
-            &::-webkit-scrollbar-thumb:hover {
-                background: #555;
-            }
-        }
-
         .product-options {
             &.custom-content {
                 @include medium {
@@ -1482,18 +1458,12 @@
 }
 
 
-.custom-pdp .custom-sidebar.fixed {
-    height: 95vh;
-    position: sticky;
-    top: 10px;
-    background: #fff;
-    z-index: 1;
-
-    .productView-images{
-        height: 0;
-        margin: 0;
-    }
+// Related sidebar: full height with page scroll (no sticky / inner scrollbar)
+.custom-sidebar.related-sidebar.stickthis-pdp {
+    position: static;
+    height: auto;
 }
+
 .related-title {
     @include hc-700;
     margin: 10px 0 40PX;
@@ -1512,14 +1482,6 @@
     @include xxlarge {
         font-size: 30px;
     }
-}
-.custom-sidebar.related-sidebar.stickthis-pdp.fixed {
-    height: 95vh;
-    position: sticky;
-    padding-right: 10px;
-    background: #fff;
-    z-index: 1;
-    transition: top 1s ease-in-out;
 }
 .related-sidebar {
     display: flex;

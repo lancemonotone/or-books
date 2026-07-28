@@ -291,33 +291,7 @@ export default (function (context) {
       }
     }, 100);
 
-    if ($(".product-page").length > 0) {
-      if ($(window).width() > 1000) {
-        var test_length = $(".related-sidebar .card").length;
-
-        if(test_length > 2){
-
-          $(window).scroll(function () {   
-            var height_2 = $('.header').height();
-            var threshold = height_2 + 250;
-       
-          if($(window).scrollTop() > threshold) {
-             $('.stickthis-pdp').addClass('fixed');
-             $('.custom-pdp .custom-sidebar').addClass('fixed');
-          }
-     
-          else if ($(window).scrollTop() <= threshold) {
-           $('.stickthis-pdp').removeClass('fixed');
-           $('.custom-pdp .custom-sidebar').removeClass('fixed');
-          }  
-             if ($('.stickthis-pdp').offset().top + $(".stickthis-pdp").height() > $(".footer").offset().top) {
-                 $('.stickthis-pdp').css('top',-($(".stickthis-pdp").offset().top + $(".stickthis-pdp").height() - $(".footer").offset().top));
-                 $('.stickthis-pdp').addClass('bottom');
-             }
-         });
-        }
-      }
-    }
+    // PDP related sidebar (.stickthis-pdp): no sticky / inner scroll — full list scrolls with page
     // Home/category .stickthis: no sticky / inner scroll — sidebar scrolls with page
 
     if ($(window).width() > 1024) {

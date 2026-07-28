@@ -28,6 +28,10 @@ Subjects are how people browse the catalog, so they come first in the sidebar. F
 
 The old sidebar locked to a short sticky box with an inner scroll. With a full subject list (plus Featured Title, news, etc.) that meant fighting a tiny scrollbar while the rest of the page scrolled separately. The column now grows with the page: one scroll shows everything.
 
+### Book detail: related column (same sticky kill)
+
+Same pattern on product pages: the related/sidebar column used sticky/fixed positioning plus a JS scroll handler (`stickthis-pdp`) and custom scrollbar chrome. That pinned the column while the main product content scrolled separately. Removed the sticky/fixed CSS and the scroll handler so the related column scrolls with the page — one scroll, same idea as the home sidebar.
+
 ## Screenshots (local preview)
 
 | File | Notes |
