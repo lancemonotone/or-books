@@ -12,6 +12,9 @@
 // -----------------------------------------------------------------------------
 
 .card {
+    container-type: inline-size;
+    container-name: or-card;
+
     &:focus-within {
         .card-figcaption {
             opacity: 1;

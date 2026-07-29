@@ -35,191 +35,7 @@
                     align-items: stretch;
                 }
                 // Section arrows: .or-section--slider in slider-chrome.scss
-                .top-product {
-                    // Vertical spacing: parent .or-flow gap
-                    .productView {
-                        margin: 0;
-                        padding: 0;
-                        .mobile-featured {
-                            margin: 0 0 25px;
-                            text-align: center;
-                            display: block;
-                            @include medium {
-                                display: none;
-                            }
-                        }
-
-                        .productView-image {
-                            pointer-events: visible;
-                            @include xxsmall {
-                                max-width: 228px;
-                                width: 100%;
-                            }
-                            @include medium {
-                                width: auto;
-                                max-width: 100%;
-                            }
-                            .productView-img-container {
-                                img {
-                                    position: relative;
-                                }
-                                &:after {
-                                    padding: 0;
-                                }
-                            }
-                        }
-                        .productView-details {
-                            width: 100%;
-                            padding: 0;
-                            margin-top: 22px;
-                            order: 2;
-                            text-align: center;
-                            @include medium {
-                                text-align: left;
-                                margin-top: 15px;
-                            }
-                            @include breakpoint(1440px) {
-                                margin-top: 20px;
-                                // padding-right: 15px;
-                                // padding-left: 15px;
-                                padding-right: 0;
-                                padding-left: 0;
-                            }
-                            @include xxlarge {
-                                margin-top: 22px;
-                                // padding-right: 30px;
-                                // padding-left: 30px;
-                                 padding-right: 0;
-                                padding-left: 0;
-                            }
-                            .productView-product {
-                                border: none;
-                                padding-bottom: 0.7rem;
-                                @include medium{
-                                    padding-bottom: 1.7rem; 
-                                }
-                                
-                                @include xxlarge {
-                                    padding-bottom: 2.2rem;
-                                }
-                                .desktop-featured {
-                                    display: none;
-                                    color: #454545;
-                                    @include hc-400;
-                                    font-size: 16px;
-                                    margin-bottom: 10px;
-                                    @include small {
-                                        font-size: 16px;
-                                        margin-bottom: 15px;
-                                    }
-                                    @include medium {
-                                        display: block;
-                                    }
-                                    @include xlarge{
-                                        font-size: 18px;
-                                    }
-                                }
-                                .card-category-name {
-                                    font-size: 14px;
-                                    color: stencilColor("sub_title_color");
-                                    font-family: $or-font-condensed;
-                                    font-weight: 400;
-                                    line-height: 1;
-                                    @include large {
-                                        font-size: 18px;
-                                        line-height: 0.8;
-                                    }
-                                    @include xxlarge {
-                                        font-size: 20px;
-                                        line-height: 0.7;
-                                    }
-                                }                                .sub-productView-title {
-                                    margin-bottom: 13px;
-                                    @include medium{
-                                        margin-bottom: 24px;
-                                    }
-                                    @include xxlarge {
-                                        margin-bottom: 30px;
-                                    }
-                                    .productView-info-name {
-                                        display: none;
-                                    }
-                                    .productView-info-value {
-                                        display: block;
-                                        @include hc-400;
-                                        color: #020202;
-                                        text-transform: none;
-                                        margin: 0;
-                                        font-size: 14px;
-                                        text-align: center;
-                                        @include medium {
-                                            text-align: left;
-                                        }
-                                        @include large {
-                                            font-size: 24px;
-                                        }
-                                        @include xxlarge {
-                                            font-size: 26px;
-                                        }
-                                    }
-                                }
-                                .productView-brand {
-                                    font-size: 18px;
-                                    @include hc-700;
-                                    line-height: 1;
-                                   // text-transform: uppercase;
-                                    @include large {
-                                        font-size: 22px;
-                                    }
-                                    @include xxlarge {
-                                        font-size: 24px;
-                                    }
-                                    .Edited-By{
-                                        font-weight: 400;
-                                        text-transform: none;
-                                    }
-                                    a {
-                                        color: stencilColor("sub_title_color");
-                                        &:hover {
-                                            color: stencilColor("button--primary-backgroundColorHover");
-                                        }
-                                    }
-                                }
-                            }
-                            .pdp-content {
-                                p {
-                                    color: stencilColor("title_color");
-                                    font-size: 16px;
-                                    font-family: $or-font-body;
-                                    font-weight: 400;
-                                    line-height: 1.5;
-                                    margin: 0;
-                                    @include medium {
-                                        font-size: 15px;
-                                    }
-                                    @include xxlarge {
-                                        font-size: 18px;
-                                    }
-                                }
-                                a{
-                                    color: $color-greyLighter;
-                                    font-size: 16px;
-                                    font-family: $or-font-body;
-                                    font-weight: 400;
-                                    line-height: 1.5;
-                                    margin: 0;
-                                    @include medium {
-                                        font-size: 15px;
-                                    }
-                                    @include xxlarge {
-                                        font-size: 18px;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                // Home subjects layout: see subjects.scss (.or-subjects / .home-subj-sidebar)
+                // .top-product .productView: see productView.scss
                 .blog-main-home {
                     // Vertical spacing: parent .or-flow gap
                     margin: 0;
@@ -236,7 +52,7 @@
                             margin: 0 -5px;
                             .blog {
                                 padding: 0 5px;
-                                 display: flex;
+                                display: flex;
                                 flex-wrap: wrap;
                                 flex-direction: column;
                                 .blog-post-figure {
@@ -246,33 +62,20 @@
                                         }
                                     }
                                 }
-                                .read-btn {
-                                    opacity: 1;
-                                    position: static;
-                                    order: 3;
-                                    margin-top: 0;
-                                    .read-sub-btn {
-                                        position: static;
-                                        transform: none;
-                                        padding: 0;
-                                    }
-                                    &:after {
-                                        content: none;
-                                    }
-                                }
+                                // .read-btn: in-flow via news.scss (.blog-list)
                                 .blog-post-body {
                                     padding: 18px 0;
                                     text-align: center;
-                                    @include medium {
-                                        text-align: left;
+
+                                    @media (min-width: 768px) {
+                                        text-align: start;
                                     }
-                                    .blog-header {                                        .blog-date {
-                                            text-align: center;
+
+                                    .blog-header {
+                                        .blog-date {
+                                            text-align: inherit;
                                             font-size: 18px;
 
-                                            @include medium {
-                                                text-align: left;
-                                            }
                                             @include large {
                                                 font-size: 20px;
                                             }
@@ -282,11 +85,11 @@
                                         }
                                     }
                                     .blog-post {
-                                        text-align: center;
+                                        text-align: inherit;
                                         line-height: 1.4;
                                         font-size: 15px;
-                                        @include medium {
-                                            text-align: left;
+
+                                        @media (min-width: 768px) {
                                             font-size: 16px;
                                             line-height: 1.2;
                                         }

@@ -20,80 +20,81 @@ Sitewide: section headings, book titles, pull quotes, and body text are too clos
 ## Contract (locked)
 
 - **`typography.scss`** = sole source of body + heading type.
-- **Bare `h1–h6` only** — shared chrome sitewide (Condensed 700, uppercase, shared line); **sizes + margin-block-end = Major Third stairs** via `--or-type-h*-size` / `--or-type-h*-margin-block-end` (size base bumps at 1024).
-- **Align:** naked headings `center` &lt;768, `start` ≥768. Headings inside cards/containers (`event-details`, `video-details`, `.card*`, product shells) use `text-align: inherit` so they follow the container.
-- **No classes for heading appearance.** Classes on headings only if JS needs a hook; those classes get **no** type CSS.
-- **No `h1–h6` rules in any other stylesheet** — not even margin/text-align (container inherit list lives in `typography.scss`).
-- Layout around headings uses parents / flex / non-heading wrappers.
+- **Bare `h1–h6` only** — shared chrome sitewide (Condensed 700, uppercase); **Major Third (1.25) size + margin stairs**; desktop size base bumps at 1024.
+- **Align:** naked headings `center` &lt;768, `start` ≥768. Card shells (`.event-details`, `.video-details`, `.card*`) inherit parent align. ProductView headings use naked contract (not inherit).
+- **Narrow CQ:** nearest containment ≤**30rem** → every heading **−2px**. Containment on `.custom-sidebar`, `.or-section`, `.card`.
+- **No classes for heading appearance.** JS hook classes OK; no type CSS on them.
+- **No `h1–h6` rules outside `typography.scss`.**
 - Spec: `docs/superpowers/specs/2026-07-29-heading-major-third-design.md`
 
 ## Delivered so far
 
 ### Typography system
 
-- Replaced `headings.scss` with **`typography.scss`** (tokens + body + shared `h1–h6`); imported **last** in `or-books/theme.scss`.
-- Stripped **all** `h1–h6` rulesets outside `typography.scss` (or-books, foundation, citadel, stencil layouts, invoice/maintenance). Settings `$h*`-font vars only remain.
-- Removed title-class type rulesets sitewide (`.page-heading`, `.productView-title`, `.card-title`, `.blog-title`, `.large-title`, `.related-title`, `.sidebarBlock-heading`, `.modal-header-title`, `.product-desc-title`, `.or-subjects-title`, etc.).
-- JS hook classes kept in markup where needed (`productView-title`, `accordion-title`, `card-title`, …) — no type CSS on those classes.
-- Foundation `_type.scss` heading/body type neutralized; competing `body` type in `common.scss` removed.
-- Accordion chrome restored without type: `cursor: pointer`, chevron absolute right, open rotate (`common.scss` `.accordion-custom-tabs`).
-- Subjects title size tokens removed; bare `h*` only.
-- Docs: `docs/design-language.md` aligned to this contract.
+- Replaced `headings.scss` → **`typography.scss`** (last in `theme.scss`).
+- Stripped competing `h*` / title-class type rules sitewide.
+- Major Third stairs + margin stairs; global −2px size shift; narrow container −2px via CQ.
+- Accordion chrome restored without type (pointer + chevron).
 
-### Events page cleanup (same branch; headings + template hygiene)
-
-Production maps:
+### Events
 
 | URL | Template |
 |-----|----------|
 | `/events/` | `new-events.html` |
-| `/past-events/` | `events.html` (confirmed via live `stencilBootstrap`) |
+| `/past-events/` | `events.html` |
 
-- Cleaned live **`new-events.html`**: sidebar featured only; banner slider; optional Upcoming + Past list (uncommented for review, wrapped in `<!-- BEGIN/END optional -->`); **View Past Events** `or-btn`; newsletter under that CTA (not sidebar); bare `h2`s.
-- Restored **`events.html`** as real Past Events archive page (`orbooks/event` + pagination); bare `<h1>{{ page.title }}`. Local map: `/past-events/` → `events.html`.
-- Spare copy of optional blocks: `templates/components/orbooks/events-deferred-sections.html` (not mapped; keep in sync; pointers in `new-events.html` header).
-- Fixed single-slide Slick pagination dot (`home.js`: dots only if slide count > 1; no slick on empty `.upcoming-events`).
-- Subscribe / archive CTAs use `.or-btn`; newsletter **sidebar** with bare **`h3`** + `or-btn-block`.
-- New **`events.scss`** (imported before typography): events layout extracted from `pages.scss`; stripped card/list type stairs; replicated layout fixes — `.event-page { display: block }`, no `padding-left: 75px`, no negative margins on `.event-page`/`.video-page`.
+- Sidebar LOAC graphic (no link); newsletter; optional Upcoming/Past **HTML-commented**; archive CTA; `events.scss`; event titles `h4`.
+
+### Blog / media / cards (in progress)
+
+- **Removed animated / overlay “read now”** (absolute full-card hover reveal + transform slide). All `.blog-list` CTAs are in-flow `.or-btn`.
+- Latest News + AJAX “in the media” share card shell; list titles **`h4`**; text center → start @768.
+- `blog.js`: only runs when `.custom-blog-list` + `.catename`; keeps summary; no console spam.
+- Product slider titles **`h4.card-title`** (was `h3`).
+- Blog post page layout rebuilt (no figure/title overlap).
+- Featured product: description kept + `or-btn` Read More (inline “more” link removed).
+- **`productView.scss`**: featured/top-product layout moved out of `home.scss` / `common.scss`.
+- Dropped `@container` button size bump that made sidebar/main Read Now disagree.
+
+### Other
+
+- Past-events `ul`: zero pad when centered; indent ≥768.
+- `.or-section-head` headings: `margin-block-end: 0`.
 
 ## Still to do
 
-- Full browser verify: home, Events (with optional blocks on), Past Events archive, PDP, author, cards — headings match; bylines readable.
-- Decide with human: keep optional Upcoming/Past list live vs HTML-comment when empty (client used to uncommenting).
-- Dial remaining non-heading type stairs that still fight hierarchy (author bio, etc.) if still in scope.
-- Commit when asked; BB delivery comment when reviewable; Wave 1 `stencil push` for prod parity (`/events/` still old messy template until push).
+- Unify author accordion product cards ↔ in-the-media ↔ listing post ↔ featured productView meta stack (user: author accordion proportions = target; more image→title gap; match media cards).
+- Browser verify pass; BB delivery; Wave 1 `stencil push`.
 
 ## Diverged from ask (if any)
 
 | Original expectation | What we shipped | Why |
 |--------------------|-----------------|-----|
-| “Easier to tell apart” via richer type scale stairs | One shared heading look for all `h1–h6` | Locked contract: one system, not per-level size stairs |
-| (none on card) Events template cleanup | Cleaned `/events/` + restored `/past-events/` mapping clarity | Found hollow Upcoming + broken archive markup while verifying headings |
+| Flat “one look” then richer stairs | Major Third + narrow CQ | Iterated with human after flat scale felt too flat |
+| (none) Events / blog CTA cleanup | Events templates + killed overlay read button | Found while verifying headings |
 
 ## Client action needed
 
 - [ ] None until verify pass + push.
-- [ ] Later: confirm whether optional Upcoming/Past list stays live or commented between shows.
+- [ ] Later: confirm optional Upcoming/Past list live vs commented between shows.
 
 ## Verify
 
-Hard-refresh local:
-
-- Home strips — bare `h2` / section heads, shared heading look.
-- `/events/` — LOAC sidebar `h2`; optional Upcoming/Past; View Past Events + newsletter; no lonely Slick dot with one banner slide.
-- `/past-events/` — `events.html`, page title `h1`, event cards from `orbooks/event`.
-- PDP book title `h1`, accordion `h3` — same heading system; accordion pointer + chevron right.
-- Prod still differs until push ([orbooks.com/events/](https://orbooks.com/events/) still empty Upcoming + broken archive heading).
+- Home: section `h2`, product cards `h4`, Latest News `h4` + in-flow read.
+- Author / PDP “in the media”: GraphQL cards, no hover overlay.
+- `/news/{slug}/`: two-column header, no title-over-image.
+- `/events/`, `/past-events/`.
 
 ## Theme archive / new files
 
 | Kind | Location |
 |------|----------|
-| Old `headings.scss` | `templates-archive/…` if present (write-once baseline) |
-| New | `orbooks-theme/assets/scss/or-books/typography.scss` — delete to undo |
-| New | `orbooks-theme/templates/components/orbooks/events-deferred-sections.html` — spare optional Events markup |
+| New | `orbooks-theme/assets/scss/or-books/typography.scss` |
+| New | `orbooks-theme/assets/scss/or-books/events.scss` |
+| New | `orbooks-theme/assets/scss/or-books/productView.scss` |
+| Removed | animated blog `.read-btn` overlay styles (`news.scss`) |
 
 ## Related
 
 - **5.2** — Featured Author slider (Wave 3).
-- Events optional-block workflow — client edits `new-events.html` HTML comments; spare in `events-deferred-sections.html`.
+- Events optional-block workflow — HTML comments in `new-events.html`.

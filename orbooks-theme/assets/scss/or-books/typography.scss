@@ -25,14 +25,16 @@
   --or-type-body-line: 1.5;
   --or-type-body-margin-block-end: 0.75rem;
 
-  // Semantic — headings (Major Third 1.25 from h6 base)
-  --or-type-h6-size: 1rem;
-  --or-type-h5-size: 1.25rem;
-  --or-type-h4-size: 1.5625rem;
-  --or-type-h3-size: 1.953125rem;
-  --or-type-h2-size: 2.44140625rem;
-  --or-type-h1-size: 3.0517578125rem;
+  // Semantic — headings (Major Third 1.25 from h6 base, then −2px each)
+  --or-type-h6-size: 0.875rem; // 14
+  --or-type-h5-size: 1.125rem; // 18
+  --or-type-h4-size: 1.4375rem; // 23
+  --or-type-h3-size: 1.828125rem; // 29.25
+  --or-type-h2-size: 2.31640625rem; // 37.06
+  --or-type-h1-size: 2.9267578125rem; // 46.83
   --or-type-heading-line: 1;
+  // Narrow-column nudge (container query ≤30rem)
+  --or-type-heading-narrow-delta: 0.25rem; // −4px
 
   // Margin-block-end stair (same hierarchy feel as sizes)
   --or-type-h6-margin-block-end: 0.5rem;
@@ -56,13 +58,13 @@
   @media (min-width: 1024px) {
     --or-type-body-size: var(--or-text-lg); // 18
     --or-type-body-margin-block-end: 1.25rem;
-    // Same size ratio; h6 base tracks body (1.125rem)
-    --or-type-h6-size: 1.125rem;
-    --or-type-h5-size: 1.40625rem;
-    --or-type-h4-size: 1.7578125rem;
-    --or-type-h3-size: 2.197265625rem;
-    --or-type-h2-size: 2.74658203125rem;
-    --or-type-h1-size: 3.4332275390625rem;
+    // Same size ratio; h6 base tracks body, then −2px each
+    --or-type-h6-size: 1rem; // 16
+    --or-type-h5-size: 1.28125rem; // 20.5
+    --or-type-h4-size: 1.6328125rem; // 26.13
+    --or-type-h3-size: 2.072265625rem; // 33.16
+    --or-type-h2-size: 2.62158203125rem; // 41.95
+    --or-type-h1-size: 3.3082275390625rem; // 52.93
     --or-type-h6-margin-block-end: 0.75rem;
     --or-type-h5-margin-block-end: 0.875rem;
     --or-type-h4-margin-block-end: 1rem;
@@ -149,15 +151,65 @@ h6 {
   font-size: var(--or-type-h6-size);
 }
 
+// Narrow containers (sidebar, skinny sections): −2px on every heading level
+// Nearest ancestor with container-type — e.g. .custom-sidebar, .or-section
+@container (max-width: 30rem) {
+  h1 {
+    font-size: calc(
+      var(--or-type-h1-size) - var(--or-type-heading-narrow-delta)
+    );
+  }
+
+  h2 {
+    font-size: calc(
+      var(--or-type-h2-size) - var(--or-type-heading-narrow-delta)
+    );
+  }
+
+  h3 {
+    font-size: calc(
+      var(--or-type-h3-size) - var(--or-type-heading-narrow-delta)
+    );
+  }
+
+  h4 {
+    font-size: calc(
+      var(--or-type-h4-size) - var(--or-type-heading-narrow-delta)
+    );
+  }
+
+  h5 {
+    font-size: calc(
+      var(--or-type-h5-size) - var(--or-type-heading-narrow-delta)
+    );
+  }
+
+  h6 {
+    font-size: calc(
+      var(--or-type-h6-size) - var(--or-type-heading-narrow-delta)
+    );
+  }
+}
+
+// Section heads own their spacing via flex gap / container margin
+.or-section-head {
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    margin-block-end: 0;
+  }
+}
+
 // Card / container headings follow the container’s text-align contract
+// (not productView — those use the naked heading center→768 contract)
 .event-details,
 .video-details,
 .card,
 .card-body,
-.card-figure,
-.product,
-.productView-product,
-.productView-details {
+.card-figure {
   & h1,
   & h2,
   & h3,

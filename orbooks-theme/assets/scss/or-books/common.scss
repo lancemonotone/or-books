@@ -110,6 +110,8 @@ body.custom {
 }
 
 .custom-sidebar {
+  container-type: inline-size;
+  container-name: or-narrow;
   padding-left: 0;
   padding-right: 0;
   width: 100%;
@@ -267,6 +269,8 @@ body.custom {
 
 // card
 .card {
+  container-type: inline-size;
+  container-name: or-card;
   border: none;
   margin: 0;
   height: 100%;
@@ -1266,226 +1270,7 @@ body.custom {
   }
 }
 
-// top product
-.top-product {
-  margin-top: 30px;
-
-  &.cat-top-product {
-    margin-bottom: 30px;
-
-    @include large {
-      margin-bottom: 40px;
-    }
-
-    @include xlarge {
-      margin-bottom: 50px;
-    }
-
-    @include xxlarge {
-      margin-bottom: 60px;
-    }
-  }
-
-  @include medium {
-    margin-top: 0;
-  }
-
-  .productView {
-    margin: 0;
-    padding: 0;
-
-    .productView-image {
-      width: 100%;
-
-      @include xxsmall {
-        max-width: 228px;
-        width: 100%;
-      }
-
-      @include medium {
-        width: auto;
-        max-width: 100%;
-      }
-
-      .productView-img-container {
-        img {
-          position: relative;
-        }
-
-        &:after {
-          padding: 0;
-        }
-      }
-    }
-
-    .mobile-featured {
-      display: none;
-    }
-
-    .productView-details {
-      width: 100%;
-      padding: 0;
-      margin-top: 22px;
-      order: 2;
-      text-align: center;
-
-      @include medium {
-        text-align: left;
-        margin-top: 0;
-      }
-
-      @include breakpoint(1440px) {
-        margin-top: 20px;
-        padding-right: 0;
-      }
-
-      @include xxlarge {
-        margin-top: 22px;
-        padding-right: 0;
-      }
-
-      .productView-product {
-        border: none;
-        padding-bottom: 1.7rem;
-
-        @include xxlarge {
-          padding-bottom: 2.2rem;
-        }
-
-        .card-category-name {
-          font-size: 14px;
-          color: stencilColor("sub_title_color");
-          font-family: $or-font-condensed;
-          font-weight: 400;
-          line-height: 1;
-
-          @include large {
-            font-size: 18px;
-            line-height: 0.8;
-          }
-
-          @include xxlarge {
-            font-size: 20px;
-            line-height: 0.7;
-          }
-        }
-
-        p {
-          color: #454545;
-          @include hc-400;
-          font-size: 16px;
-          margin-bottom: 10px;
-
-          @include small {
-            font-size: 18px;
-            margin-bottom: 15px;
-          }
-
-          @include xlarge {
-            font-size: 20px;
-          }
-        }
-        .sub-productView-title {
-          margin-bottom: 24px;
-          display: flex;
-
-          @include xxlarge {
-            margin-bottom: 30px;
-          }
-
-          .productView-info-name {
-            display: none;
-          }
-
-          .productView-info-value {
-            display: block;
-            width: 100%;
-            text-align: center;
-            @include hc-400;
-            color: #020202;
-            text-transform: none;
-            margin: 0;
-            font-size: 20px;
-            line-height: 1;
-
-            @include medium {
-              text-align: left;
-            }
-
-            @include large {
-              font-size: 24px;
-            }
-
-            @include xxlarge {
-              font-size: 26px;
-            }
-          }
-        }
-
-        .productView-brand {
-          font-size: 20px;
-          @include hc-700;
-          line-height: 1;
-          text-transform: lowercase;
-          color: stencilColor("sub_title_color");
-
-          @include large {
-            font-size: 22px;
-          }
-
-          @include xxlarge {
-            font-size: 24px;
-          }
-
-          a {
-            color: stencilColor("sub_title_color");
-            text-transform: uppercase;
-
-            &:hover {
-              color: stencilColor("button--primary-backgroundColorHover");
-            }
-          }
-        }
-      }
-
-      .pdp-content {
-        p {
-          color: stencilColor("title_color");
-          font-size: 16px;
-          font-family: $or-font-body;
-          font-weight: 400;
-          line-height: 1.5;
-          margin: 0;
-
-          @include medium {
-            font-size: 15px;
-          }
-
-          @include xxlarge {
-            font-size: 18px;
-          }
-        }
-
-        a {
-          color: $color-greyLighter;
-          font-size: 16px;
-          font-family: $or-font-body;
-          font-weight: 400;
-          line-height: 1.5;
-          margin: 0;
-
-          @include medium {
-            font-size: 15px;
-          }
-
-          @include xxlarge {
-            font-size: 18px;
-          }
-        }
-      }
-    }
-  }
-}
+// .top-product / .productView: see productView.scss
 
 //breadcumbs
 .breadcrumbs {

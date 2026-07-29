@@ -30,10 +30,16 @@ Ratio **1.25**. Mobile base **1rem** for `h6`. At **1024px+**, base **1.125rem**
 
 Tokens: `--or-type-h1-size` … `--or-type-h6-size`. Remove `--or-type-heading-size`.
 
+## Narrow containers
+
+When the nearest containment context is **≤30rem (480px)** wide, every `h1`–`h6` is **−2px** (`calc(var(--or-type-hN-size) - 0.125rem)`).
+
+Containment: `.custom-sidebar` (`container-name: or-narrow`) and existing `.or-section`. Not a separate sidebar scale — width-driven only.
+
 ## Align
 
 - Naked `h1`–`h6`: `text-align: center` below 768px; `start` at 768px+ (same breakpoint as past-events list centering).
-- Headings inside card/container shells inherit parent `text-align` (list in `typography.scss`: `.event-details`, `.video-details`, `.card*`, product shells).
+- Headings inside card/container shells inherit parent `text-align` (list in `typography.scss`: `.event-details`, `.video-details`, `.card*`).
 
 ## Margin-block-end stair
 
@@ -41,4 +47,4 @@ Per-level tokens `--or-type-h1-margin-block-end` … `--or-type-h6-margin-block-
 
 ## Out of scope
 
-Markup level changes; Perfect Fourth / other ratios; class-based title type.
+Markup level changes; Perfect Fourth / other ratios; class-based title type; sidebar-only parallel type scale.

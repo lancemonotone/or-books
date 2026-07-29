@@ -61,14 +61,6 @@
     @include hc-700;
 }
 
-// Wide section only — slight step up (optional; base already matches across sidebar/main)
-@container or-section (min-width: 40rem) {
-    .or-btn.or-btn-block {
-        --or-btn-font-size: 1.125rem;
-        --or-btn-size: 3rem;
-    }
-}
-
 // Compact CTA (e.g. section-head “See all”)
 .or-btn-sm {
     --or-btn-sm-pad-inline: 0.75rem;

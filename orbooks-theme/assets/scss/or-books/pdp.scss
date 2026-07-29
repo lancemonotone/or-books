@@ -1237,26 +1237,8 @@
     }
 }
 
-.productView-details {    .productView-brand {
-        margin: 0;
-        @include hc-700;
-        color: $color-greyDarkest;
-        text-transform: capitalize;
-        font-size: 18px;
-        
-        @include small {
-            font-size: 20px;
-        }
-        @include medium{
-            font-size: 24px;
-        }
-        @include xlarge {
-            font-size: 26px;
-        }
-        @include xxlarge {
-            font-size: 30px;
-        }
-    }
+.productView-details {
+    // .productView-brand: class kept on markup; type from bare h*
     .productView-price {
         @include hc-700;
         color: $color-greyDarkest;
