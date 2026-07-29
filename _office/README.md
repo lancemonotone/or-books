@@ -22,7 +22,7 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | 2.1 | `2.1-label-or-replace-subjects-icons/` | `feature/wave1-2.1-subjects-icons` | Complete locally; deploy with Wave 1 batch |
 | 2.2 | `2.2-fix-fake-links/` | `feature/wave1-2.2-section-heads` | Complete locally; deploy with Wave 1 batch |
 | 2.3 | `2.3-stop-squashing-media-list-images/` | `feature/wave1-2.3-media-list-images` | Complete locally; deploy with Wave 1 batch |
-| 2.5 | `2.5-make-headings-easier-to-tell-apart/` | — | Research / parked (NOTES only; not implemented) |
+| 2.5 | `2.5-make-headings-easier-to-tell-apart/` | `feature/wave1-2.5-headings-type-scale` | In progress — typography.scss global h* |
 
 ## Theme rollback archives
 
