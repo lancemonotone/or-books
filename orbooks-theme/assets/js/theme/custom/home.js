@@ -347,15 +347,20 @@ export default (function (context) {
     $btns.removeClass('active');
     $(this).addClass('active');
   })
-  $('.slider-inner').slick({
-    dots: true,
-    arrows: false,
-    infinite: true,
-    slidesToShow: 1,
-    centerMode: false,
-    slidesToScroll: 1,
-    adaptiveHeight: true
-  });
+  const $eventSlider = $('.slider-inner');
+  if ($eventSlider.length) {
+    const slideCount = $eventSlider.children().length;
+    $eventSlider.slick({
+      dots: slideCount > 1,
+      arrows: false,
+      infinite: slideCount > 1,
+      slidesToShow: 1,
+      centerMode: false,
+      slidesToScroll: 1,
+      adaptiveHeight: true,
+    });
+  }
+  if ($('.upcoming-events').children().length) {
   $('.upcoming-events').slick({
     dots: false,
     arrows: true,
@@ -374,6 +379,7 @@ export default (function (context) {
     ]
 
   });
+  }
 });
 
 

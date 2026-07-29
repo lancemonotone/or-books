@@ -6,14 +6,9 @@
 
 {{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
 
-
-
-
-
-
 <section class="page custom-page">
     {{#unless theme_settings.hide_page_heading }}
-        <h1 class="page-heading">{{ page.title }}</h1>
+        <h1>{{ page.title }}</h1>
     {{/unless}}
 
     {{#if page.sub_pages}}
@@ -36,21 +31,20 @@
         {{/replace}}
     </div>
 
-    <input type='hidden' id='current_page' class="current_page"/>
-    <input type='hidden' id='show_per_page' class="show_per_page"/>
-  
-    <div class="event-page custom-page-data" > 
+    <input type="hidden" id="current_page" class="current_page"/>
+    <input type="hidden" id="show_per_page" class="show_per_page"/>
+
+    <div class="event-page custom-page-data">
         {{> components/orbooks/event}}
     </div>
 
     <nav class="pagination pagination-custom"><ul class="page_navigation pagination-list"></ul></nav>
-    
 
     {{#if page.feed}}
         <ul>
             {{#each page.feed}}
                 <li>
-                    <h6><a href="{{url}}" target="_blank">{{title}}</a></h6>
+                    <h6><a href="{{url}}" target="_blank" rel="noopener">{{title}}</a></h6>
                     <p>{{content}}</p>
                 </li>
             {{/each}}
@@ -60,6 +54,3 @@
 {{/partial}}
 
 {{> layout/base}}
-
-
-

@@ -9,7 +9,8 @@
       "subsidiary-rights.html": ["/subsidiary-rights/"]
     },
     "page": {
-      "new-events.html": ["/events/"]
+      "new-events.html": ["/events/"],
+      "events.html": ["/past-events/"]
     },
     "product": {}
   },

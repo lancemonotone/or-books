@@ -1,0 +1,250 @@
+// Shared newsletter CTA shell (events sidebar, booksellers, rights, …)
+.subscribe-link {
+  margin-block-start: 1.5rem;
+  text-align: center;
+
+  @include medium {
+    text-align: start;
+  }
+
+  .button {
+    margin-block-start: 0.75rem;
+  }
+}
+
+// Events (+ shared video-page card grid) — layout only.
+// Type: typography.scss (bare h*) + .or-btn. Do not reintroduce heading/body stairs here.
+
+.event-main-page {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include medium {
+    justify-content: flex-end;
+  }
+
+  .custom-sidebar {
+    order: 2;
+
+    @include medium {
+      order: 1;
+    }
+  }
+
+  .page-content {
+    order: 1;
+
+    @include medium {
+      order: 2;
+    }
+  }
+
+  .custom-sidebar + .custom-content {
+    inline-size: 100%;
+    padding: 0;
+
+    @include medium {
+      inline-size: 74%;
+      padding-inline-start: 3.75rem;
+    }
+
+    @include xxlarge {
+      padding-inline-start: 2.5rem;
+    }
+
+    .event-slider {
+      .slider-inner {
+        margin-inline-start: 0;
+      }
+
+      .slick-dots {
+        bottom: -30px;
+
+        li button {
+          block-size: 10px;
+          inline-size: 10px;
+
+          &::before {
+            block-size: 100%;
+            inline-size: 100%;
+            inset-inline-start: 0;
+            inset-block-start: 0;
+          }
+        }
+
+        .slick-active button::before {
+          background-color: #000;
+        }
+      }
+    }
+
+    // User override: block layout, no extra padding-left on this grid
+    .event-page {
+      display: block;
+    }
+
+    .event-link {
+      margin-block: 1.5rem 0.875rem;
+      text-align: center;
+
+      @media (min-width: 768px) {
+        margin-block-end: 1rem;
+      }
+    }
+
+    .past-events {
+      margin-block-start: 5rem;
+
+      // Zero indent while centered (mobile); restore indent when left-aligned
+      ul {
+        margin-inline: 0;
+        padding-inline-start: 0;
+        list-style: none;
+
+        @media (min-width: 768px) {
+          padding-inline-start: 1.25rem;
+        }
+      }
+
+      li {
+        list-style: none;
+        margin-block: 0 0.875rem;
+        text-align: center;
+
+        @media (min-width: 768px) {
+          margin-block-end: 1rem;
+          text-align: start;
+        }
+
+        span {
+          display: block;
+
+          @include medium {
+            display: inline-block;
+          }
+        }
+      }
+    }
+
+    .upcomming-events {
+      margin-block-start: 5rem;
+
+      .upcoming-events {
+        @include xsmall {
+          padding-inline: 1.875rem;
+        }
+      }
+
+      .event-card {
+        padding-inline: 1.875rem;
+
+        .button {
+          inline-size: 100%;
+        }
+      }
+
+      .slick-arrow {
+        inline-size: auto;
+        block-size: auto;
+        padding: 0;
+        background-color: initial;
+        border: none;
+        top: 50%;
+
+        &::before {
+          inline-size: 25px;
+          block-size: 25px;
+        }
+
+        &.slick-prev {
+          inset-inline-start: 0;
+        }
+
+        &.slick-next {
+          inset-inline-end: 0;
+        }
+      }
+    }
+  }
+
+  // subscribe-link: see top-level rule (shared)
+}
+
+// Card grids (events archive + videos). No negative side margins (was crushing layout).
+.event-page,
+.video-page {
+  inline-size: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  .event-card,
+  .video-card {
+    inline-size: 100%;
+    margin: 0;
+    border: none;
+    padding: 0 0 1.875rem;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      inline-size: 50%;
+      padding: 0.9375rem 0.9375rem 1.875rem;
+    }
+
+    @include medium {
+      inline-size: 33.33%;
+      padding: 1.875rem;
+    }
+
+    .event-img,
+    .video-img {
+      inline-size: 100%;
+      position: relative;
+
+      img {
+        inline-size: 100%;
+        block-size: auto;
+      }
+
+      .video-link {
+        position: absolute;
+        inset: 0;
+        inline-size: 100%;
+        block-size: 100%;
+      }
+    }
+
+    .event-details,
+    .video-details {
+      inline-size: 100%;
+      text-align: start;
+      padding-block: 0.625rem;
+
+      @include medium {
+        padding-block: 0.9375rem;
+      }
+
+      @include xlarge {
+        padding-block: 1.25rem;
+      }
+
+      // Links/copy: inherit body/heading from typography — no local size stairs
+      a {
+        display: block;
+        margin-block: 0.3125rem;
+        color: inherit;
+      }
+
+      p {
+        margin: 0;
+
+        a {
+          display: inline-block;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
