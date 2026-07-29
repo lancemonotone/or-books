@@ -15,7 +15,7 @@ shop_by_brand:
     <div class="author-page">
         <div class="author-banner is-loader">
             {{#unless theme_settings.hide_brand_banner }}
-            <h2 class="page-heading">{{lang 'brand.brand_feature'}}</h2>
+            <h2>{{lang 'brand.brand_feature'}}</h2>
             <div class="author-banner-main">
                 <div class="brand-cnt">
                     <a href="https://orbooks.com/authors/f/norman-g.-finkelstein/">
@@ -39,7 +39,7 @@ shop_by_brand:
         <input type='hidden' id='author_show_per_page' class="author_show_per_page"/>
         <section  class="product-list contained" data-facet-content >
             <div class="page-details {{#if category.description}}has-description{{/if}}">
-                <h1 class="page-title large-title">Our Authors</h1>
+                <h1>Our Authors</h1>
                 {{#if category.image}}
                     <div>
                         {{> components/common/responsive-img

@@ -68,10 +68,6 @@ input:focus + label {
   margin: 0;
 }
 
-body {
-  @include hs-400;
-  color: $color-greyDarkest;
-}
 
 body.search-open {
   overflow-y: hidden;
@@ -108,16 +104,6 @@ body.custom {
 .carousel-tooltip {
   display: none !important;
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: $color-greyDarkest;
-}
-
 .form-label,
 .form-input {
   color: $color-greyDarkest;
@@ -396,52 +382,6 @@ h6 {
         }
       }
     }
-
-    .card-title {
-      margin-bottom: 7px;
-      line-height: 1;
-
-      @include small {
-        margin-bottom: 13px;
-      }
-
-      @include medium {
-        margin-bottom: 9px;
-      }
-
-      @include large {
-        margin-bottom: 10px;
-      }
-
-      .card-title-name {
-        @include hc-700;
-        color: $color-greyDarkest;
-        font-size: 18px;
-        text-transform: uppercase;
-        transition: 0.3s ease-in-out;
-
-        &:hover {
-          color: $color-greyDarker;
-        }
-
-        @include small {
-          font-size: 20px;
-        }
-
-        @include medium {
-          font-size: 20px;
-        }
-
-        // @include large {
-        //     font-size: 24px;
-        // }
-        @include xxlarge {
-          line-height: 1.1;
-          font-size: 24px;
-        }
-      }
-    }
-
     .card-category {
       .card-category-title {
         display: none;
@@ -1199,13 +1139,6 @@ h6 {
   .login {
     margin: 0 auto 3rem;
   }
-
-  .page-heading {
-    @include hc-700;
-    text-transform: uppercase;
-    margin: 0 0 2rem;
-  }
-
   .login-form {
     .form-field {
       .form-input {
@@ -1239,11 +1172,6 @@ h6 {
 }
 
 .createaccount-page {
-  .page-heading {
-    @include hc-700;
-    text-transform: uppercase;
-  }
-
   .form-row {
     .form-input {
       color: #8d8d8d;
@@ -1263,11 +1191,6 @@ h6 {
   .sidebar-heading {
     width: 100%;
   }
-
-  .page-heading {
-    width: 100%;
-  }
-
   .recent-slide,
   .video-slide {
     display: none;
@@ -1462,30 +1385,6 @@ h6 {
             font-size: 20px;
           }
         }
-
-        .productView-title {
-          font-size: 25px;
-          margin: 15px 0 8px;
-          @include hc-700;
-          line-height: 1;
-          text-transform: uppercase;
-          color: stencilColor("title_color");
-
-          @include large {
-            font-size: 28px;
-          }
-
-          @include xxlarge {
-            font-size: 30px;
-          }
-
-          a {
-            &:hover {
-              color: $color-greyDarker;
-            }
-          }
-        }
-
         .sub-productView-title {
           margin-bottom: 24px;
           display: flex;
@@ -1615,17 +1514,6 @@ h6 {
     padding: 0;
     width: 100%;
   }
-
-  .page-heading {
-    @include hc-700;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-
-    &.About {
-      display: none;
-    }
-  }
-
   .pagecnt-main {
     display: flex;
     justify-content: space-between;
@@ -1666,56 +1554,7 @@ h6 {
 
         @include xxlarge {
           margin-top: 50px;
-        }
-
-        .page-subheading {
-          @include hc-400;
-          font-size: 35px;
-          color: $color-greyDarkest;
-          margin: 0;
-          text-align: center;
-
-          @include xxsmall {
-            font-size: 30px;
-          }
-
-          @include medium {
-            text-align: left;
-          }
-
-          @include xlarge {
-            font-size: 40px;
-          }
-
-          @include xxlarge {
-            font-size: 61px;
-          }
-        }
-
-        h4 {
-          @include hc-700;
-          font-size: 18px;
-          color: $color-greyDarkest;
-          margin: 18px 0 0;
-          text-align: center;
-          font-style: italic;
-
-          @include xxsmall {
-            font-size: 20px;
-            margin: 15px 0 0;
-          }
-
-          @include medium {
-            text-align: left;
-            font-style: normal;
-          }
-
-          @include xxlarge {
-            font-size: 30px;
-            margin: 32px 0 0;
-          }
-        }
-      }
+        }}
 
       .pagetitle {
         text-align: center;
@@ -1728,29 +1567,6 @@ h6 {
         @include xlarge {
           margin-top: 70px;
         }
-
-        .page-heading {
-          color: $color-greyDarkest;
-          margin: 0 0 30px;
-          text-align: center;
-          font-size: 30px;
-          line-height: 1;
-
-          @include xxsmall {
-            margin: 0 0 30px;
-            font-size: 28px;
-          }
-
-          @include medium {
-            text-align: left;
-          }
-
-          @include xxlarge {
-            margin: 0 0 32px;
-            font-size: 36px;
-          }
-        }
-
         p {
           font-size: 16px;
           @include hc-400;
@@ -1849,20 +1665,6 @@ h6 {
       @include xxlarge {
         padding: 0 55px 0 55px;
       }
-
-      .page-heading {
-        text-align: center;
-        margin: 0;
-
-        @include medium {
-          text-align: left;
-        }
-
-        @include xxlarge {
-          font-size: 50px;
-        }
-      }
-
       .slick-arrow {
         width: auto;
         height: auto;
@@ -2113,35 +1915,9 @@ h6 {
     padding: 80px;
   }
 
-  .perc-left {
-    h3 {
-      @include hc-700;
-      font-size: 24px;
-      color: $color-greyDarker;
-      margin: 0;
-
-      @include xlarge {
-        font-size: 34px;
-      }
-
-      @include xxlarge {
-        font-size: 40px;
-      }
-    }
-  }
+  .perc-left {  }
 
   .perc-right {
-    h3 {
-      @include hc-700;
-      color: stencilColor("title_color");
-      font-size: 20px;
-      margin: 0;
-
-      @include xlarge {
-        font-size: 24px;
-      }
-    }
-
     .news-main {
       margin-top: 0;
 
@@ -2289,11 +2065,6 @@ h6 {
 
 //Error Page
 .\34 04-page {
-  .page-heading {
-    @include hc-700;
-    text-transform: uppercase;
-  }
-
   .form-prefixPostfix {
     .form-input {
       color: #8d8d8d;
@@ -2302,12 +2073,7 @@ h6 {
 }
 
 //Account Pages
-.createaccount_thanks-page {
-  .page-heading {
-    @include hc-700;
-    text-transform: uppercase;
-  }
-}
+.createaccount_thanks-page {}
 
 .account-product-detail-heading {
   @include hc-400;
@@ -2324,26 +2090,7 @@ h6 {
 .account_recentitems-page,
 .editaccount-page,
 .account_order_page,
-.wishlists-page {
-  .page-heading {
-    @include hc-700;
-    text-transform: uppercase;
-    margin: 0 0 2rem;
-  }
-
-  h2,
-  h5 {
-    // @include hc-400;
-    font-family: $or-font-body;
-
-    a {
-      &:hover {
-        color: stencilColor("button--primary-backgroundColorHover");
-      }
-    }
-  }
-
-  .navBar--account {
+.wishlists-page {  .navBar--account {
     .navBar-item {
       .navBar-action {
         color: stencilColor("title_color");
@@ -2501,12 +2248,6 @@ h6 {
       color: $color-white;
     }
   }
-
-  h3 {
-    @include hc-700;
-    text-transform: uppercase;
-  }
-
   .account--fixed {
     a {
       text-decoration: underline;
@@ -2527,21 +2268,10 @@ h6 {
         font-size: 16px;
       }
     }
-  }
-
-  .page-heading {
-    @include hc-700;
-    text-transform: uppercase;
-  }
-}
+  }}
 
 // cart
 .cart-page {
-  .page-heading {
-    color: $color-greyDarkest;
-    @include hc-700;
-  }
-
   .cart {
     .cart-header {
       .cart-header-item {
@@ -2893,19 +2623,29 @@ h6 {
     }
   }
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: $or-font-body;
-}
-
+// Accordion chrome only — type comes from typography.scss (bare h*)
 .accordion-custom-tabs {
-  h2 {
-    font-family: $or-font-condensed;
+  .accordion-title {
+    cursor: pointer;
+    position: relative;
+    padding-inline-end: 1.5rem;
+
+    .icon {
+      position: absolute;
+      inset-inline-end: 0;
+      top: 50%;
+      inline-size: 1rem;
+      block-size: 1rem;
+      transform: translateY(-50%);
+    }
+
+    &.is-open .icon {
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+
+  .accordion-desc {
+    display: none;
   }
 }
 
@@ -2992,11 +2732,4 @@ h6 {
   margin-top: 40px;
 }
 
-.custom-cat-desc {
-  h2 {
-    margin: 15px 0;
-    margin-bottom: 24px;
-    font-size: 18px;
-    line-height: 1.4;
-  }
-}
+.custom-cat-desc {}

@@ -1,22 +1,4 @@
-.blog-page {
-    .page-heading {
-        margin: 0 0 15px;
-        text-align: left;
-        @include hc-700;
-        font-size: 24px;
-        line-height: 1;
-        @include small {
-            font-size: 26px;
-        }
-        @include medium {
-            font-size: 34px;
-            margin: 0;
-        }
-        @include xlarge {
-            font-size: 40px;
-        }
-    }
-    .blog-featured {
+.blog-page {    .blog-featured {
         @include small {
             margin-top: 30px;
         }
@@ -259,39 +241,7 @@
                         font-size: 29px;
                     }
 
-                }
-                .blog-title {
-                    margin: 5px 0;
-                    line-height: 1;
-                    text-align: center;
-                    @include medium {
-                        margin: 10px 0;
-                        line-height: 1.2;
-                    }
-                    @include large {
-                        margin: 15px 0;
-                    }
-                    @include xlarge {
-                        margin: 20px 0 20px;
-                    }
-                    a {
-                        line-height: 1;
-                        @include hc-700;
-                        font-size: 18px;
-                        color: #232323;
-
-                        @include medium{
-                            font-size: 20px;
-                        } 
-                        @include large{
-                            font-size: 24px;
-                        }
-                        @include xlarge{
-                            font-size: 29px;
-                        }
-                    }
-                }
-            }
+                }            }
             .blog-post {
                 line-height: 1;
                 @include hc-400;
@@ -335,29 +285,7 @@
                 width: 50%;
             }
 
-            .blog-header {
-                .blog-title {
-                    font-size: 22px;
-                    line-height: 1.25;
-                    @include small {
-                        font-size: 24px;
-                    }
-                    @include medium {
-                        font-size: 26px;
-                    }
-                    @include large {
-                        font-size: 34px;
-                    }
-                    @include xxlarge {
-                        font-size: 40px;    
-                    }
-                    
-                    a {
-                        @include hc-700;
-                        color: $color-greyDarkest;
-                    }
-                }
-                .blog-date {
+            .blog-header {                .blog-date {
                     font-size: 18px;
                     @include hc-400;
 

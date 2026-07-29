@@ -1,10 +1,4 @@
-.page_contact_form-page {
-    .page-heading {
-        @include hc-700;
-        text-transform: uppercase;
-        margin-bottom: 2rem;
-    }
-    .form {
+.page_contact_form-page {    .form {
         .form-field {
             textarea {
                 width: 100% !important;
@@ -19,17 +13,7 @@
     @include medium {
         margin: 3rem auto 8rem;
     }
-    .perc-right {
-        h3 {
-            @include hc-700;
-            color: stencilColor("title_color");
-            font-size: 20px;
-            margin: 0;
-            @include xlarge {
-                font-size: 24px;
-            }
-        }
-   .news-main {
+    .perc-right {   .news-main {
             margin-top: 29px;
             @include medium {
                 margin-top: 0;

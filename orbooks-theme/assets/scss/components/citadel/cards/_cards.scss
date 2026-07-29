@@ -74,22 +74,6 @@
     object-fit: contain;
     width: 100%;
 }
-
-.card-title {
-    font-size: $card-title-fontSize;
-    margin: $card-title-margin;
-
-    > a {
-        color: $card-title-color;
-        display: block;
-        text-decoration: $card-title-textDecoration;
-
-        &:hover {
-            color: $card-title-color-hover;
-        }
-    }
-}
-
 .card-text {
     margin-bottom: $card-text-marginBottom;
 
@@ -162,8 +146,5 @@
             }
         }
 
-        .card-title > a {
-            color: stencilColor("card--alternate-color--hover");
-        }
     }
 }

@@ -50,29 +50,7 @@
                 }
                 @include xxlarge {
                     margin-bottom: 50px;
-                }
-                h3 {
-                    color: stencilColor("footer_color");
-                    font-size: 18px;
-                    font-family: $or-font-neue;
-                    font-weight: 400;
-                    margin-bottom: 6px;
-                    @include xsmall {
-                        font-size: 15px;
-                    }
-                    @include small {
-                        margin-bottom: 0;
-                    }
-                    @include xlarge {
-                        font-size: 17px;
-                        margin-bottom: 2px;
-                    }
-                    @include xxlarge {
-                        font-size: 18px;
-                        margin-bottom: 5px;
-                    }
-                }
-                .socialLinks-item  {
+                }                .socialLinks-item  {
                     margin: 0 7px 0 0;
                     .icon {
                         height: 2.3rem;

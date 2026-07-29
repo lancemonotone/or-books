@@ -1,0 +1,169 @@
+// =============================================================================
+// OR Books — typography design system
+// =============================================================================
+// THE source of truth for type. Loaded last in theme.scss.
+// No other stylesheet may style h1–h6 (or redefine body type).
+// Headings: shared chrome + Major Third (1.25) size + margin stairs.
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// 1. Primitive tokens (families live in variable.scss; sizes/rhythm here)
+// -----------------------------------------------------------------------------
+
+:root {
+  // Type scale (rem) — shared steps for the system
+  --or-text-xs: 0.75rem; // 12
+  --or-text-sm: 0.875rem; // 14
+  --or-text-md: 1rem; // 16
+  --or-text-lg: 1.125rem; // 18
+  --or-text-xl: 1.25rem; // 20
+  --or-text-2xl: 1.5rem; // 24
+  --or-text-3xl: 1.875rem; // 30
+
+  // Semantic — body
+  --or-type-body-size: var(--or-text-sm); // 14 mobile
+  --or-type-body-line: 1.5;
+  --or-type-body-margin-block-end: 0.75rem;
+
+  // Semantic — headings (Major Third 1.25 from h6 base)
+  --or-type-h6-size: 1rem;
+  --or-type-h5-size: 1.25rem;
+  --or-type-h4-size: 1.5625rem;
+  --or-type-h3-size: 1.953125rem;
+  --or-type-h2-size: 2.44140625rem;
+  --or-type-h1-size: 3.0517578125rem;
+  --or-type-heading-line: 1;
+
+  // Margin-block-end stair (same hierarchy feel as sizes)
+  --or-type-h6-margin-block-end: 0.5rem;
+  --or-type-h5-margin-block-end: 0.625rem;
+  --or-type-h4-margin-block-end: 0.75rem;
+  --or-type-h3-margin-block-end: 0.875rem;
+  --or-type-h2-margin-block-end: 1rem;
+  --or-type-h1-margin-block-end: 1.25rem;
+
+  @media (min-width: 768px) {
+    --or-type-body-size: var(--or-text-md); // 16
+    --or-type-body-margin-block-end: 1rem;
+    --or-type-h6-margin-block-end: 0.625rem;
+    --or-type-h5-margin-block-end: 0.75rem;
+    --or-type-h4-margin-block-end: 0.875rem;
+    --or-type-h3-margin-block-end: 1rem;
+    --or-type-h2-margin-block-end: 1.25rem;
+    --or-type-h1-margin-block-end: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    --or-type-body-size: var(--or-text-lg); // 18
+    --or-type-body-margin-block-end: 1.25rem;
+    // Same size ratio; h6 base tracks body (1.125rem)
+    --or-type-h6-size: 1.125rem;
+    --or-type-h5-size: 1.40625rem;
+    --or-type-h4-size: 1.7578125rem;
+    --or-type-h3-size: 2.197265625rem;
+    --or-type-h2-size: 2.74658203125rem;
+    --or-type-h1-size: 3.4332275390625rem;
+    --or-type-h6-margin-block-end: 0.75rem;
+    --or-type-h5-margin-block-end: 0.875rem;
+    --or-type-h4-margin-block-end: 1rem;
+    --or-type-h3-margin-block-end: 1.25rem;
+    --or-type-h2-margin-block-end: 1.5rem;
+    --or-type-h1-margin-block-end: 1.875rem;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 2. Body
+// -----------------------------------------------------------------------------
+
+body {
+  font-family: $or-font-body;
+  font-size: var(--or-type-body-size);
+  font-weight: 400;
+  line-height: var(--or-type-body-line);
+  color: $color-greyDarkest;
+}
+
+p {
+  margin-block: 0 var(--or-type-body-margin-block-end);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+// -----------------------------------------------------------------------------
+// 3. Headings — shared chrome; Major Third size + margin per level
+// Naked headings: center on mobile, start at 768px+.
+// Container headings: inherit parent text-align (cards stay left).
+// -----------------------------------------------------------------------------
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-block: 0 var(--or-type-heading-margin-block-end, 0.75rem);
+  margin-inline: 0;
+  color: $color-greyDarkest;
+  font-family: $or-font-condensed;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: var(--or-type-heading-line);
+  text-align: center;
+  text-transform: uppercase;
+
+  @media (min-width: 768px) {
+    text-align: start;
+  }
+}
+
+h1 {
+  --or-type-heading-margin-block-end: var(--or-type-h1-margin-block-end);
+  font-size: var(--or-type-h1-size);
+}
+
+h2 {
+  --or-type-heading-margin-block-end: var(--or-type-h2-margin-block-end);
+  font-size: var(--or-type-h2-size);
+}
+
+h3 {
+  --or-type-heading-margin-block-end: var(--or-type-h3-margin-block-end);
+  font-size: var(--or-type-h3-size);
+}
+
+h4 {
+  --or-type-heading-margin-block-end: var(--or-type-h4-margin-block-end);
+  font-size: var(--or-type-h4-size);
+}
+
+h5 {
+  --or-type-heading-margin-block-end: var(--or-type-h5-margin-block-end);
+  font-size: var(--or-type-h5-size);
+}
+
+h6 {
+  --or-type-heading-margin-block-end: var(--or-type-h6-margin-block-end);
+  font-size: var(--or-type-h6-size);
+}
+
+// Card / container headings follow the container’s text-align contract
+.event-details,
+.video-details,
+.card,
+.card-body,
+.card-figure,
+.product,
+.productView-product,
+.productView-details {
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    text-align: inherit;
+  }
+}

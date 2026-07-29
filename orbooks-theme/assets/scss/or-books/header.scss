@@ -938,41 +938,7 @@
                                             @include breakpoint(1440px) {
                                                 font-size: 20px;
                                             }
-                                        }
-                                        .card-title {
-                                            margin-bottom: 7px;
-                                            line-height: 1;
-                                            @include small {
-                                                margin-bottom: 13px;
-                                            }
-                                            @include medium {
-                                                margin-bottom: 9px;
-                                            }
-                                            @include xxlarge {
-                                                margin-bottom: 13px;
-                                            }
-                                            a {
-                                                @include hc-700;
-                                                color: $color-greyDarkest;
-                                                font-size: 14px;
-                                                text-transform: uppercase;
-                                                transition: 0.3s ease-in-out;
-                                                &:hover {
-                                                    color: #D2230E;
-                                                }
-                                                @include small {
-                                                    font-size: 18px;
-                                                }
-                                                @include large {
-                                                    font-size: 20px;
-                                                }
-                                                @include xxlarge {
-                                                    line-height: 1.1;
-                                                    font-size: 24px;
-                                                }
-                                            }
-                                        }
-                                        .price-section {
+                                        }                                        .price-section {
                                             display: none;
                                         }
                                     }

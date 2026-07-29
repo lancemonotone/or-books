@@ -1,5 +1,5 @@
 {{#if theme_settings.homepage_new_products_column_count ">" 10}}
-    <h2 class="page-heading">{{lang 'products.top' }}</h2>
+    <h2>{{lang 'products.top' }}</h2>
 
     <ul class="productCarousel newprd" data-product-type="top_sellers"  {{#if settings.data_tag_enabled}} data-list-name="Most Popular Products" {{/if}}>
 
@@ -10,7 +10,7 @@
     {{/each}}
     </ul>
     {{else}}
-    <h2 class="page-heading">{{lang 'products.top' }}</h2>
+    <h2>{{lang 'products.top' }}</h2>
     <ul class="productCarousel singleprd" data-product-type="top_sellers"  {{#if settings.data_tag_enabled}} data-list-name="Most Popular Products" {{/if}}>
 
         {{#each products}}

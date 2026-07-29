@@ -34,12 +34,8 @@
 }
 
 .modal-header-title {
-    font-size: fontSize("large");
+    // type: typography.scss (bare h*)
     text-align: center;
-
-    @include breakpoint("medium") {
-        font-size: fontSize("larger");
-    }
 }
 
 .modal-close {

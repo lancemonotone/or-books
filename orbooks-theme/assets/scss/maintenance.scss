@@ -11,19 +11,15 @@ body {
     background-size: cover;
 
     -ms-box-orient: horizontal;
-    color: #798289;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
     -ms-flex-pack: space-around;
-    font-family: $or-font-body;
-    font-size: 0.8em;
     height: 100vh;
 
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    line-height: 1.5em;
     margin: 0;
     min-height: 480px;
     min-width: 320px;
@@ -101,14 +97,6 @@ a {
     margin: 0 5px;
     text-decoration: none;
 }
-
-h1 {
-    color: #3c4043;
-    font-size: 24px;
-    font-weight: 300;
-    margin-top: 15px;
-}
-
 div p {
     margin-bottom: 0;
     margin-top: 0;

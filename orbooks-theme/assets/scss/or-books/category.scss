@@ -35,23 +35,6 @@
         @include medium{
             text-align: left;
         }
-        .sidebarBlock-heading {
-            line-height: 1;
-            @include hc-700;
-            text-transform: uppercase;
-            font-size: 18px;
-            
-            @include medium {
-                font-size: 24px;
-            }
-            @include large {
-                font-size: 26px;
-            }
-            @include xlarge {
-                font-size: 30px;
-            }
-        }
-
         .navList {
             margin: 10px 0;
             
@@ -212,29 +195,7 @@
         padding: 0 0 10px;
     }
 
-    .category-title {
-        .page-heading {
-            margin: 0;
-            @include hc-700;
-            color: $color-greyDarkest;
-            font-size: 24px;
-            line-height: 1.25;
-
-
-            @include medium {
-                font-size: 26px;
-            }
-            @include large {
-                font-size: 32px;
-            }
-            @include xlarge {
-                font-size: 36px;
-            }
-            @include xxlarge {
-                font-size: 40px;
-            }
-        }
-    }
+    .category-title {    }
 }
 .category-short {
     display: flex;
@@ -303,31 +264,7 @@
         }
     }
 }
-.reading-list-title {
-    h2 {
-        margin: 0;
-        font-size: 18px;
-        @include hc-700;
-        text-transform: uppercase;
-        text-align: center;
-
-        @include small {
-            font-size: 20px;
-        }
-        @include medium {
-            font-size: 24px;
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        @include large {
-            font-size: 26px;
-        }
-        @include xlarge {
-            font-size: 30px;
-            margin-bottom: 22px;
-        }
-    }
-}
+.reading-list-title {}
 .reading-list {
     .reading-list-slider {
         margin: 0 -10px;
@@ -601,27 +538,6 @@
                 // @include xxlarge {
                 //     margin-top: 53px;
                 // }
-                h2{
-                    @include hc-700;
-                    font-size: 20px;
-                    color: $color-greyDarkest;
-                    margin: 0 0 20px;
-                    line-height: 1;
-                    text-align: center;
-                    @include small {
-                        font-size: 22px;
-                    }
-                    @include medium {
-                        text-align: left;
-                        font-size: 24px;
-                    }
-                    @include large {
-                        font-size: 26px;
-                    }
-                    @include xxlarge {
-                        font-size: 30px;
-                    }
-                }
             }
             .rights-link {
                 margin: 30px 0 40px;
@@ -813,32 +729,7 @@
             
                     @include medium {
                         padding-bottom: 30px;
-                    }
-
-                    .productView-title {
-                        @include hc-700;
-                        margin: 0 0 0;
-                        color: $color-greyDarkest;
-                        text-transform: uppercase;
-                        font-size: 26px;
-
-                        @include medium {
-                            font-size: 30px;
-                            margin: 10px 0 5px;
-                        }
-                        @include large {
-                            font-size: 32px;
-                            margin: 20px 0 7px;
-                        }
-                        @include xlarge {
-                            font-size: 34px;
-                        }
-                        @include xxlarge {
-                            font-size: 36px;
-                            margin: 30px 0 7px;
-                        }
-                    }
-                    .sub-productView-title {
+                    }                    .sub-productView-title {
                         float: left;
                         width: 100%;
                         .productView-info-name {
@@ -1591,23 +1482,8 @@
                 width: 100%;
                 padding: 0;
                 .product-desc-title {
-                    @include hc-700;
-                    text-transform: uppercase;
-                    margin: 0 0 0px;
-
-                    @include small {
-                        font-size: 20px;
-                    }
-                    @include large {
-                        
-                    }
-                    @include xlarge {
-                        
-                    }
-                    @include xxlarge {
-                        font-size: 24px;
-                       // margin: 0 0 20px;
-                    }
+                    // type: typography.scss (bare h*)
+                    margin-block: 0;
                 }
                 .product-desc{
                     p{

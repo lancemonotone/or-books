@@ -33,12 +33,7 @@
         .productView-details {
             @include grid-column(5);
         }
-    }
-
-    .productView-title {
-        margin-top: 0;
-    }
-}
+    }}
 
 .previewCartCheckout {
     background: container("fill", "dark");

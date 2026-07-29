@@ -1,41 +1,24 @@
 @import "variable";
 
-
 @import "account-pages";
-
 @import "authors";
-
 @import "category";
-
 @import "common";
-
 @import "footer";
-
 @import "header";
-
 @import "home";
-
 @import "news";
-
 @import "pages";
-
 @import "pdp";
-
 @import "sidebar";
-
 @import "buttons";
-
-@import "headings";
-
 @import "subjects";
-
 @import "section";
-
 @import "section-head";
-
 @import "slider-chrome";
-
 @import "flow";
-
 @import "cms";
+@import "events";
 
+// Last: sole body + heading type source
+@import "typography";

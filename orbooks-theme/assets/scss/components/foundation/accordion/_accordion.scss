@@ -19,14 +19,6 @@
         margin-bottom: 0;
     }
 }
-
-.accordion-title {
-    color: stencilColor("color-textHeading");
-    font-family: "Montserrat", Arial, Helvetica, sans-serif;
-    font-size: remCalc(15px);
-    margin: 0;
-}
-
 .accordion-navigation {
     align-items: center;
     display: flex;
@@ -78,12 +70,10 @@
             padding: 0;
         }
     }
-
     .accordion-title {
-        font-weight: normal;
+        // type: typography.scss — layout/chrome only
         padding: $accordion-navList-padding;
         text-decoration: none;
-        text-transform: inherit;
 
         @include breakpoint("medium") {
             padding: 0;

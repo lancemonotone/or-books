@@ -13,24 +13,7 @@
   }
   @include xxlarge {
     margin-bottom: 45px;
-  }
-  .page-heading {
-    @include hc-400;
-    font-size: 24px;
-    color: $color-greyDarkest;
-    letter-spacing: 0;
-    text-transform: capitalize;
-    line-height: 1;
-    margin: 0;
-    text-align: left;
-    @include xlarge {
-      font-size: 27px;
-    }
-    @include xxlarge {
-      font-size: 30px;
-    }
-  }
-  .slick-arrow {
+  }  .slick-arrow {
     width: auto;
     height: auto;
     padding: 0;
@@ -102,26 +85,7 @@
       }
     }
   }
-}
-.large-title {
-  @include hc-700;
-  font-size: 24px;
-  color: $color-greyDarkest;
-  text-transform: capitalize;
-  line-height: 1.3;
-  margin: 0;
-  text-align: center;
-  @include medium {
-    text-align: left;
-  }
-  @include xlarge {
-    font-size: 27px;
-  }
-  @include xxlarge {
-    font-size: 40px;
-  }
-}
-.authorbuttons {
+}.authorbuttons {
   margin-top: 15px;
   border-top: 1px solid #ececec;
   padding: 10px 0;
@@ -246,21 +210,7 @@
         }
       }
       .card-body {
-        padding: 0;
-        .card-title {
-          margin: 31px 0 0;
-          color: $color-greyDarkest;
-          font-size: 14px;
-          @include hc-700;
-          text-transform: uppercase;
-          @include small {
-            font-size: 16px;
-          }
-          @include xxlarge {
-            font-size: 24px;
-          }
-        }
-      }
+        padding: 0;      }
       &:hover {
         box-shadow: none;
         .card-img-container {
@@ -268,11 +218,7 @@
             filter: none;
           }
         }
-        .card-body {
-          .card-title {
-            color: $color-greyDarker;
-          }
-        }
+        .card-body {        }
       }
     }
   }
@@ -319,6 +265,7 @@
         }
         @include large {
           padding: 10px 0;
+          padding-top: 20px;
         }
         @include xxlarge {
           font-size: 20px;
@@ -329,39 +276,6 @@
             margin: 0 -20px;
           }
         }
-      }
-      .accordion-desc {
-        @include large {
-          padding-top: 20px;
-        }
-      }
-      .accordion-title {
-        color: $color-greyDarkest;
-        cursor: pointer;
-        text-transform: uppercase;
-        @include hc-700;
-        position: relative;
-        font-size: 18px;
-        transition: 0.3s ease;
-
-        @include xxlarge {
-          font-size: 25px;
-        }
-
-        .icon {
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-        &.is-open {
-          .icon {
-            transform: translateY(-50%) rotate(180deg);
-          }
-        }
-      }
-      .accordion-desc {
-        display: none;
       }
     }
   }
@@ -400,29 +314,7 @@
     }
     @include breakpoint(1900px) {
       width: 74%;
-    }
-    .large-title {
-      @include hc-700;
-      color: $color-greyDarkest;
-      text-transform: uppercase;
-      margin: 0;
-      text-align: left;
-      font-size: 26px;
-
-      @include medium {
-        font-size: 30px;
-      }
-      @include large {
-        font-size: 32px;
-      }
-      @include xlarge {
-        font-size: 36px;
-      }
-      @include xxlarge {
-        font-size: 44px;
-      }
-    }
-    .cat-desc {
+    }    .cat-desc {
       background-color: initial;
       padding: 20px 0 22px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.5);
@@ -451,36 +343,7 @@
     }
     .actionBar {
       display: none;
-    }
-    .page-subheading {
-      @include hc-700;
-      font-size: 18px;
-      color: $color-greyDarkest;
-      letter-spacing: 0;
-      text-transform: uppercase;
-      line-height: 1.2;
-      margin: 0;
-      text-align: left;
-      padding-top: 30px;
-      @include small {
-        font-size: 20px;
-      }
-      @include medium {
-        font-size: 22px;
-      }
-      @include large {
-        font-size: 24px;
-      }
-      @include xlarge {
-        font-size: 26px;
-      }
-      @include xxlarge {
-        font-size: 30px;
-        padding-top: 49px;
-        line-height: 1;
-      }
-    }
-    .productGrid {
+    }    .productGrid {
       padding-top: 30px;
       @include medium {
         padding-top: 10px;
@@ -494,32 +357,7 @@
         }
       }
     }
-    .brnd-blog {
-      .page-subheading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-bottom: 30px;
-        padding-top: 0;
-        cursor: pointer;
-        &:hover {
-          color: #d2230e;
-        }
-        &.icon-open {
-          .icon {
-            transform: rotate(180deg);
-          }
-        }
-        svg {
-          cursor: pointer;
-          width: 18px;
-          height: 18px;
-          &:hover {
-            fill: #d2230e;
-          }
-        }
-      }
-    }
+    .brnd-blog {    }
   }
   .pagination {
     margin-bottom: 0;

@@ -217,32 +217,7 @@
 
                 @include medium {
                     padding-bottom: 30px;
-                }
-
-                .productView-title {
-                    @include hc-700;
-                    margin: 0 0 3px;
-                    color: $color-greyDarkest;
-                    text-transform: uppercase;
-                    font-size: 26px;
-
-                    @include medium {
-                        font-size: 30px;
-                        margin: 30px 0 5px;
-                    }
-                    @include large {
-                        font-size: 32px;
-                        margin: 30px 0 7px;
-                    }
-                    @include xlarge {
-                        font-size: 36px;
-                    }
-                    @include xxlarge {
-                        margin: 50px 0 10px;
-                        font-size: 44px;    
-                    }
-                }
-                .sub-productView-title {
+                }                .sub-productView-title {
                     float: left;
                     width: 100%;
                     .productView-info-name {
@@ -330,27 +305,7 @@
                         @include xxlarge {
                             margin-top: 20px;
                         }
-                    }
-                    h3 {
-                        color: $color-greyDarkest;
-                        @include hc-400;
-                        font-size: 20px;
-                        margin: 0;
-
-                        @include small {
-                            font-size: 24px;
-                        }
-                        @include large {
-                            font-size: 26px;
-                        }
-                        @include xlarge {
-                            font-size: 30px;
-                        }
-                        @include xxlarge {
-                            font-size: 34px;
-                        }
-                    }
-                    span {
+                    }                    span {
                         @include hc-700;
                         color: $color-greyDarkest;
                         font-size: 16px;
@@ -1144,22 +1099,8 @@
                 margin: 0;
             }
             .product-desc-title {
-                color:  $color-greyDarkest;
-                @include hc-700;
-                text-transform: uppercase;
-                margin: 0 0 10px;
-                 font-size: 18px;
-
-                @include small {
-                    font-size: 18px;
-                }
-                @include large {
-                    margin: 0 0 10px;
-                }
-                @include xxlarge {
-                    font-size: 25px;
-                }
-                
+                // type: typography.scss (bare h3)
+                margin-block: 0 0.625rem;
             }
             .product-desc, .accordion-desc {
                 padding: 5px 0;
@@ -1198,11 +1139,7 @@
             .accordion-desc {
                 @include large{
                     padding-top: 10px;
-                }
-                h3{
-                    margin-top: 0;
-                }
-                p {
+                }                p {
                     // display: inline;
                     img {                        
                        width: 100%;
@@ -1243,35 +1180,6 @@
                         }
                     }
                 }
-            }
-            .accordion-title {
-                color: $color-greyDarkest;
-                cursor: pointer;
-                text-transform: uppercase;
-                @include hc-700;
-                position: relative;
-                font-size: 18px;
-                transition: 0.3s ease;
-                margin-bottom: 10px;
-              
-                @include xxlarge {
-                    font-size: 25px;
-                }
-
-                .icon {
-                    position: absolute;
-                    right: 0;
-                    top: 50%;
-                    transform: translateY(-50%);
-                }
-                &.is-open {
-                    .icon {
-                        transform: translateY(-50%) rotate(180deg);
-                    }
-                }
-            }
-            .accordion-desc {
-                display: none;
             }
         }
     }
@@ -1329,30 +1237,7 @@
     }
 }
 
-.modal-header-title {
-    @include hc-700;
-}
-.productView-details {
-    .productView-title {
-        @include hc-700;
-        color: $color-greyDarkest;
-        text-transform: uppercase;
-        font-size: 24px;
-
-        @include medium {
-            font-size: 26px;
-        }
-        @include large {
-            font-size: 30px;
-        }
-        @include xlarge {
-            font-size: 32px;
-        }
-        @include xxlarge {
-            font-size: 36px;
-        }
-    }
-    .productView-brand {
+.productView-details {    .productView-brand {
         margin: 0;
         @include hc-700;
         color: $color-greyDarkest;
@@ -1462,28 +1347,7 @@
 .custom-sidebar.related-sidebar.stickthis-pdp {
     position: static;
     height: auto;
-}
-
-.related-title {
-    @include hc-700;
-    margin: 10px 0 40PX;
-    font-size: 18px;
-    width: 100%;
-    text-transform: uppercase;
-
-    @include medium {
-        margin: 30px auto;
-        font-size: 22px;
-        text-align: center;
-    }
-    @include xlarge {
-        font-size: 26px;
-    }
-    @include xxlarge {
-        font-size: 30px;
-    }
-}
-.related-sidebar {
+}.related-sidebar {
     display: flex;
     flex-wrap: wrap;
     .card {
@@ -1533,13 +1397,7 @@
             padding: 0;
 
             .productView-product {
-                padding-bottom: 5px;
-
-                .productView-title {
-                    margin: 0;
-                    font-size: 18px;
-                }
-                .productView-price {
+                padding-bottom: 5px;                .productView-price {
                     display: block;
                 }
             }

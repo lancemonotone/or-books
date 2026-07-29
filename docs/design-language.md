@@ -50,19 +50,30 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Job:** Shared shell for any homepage (etc.) block that uses `.or-section-head` + body.
 - **Modifier:** `.or-section--slider` when the body is a Slick carousel — enables shared arrow chrome only (does not change the head).
 
-## Atom: Heading (`.or-heading`)
+## Typography system (`typography.scss`)
 
-- **Styles:** `orbooks-theme/assets/scss/or-books/headings.scss`
-- **Job:** Shared strip / section title type (Roboto Condensed bold, uppercase, fluid size). **No letter-spacing.**
-- **Also zeros** letter-spacing on `h1–h6`, `.page-heading`, `.sidebar-heading`, and related legacy title classes.
-- **Use** `or-heading` on section strip titles (via `section-head.html`) and other matching uppercase strip titles.
-- Page H1s that need a different scale (category, blog, CMS) may keep `.page-heading` with page-file size overrides — do not re-declare the strip title recipe there.
+**Only file allowed to set body / heading type.** Loaded last in `or-books/theme.scss`.
+
+| Layer | What |
+|-------|------|
+| **Tokens** | `--or-text-*` scale; `--or-type-body-*`; `--or-type-h1-size`…`--or-type-h6-size` + matching `--or-type-h*-margin-block-end` (Major Third 1.25); heading line |
+| **Body** | `body`, `p` — Helvetica stack, body size/line |
+| **Headings** | bare `h1–h6` — shared chrome (Condensed 700, uppercase); **size + margin stairs** Major Third; **align** center &lt;768, start ≥768; container headings (`text-align: inherit`) |)
+
+**Do not** style `h1–h6` in page/component SCSS (not even margin/align). Layout around headings uses parents / flex children (`:first-child`), not heading selectors.
+
+**Markup:** bare heading tags. Classes on headings only for JS hooks; those classes get **no** type CSS.
+
+## Atom: Heading
+
+Covered by the typography system above (not a separate utility class).
+
 
 ## Molecule: Section head (`.or-section-head`)
 
 - **Template:** `orbooks-theme/templates/components/orbooks/section-head.html`
 - **Styles:** `orbooks-theme/assets/scss/or-books/section-head.scss` (layout only)
-- **Title type:** `.or-heading` from `headings.scss`
+- **Title type:** bare `h*` from `typography.scss`
 - **Job:** Plain title + **See all** link. **Same for every section** — whether or not a slider follows.
 - **CTA:** Only See all is a link (`button button--primary or-btn or-btn-sm`). Title is not linked.
 - **Omit `url`** when AJAX fills `data-or-section-head-pending` on the See all link.

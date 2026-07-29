@@ -2,7 +2,7 @@
 
 <section class="page">
     <div class="page-content page-content--centered">
-        <h1 class="page-heading" tabindex="0" role="status" aria-live="assertive">
+        <h1 tabindex="0" role="status" aria-live="assertive">
             {{#if subscription.error}}
                 {{lang 'newsletter.subscribed_heading_error'}}
             {{else}}
@@ -20,7 +20,7 @@
 </section>
 
 <script>
-    const subscriptionStatusElement = document.querySelector('.page-content > .page-heading');
+    const subscriptionStatusElement = document.querySelector('.page-content > h1');
     if (subscriptionStatusElement) subscriptionStatusElement.focus();
 </script>
 

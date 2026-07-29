@@ -62,7 +62,7 @@
         </div>
         <div class="page-sidebar custom-sidebar related-sidebar stickthis-pdp desktop-related-product">
             {{#if product.related_products}}
-                <h2 class="related-title">{{lang 'products.related_title'}}</h2>
+                <h2>{{lang 'products.related_title'}}</h2>
                 {{#each product.related_products}}
                     {{> components/orbooks/card settings=../settings theme_settings=../theme_settings customer=../customer event="list" position=(add @index 1)}}
                 {{/each}}
@@ -301,7 +301,7 @@
     </article>
     <section class="page-sidebar custom-sidebar related-sidebar mobile-related-product">
         {{#if product.related_products}}
-            <h2 class="related-title">{{lang 'products.related_title'}}</h2>
+            <h2>{{lang 'products.related_title'}}</h2>
             {{#each product.related_products}}
                 {{> components/orbooks/card settings=../settings theme_settings=../theme_settings customer=../customer event="list" position=(add @index 1)}}
             {{/each}}
