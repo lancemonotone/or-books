@@ -36,7 +36,7 @@
 .blog-date,
 .blog-author {
     color: stencilColor("color-textSecondary");
-    text-align: center;
+    // Align: list cards use .blog-post-body text-align (center → start @ 768)
 }
 
 .blog-author {

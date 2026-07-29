@@ -34,8 +34,7 @@
             <div class="productView-img-container">
                 {{!-- Remove the surrounding a-element if there is no main image. --}}
                 {{#if product.main_image}}
-                    <a href="{{product.url}}"
-                        target="_blank">
+                    <a href="{{product.url}}">
                 {{/if}}
                 {{> components/common/responsive-img
                     image=product.main_image
@@ -53,25 +52,22 @@
         </figure>
     <section class="productView-details product-data">
         <div class="productView-product">
-            <a href="{{product.url}}" target="_blank">
-            <p class="desktop-featured">Featured Title</p>
-            </a>
-            <h1 class="productView-title">
-                <a href="{{product.url}}" target="_blank">
+            <h3 class="productView-title">
+                <a href="{{product.url}}">
                     {{product.title}}
                 </a>
-            </h1>
+            </h3>
             <div class="sub-productView-title">
                 {{#each product.custom_fields}}
                     {{#if name '===' 'sub-heading'}}
                     <div class="productView-info-name">{{name}}:</div>
-                    <div class="productView-info-value">{{{value}}}</div>
+                    <h5 class="productView-info-value">{{{value}}}</h5>
                     {{/if}}
                 {{/each}}
             </div>
             {{#each product.custom_fields}}
                 {{#if name '===' 'Author'}}
-                    <h2 class="productView-brand">{{{value}}}</h2>
+                    <h4 class="productView-brand">{{{value}}}</h4>
                 {{/if}}
             {{/each}}
             
@@ -80,9 +76,8 @@
             
         </div>
             <div class="pdp-content">
-                <p>{{{ellipsis product.description 250}}}
-                    <a href="{{product.url}}" target="_blank">more</a>
-               </p>
+                <p>{{{ellipsis product.description 250}}}</p>
+                <a href="{{product.url}}" class="button button--primary or-btn or-btn-block">Read More</a>
             </div>
         </div>
     </section>
