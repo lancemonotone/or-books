@@ -121,18 +121,28 @@
         padding-right: 0;
       }
       .productView-images {
+        // 2.4 — phones: keep cover from eating the first screenful; zoom still opens full size
+        --or-pdp-cover-max-block: min(42vh, 17.5rem);
+        --or-pdp-cover-max-inline: 100%;
+
         padding: 0;
         position: relative;
         width: 100%;
         float: none;
+        margin: 0 auto 1.5rem;
+
         @include small {
-          max-width: 300px;
+          --or-pdp-cover-max-block: none;
+          --or-pdp-cover-max-inline: 18.75rem; // 300px
           margin: 0 auto 42px;
         }
+
         @include medium {
+          --or-pdp-cover-max-inline: 100%;
           padding-right: 0;
-          max-width: 100%;
+          margin: 0;
         }
+
         @include xxlarge {
           padding-right: 0;
         }
@@ -145,19 +155,35 @@
           width: 100%;
           display: inline-block;
           height: auto;
+          text-align: center;
+
           @include xxlarge {
             padding: 22px 0 5px;
           }
+
           .productView-thumbnail {
-            min-width: 300px;
+            min-width: 0;
             pointer-events: none;
+
             @include medium {
               pointer-events: auto;
               min-width: 210px;
             }
+
             .zoom {
               position: static !important;
               display: block;
+            }
+
+            .productView-image-slick,
+            img {
+              display: block;
+              margin-inline: auto;
+              inline-size: auto;
+              max-inline-size: var(--or-pdp-cover-max-inline);
+              max-block-size: var(--or-pdp-cover-max-block);
+              block-size: auto;
+              object-fit: contain;
             }
           }
         }
