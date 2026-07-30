@@ -80,16 +80,16 @@
 
       &.custom-content {
         @include medium {
-          padding: 0 0 30px 40px;
+          padding: 0 0 0 40px;
         }
         @include large {
-          padding: 0 0 30px 80px;
+          padding: 0 0 0 80px;
         }
         @include xlarge {
-          padding: 0 0 30px 120px;
+          padding: 0 0 0 120px;
         }
         @include xxlarge {
-          padding: 0 0 35px 150px;
+          padding: 0 0 0 150px;
         }
       }
     }
@@ -273,35 +273,7 @@
           width: 100%;
           float: left;
 
-          .custom-fields-shouts {
-            --or-shouts-pad-block: 0.625rem;
-            --or-shouts-border: 1px solid #000;
-
-            border-block: var(--or-shouts-border);
-            padding-block: var(--or-shouts-pad-block);
-
-            &:not(:has(blockquote)) {
-              --or-shouts-pad-block: 0;
-              --or-shouts-border: none;
-            }
-          }
-
-          // Shouts / short desc are bare blockquote + p (typography.scss)
-          blockquote {
-            margin-block-start: 0.9375rem;
-
-            @include small {
-              margin-block-start: 1.25rem;
-            }
-
-            @include large {
-              margin-block-start: 1.5625rem;
-            }
-
-            @include xxlarge {
-              margin-block-start: 1.875rem;
-            }
-          }
+          // Shouts: typography.scss (.custom-fields-shouts + blockquote)
         }
         .productView-info {
           float: left;

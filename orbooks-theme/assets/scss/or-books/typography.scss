@@ -118,7 +118,7 @@ blockquote {
   color: inherit;
   // text-transform: none;
 
-  // CMS Shouts often still paste h2/h3 + span attribution inside
+  // CMS Shouts paste h2/h3 + span; theme rewrites span→cite (custom-fields.html)
   & h1,
   & h2,
   & h3,
@@ -137,21 +137,54 @@ blockquote {
   }
 
   & p,
-  & span {
+  & span,
+  & cite {
     display: block;
     margin-block: 0 var(--or-type-body-margin-block-end);
     font: inherit;
     font-size: var(--or-type-pullquote-size);
+    font-style: inherit;
     color: inherit;
     text-transform: none;
   }
 
-  & span {
+  // Attribution (cite preferred; span kept for any unconverted paste)
+  & span,
+  & cite {
     font-size: var(--or-type-h6-size);
   }
 
   & :last-child {
     margin-block-end: 0;
+  }
+}
+
+// Shout group — top/bottom rules + quote stack rhythm (PDP + About)
+.custom-fields-shouts {
+  --or-shouts-pad-block: 0.625rem;
+  --or-shouts-border: 1px solid #000;
+  --or-shouts-quote-gap: 0.9375rem;
+
+  border-block: var(--or-shouts-border);
+  padding-block: var(--or-shouts-pad-block);
+  margin-block-end: var(--or-shouts-quote-gap);
+
+  @media (min-width: 768px) {
+    --or-shouts-quote-gap: 1.25rem;
+  }
+
+  @media (min-width: 1024px) {
+    --or-shouts-quote-gap: 1.5625rem;
+  }
+
+  &:not(:has(blockquote)) {
+    --or-shouts-pad-block: 0;
+    --or-shouts-border: none;
+    margin-block-end: 0;
+  }
+
+  & blockquote {
+    margin-block-start: var(--or-shouts-quote-gap);
   }
 }
 

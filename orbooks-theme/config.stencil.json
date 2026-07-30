@@ -9,6 +9,7 @@
       "subsidiary-rights.html": ["/subsidiary-rights/"]
     },
     "page": {
+      "about.html": ["/about/"],
       "new-events.html": ["/events/"],
       "events.html": ["/past-events/"]
     },
