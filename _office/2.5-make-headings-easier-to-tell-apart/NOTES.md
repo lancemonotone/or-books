@@ -79,7 +79,9 @@ Target = author books accordion product card text stack.
 ### PDP meta stack (book page)
 
 - Title: `<h2 class="productView-title">` — class kept for JS hook only; no type CSS on class.
-- Subtitle / author / short description: bare `<p>` (body type).
+- Subtitle: `<h5>` — heading chrome (centers on mobile &lt;768); was bare `<p><strong>` which stayed left.
+- Author: bare `<h3>` (CMS may include `<a>`).
+- Short description: bare `<p>` (body type).
 - Shouts: bare `<blockquote>`; nested CMS `h*`/`span` reset to body in `typography.scss`.
 - Stripped `pdp.scss` type stairs for `.title-main`, `.short-dec`, subtitle `.productView-info-value`, shout attributions.
 
