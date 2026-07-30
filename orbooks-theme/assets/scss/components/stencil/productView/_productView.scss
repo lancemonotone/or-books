@@ -126,10 +126,10 @@
 // -----------------------------------------------------------------------------
 
 .productView-product {
-  @include breakpoint("medium") {
-    border-bottom: container("border");
-    padding-bottom: spacing("single") + spacing("third");
-  }
+  // @include breakpoint("medium") {
+  //   border-bottom: container("border");
+  //   padding-bottom: spacing("single") + spacing("third");
+  // }
 
   > :last-child {
     margin-bottom: 0;
