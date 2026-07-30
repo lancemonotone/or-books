@@ -49,9 +49,10 @@
                             padding-top: 0.75rem;
                         }
                         .slick-list {
-                            margin: 0 -5px;
+                            // Full-bleed with slider-chrome (no side gutter / no -5px cancel)
+                            margin-inline: 0;
                             .blog {
-                                padding: 0 5px;
+                                padding: 0;
                                 display: flex;
                                 flex-wrap: wrap;
                                 flex-direction: column;

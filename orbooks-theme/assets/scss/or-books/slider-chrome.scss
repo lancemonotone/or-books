@@ -1,15 +1,16 @@
 // Shared slider chrome for any .or-section--slider
 // Design language: docs/design-language.md
 // Arrows stay on the Slick carousel (DOM). Side-mounted, vertically centered — never in the section head.
-// Track padding keeps slide text clear of arrows.
+// Track is full-bleed; arrows overlay slide edges (media) so block CTAs can span the section.
 // Product carousel shell (margin / block spacing) lives here — not in home.scss.
 // 4.8: style .slick-dots here the same shared way — no per-page one-offs.
 
 .or-section.or-section--slider {
     --or-slider-arrow-size: 1.25rem;
-    --or-slider-arrow-inset: 0;
-    // Arrow width + gap so chrome clears card edge (incl. cover shadow)
-    --or-slider-track-pad: calc(var(--or-slider-arrow-size) + 0.75rem);
+    // Sit on the card edge; slight inset so the hit target stays inside the section
+    --or-slider-arrow-inset: 0.25rem;
+    // No side gutter — slides (and or-btn-block CTAs) span the section width
+    --or-slider-track-pad: 0;
 
     @media (min-width: 1024px) {
         --or-slider-arrow-size: 1.4375rem;
@@ -27,22 +28,23 @@
         }
     }
 
-    // Position relative to the carousel; pad so arrows sit in the gutter
+    // Full-bleed track; arrows overlay (do not reserve gutter)
     .slick-slider.slick-initialized {
         position: relative;
         box-sizing: border-box;
         padding-inline: var(--or-slider-track-pad);
-        padding-left: var(--or-slider-track-pad);
-        padding-right: var(--or-slider-track-pad);
         padding-block-start: 0;
     }
 
-    // No negative list bleed — that cancelled track pad and put arrows on covers
     .slick-slider.slick-initialized .slick-list,
     .productCarousel.slick-initialized .slick-list {
         margin-inline: 0;
-        margin-left: 0;
-        margin-right: 0;
+        overflow: hidden;
+    }
+
+    // Title/date clear of overlay arrows; Read Now (.or-btn-block) stays full-bleed
+    & .blog .blog-post-body {
+        padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
     }
 
     // Equal-height product cards: stretch slides → fill chain → pin quick-view
@@ -100,7 +102,7 @@
 
     .slick-arrow {
         position: absolute;
-        z-index: 2;
+        z-index: 3;
         top: 50%;
         transform: translateY(-50%);
         display: inline-flex !important;
@@ -121,6 +123,8 @@
         background-color: transparent;
         background-image: none;
         box-shadow: none;
+        // Keep clicks on the control, not the slide underneath
+        pointer-events: auto;
 
         &::before {
             content: "";
