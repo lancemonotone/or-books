@@ -340,28 +340,24 @@
       }
 
       .pre-date {
-        @include hc-700;
+        // type: typography.scss (bare p / body)
         color: $color-greyDarkest;
-        text-transform: normal;
-        margin-bottom: 15px;
-        font-size: 16px;
+        margin-block-end: 0.9375rem;
 
         @include small {
-          font-size: 22px;
-          margin-bottom: 25px;
+          margin-block-end: 1.5625rem;
         }
+
         @include xlarge {
-          font-size: 24px;
-          margin-bottom: 30px;
+          margin-block-end: 1.875rem;
         }
+
         @include xxlarge {
-          font-size: 28px;
-          margin-bottom: 38px;
+          margin-block-end: 2.375rem;
         }
       }
       .pdp-custom-variation {
         .redio-select {
-          @include hc-700;
           margin-bottom: 15px;
           @include small {
             margin-bottom: 15px;
@@ -435,28 +431,17 @@
           .form-label-text {
             color: #747474;
             width: auto;
-            font-weight: 700;
             min-width: 135px;
             margin: 0;
             padding-right: 10px;
             text-transform: capitalize;
+
             @include small {
               min-width: 150px;
-              font-size: 18px;
-            }
-            @include xxlarge {
-              font-size: 20px;
             }
           }
           .colon {
             color: #747474;
-            font-size: 14px;
-            @include small {
-              font-size: 18px;
-            }
-            @include xxlarge {
-              font-size: 20px;
-            }
           }
           .price-section-gpQL {
             display: flex;
@@ -467,7 +452,6 @@
               padding: 0;
             }
             .variation-price {
-              font-size: 14px;
               display: flex;
               align-items: center;
               border-right: 2px solid #747474;
@@ -476,24 +460,14 @@
               &:last-child {
                 border: none;
               }
-              @include small {
-                font-size: 18px;
-              }
-              @include xxlarge {
-                font-size: 20px;
-              }
               .sale-price {
                 line-height: 1;
-                @include hs-700;
                 color: #747474;
               }
               .base-price {
                 text-decoration: line-through;
                 margin-left: 15px;
-                @include hs-400;
                 color: #b7b7b7;
-                @include small {
-                }
               }
             }
           }
@@ -555,6 +529,10 @@
         }
 
         .add-to-cart-wrapper {
+          // Match .or-btn size token so qty shares height (var is on .or-btn only)
+          --or-btn-size: 2.75rem;
+          --or-btn-pad-inline: 1.25rem;
+
           display: flex;
           align-items: center;
           position: relative;
@@ -566,44 +544,15 @@
               border: 1px solid #e0e0e0;
               border-radius: 5px;
               background: #fafafa;
-              height: 45px;
-              width: 120px;
-
-              @include small {
-                height: 50px;
-                width: 150px;
-              }
-              @include large {
-                height: 60px;
-                width: 171px;
-              }
-              @include xlarge {
-                width: 200px;
-              }
-              @include xxlarge {
-                height: 70px;
-                width: 231px;
-              }
+              block-size: var(--or-btn-size);
+              inline-size: 7.5rem;
 
               .button {
                 background: #fafafa;
                 height: 100%;
                 border: none;
                 border-radius: 0;
-                width: 34px;
-
-                @include small {
-                  width: 42px;
-                }
-                @include large {
-                  width: 49px;
-                }
-                @include xlarge {
-                  width: 64px;
-                }
-                @include xxlarge {
-                  width: 74px;
-                }
+                width: 2.125rem;
 
                 &.button-minus {
                   border-radius: 5px 0 0 5px;
@@ -619,7 +568,6 @@
                 width: max-content;
               }
               .form-input {
-                @include hn-700;
                 border-width: 0px 1px 0px 1px;
                 border-style: solid;
                 border-color: #e0e0e0;
@@ -627,35 +575,18 @@
                 height: 100%;
                 background: #fff;
                 color: $color-greyDarkest;
-                width: 50px;
-
-                @include small {
-                  font-size: 16px;
-                  width: 64px;
-                }
-                @include large {
-                  width: 70px;
-                  font-size: 20px;
-                }
-                @include xlarge {
-                  width: 70px;
-                }
-                @include xxlarge {
-                  width: 80px;
-                  font-size: 24px;
-                }
+                width: 3rem;
               }
             }
           }
           .add-to-cart-buttons {
-            margin: 0 0 0 10px;
+            margin: 0 0 0 0.625rem;
             width: auto;
             padding: 0;
+            flex: 1 1 auto;
+
             @include small {
-              margin: 0 0 0 30px;
-            }
-            @include medium {
-              margin: 0 0 0 40px;
+              margin: 0 0 0 1.25rem;
             }
 
             .add-to-cart-wallet-buttons {
@@ -663,83 +594,43 @@
             }
             .form-action {
               position: relative;
-              width: 130px;
-              height: 45px;
-              @media only screen and (min-width: 375px) {
-                width: 170px;
-              }
+              block-size: var(--or-btn-size);
+              inline-size: 100%;
+              max-inline-size: 20rem;
 
-              @include small {
-                width: 250px;
-                height: 50px;
-              }
-              @include large {
-                width: 300px;
-                height: 60px;
-              }
-              @include xlarge {
-                width: 350px;
-              }
-              @include xxlarge {
-                width: 390px;
-                height: 70px;
-              }
               .button-over {
+                opacity: 0;
+                position: absolute;
+                inset: 0;
+                z-index: 2;
+
                 &:hover {
                   + .button--primary {
                     background-color: #000;
                   }
                 }
               }
-              .button {
-                padding: 0;
-                border-radius: 5px;
-                @include hc-700;
+              .button.or-btn {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                height: 100%;
+                gap: 0.5rem;
+                block-size: var(--or-btn-size);
+                inline-size: 100%;
+                margin: 0;
+                padding-block: 0;
+                padding-inline: var(--or-btn-pad-inline);
+                border-radius: 5px;
+                line-height: 1;
 
-                @include large {
-                  font-size: 16px;
-                }
-                @include xlarge {
-                  font-size: 18px;
-                }
-                @include xxlarge {
-                  font-size: 20px;
-                }
                 p {
                   margin: 0;
                 }
                 svg {
-                  width: 15px;
-                  height: 15px;
-                  margin-right: 10px;
-                  @include small {
-                    width: 20px;
-                    height: 20px;
-                  }
-                  @include medium {
-                    width: 22px;
-                    height: 22px;
-                  }
-                  @include xlarge {
-                    margin-right: 15px;
-                    width: 24px;
-                    height: 24px;
-                  }
+                  flex-shrink: 0;
+                  width: 1.125rem;
+                  height: 1.125rem;
                 }
-              }
-              .button-over {
-                opacity: 0;
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 100%;
-                right: 0;
-                bottom: 0;
-                z-index: 2;
               }
               .icon {
                 stroke: #fff;
@@ -770,6 +661,7 @@
       }
       ul {
         margin-bottom: 0;
+        margin-left: 1.5rem;
         li {
           margin-bottom: 10px;
 
@@ -1257,28 +1149,29 @@
 
 .pre-text {
   &.availavle {
+    // type: typography.scss
     width: 100%;
-    @include hc-700;
     color: $color-greyDarkest;
-    text-transform: capitalize;
-    margin-bottom: 15px;
-    font-size: 16px;
+    margin-block-end: 0.9375rem;
 
     @include small {
-      font-size: 22px;
-      margin-bottom: 25px;
+      margin-block-end: 1.5625rem;
     }
+
     @include xlarge {
-      font-size: 24px;
-      margin-bottom: 30px;
+      margin-block-end: 1.875rem;
     }
+
     @include xxlarge {
-      font-size: 28px;
-      margin-bottom: 38px;
+      margin-block-end: 2.375rem;
     }
   }
 }
 .add-to-cart-wrapper {
+  // Match .or-btn size token so qty shares height (var is on .or-btn only)
+  --or-btn-size: 2.75rem;
+  --or-btn-pad-inline: 1.25rem;
+
   display: flex;
   align-items: center;
   position: relative;
@@ -1295,44 +1188,15 @@
       border: 1px solid #e0e0e0;
       border-radius: 5px;
       background: #fafafa;
-      height: 45px;
-      width: 120px;
-
-      @include small {
-        height: 50px;
-        width: 150px;
-      }
-      @include large {
-        height: 60px;
-        width: 171px;
-      }
-      @include xlarge {
-        width: 200px;
-      }
-      @include xxlarge {
-        height: 70px;
-        width: 231px;
-      }
+      block-size: var(--or-btn-size);
+      inline-size: 7.5rem;
 
       .button {
         background: #fafafa;
         height: 100%;
         border: none;
         border-radius: 0;
-        width: 34px;
-
-        @include small {
-          width: 42px;
-        }
-        @include large {
-          width: 49px;
-        }
-        @include xlarge {
-          width: 64px;
-        }
-        @include xxlarge {
-          width: 74px;
-        }
+        width: 2.125rem;
 
         &.button-minus {
           border-radius: 5px 0 0 5px;
@@ -1353,7 +1217,6 @@
         width: max-content;
       }
       .form-input {
-        @include hn-700;
         border-width: 0px 1px 0px 1px;
         border-style: solid;
         border-color: #e0e0e0;
@@ -1361,35 +1224,18 @@
         height: 100%;
         background: #fff;
         color: $color-greyDarkest;
-        width: 50px;
-
-        @include small {
-          font-size: 16px;
-          width: 64px;
-        }
-        @include large {
-          width: 70px;
-          font-size: 20px;
-        }
-        @include xlarge {
-          width: 70px;
-        }
-        @include xxlarge {
-          width: 80px;
-          font-size: 24px;
-        }
+        width: 3rem;
       }
     }
   }
   .add-to-cart-buttons {
-    margin: 0 0 0 10px;
+    margin: 0 0 0 0.625rem;
     width: auto;
     padding: 0;
+    flex: 1 1 auto;
+
     @include small {
-      margin: 0 0 0 30px;
-    }
-    @include medium {
-      margin: 0 0 0 40px;
+      margin: 0 0 0 1.25rem;
     }
 
     .add-to-cart-wallet-buttons {
@@ -1397,83 +1243,44 @@
     }
     .form-action {
       position: relative;
-      width: 130px;
-      height: 45px;
-      @media only screen and (min-width: 375px) {
-        width: 170px;
-      }
-      @include small {
-        width: 250px;
-        height: 50px;
-      }
-      @include large {
-        width: 300px;
-        height: 60px;
-      }
-      @include xlarge {
-        width: 350px;
-      }
-      @include xxlarge {
-        width: 390px;
-        height: 70px;
-      }
+      block-size: var(--or-btn-size);
+      inline-size: 100%;
+      max-inline-size: 20rem;
+
       .button-over {
+        opacity: 0;
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+
         &:hover {
           + .button--primary {
             background-color: #000;
           }
         }
       }
-      .button {
-        padding: 0;
-        border-radius: 5px;
-        @include hc-700;
+      .button.or-btn {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100%;
+        gap: 0.5rem;
+        block-size: var(--or-btn-size);
+        inline-size: 100%;
+        margin: 0;
+        padding-block: 0;
+        padding-inline: var(--or-btn-pad-inline);
+        border-radius: 5px;
+        line-height: 1;
 
-        @include large {
-          font-size: 16px;
-        }
-        @include xlarge {
-          font-size: 18px;
-        }
-        @include xxlarge {
-          font-size: 20px;
-        }
         p {
           margin: 0;
           text-transform: capitalize;
         }
         svg {
-          width: 15px;
-          height: 15px;
-          margin-right: 10px;
-          @include small {
-            width: 20px;
-            height: 20px;
-          }
-          @include medium {
-            width: 22px;
-            height: 22px;
-          }
-          @include xlarge {
-            margin-right: 15px;
-            width: 24px;
-            height: 24px;
-          }
+          flex-shrink: 0;
+          width: 1.125rem;
+          height: 1.125rem;
         }
-      }
-      .button-over {
-        opacity: 0;
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        right: 0;
-        bottom: 0;
-        z-index: 2;
       }
       .icon {
         stroke: #fff;
@@ -1510,11 +1317,93 @@
 }
 .productView-options {
   .form-wishlist {
-    margin: 20px auto;
-    display: block;
-    .dropdown-menu {
+    --or-btn-size: 2.75rem;
+
+    margin: 1.25rem 0 0;
+    display: inline-block;
+    position: relative;
+    float: none;
+    width: auto;
+    max-inline-size: 100%;
+    padding: 0;
+    vertical-align: top;
+
+    .dropdown-menu-button.or-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      block-size: var(--or-btn-size);
+      line-height: 1;
+      margin-block-end: 0;
+      margin-inline-end: 0;
+      width: auto;
+      max-inline-size: 100%;
+
+      &.is-open {
+        border-color: stencilColor("color-textBase");
+      }
+    }
+
+    .dropdown-menu-button.or-btn .icon {
+      float: none;
+      margin-inline-start: 0;
+    }
+
+    #wishlist-dropdown.is-open {
+      top: 100% !important;
+      inset-inline-start: 0 !important;
+      inset-inline-end: auto !important;
+      padding-inline: 0 !important;
+      margin-block-end: 0;
+      width: 100% !important;
+      max-width: none !important;
+      background-color: stencilColor("dropdown--wishList-backgroundColor");
+      border-block-start: 0;
+      border-end-start-radius: 5px;
+      border-end-end-radius: 5px;
+      box-sizing: border-box;
+      list-style: none;
+      z-index: 10;
+
+      li {
+        margin: 0;
+        padding: 0;
+      }
+
       .button {
-        padding: 0.85714rem 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        width: 100%;
+        min-block-size: var(--or-btn-size);
+        margin: 0;
+        padding-block: 0.75rem;
+        padding-inline: 0.75rem;
+        border-radius: 0;
+        border-block-start: 0;
+        border-color: stencilColor("color-textBase");
+        line-height: 1.2;
+        text-align: center;
+        text-transform: none;
+        letter-spacing: normal;
+        font-size: var(--or-type-body-size);
+        font-weight: 400;
+        color: stencilColor("color-textSecondary");
+        background-color: stencilColor("dropdown--wishList-backgroundColor");
+
+        &:hover,
+        &:focus {
+          color: stencilColor("color-textBase");
+          border-color: stencilColor("color-textBase");
+          background-color: stencilColor("dropdown--wishList-backgroundColor");
+        }
+      }
+
+      li:last-child .button {
+        border-end-start-radius: 5px;
+        border-end-end-radius: 5px;
       }
     }
   }
@@ -1559,11 +1448,6 @@
         }
       }
     }
-  }
-}
-#wishlist-dropdown {
-  &.is-open {
-    top: calc(100% - 1rem) !important;
   }
 }
 .easyzoom-flyout {
