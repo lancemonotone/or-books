@@ -19,7 +19,7 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | BB id | Folder | Branch (if any) | Status |
 |-------|--------|-----------------|--------|
 | 1.2 | `1.2-helvetica-removal/` | `feature/helvetica-font-removal` | Complete locally; deploy with Wave 1 batch |
-| 2.1 | `2.1-label-or-replace-subjects-icons/` | `feature/wave1-2.1-subjects-icons` | Complete locally; deploy with Wave 1 batch |
+| 2.1 | `2.1-label-or-replace-subjects-icons/` | `fix/wave1-2.1-subjects-catalog-head` | Catalog section head follow-up; deploy with Wave 1 batch |
 | 2.2 | `2.2-fix-fake-links/` | `feature/wave1-2.2-section-heads` | Complete locally; deploy with Wave 1 batch |
 | 2.3 | `2.3-stop-squashing-media-list-images/` | `feature/wave1-2.3-media-list-images` | Complete locally; deploy with Wave 1 batch |
 | 2.4 | `2.4-scale-the-book-cover-on-mobile/` | `feature/wave1-2.4-scale-book-cover-mobile` | Complete locally; deploy with Wave 1 batch |

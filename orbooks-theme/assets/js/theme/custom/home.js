@@ -380,7 +380,188 @@ export default (function (context) {
 
   });
   }
+
+  // Home Catalog subjects: keep top N by bestseller product → category mix
+  orRankSubjectsByBestsellers(context);
 });
 
+/**
+ * Trim `.or-subjects-section[data-or-subjects-popular]` to top categories
+ * by bestseller title mix (format SKUs often sit outside subject cats, so we
+ * normalize names and score Catalog children). On failure, leave SSR list.
+ */
+function orRankSubjectsByBestsellers(context) {
+  const root = document.querySelector('.or-subjects-section[data-or-subjects-popular]');
+  if (!root || !context.bearerToken) {
+    return;
+  }
 
+  const limit = parseInt(root.getAttribute('data-or-subjects-popular'), 10) || 10;
+  const list = root.querySelector('.or-subjects-list');
+  const items = Array.prototype.slice.call(
+    root.querySelectorAll('.or-subjects-item[data-category-id]')
+  );
+  if (!list || !items.length) {
+    return;
+  }
 
+  function orNormProductName(name) {
+    return String(name || '')
+      .toLowerCase()
+      .replace(/\s*[–—-]\s*(e-?book|paperback|hardback|hardcover|audiobook).*$/i, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function orGraphql(query) {
+    return fetch('/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + context.bearerToken,
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ query }),
+    }).then((res) => res.json());
+  }
+
+  const bestQuery = `query OrPopularBestsellers {
+    site {
+      bestsellers: bestSellingProducts(first: 50) {
+        edges { node { name } }
+      }
+    }
+  }`;
+
+  orGraphql(bestQuery)
+    .then((bestPayload) => {
+      if (
+        !bestPayload ||
+        bestPayload.errors ||
+        !bestPayload.data ||
+        !bestPayload.data.site
+      ) {
+        return null;
+      }
+
+      const bestEdges =
+        (bestPayload.data.site.bestsellers &&
+          bestPayload.data.site.bestsellers.edges) ||
+        [];
+      const bestNorms = bestEdges
+        .map((edge, index) => ({
+          norm: orNormProductName(edge.node && edge.node.name),
+          weight: bestEdges.length - index,
+        }))
+        .filter((row) => row.norm);
+
+      if (!bestNorms.length) {
+        return null;
+      }
+
+      // Keep under Storefront GraphQL complexity budget (~10k): small batches
+      const batchSize = 4;
+      const batches = [];
+      for (let i = 0; i < items.length; i += batchSize) {
+        batches.push(items.slice(i, i + batchSize));
+      }
+
+      return batches
+        .reduce((chain, batch) => {
+          return chain.then((counts) => {
+            const catFields = batch
+              .map((li) => {
+                const id = li.getAttribute('data-category-id');
+                return (
+                  'c' +
+                  id +
+                  ': category(entityId: ' +
+                  id +
+                  ') { entityId products(first: 12, sortBy: BEST_SELLING) { edges { node { name } } } }'
+                );
+              })
+              .join('\n');
+
+            const query =
+              'query OrPopularSubjectBatch {\n  site {\n' +
+              catFields +
+              '\n  }\n}';
+
+            return orGraphql(query).then((payload) => {
+              if (!payload || payload.errors || !payload.data || !payload.data.site) {
+                return counts;
+              }
+              const site = payload.data.site;
+              batch.forEach((li) => {
+                const id = li.getAttribute('data-category-id');
+                const cat = site['c' + id];
+                if (!cat) {
+                  return;
+                }
+                const norms = {};
+                ((cat.products && cat.products.edges) || []).forEach((edge) => {
+                  const n = orNormProductName(edge.node && edge.node.name);
+                  if (n) {
+                    norms[n] = true;
+                  }
+                });
+                let score = 0;
+                bestNorms.forEach((row) => {
+                  if (norms[row.norm]) {
+                    score += row.weight;
+                  }
+                });
+                if (score > 0) {
+                  counts[id] = score;
+                }
+              });
+              return counts;
+            });
+          });
+        }, Promise.resolve({}))
+        .then((counts) => ({ counts }));
+    })
+    .then((result) => {
+      if (!result || !result.counts) {
+        return;
+      }
+
+      const counts = result.counts;
+      const rankedIds = Object.keys(counts).sort(
+        (a, b) => counts[b] - counts[a] || Number(a) - Number(b)
+      );
+
+      if (!rankedIds.length) {
+        return;
+      }
+
+      const ordered = rankedIds.slice(0, limit);
+      items.forEach((li) => {
+        const id = li.getAttribute('data-category-id');
+        if (ordered.length < limit && ordered.indexOf(id) === -1) {
+          ordered.push(id);
+        }
+      });
+
+      const byId = {};
+      items.forEach((li) => {
+        byId[li.getAttribute('data-category-id')] = li;
+      });
+
+      ordered.forEach((id) => {
+        if (byId[id]) {
+          list.appendChild(byId[id]);
+        }
+      });
+
+      items.forEach((li) => {
+        const id = li.getAttribute('data-category-id');
+        if (ordered.indexOf(id) === -1) {
+          li.parentNode && li.parentNode.removeChild(li);
+        }
+      });
+    })
+    .catch(() => {
+      // Keep full SSR Catalog children
+    });
+}

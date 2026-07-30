@@ -8,20 +8,9 @@
 .top-product {
   margin-block-start: 1.875rem;
 
-  &.cat-top-product {
-    margin-block-end: 1.875rem;
-
-    @include large {
-      margin-block-end: 2.5rem;
-    }
-
-    @include xlarge {
-      margin-block-end: 3.125rem;
-    }
-
-    @include xxlarge {
-      margin-block-end: 3.75rem;
-    }
+  // Parent .or-flow gap owns vertical rhythm — kill legacy margins
+  .or-flow > & {
+    margin-block: 0;
   }
 
   @media (min-width: 1024px) {

@@ -31,11 +31,11 @@ category:
 {{{region name="category_below_header"}}}
 
 <div class="page">
-    <aside class="page-sidebar custom-sidebar stickthis" id="faceted-search-container">
+    <aside class="page-sidebar custom-sidebar stickthis or-flow" id="faceted-search-container">
+        {{> components/category/sidebar}}
         <div class="top-product cat-top-product main-loader">
             {{> components/orbooks/pre-loading}}
         </div>
-        {{> components/category/sidebar}}
         {{#if theme_settings.show_category_sidebar_image}}
             {{> components/orbooks/category-sidebar-image}}
         {{/if}}
@@ -46,7 +46,7 @@ category:
         <div class="category-header">
             <div class="category-title">
                 {{#unless theme_settings.hide_category_page_heading }}
-                <h1>{{category.name}}</h1>
+                <h1>{{#if category.name '===' 'Catalog'}}{{lang 'common.catalog_page_title'}}{{else}}{{category.name}}{{/if}}</h1>
                 {{/unless}}
             </div>
         </div>

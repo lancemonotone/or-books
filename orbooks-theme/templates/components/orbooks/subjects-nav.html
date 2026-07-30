@@ -1,25 +1,34 @@
 {{!--
   Molecule: Subjects nav — Catalog children as text list (full list, no accordion).
   @param variant {String} "home" | "category"
-    home     — no title; "View Catalog" CTA
-    category — "subjects" title; no CTA
+    Both: Catalog section head (See all → /catalog/) + full SSR list
+    home — also data-or-subjects-popular so home.js trims to top 10
+    category — full list kept (e.g. /catalog/ sidebar)
 --}}
-<nav class="or-subjects" aria-label="Subjects">
-    {{#if variant '===' 'category'}}
-        <h2>subjects</h2>
-    {{/if}}
-    <ul class="or-subjects-list">
-        {{#each categories}}
-            {{#if name '===' 'Catalog'}}
-                {{#each children}}
-                    <li class="or-subjects-item">
-                        <a class="or-subjects-link" href="{{url}}" title="{{name}}">{{name}}</a>
-                    </li>
-                {{/each}}
-            {{/if}}
-        {{/each}}
-    </ul>
-    {{#if variant '===' 'home'}}
-        <a class="or-subjects-catalog-cta button button--primary or-btn or-btn-block" href="/catalog/">View Catalog</a>
-    {{/if}}
-</nav>
+<div
+    class="or-section or-subjects-section"
+    {{#if variant '===' 'home'}}data-or-subjects-popular="10"{{/if}}
+>
+    {{> components/orbooks/section-head
+        title="Catalog"
+        url="/catalog/"
+    }}
+    <nav class="or-subjects" aria-label="Catalog subjects">
+        <ul class="or-subjects-list">
+            {{#each categories}}
+                {{#if name '===' 'Catalog'}}
+                    {{#each children}}
+                        <li class="or-subjects-item{{#if is_active}} is-active{{/if}}" data-category-id="{{id}}">
+                            <a
+                                class="or-subjects-link"
+                                href="{{url}}"
+                                title="{{name}}"
+                                {{#if is_active}}aria-current="page"{{/if}}
+                            >{{name}}</a>
+                        </li>
+                    {{/each}}
+                {{/if}}
+            {{/each}}
+        </ul>
+    </nav>
+</div>

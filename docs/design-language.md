@@ -41,6 +41,7 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Job:** Column stack whose **gap** owns vertical spacing between direct children (margins zeroed on those children).
 - **Modifiers:** `or-flow-tight` · `or-flow-loose`
 - **Home:** Wired on `.custom-sidebar` + `.custom-content` — one responsive gap for main + sidebar strips (replaces per-block `margin-top` one-offs).
+- **Category:** Wired on sidebar (`.page-sidebar.or-flow`) — Catalog / Featured Title / Reading Lists.
 - **Wire later on:** category `.page-content`, CMS `.page` / `.page-content`, product `.pdp-js`, blog `.page`.
 - **Gap tokens:** `1.5rem` → `1.75rem` (768) → `2rem` (1024).
 
@@ -109,16 +110,18 @@ Covered by the typography system above (not a separate utility class).
 
 - **Template:** `orbooks-theme/templates/components/orbooks/subjects-nav.html`
 - **Styles:** `orbooks-theme/assets/scss/or-books/subjects.scss`
-- **Classes:** `or-subjects`, `or-subjects-title`, `or-subjects-list`, `or-subjects-item`, `or-subjects-link`, `or-subjects-catalog-cta`
-- **Variants:** `variant="home"` (full list + View Catalog) · `variant="category"` (title + full list)
-- Home CTA uses `or-btn` + `or-btn-block`.
+- **Classes:** `or-subjects-section` (home wrapper), `or-subjects`, `or-subjects-list`, `or-subjects-item`, `or-subjects-link`
+- **Variants:** `variant="home"` (Catalog head + See all; list trimmed to 10 via bestsellers) · `variant="category"` (same Catalog head + **full** list, e.g. `/catalog/` sidebar)
+- Home uses shared section head — not a block CTA under the list.
 
 ### Rules for this molecule
 
 - Text labels only (no icon grid).
 - Full Catalog-child list always visible — no expand/collapse.
 - No drop-shadow hover on links (underline / color only).
-- Home CTA label: **View Catalog** → `/catalog/`.
+- Head (home + category): **Catalog** + **See all** → `/catalog/`.
+- Home list: SSR all Catalog children, then **trim to 10** by bestseller **title** mix (GraphQL `bestSellingProducts` + each subject’s products; names normalized so E-Book SKUs match subject listings). GraphQL fail → leave full SSR list.
+- Category / `/catalog/` sidebar: full SSR list (no trim).
 - **Alignment:** centered below two-column layout; left-aligned from `medium` (1024) when sidebar is a column.
 
 ## Next candidates (later chunks)
