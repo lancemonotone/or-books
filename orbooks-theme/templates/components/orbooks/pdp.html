@@ -72,29 +72,17 @@
 
     <section class="custom-content productView-details product-data">
         <div class="productView-product">
-            <h1 class="productView-title">{{product.title}}</h1>
-            <div class="sub-productView-title">
-                {{#each product.custom_fields}}
-                    {{#if name '===' 'sub-heading'}}
-                    <div class="productView-info-name">{{name}}:</div>
-                    <div class="productView-info-value">{{{value}}}</div>
-                    {{/if}}
-                {{/each}}
-            </div>
-            <!--{{#if product.brand}}-->
-            <!--    <div class="author-title other-book-details">-->
-            <!--        <h2 class="title-main productView-brand">-->
-            <!--            <a href="{{product.brand.url}}"><span>{{product.brand.name}}</span></a>-->
-            <!--        </h2>-->
-            <!--    </div>-->
-            <!--{{/if}}-->
-            <div class="author-title other-book-details">
-                {{#each product.custom_fields}}
-                    {{#if name '===' 'Author'}}
-                    <div class="title-main">{{{value}}}</div>
-                    {{/if}}
-                {{/each}}
-            </div>
+            <h2 class="productView-title">{{product.title}}</h2>
+            {{#each product.custom_fields}}
+                {{#if name '===' 'sub-heading'}}
+                <p><strong>{{{value}}}</strong></p>
+                {{/if}}
+            {{/each}}
+            {{#each product.custom_fields}}
+                {{#if name '===' 'Author'}}
+                <h3>{{{value}}}</h3>
+                {{/if}}
+            {{/each}}
             
             {{#if theme_settings.show_custom_fields_tabs '!==' true}}
                 <div class="custom-fields">

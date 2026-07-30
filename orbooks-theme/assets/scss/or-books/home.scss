@@ -62,37 +62,12 @@
                                         }
                                     }
                                 }
-                                // .read-btn: in-flow via news.scss (.blog-list)
+                                // Listing meta: news.scss + common.scss card stack
                                 .blog-post-body {
-                                    padding: 18px 0;
                                     text-align: center;
 
                                     @media (min-width: 768px) {
                                         text-align: start;
-                                    }
-
-                                    .blog-header {
-                                        .blog-date {
-                                            text-align: inherit;
-                                            font-size: 18px;
-
-                                            @include large {
-                                                font-size: 20px;
-                                            }
-                                            @include xxlarge {
-                                                font-size: 24px;
-                                            }
-                                        }
-                                    }
-                                    .blog-post {
-                                        text-align: inherit;
-                                        line-height: 1.4;
-                                        font-size: 15px;
-
-                                        @media (min-width: 768px) {
-                                            font-size: 16px;
-                                            line-height: 1.2;
-                                        }
                                     }
                                 }
                             }
@@ -553,24 +528,9 @@
                                 }
                                 .card-body {
                                     text-align: center;
-                                    padding-top: 14px;
                                     @include medium {
                                         width: 100%;
                                         text-align: left;
-                                    }                                    .card-category {
-                                        .card-category-name {
-                                            text-transform: none;
-                                            @media (max-width: 569px) {
-                                                font-size: 14px;
-                                                line-height: 1.2;
-                                            }
-                                        }
-                                    }
-                                    .card-text {
-                                        @media (max-width: 569px) {
-                                            line-height: 1;
-                                            font-size: 18px;
-                                        }
                                     }
                                 }
                                 // .card-link pin: slider-chrome.scss

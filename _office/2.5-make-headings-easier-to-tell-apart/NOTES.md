@@ -45,14 +45,14 @@ Sitewide: section headings, book titles, pull quotes, and body text are too clos
 
 - Sidebar LOAC graphic (no link); newsletter; optional Upcoming/Past **HTML-commented**; archive CTA; `events.scss`; event titles `h4`.
 
-### Blog / media / cards (in progress)
+### Blog / media / cards
 
 - **Removed animated / overlay “read now”** (absolute full-card hover reveal + transform slide). All `.blog-list` CTAs are in-flow `.or-btn`.
-- Latest News + AJAX “in the media” share card shell; list titles **`h4`**; text center → start @768.
-- `blog.js`: only runs when `.custom-blog-list` + `.catename`; keeps summary; no console spam.
+- Listing cards share product-card stack (`h4.card-title` → `.card-category-name` → `.card-text`); see Card stack unify below.
+- `blog.js`: only runs when `.custom-blog-list` + `.catename`; keeps summary as `.card-text`.
 - Product slider titles **`h4.card-title`** (was `h3`).
-- Blog post page layout rebuilt (no figure/title overlap).
-- Featured product: description kept + `or-btn` Read More (inline “more” link removed).
+- Blog post page layout rebuilt (no figure/title overlap); single post still `h1`.
+- Featured product: same meta classes as product cards; description + `or-btn` Read More.
 - **`productView.scss`**: featured/top-product layout moved out of `home.scss` / `common.scss`.
 - Dropped `@container` button size bump that made sidebar/main Read Now disagree.
 
@@ -61,10 +61,34 @@ Sitewide: section headings, book titles, pull quotes, and body text are too clos
 - Past-events `ul`: zero pad when centered; indent ≥768.
 - `.or-section-head` headings: `margin-block-end: 0`.
 
+### Card stack unify (listing)
+
+Target = author books accordion product card text stack.
+
+| Slot | Product card | Blog / media listing | Featured home product |
+|------|--------------|----------------------|------------------------|
+| Title | `h4.card-title` | `h4.card-title` | `h4.productView-title.card-title` |
+| Meta | `.card-category-name` (sub-heading) | `.card-category-name.blog-date` | `.card-category-name` (sub-heading) |
+| Secondary | `.card-text` (author) | `.card-text` (summary, JS only) | `.card-text.productView-brand` |
+| CTA | quickview (unchanged) | in-flow `.or-btn` | `.or-btn` Read More |
+
+- Image→title gap: `.card-body` `padding-block-start: 1.25rem` (was 10px).
+- Shared meta type in `common.scss` for `.blog-list` + `.top-product`.
+- Single blog post page still `h1` + date under title (not card stack).
+
+### PDP meta stack (book page)
+
+- Title: `<h2 class="productView-title">` — class kept for JS hook only; no type CSS on class.
+- Subtitle / author / short description: bare `<p>` (body type).
+- Shouts: bare `<blockquote>`; nested CMS `h*`/`span` reset to body in `typography.scss`.
+- Stripped `pdp.scss` type stairs for `.title-main`, `.short-dec`, subtitle `.productView-info-value`, shout attributions.
+
 ## Still to do
 
-- Unify author accordion product cards ↔ in-the-media ↔ listing post ↔ featured productView meta stack (user: author accordion proportions = target; more image→title gap; match media cards).
-- Browser verify pass; BB delivery; Wave 1 `stencil push`.
+- Browser verify pass (author accordion, in-the-media, Latest News, featured product, PDP meta).
+- Roll same bare markup to quick-view / default-pdp when ready.
+- BB **3.1** (deferred): logo `h1` every page; content titles → `h2`.
+- BB delivery; Wave 1 `stencil push`.
 
 ## Diverged from ask (if any)
 

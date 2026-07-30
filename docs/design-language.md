@@ -56,9 +56,11 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 
 | Layer | What |
 |-------|------|
-| **Tokens** | `--or-text-*` scale; `--or-type-body-*`; `--or-type-h1-size`…`--or-type-h6-size` + matching `--or-type-h*-margin-block-end` (Major Third 1.25); heading line |
+| **Tokens** | `--or-text-*` scale; `--or-type-body-*`; `--or-type-pullquote-*`; `--or-type-h1-size`…`--or-type-h6-size` + matching `--or-type-h*-margin-block-end` (Major Third 1.25); heading line |
 | **Body** | `body`, `p` — Helvetica stack, body size/line |
-| **Headings** | bare `h1–h6` — shared chrome (Condensed 700, uppercase); **size + margin stairs** Major Third; **align** center &lt;768, start ≥768; **narrow CQ** ≤30rem → −2px each level; card shells (`text-align: inherit`) |)
+| **Headings** | bare `h1–h6` — shared chrome (Condensed 700, uppercase); **size + margin stairs** Major Third; **align** center &lt;768, start ≥768; **narrow CQ** ≤30rem → −2px each level; card shells (`text-align: inherit`) |
+| **Pull quotes** | Product CMS: `.book-review-details` + inner `.product-desc:not(.productView-details)` headings use `--or-type-pullquote-size` (18→20→24). |
+| **Accordion labels** | `.accordion-custom-tabs .accordion-title` / `.product-desc-title` — same pullquote size stair (PDP + author). |)
 
 **Do not** style `h1–h6` in page/component SCSS (not even margin/align). Layout around headings uses parents / flex children (`:first-child`), not heading selectors.
 

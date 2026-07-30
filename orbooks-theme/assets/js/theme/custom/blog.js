@@ -71,7 +71,7 @@ export default (function (context) {
       post?.node?.thumbnailImage?.urlOriginal ||
       "https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/noimage.png";
 
-    // Summary kept (JS media cards). Title h4 + in-flow or-btn match Latest News.
+    // Same stack as product cards: title → meta → optional card-text summary.
     return `
     <article class="blog">
       <div class="blog-post-figure">
@@ -82,15 +82,17 @@ export default (function (context) {
         </figure>
       </div>
       <div class="blog-post-body with-img">
-        <header class="blog-header">
-          <p class="blog-date">${date}</p>  
-          <h4 class="blog-title">
-            <a href="${url}">${name}</a>
-          </h4>
-        </header>
-        <div class="blog-post">
-          ${summary}
+        <h4 class="card-title">
+          <a class="card-title-name" href="${url}">${name}</a>
+        </h4>
+        <div class="card-category">
+          <div class="card-category-name blog-date">${date}</div>
         </div>
+        ${
+          summary
+            ? `<div class="card-text blog-post">${summary}</div>`
+            : ""
+        }
       </div>
       <div class="read-btn">
         <div class="read-sub-btn">

@@ -1,77 +1,152 @@
 <article class="blog">
-    {{#if post.thumbnail}}
-    <div class="blog-post-figure">
-            <figure class="blog-thumbnail">
-                <a href="{{post.url}}">
-                    {{> components/common/responsive-img
-                        image=post.thumbnail
-                        fallback_size=theme_settings.blog_size
-                        lazyload=theme_settings.lazyload_mode
-                    }}
-                </a>
-            </figure>
-    </div>
-    {{/if}}
-    <div class="blog-post-body {{#if post.thumbnail}}with-img{{/if}}">
-        <header class="blog-header">
-            {{#if is_blog_post}}
-            
-            {{else}}
-                <p class="blog-date">{{post.date_published}}</p>
-            {{/if}}
-            
 
-            <h{{#if is_blog_post}}1{{else}}4{{/if}} class="blog-title">
+    {{#if post.thumbnail}}
+
+    <div class="blog-post-figure">
+
+            <figure class="blog-thumbnail">
+
+                <a href="{{post.url}}">
+
+                    {{> components/common/responsive-img
+
+                        image=post.thumbnail
+
+                        fallback_size=theme_settings.blog_size
+
+                        lazyload=theme_settings.lazyload_mode
+
+                    }}
+
+                </a>
+
+            </figure>
+
+    </div>
+
+    {{/if}}
+
+    <div class="blog-post-body {{#if post.thumbnail}}with-img{{/if}}">
+
+        {{#if is_blog_post}}
+
+        <header class="blog-header">
+
+            <h2 class="blog-title">
+
                 <a href="{{post.url}}">{{{post.title}}}</a>
-            </h{{#if is_blog_post}}1{{else}}4{{/if}}>
-            
-            {{#if is_blog_post}}
-                    <p class="blog-date">{{#if post.author}}{{lang 'blog.posted_by' name=post.author}} on {{/if}}{{post.date_published}}</p>
-            {{/if}}
-            
+
+            </h2>
+
+            <p class="blog-date">{{#if post.author}}{{lang 'blog.posted_by' name=post.author}} on {{/if}}{{post.date_published}}</p>
+
         </header>
 
-        {{#if post.body}}
-            
         {{else}}
-<!-- Paige           <div class="blog-post">
-                {{{post.summary}}}
-                {{#if post.show_read_more}}
-                ...
-                {{/if}}
-            </div> -->
+
+        {{!-- Listing cards: same stack as product cards — title → meta --}}
+
+        <h4 class="card-title">
+
+            <a class="card-title-name" href="{{post.url}}">{{{post.title}}}</a>
+
+        </h4>
+
+        <div class="card-category">
+
+            <div class="card-category-name blog-date">{{post.date_published}}</div>
+
+        </div>
+
         {{/if}}
+
+
+
+        {{#if post.body}}
+
+            
+
+        {{else}}
+
+<!-- Paige           <div class="blog-post">
+
+                {{{post.summary}}}
+
+                {{#if post.show_read_more}}
+
+                ...
+
+                {{/if}}
+
+            </div> -->
+
+        {{/if}}
+
+
 
         {{#if post.body}} 
+
             {{#if show_tags}}
+
                 {{#if post.tags}}
+
                     <ul class="tags">
+
                         {{#each post.tags}}
+
                         <li class="tag">
+
                             <a href="{{url}}">#{{name}}</a>
+
                         </li>
+
                         {{/each}}
+
                     </ul>
+
                 {{/if}}
+
             {{/if}}
+
         {{/if}}
+
     </div>
 
+
+
     {{#if post.show_read_more}}
+
         <div class="read-btn">
+
             <div class="read-sub-btn">
+
                 <a class="button button--primary or-btn or-btn-block" href="{{post.url}}" aria-label="{{post.title}} {{lang 'blog.read_more'}}">{{lang 'blog.read_more'}}</a>
+
             </div>
+
         </div>
+
     {{/if}}
+
     
+
     {{#if post.body}}
+
         <div class="blog-post">
+
             {{{post.body}}}
+
         </div>
+
     {{/if}}
+
     
+
     <div class="blog-share">
+
         {{>components/common/share url=post.url}}
+
     </div>
+
 </article>
+

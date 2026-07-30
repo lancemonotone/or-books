@@ -52,22 +52,23 @@
         </figure>
     <section class="productView-details product-data">
         <div class="productView-product">
-            <h3 class="productView-title">
-                <a href="{{product.url}}">
+            {{!-- Same stack as product cards: h4 title → subtitle → author --}}
+            <h4 class="productView-title card-title">
+                <a class="card-title-name" href="{{product.url}}">
                     {{product.title}}
                 </a>
-            </h3>
-            <div class="sub-productView-title">
+            </h4>
+            <div class="sub-productView-title card-category">
                 {{#each product.custom_fields}}
                     {{#if name '===' 'sub-heading'}}
                     <div class="productView-info-name">{{name}}:</div>
-                    <h5 class="productView-info-value">{{{value}}}</h5>
+                    <div class="card-category-name productView-info-value">{{{value}}}</div>
                     {{/if}}
                 {{/each}}
             </div>
             {{#each product.custom_fields}}
                 {{#if name '===' 'Author'}}
-                    <h4 class="productView-brand">{{{value}}}</h4>
+                    <div class="card-text productView-brand">{{{value}}}</div>
                 {{/if}}
             {{/each}}
             

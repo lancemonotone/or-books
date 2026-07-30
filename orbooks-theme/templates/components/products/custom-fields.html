@@ -22,15 +22,14 @@
 {{/each}}
 {{#each product.custom_fields}}
 {{#if name '===' 'Short Description'}}
-<div class="author-title other-book-details">
-<div class="title-main short-dec">{{{value}}}</div>
-</div>
+<p>{{{value}}}</p>
 {{/if}}
 {{/each}}
+{{!-- Shouts grouped so border can sit on this wrapper, not the blurb <p> --}}
+<div class="custom-fields-shouts">
 {{#each product.custom_fields}}
     {{#inArray (split 'Shout 1,Shout 2,Shout 3,Shout 4,Shout 5') name }}
-    <div class="book-review-details">
-        {{{value}}}
-    </div>
+    <blockquote>{{{value}}}</blockquote>
     {{/inArray}}
 {{/each}}
+</div>

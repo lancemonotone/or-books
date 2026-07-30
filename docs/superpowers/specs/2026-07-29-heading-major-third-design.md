@@ -48,3 +48,7 @@ Per-level tokens `--or-type-h1-margin-block-end` … `--or-type-h6-margin-block-
 ## Out of scope
 
 Markup level changes; Perfect Fourth / other ratios; class-based title type; sidebar-only parallel type scale.
+
+## Product CMS exception (pull quotes)
+
+BC **Shout** custom fields and product description HTML often wrap quotes in bare `h2`/`h3`. Those are **not** section titles. In `typography.scss`, headings inside `.book-review-details` and `.product-desc` use `--or-type-pullquote-size` (18 → 20 @768 → 24 @1024) while keeping heading chrome. Accordion titles (`.product-desc-title`, `.accordion-title`) stay on the Major Third scale.

@@ -363,10 +363,13 @@ body.custom {
     }
   }
 
+  // Image → title gap (author accordion / product cards)
   .card-body {
+    --or-card-body-pad-block-start: 1.25rem;
+
     flex: 1 0 auto;
     text-align: center;
-    padding-top: 10px;
+    padding-block-start: var(--or-card-body-pad-block-start);
 
     @include medium {
       text-align: left;
@@ -390,36 +393,27 @@ body.custom {
       .card-category-title {
         display: none;
       }
+    }
 
-      .card-category-name {
-        margin-bottom: 13px;
-        font-size: 14px;
-        @include hc-400;
-        color: $color-greyDarkest;
-        text-transform: none;
-        line-height: 1;
+    .card-text.card-text-price {
+      display: none;
+    }
 
-        @include small {
-          font-size: 14px;
-        }
+    .card-category-name {
+      margin-block-end: 0.8125rem;
+      font-size: 0.875rem;
+      @include hc-400;
+      color: $color-greyDarkest;
+      text-transform: none;
+      line-height: 1;
 
-        // @include medium {
-        //     margin-bottom: 15px;
-        // }
-        @include large {
-          font-size: 18px;
-        }
-
-        @include xlarge {
-          // font-size: 20px;
-          // margin-bottom: 23px;
-        }
+      @include large {
+        font-size: 1.125rem;
       }
     }
 
-    .card-text {
-      //text-transform: capitalize;
-      font-size: 16px;
+    .card-text:not(.card-text-price) {
+      font-size: 1rem;
       @include hc-400;
       color: $color-greyDarkest;
       line-height: 1;
@@ -429,15 +423,11 @@ body.custom {
       }
 
       @include small {
-        font-size: 18px;
+        font-size: 1.125rem;
       }
 
       @include xlarge {
-        font-size: 20px;
-      }
-
-      &.card-text-price {
-        display: none;
+        font-size: 1.25rem;
       }
     }
   }
@@ -486,6 +476,42 @@ body.custom {
           fill: #000000;
         }
       }
+    }
+  }
+}
+
+// Shared listing meta — blog/media + featured productView (product cards: .card .card-body above)
+.blog-list .blog-post-body,
+.top-product .productView-product {
+  .card-category-name {
+    margin-block-end: 0.8125rem;
+    font-size: 0.875rem;
+    @include hc-400;
+    color: $color-greyDarkest;
+    text-transform: none;
+    line-height: 1;
+
+    @include large {
+      font-size: 1.125rem;
+    }
+  }
+
+  .card-text:not(.card-text-price) {
+    font-size: 1rem;
+    @include hc-400;
+    color: $color-greyDarkest;
+    line-height: 1;
+
+    > a {
+      @include hc-700;
+    }
+
+    @include small {
+      font-size: 1.125rem;
+    }
+
+    @include xlarge {
+      font-size: 1.25rem;
     }
   }
 }

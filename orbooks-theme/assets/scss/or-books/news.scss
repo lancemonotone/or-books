@@ -94,6 +94,8 @@
 .blog-list {
     display: flex;
     flex-wrap: wrap;
+    align-items: stretch;
+
     @include small {
         margin: 0 -15px;
     }
@@ -102,6 +104,8 @@
         margin: 0 -30px;
     }
     .blog {
+        display: flex;
+        flex-direction: column;
         width: 100%;
         margin: 0;
         border: none;
@@ -131,11 +135,12 @@
             }
         }
 
-        // In-flow CTA (Latest News + custom-blog-list). No hover overlay.
+        // In-flow CTA pinned to card bottom (equal-height row).
         .read-btn {
             position: static;
             opacity: 1;
-            margin-block-start: 0;
+            margin-block-start: auto;
+            padding-block-start: 0.75rem;
             background: transparent;
 
             .read-sub-btn {
@@ -146,56 +151,35 @@
             }
         }
 
+        .blog-share:empty {
+            display: none;
+        }
+
+        // Meta type: common.scss (.card-category-name / .card-text) — match product cards
         .blog-post-body {
+            --or-card-body-pad-block-start: 1.25rem;
+
             width: 100%;
-            padding: 10px 0;
+            padding-block: var(--or-card-body-pad-block-start) 0;
+            padding-inline: 0;
             text-align: center;
 
             @media (min-width: 768px) {
                 text-align: start;
-                padding: 15px 0;
             }
 
-            @include xlarge {
-                padding: 20px 0;
+            .card-title {
+                margin-block: 0 0.5rem;
             }
 
-            .blog-header {
-                .blog-date {
-                    @include hc-400;
-                    font-size: 18px;
-                    color: #414141;
-                    text-align: inherit;
-                    line-height: 1;
-
-                    @include medium {
-                        font-size: 20px;
-                    }
-                    @include large {
-                        font-size: 24px;
-                    }
-                    @include xlarge {
-                        font-size: 29px;
-                    }
-                }
+            .card-category {
+                margin-block-end: 0;
             }
 
-            .blog-post {
-                line-height: 1;
-                @include hc-400;
-                font-size: 14px;
+            .blog-post.card-text {
+                margin-block-start: 0.5rem;
                 text-align: inherit;
-
-                @include small {
-                    font-size: 16px;
-                }
-
-                @include large {
-                    font-size: 20px;
-                }
-                @include xlarge {
-                    font-size: 23px;
-                }
+                line-height: 1.35;
             }
         }
     }
