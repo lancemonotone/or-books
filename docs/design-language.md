@@ -85,7 +85,7 @@ Covered by the typography system above (not a separate utility class).
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/slider-chrome.scss`
 - **Job:** Shared Slick **arrow** look + placement: on the **carousel**, left/right, vertically centered. Not in the title row.
-- **Track pad:** `padding-inline` on `.slick-slider` so arrows sit in a gutter and do not cover slide text.
+- **Track:** full-bleed (no side gutter). Arrows overlay the slide edges so block CTAs (`.or-btn-block`) can span the section width.
 - **DOM contract (all section sliders — main + sidebar):**
   ```
   .or-section.or-section--slider
