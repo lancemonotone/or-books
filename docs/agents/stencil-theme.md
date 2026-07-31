@@ -94,7 +94,29 @@ Rules:
 - **No wildcards** — `/authors/[slug]/` or `/authors/*/*/` do not work; each path is literal.
 - **Restart** `stencil start` after edits.
 
-Add mappings **when you need to test that page type locally** — not every author/product URL unless you want full parity.
+**OR Books policy:** keep a **full** `customLayouts` map (including all harvested `single-author.html` URLs). Fat JSON is fine — Stencil does exact path match; size is not a perf issue. Prefer re-harvest over hand-editing hundreds of author paths.
+
+### Refresh local customLayouts (preferred — agents: use this)
+
+Stencil CLI does **not** import production Custom Template Associations. Rebuild local mappings from the **public storefront** (read-only GETs; no store writes; no secrets):
+
+```bash
+cd orbooks-theme
+node scripts/harvest-custom-layouts.js           # dump only → customLayouts.from-api.json
+node scripts/harvest-custom-layouts.js --apply   # dump + overwrite config.stencil.json customLayouts
+```
+
+| Artifact | Role |
+|----------|------|
+| `scripts/harvest-custom-layouts.js` | Harvest script (sitemap → HTML `stencilBootstrap` → `template`) |
+| `customLayouts.from-api.json` | Regenerable dump — **do not hand-edit**; re-run script when author set drifts |
+| `config.stencil.json` → `customLayouts` | What `stencil start` actually uses — overwrite via `--apply` |
+
+`--apply` unions harvest with a small `EXTRAS` list in the script (paths often missing from sitemap / rate-limited), e.g. `/authors/h/`, `/events/`, `/past-events/`. Extend `EXTRAS` there if needed — not by hand-editing the bulk author list.
+
+Restart `stencil start` after `--apply`.
+
+**Gaps known:** sitemap harvest can miss hidden categories; 429s leave holes (script retries). Associations API may list more entities than the public sitemap. Product `custom-pdp.html` URLs need a Management API token with catalog read (Stencil CLI token is associations-only / catalog 403) or manual paths when testing those PDPs.
 
 ### Verify which template is active
 
@@ -106,13 +128,15 @@ Example: `pages/custom/category/single-author` on https://orbooks.com/authors/h/
 
 Quick DOM check: `single-author.html` → `.single-author-page` wrapper; default category → no that class, catalog sidebar widgets.
 
-### Production source of truth (bulk export)
+### Alternate: Associations API (needs catalog scope)
 
-To list **all** assignments without guessing URLs:
+Stencil `secrets.stencil.json` can **GET** [Custom Template Associations](https://developer.bigcommerce.com/docs/rest-content/custom-template-associations) but typically **403** on Catalog/Content — so `entity_id` → URL join fails. Prefer the public harvest above unless you have a Management API token with catalog + content read.
 
-1. **GET** [Custom Template Associations](https://developer.bigcommerce.com/docs/rest-content/custom-template-associations) — `?type=category` (and `page`, `product`, `brand`); paginate.
-2. **GET** [Categories](https://developer.bigcommerce.com/docs/rest-catalog/categories) (etc.) — join `entity_id` → `url`.
-3. Build `customLayouts` arrays from `file_name` + paths. Store hash from CDN (`s-4rbj5oww8j` → `4rbj5oww8j`). Token: `secrets.stencil.json` (never commit or paste in chat).
+If you do have that token:
+
+1. **GET** associations — `?type=category` (and `page`, `product`, `brand`); paginate.
+2. **GET** Categories / Pages / Products — join `entity_id` → `url`.
+3. Build `customLayouts` from `file_name` + paths. Store hash from CDN (`s-4rbj5oww8j` → `4rbj5oww8j`). Never commit or paste tokens.
 
 Do **not** use Categories API `layout_file` for Stencil themes — Blueprint only; Stencil uses Custom Template Associations.
 
@@ -124,19 +148,19 @@ Under `orbooks-theme/templates/pages/custom/`:
 |------|------|-------------|
 | category | `authors.html` | `/authors/`, letter buckets |
 | category | `single-author.html` | Individual author pages |
-| category | `merchandise.html` | `/merchandise/` |
+| category | `merchandise.html` | Merch / some imprint category URLs |
 | category | `booksellers.html` | `/booksellers/` |
 | category | `subsidiary-rights.html` | `/subsidiary-rights/` |
-| category | `reading-list.html` | One URL per reading list under `/reading-lists/.../` |
+| category | `reading-list.html` | e.g. `/reading-lists/`, partners page |
 | category | `categroy-no-sidebar.html`, `category-no-sidebar-2.html`, `category-no-sidebar-3.html` | Per-category admin assignment — URL varies |
-| page | `about.html`, `events.html`, `new-events.html`, `videos.html`, `sign-up.html` | Static pages — map when testing |
+| page | `about.html`, `events.html`, `new-events.html`, `videos.html`, `sign-up.html` | Static pages |
 | product | `custom-pdp.html` | Merchandise PDPs — one URL per product |
 
 Defaults (`category.html`, `product.html`, `home.html`, …) need no `customLayouts` entry.
 
 ### Currently mapped locally (check file for latest)
 
-See `orbooks-theme/config.stencil.json`. As of 2026-07-28: authors index + `/authors/h/`, Theodore Hamm single-author, merchandise, booksellers, subsidiary-rights. Page/product/reading-list/no-sidebar templates unmapped until needed.
+See `orbooks-theme/config.stencil.json`. Full harvest applied 2026-07-31 (authors letter buckets + ~210 single-author URLs + category/page customs). Re-run `node scripts/harvest-custom-layouts.js --apply` when production assignments drift.
 
 ### References
 

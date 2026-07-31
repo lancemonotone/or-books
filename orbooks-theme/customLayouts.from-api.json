@@ -1,4 +1,6 @@
 {
+  "generatedAt": "2026-07-31T16:23:12.900Z",
+  "note": "Public storefront read-only harvest. Ready to merge into config.stencil.json customLayouts.",
   "customLayouts": {
     "brand": {},
     "category": {
@@ -14,7 +16,6 @@
         "/authors/e/",
         "/authors/f/",
         "/authors/g/",
-        "/authors/h/",
         "/authors/i/",
         "/authors/j/",
         "/authors/l/",
@@ -274,17 +275,346 @@
       ],
       "videos.html": [
         "/videos/"
-      ],
-      "new-events.html": [
-        "/events/"
-      ],
-      "events.html": [
-        "/past-events/"
       ]
     },
     "product": {}
   },
-  "normalStoreUrl": "https://www.orbooks.com",
-  "port": 3000,
-  "packageManager": "npm"
+  "summary": {
+    "brand": {},
+    "category": {
+      "category-no-sidebar-3.html": {
+        "count": 1,
+        "sample": [
+          "/India-list/"
+        ]
+      },
+      "authors.html": {
+        "count": 21,
+        "sample": [
+          "/authors/",
+          "/authors/0-9/",
+          "/authors/a/",
+          "/authors/b/",
+          "/authors/c/",
+          "/authors/e/",
+          "/authors/f/",
+          "/authors/g/"
+        ]
+      },
+      "single-author.html": {
+        "count": 210,
+        "sample": [
+          "/authors/a/anthony-c-alessandrini/",
+          "/authors/a/chude-pamela-allen/",
+          "/authors/a/claire-armitstead/",
+          "/authors/a/jessica-applegate/",
+          "/authors/a/julian-assange/",
+          "/authors/a/juman-abujbara/",
+          "/authors/a/maximillian-alvarez/",
+          "/authors/a/michael-almereyda/"
+        ]
+      },
+      "booksellers.html": {
+        "count": 1,
+        "sample": [
+          "/booksellers/"
+        ]
+      },
+      "categroy-no-sidebar.html": {
+        "count": 1,
+        "sample": [
+          "/imprints/evergreen/"
+        ]
+      },
+      "category-no-sidebar-2.html": {
+        "count": 3,
+        "sample": [
+          "/imprints/serif/",
+          "/or-shorts-subscription/",
+          "/or-shorts/"
+        ]
+      },
+      "merchandise.html": {
+        "count": 6,
+        "sample": [
+          "/imprints/serif/cookery/",
+          "/imprints/serif/e-books/",
+          "/imprints/serif/fiction/",
+          "/imprints/serif/history/",
+          "/imprints/serif/travel-reportage/",
+          "/zines/"
+        ]
+      },
+      "reading-list.html": {
+        "count": 2,
+        "sample": [
+          "/or-partners-and-imprints/",
+          "/reading-lists/"
+        ]
+      },
+      "subsidiary-rights.html": {
+        "count": 1,
+        "sample": [
+          "/subsidiary-rights/"
+        ]
+      }
+    },
+    "page": {
+      "about.html": {
+        "count": 1,
+        "sample": [
+          "/about/"
+        ]
+      },
+      "videos.html": {
+        "count": 1,
+        "sample": [
+          "/videos/"
+        ]
+      }
+    },
+    "product": {}
+  },
+  "missingVsCurrentConfig": {
+    "brand": {},
+    "category": {
+      "category-no-sidebar-3.html": {
+        "missingCount": 1,
+        "sample": [
+          "/India-list/"
+        ]
+      },
+      "authors.html": {
+        "missingCount": 20,
+        "sample": [
+          "/authors/0-9/",
+          "/authors/a/",
+          "/authors/b/",
+          "/authors/c/",
+          "/authors/e/",
+          "/authors/f/",
+          "/authors/g/",
+          "/authors/i/"
+        ]
+      },
+      "single-author.html": {
+        "missingCount": 209,
+        "sample": [
+          "/authors/a/anthony-c-alessandrini/",
+          "/authors/a/chude-pamela-allen/",
+          "/authors/a/claire-armitstead/",
+          "/authors/a/jessica-applegate/",
+          "/authors/a/julian-assange/",
+          "/authors/a/juman-abujbara/",
+          "/authors/a/maximillian-alvarez/",
+          "/authors/a/michael-almereyda/"
+        ]
+      },
+      "categroy-no-sidebar.html": {
+        "missingCount": 1,
+        "sample": [
+          "/imprints/evergreen/"
+        ]
+      },
+      "category-no-sidebar-2.html": {
+        "missingCount": 3,
+        "sample": [
+          "/imprints/serif/",
+          "/or-shorts-subscription/",
+          "/or-shorts/"
+        ]
+      },
+      "merchandise.html": {
+        "missingCount": 6,
+        "sample": [
+          "/imprints/serif/cookery/",
+          "/imprints/serif/e-books/",
+          "/imprints/serif/fiction/",
+          "/imprints/serif/history/",
+          "/imprints/serif/travel-reportage/",
+          "/zines/"
+        ]
+      },
+      "reading-list.html": {
+        "missingCount": 2,
+        "sample": [
+          "/or-partners-and-imprints/",
+          "/reading-lists/"
+        ]
+      }
+    },
+    "page": {
+      "videos.html": {
+        "missingCount": 1,
+        "sample": [
+          "/videos/"
+        ]
+      }
+    },
+    "product": {}
+  },
+  "defaultTemplateCount": 2394,
+  "errorCount": 112,
+  "errors": [
+    {
+      "path": "/authors/c/robert-cenedella/",
+      "status": 429
+    },
+    {
+      "path": "/authors/c/patrick-cockburn/",
+      "status": 429
+    },
+    {
+      "path": "/authors/c/simon-critchley/",
+      "status": 429
+    },
+    {
+      "path": "/authors/c/robert-coover/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/",
+      "status": 429
+    },
+    {
+      "path": "/authors/c/sue-coe/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/anders-dunker/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/ariel-dorfman/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/ashley-dawson/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/dave-oswald-mitchell/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/james-dunkerley/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/lisa-dierbeck/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/juan-jose-martinez-d-aubuisson/",
+      "status": 429
+    },
+    {
+      "path": "/authors/d/dipti-desai/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/indigo-goodson-fields/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/gordon-van-gelder/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/joe-guinan/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/dw-gibson/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/francis-greenburger/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/mark-gevisser/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/masha-gessen/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/robert-guffey/",
+      "status": 429
+    },
+    {
+      "path": "/authors/g/stephen-gilpin/",
+      "status": 429
+    },
+    {
+      "path": "/authors/h/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/carin-kuoni/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/emma-jane-kirby/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/kareem-khubchandani/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/katie-redford/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/margaret-kunstler/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/matt-kennard/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/mazen-kerbaj/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/muhammad-ali-khalidi/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/paul-koberstein/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/rami-g-khouri/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/richard-kim/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/miles-klee/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/richard-kreitner/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/sean-kennedy/",
+      "status": 429
+    },
+    {
+      "path": "/authors/k/thomas-p.-keenan/",
+      "status": 429
+    }
+  ]
 }

@@ -15,6 +15,16 @@ When working under `orbooks-theme/`, read **`docs/agents/stencil-theme.md`** fir
 - Store URL = storefront homepage (`https://www.orbooks.com`), not the API `/v3/` path.
 - This theme is **not** Briefboard (`app/`). Prefer separate git repo; do not mix theme dumps into Briefboard history without an explicit user decision.
 
+## Local customLayouts (do not rediscover)
+
+Production template associations are **not** imported by `stencil pull` / `download`. Local map = `config.stencil.json` → `customLayouts`.
+
+- **Refresh:** `node scripts/harvest-custom-layouts.js --apply` (from `orbooks-theme/`) — public storefront GETs only; writes `customLayouts.from-api.json` + overwrites `customLayouts`.
+- **Dump is regenerable** — do not hand-edit `customLayouts.from-api.json` or the bulk author URL list; re-harvest when authors drift.
+- Fat `customLayouts` (all single-author URLs) is **intentional**. Restart `stencil start` after apply.
+
+Details: `docs/agents/stencil-theme.md` → **Refresh local customLayouts**.
+
 ## Common commands
 
 ```bash
@@ -26,6 +36,7 @@ stencil pull
 stencil bundle
 stencil push          # upload only
 stencil push -a       # upload + activate
+node scripts/harvest-custom-layouts.js --apply   # refresh local customLayouts
 ```
 
 Full command list + Helvetica cutover notes: `docs/agents/stencil-theme.md`.
