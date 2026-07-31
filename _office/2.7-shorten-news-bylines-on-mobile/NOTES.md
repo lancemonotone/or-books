@@ -10,7 +10,7 @@
 | **taskKey** | `1c59053b-b5c4-4f94-8361-422f66dd6614` |
 | **Briefboard URL** | https://lancemonotone.com/or-books/app/?i=1#/task/1c59053b-b5c4-4f94-8361-422f66dd6614 |
 | **Branch** | `fix/wave1-2.7-news-byline-date-only` |
-| **Commits** | (fill after commit) |
+| **Commits** | `7ed3cba` Show news article date only; drop byline and hashtags. |
 | **Deploy** | Local only until Wave 1 batch `stencil push` |
 
 ## Client ask (original)
