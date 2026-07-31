@@ -166,7 +166,9 @@
 
   .event-card,
   .video-card {
-    inline-size: 100%;
+    --or-archive-cols: 1;
+
+    inline-size: calc(100% / var(--or-archive-cols));
     margin: 0;
     border: none;
     padding: 0 0 1.875rem;
@@ -176,12 +178,12 @@
     align-items: center;
 
     @media (min-width: 768px) {
-      inline-size: 50%;
+      --or-archive-cols: 2;
       padding: 0.9375rem 0.9375rem 1.875rem;
     }
 
     @include medium {
-      inline-size: 33.33%;
+      --or-archive-cols: 3;
       padding: 1.875rem;
     }
 
@@ -233,5 +235,12 @@
         }
       }
     }
+  }
+}
+
+// Past events archive: four columns on desktop (videos stay three)
+.event-page .event-card {
+  @include medium {
+    --or-archive-cols: 4;
   }
 }
