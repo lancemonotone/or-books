@@ -585,6 +585,10 @@ body.custom {
         }
       }
 
+      .sub-listItem {
+        padding-block: 15px;
+      }
+
       .product-data {
         display: flex;
         align-items: flex-start;
@@ -676,8 +680,9 @@ body.custom {
               padding: 0;
               text-align: center;
 
-              @include medium {
-                text-align: left;
+              // Desktop: start; mobile + tablet stay centered
+              @media (min-width: 1024px) {
+                text-align: start;
               }
 
               .listItem-title {
@@ -835,14 +840,14 @@ body.custom {
 
       .product-desc {
         margin-top: 15px;
-        // Match .listItem-details: center on narrow, start from 768
+        // Match .listItem-details: center through tablet, start from 1024
         text-align: center;
 
         @include small {
           margin-top: 20px;
         }
 
-        @include medium {
+        @media (min-width: 1024px) {
           margin-top: 25px;
           text-align: start;
         }
