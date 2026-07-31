@@ -38,7 +38,7 @@
 
             </h2>
 
-            <p class="blog-date">{{#if post.author}}{{lang 'blog.posted_by' name=post.author}} on {{/if}}{{post.date_published}}</p>
+            <p class="blog-date">{{post.date_published}}</p>
 
         </header>
 
@@ -83,32 +83,6 @@
         {{/if}}
 
 
-
-        {{#if post.body}} 
-
-            {{#if show_tags}}
-
-                {{#if post.tags}}
-
-                    <ul class="tags">
-
-                        {{#each post.tags}}
-
-                        <li class="tag">
-
-                            <a href="{{url}}">#{{name}}</a>
-
-                        </li>
-
-                        {{/each}}
-
-                    </ul>
-
-                {{/if}}
-
-            {{/if}}
-
-        {{/if}}
 
     </div>
 

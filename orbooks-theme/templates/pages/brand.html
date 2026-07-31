@@ -74,7 +74,7 @@ blog:
                 <div class="blog-list">
                     {{#each blog.recent_posts }}
                         {{#contains (toLowerCase (JSONstringify (pluck tags 'name'))) (toLowerCase (JSONstringify ../brand.name)) }}
-                            {{> components/blog/post post=this theme_settings=../theme_settings show_tags=true}}
+                            {{> components/blog/post post=this theme_settings=../theme_settings}}
                         {{/contains}}
                     {{/each}}
                 </div>
