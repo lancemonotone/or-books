@@ -429,6 +429,31 @@ body.custom {
         font-size: 1.25rem;
       }
     }
+
+    // Rights custom field (output only when present on product)
+    .product-desc {
+      --or-card-rights-margin-block-start: 0.75rem;
+
+      margin-block-start: var(--or-card-rights-margin-block-start);
+
+      @media (min-width: 768px) {
+        --or-card-rights-margin-block-start: 1rem;
+      }
+
+      @media (min-width: 1024px) {
+        --or-card-rights-margin-block-start: 1.25rem;
+      }
+
+      p {
+        margin: 0;
+        @include hc-700;
+        text-transform: uppercase;
+        font-size: 1rem;
+        color: #262626;
+        line-height: 1.25;
+        text-align: inherit;
+      }
+    }
   }
 
   .card-link {

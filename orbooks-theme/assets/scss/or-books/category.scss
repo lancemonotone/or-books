@@ -1568,18 +1568,11 @@
 }
 
 .book-seller {
-    .productList{
-         .product{
-             .listItem{
-                    .product-desc {
-                        display: none;
-      
+    .productGrid .card .product-desc {
+        display: none;
     }
-             }
-         } 
-    }
- 
 }
+
 .Rights-category , .Booksellers-category{
     .percentage-main{
         display: none !important;

@@ -35,7 +35,7 @@ While applying the alignment contract across templates, these shared surfaces we
 - **About / shout quotes** — shared blockquote + cite markup with PDP; dropped duplicate About store `h1`.
 - **Sidebar / stack CTAs** — About, booksellers, rights use shared `.or-btn` / `.or-btn-block`; block buttons center correctly in stacks (foundation adjacent-button margin quirk fixed).
 - **Mailchimp newsletter CTAs** — shared `.or-newsletter` molecule (booksellers, subsidiary-rights, events); same gray panel language as home subscribe shell. Home “Join Our Mailing List” stays the BigCommerce form (not Mailchimp).
-- **List cards (Rights / Merchandise / shared list-item)** — one product-list card layout: top-aligned meta, magnifier pinned to bottom of card, shared 3-col at 1024, rights cover crush from fixed text column, rights description type uppercase Condensed; titles stay centered through tablet with details; row padding restored.
+- **Product cards (Rights / Booksellers / Merchandise)** — Unified to shared grid `orbooks/card` (image on top) via `category/product-listing`. Rights renders on card when field present; booksellers still hides it via page CSS. Deleted `orbooks/category-listing`.
 
 ## Diverged from ask (if any)
 
@@ -53,12 +53,12 @@ While applying the alignment contract across templates, these shared surfaces we
 |---------|-----------|----------|
 | About | `/about/` | Body copy left; sidebar buttons full-width stack; shout cites match PDP pattern |
 | CMS / legal | any content page | Paragraphs start-aligned; no broken nested `<p>` |
-| Subsidiary Rights | `/subsidiary-rights/` | List cards equal height; cover not crushed; desc in right column; newsletter CTA |
-| Merchandise | `/merchandise/` | Same card contract (wider — no sidebar) |
-| Booksellers | `/booksellers/` | Newsletter CTA; product-desc hidden as before |
+| Subsidiary Rights | `/subsidiary-rights/` | Grid cards (image on top); Rights text when field present; newsletter CTA |
+| Merchandise | `/merchandise/` | Same grid card (full width — no sidebar) when custom template mapped |
+| Booksellers | `/booksellers/` | Same grid card; Rights field present but hidden by `.book-seller` CSS |
 | Events | `/events/` | Mailchimp CTA uses shared newsletter molecule |
 
-Phone (~390) and tablet (~768–1024): titles on list cards may stay centered through tablet; body paragraphs stay left.
+Phone (~390) and tablet (~768–1024): body paragraphs stay left; product cards use shared grid stack.
 
 ## Theme archive (rollback)
 

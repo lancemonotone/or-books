@@ -162,6 +162,13 @@
                     {{/if}}
                     {{/each}}
                 </div>
+                {{#each custom_fields}}
+                {{#if name '===' 'Rights'}}
+                <div class="product-desc">
+                    <p>{{{value}}}</p>
+                </div>
+                {{/if}}
+                {{/each}}
                 {{#if theme_settings.show_product_price}}
                 <div class="card-text card-text-price"
                     data-test-info-type="price">
