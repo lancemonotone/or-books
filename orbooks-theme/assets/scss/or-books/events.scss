@@ -187,10 +187,10 @@
       padding: 1.875rem;
     }
 
-    // Pin block CTA to card bottom (same contract as news .read-btn / product .card-link)
+    // Pin block CTA to card bottom (same contract as news .read-btn / product .card-link).
+    // No padding on the button itself — that skews label vertical centering.
     > .button.or-btn {
       margin-block-start: auto;
-      padding-block-start: 0.75rem;
     }
 
     .event-img,
