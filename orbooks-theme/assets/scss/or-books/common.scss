@@ -1358,18 +1358,6 @@ body.custom {
         }
       }
 
-      .sidehead {
-        margin-top: 0;
-
-        @include xlarge {
-          margin-top: 30px;
-        }
-
-        @include xxlarge {
-          margin-top: 50px;
-        }
-      }
-
       .pagetitle {
         text-align: center;
         margin-top: 66px;
@@ -1408,18 +1396,13 @@ body.custom {
       }
 
       // Stack only — width/center from .or-btn-block (buttons.scss)
+      // Vertical spacing from parent .or-flow gap
       .pagebtns {
         --or-pagebtns-gap: 0.75rem;
-        --or-pagebtns-margin-block-start: 2.1875rem;
 
         display: flex;
         flex-direction: column;
         gap: var(--or-pagebtns-gap);
-        margin-block-start: var(--or-pagebtns-margin-block-start);
-
-        @media (min-width: 768px) {
-          --or-pagebtns-margin-block-start: 2.5rem;
-        }
       }
     }
 

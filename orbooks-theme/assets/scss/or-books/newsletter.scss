@@ -30,12 +30,12 @@
 }
 
 // External subscribe (booksellers, rights, events) — title + button
+// Vertical spacing from parent .or-flow gap
 .or-newsletter.or-newsletter--cta {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--or-newsletter-gap);
-  margin-block-start: 1.5rem;
 
   @media (min-width: 768px) {
     align-items: stretch;

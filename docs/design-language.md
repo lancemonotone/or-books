@@ -49,9 +49,9 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Job:** Column stack whose **gap** owns vertical spacing between direct children (margins zeroed on those children).
 - **Modifiers:** `or-flow-tight` · `or-flow-loose`
 - **Home:** Wired on `.custom-sidebar` + `.custom-content` — one responsive gap for main + sidebar strips (replaces per-block `margin-top` one-offs).
-- **Category:** Wired on sidebar (`.page-sidebar.or-flow`) — Catalog / Featured Title / Reading Lists.
+- **Sidebars:** Wired on home, category, about, events, booksellers, subsidiary-rights, single-author, PDP left column.
 - **Wire later on:** category `.page-content`, CMS `.page` / `.page-content`, product `.pdp-js`, blog `.page`.
-- **Gap tokens:** `1.5rem` → `1.75rem` (768) → `2rem` (1024).
+- **Gap tokens:** `2.5rem` → `2.75rem` (768) → `3rem` (1024).
 
 ## Organism: Section (`.or-section`)
 

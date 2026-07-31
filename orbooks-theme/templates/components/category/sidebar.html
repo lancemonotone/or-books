@@ -1,13 +1,9 @@
-<nav>
-    {{#if theme_settings.show_sidebar_sub_category}}
-    <div class="sidebarBlock">
-        {{> components/orbooks/subjects-nav}}
-    </div>
-    {{/if}}
+{{#if theme_settings.show_sidebar_sub_category}}
+    {{> components/orbooks/subjects-nav}}
+{{/if}}
 
-    <!-- {{#if category.faceted_search_enabled}}
-        {{> components/faceted-search/index category}}
-    {{else}}
-        {{> components/category/shop-by-price shop_by_price=category.shop_by_price category_url=category.url}}
-    {{/if}} -->
-</nav>
+<!-- {{#if category.faceted_search_enabled}}
+    {{> components/faceted-search/index category}}
+{{else}}
+    {{> components/category/shop-by-price shop_by_price=category.shop_by_price category_url=category.url}}
+{{/if}} -->

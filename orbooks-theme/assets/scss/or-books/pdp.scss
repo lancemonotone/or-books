@@ -1059,26 +1059,15 @@
   }
 }
 
-// Related sidebar: full height with page scroll (no sticky / inner scrollbar)
-.custom-sidebar.related-sidebar.stickthis-pdp {
+// Related: no sticky / inner scrollbar; show desktop vs mobile placement only
+.related-sidebar.stickthis-pdp {
   position: static;
   height: auto;
 }
 .related-sidebar {
-  display: flex;
-  flex-wrap: wrap;
   .card {
     width: 100%;
     height: auto;
-
-    @include small {
-      width: 50%;
-    }
-    @include medium {
-      width: 95%;
-      padding: 0 25px 10px;
-      margin: 0 auto 10px;
-    }
   }
 }
 .desktop-related-product {
@@ -1088,7 +1077,7 @@
   }
 }
 .mobile-related-product {
-  display: flex;
+  display: block;
   @include medium {
     display: none;
   }

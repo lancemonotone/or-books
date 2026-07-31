@@ -33,7 +33,7 @@
     {{/each}}
 
 
-    <section class="custom-sidebar">
+    <section class="custom-sidebar or-flow">
         <div class="productView-images" data-image-gallery>  
 
             <ul class="slider-for slider productView-image" {{#if product.main_image}} itemprop="image" content="{{getImage product.main_image 'Orignal_size' (cdn theme_settings.default_image_product)}}"{{/if}} >
@@ -60,7 +60,7 @@
                 {{/each}}
             </ul>
         </div>
-        <div class="page-sidebar custom-sidebar related-sidebar stickthis-pdp desktop-related-product">
+        <div class="related-sidebar stickthis-pdp desktop-related-product">
             {{#if product.related_products}}
                 <h2>{{lang 'products.related_title'}}</h2>
                 {{#each product.related_products}}
@@ -287,14 +287,14 @@
             {{> components/orbooks/description-tabs}}
         {{/if}}
     </article>
-    <section class="page-sidebar custom-sidebar related-sidebar mobile-related-product">
+    <div class="related-sidebar mobile-related-product">
         {{#if product.related_products}}
             <h2>{{lang 'products.related_title'}}</h2>
             {{#each product.related_products}}
                 {{> components/orbooks/card settings=../settings theme_settings=../theme_settings customer=../customer event="list" position=(add @index 1)}}
             {{/each}}
         {{/if}}
-    </section>
+    </div>
 </div>
 
 <div id="previewModal" class="modal modal--large" data-reveal>

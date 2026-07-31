@@ -1,76 +1,75 @@
 // Layout utility: .or-flow — vertical section stack (gap owns spacing)
 // Design language: docs/design-language.md
-// Home: wired on `.custom-sidebar` + `.custom-content` (home.html).
 //
-// Wired: home sidebar + content; category sidebar (category.html).
-// Other intended wrappers (when wiring):
-//   category → .page-content
-//   CMS page → .page / .page-content
-//   product  → .pdp-js
-//   blog     → .page
+// Wired sidebars: home, category, about, events, booksellers, subsidiary-rights,
+// single-author, PDP left column (images + related as children).
+// Wired main columns: home `.custom-content`.
+// Still later: category/CMS/blog/product main columns (`.page-content` / `.page` / `.pdp-js`).
 
 .or-flow {
-    --or-flow-gap: 1.5rem;
+  --or-flow-gap: 2.5rem;
 
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--or-flow-gap);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--or-flow-gap);
 
-    @media (min-width: 768px) {
-        --or-flow-gap: 1.75rem;
-    }
+  @media (min-width: 768px) {
+    --or-flow-gap: 2.75rem;
+  }
 
-    @media (min-width: 1024px) {
-        --or-flow-gap: 2rem;
-    }
+  @media (min-width: 1024px) {
+    --or-flow-gap: 3rem;
+  }
 
-    // Gap owns rhythm between direct children
-    > * {
-        margin-block: 0;
-    }
+  // Gap owns rhythm between direct children
+  > * {
+    margin-block: 0;
+  }
 
-    // Empty BC region stubs must not consume a gap slot
-    > :empty {
-        display: none;
-    }
+  // Empty BC region stubs must not consume a gap slot
+  > :empty {
+    display: none;
+  }
 }
 
-// Home columns: beat leftover page-file margin-top one-offs + keep flex from .or-flow
+// Beat leftover page-file margin one-offs + keep flex from .or-flow
 .custom-content.or-flow,
-.custom-sidebar.or-flow {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+.custom-sidebar.or-flow,
+.page-sidebar.or-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .custom-content.or-flow > *,
-.custom-sidebar.or-flow > * {
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-block: 0;
+.custom-sidebar.or-flow > *,
+.page-sidebar.or-flow > * {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-block: 0;
 }
 
 .or-flow-tight {
-    --or-flow-gap: 0.75rem;
+  --or-flow-gap: 0.75rem;
 
-    @media (min-width: 768px) {
-        --or-flow-gap: 1rem;
-    }
+  @media (min-width: 768px) {
+    --or-flow-gap: 1rem;
+  }
 
-    @media (min-width: 1024px) {
-        --or-flow-gap: 1.25rem;
-    }
+  @media (min-width: 1024px) {
+    --or-flow-gap: 1.25rem;
+  }
 }
 
 .or-flow-loose {
-    --or-flow-gap: 1.75rem;
+  --or-flow-gap: 1.75rem;
 
-    @media (min-width: 768px) {
-        --or-flow-gap: 2.5rem;
-    }
+  @media (min-width: 768px) {
+    --or-flow-gap: 2.5rem;
+  }
 
-    @media (min-width: 1024px) {
-        --or-flow-gap: 3rem;
-    }
+  @media (min-width: 1024px) {
+    --or-flow-gap: 3rem;
+  }
 }

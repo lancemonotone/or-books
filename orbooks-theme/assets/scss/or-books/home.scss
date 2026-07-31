@@ -1,705 +1,709 @@
 .default-page {
-    margin-top: 0;
-    .default_page {
-        margin-bottom: 3rem;
+  margin-top: 0;
+  .default_page {
+    margin-bottom: 3rem;
+  }
+
+  .home-page {
+    @include medium {
+      margin-top: 30px;
     }
-
-    .home-page {
+    @include breakpoint(1500px) {
+      margin-top: 45px;
+    }
+    @include xxlarge {
+      margin-top: 60px;
+    }
+    .home-main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      max-width: 1790px;
+      margin: 0 auto;
+      @include medium {
+        justify-content: flex-end;
+      }
+      .custom-sidebar {
+        display: block;
+        order: 2;
         @include medium {
-            margin-top: 30px;
+          order: 1;
         }
-        @include breakpoint(1500px){
-            margin-top: 45px;
-        }
-        @include xxlarge {
-            margin-top: 60px;
-        }
-        .home-main {
-            display: flex;
-            flex-wrap: wrap;
+        // Section arrows: .or-section--slider in slider-chrome.scss
+        // .top-product .productView: see productView.scss
+        .blog-main-home {
+          // Vertical spacing: parent .or-flow gap
+          margin: 0;
+          justify-content: center;
+          @include medium {
             justify-content: flex-start;
-            max-width: 1790px;
-            margin: 0 auto;
-            @include medium {
-                justify-content: flex-end;
+          }
+          .blog-cont {
+            padding-top: 0.5rem;
+            @include xxlarge {
+              padding-top: 0.75rem;
             }
-                .custom-sidebar {
-                display: block;
-                order: 2;
-                @include medium {
-                    order: 1;
-                }
-                &.or-flow {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: stretch;
-                }
-                // Section arrows: .or-section--slider in slider-chrome.scss
-                // .top-product .productView: see productView.scss
-                .blog-main-home {
-                    // Vertical spacing: parent .or-flow gap
-                    margin: 0;
-                    justify-content: center;
-                    @include medium {
-                        justify-content: flex-start;
-                    }            
-                    .blog-cont {
-                        padding-top: 0.5rem;
-                        @include xxlarge {
-                            padding-top: 0.75rem;
-                        }
-                        .slick-list {
-                            // Full-bleed with slider-chrome (no side gutter / no -5px cancel)
-                            margin-inline: 0;
-                            .blog {
-                                padding: 0;
-                                display: flex;
-                                flex-wrap: wrap;
-                                flex-direction: column;
-                                .blog-post-figure {
-                                    .blog-thumbnail {
-                                        img {
-                                            border-radius: 5px;
-                                        }
-                                    }
-                                }
-                                // Listing meta: news.scss + common.scss card stack
-                                .blog-post-body {
-                                    text-align: center;
-
-                                    @media (min-width: 768px) {
-                                        text-align: start;
-                                    }
-                                }
-                            }
-                        } 
+            .slick-list {
+              // Full-bleed with slider-chrome (no side gutter / no -5px cancel)
+              margin-inline: 0;
+              .blog {
+                padding: 0;
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: column;
+                .blog-post-figure {
+                  .blog-thumbnail {
+                    img {
+                      border-radius: 5px;
                     }
+                  }
                 }
-                .event-carousel, .video-home {
-                    // Vertical spacing: parent .or-flow gap
+                // Listing meta: news.scss + common.scss card stack
+                .blog-post-body {
+                  text-align: center;
+
+                  @media (min-width: 768px) {
+                    text-align: start;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .event-carousel,
+        .video-home {
+          // Vertical spacing: parent .or-flow gap
+          text-align: center;
+          @include medium {
+            text-align: left;
+          }
+          .eventgrid,
+          .videomain {
+            padding-top: 30px;
+            margin: 0;
+            .slick-list {
+              margin: 0 -5px;
+              .event-card,
+              .video-card {
+                padding: 0 5px;
+                .event-details,
+                .video-details {
+                  padding: 18px 0;
+                  text-align: center;
+                  @include medium {
+                    text-align: left;
+                  }
+                  span {
+                    @include hc-400;
+                    font-size: 18px;
+                    color: #414141;
+                    line-height: 1;
                     text-align: center;
                     @include medium {
-                        text-align: left;
+                      text-align: left;
                     }
-                    .eventgrid, .videomain {
-                        padding-top: 30px;
-                        margin: 0;
-                        .slick-list {
-                            margin: 0 -5px;
-                            .event-card, .video-card {
-                                padding: 0 5px;
-                                .event-details, .video-details {
-                                    padding: 18px 0;
-                                    text-align: center;
-                                    @include medium {
-                                        text-align: left;
-                                    }
-                                    span {
-                                        @include hc-400;
-                                        font-size: 18px;
-                                        color: #414141;
-                                        line-height: 1;
-                                        text-align: center;
-                                        @include medium {
-                                            text-align: left;
-                                        }
-                                        @include large {
-                                            font-size: 18px;
-                                        }
-                                        @include xxlarge {
-                                            font-size: 24px;
-                                        }
-                                    }
-                                        a {
-                                            display: block;
-                                            margin: 10px 0;
-                                            line-height: 1;
-                                            @include hc-700;
-                                            font-size: 18px;
-                                            color: #232323;
-                                            @include medium {
-                                                margin: 12px 0;
-                                            }
-                                            @include large {
-                                                font-size: 20px;
-                                            }
-                                            @include xxlarge {
-                                                font-size: 24px;
-                                            }
-                                        }
-                                        p {
-                                            line-height: 1.4;
-                                            @include hc-400;
-                                            font-size: 15px;
-                                            text-align: center;
-                                            margin: 0;
-                                            display: -webkit-box;
-                                            -webkit-line-clamp: 3;
-                                            -webkit-box-orient: vertical;
-                                            overflow: hidden;
-                                            @include medium {
-                                                text-align: left;
-                                                font-size: 16px;
-                                                line-height: 1.2;
-                                            }
-                                        }
-                                }
-                                .video-img {
-                                    iframe {
-                                        width: 100%;
-                                        height: 220px;
-                                        @include xxsmall {
-                                            height: 260px;
-                                        }
-                                        @include medium {
-                                            height: 200px;
-                                        }
-                                        .ytp-large-play-button-red-bg {
-                                            width: 40px;
-                                            height: 40px;
-                                            transform: translate(-50%, -50%);
-                                            margin-left: 0; 
-                                            margin-top: 0;
-                                            svg {
-                                                border-radius: 50px;
-                                                .ytp-large-play-button-bg {
-                                                    fill: #fff;
-                                                    path {
-                                                        fill: #414141;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    @include large {
+                      font-size: 18px;
                     }
-                }
-                .mobile-per {
+                    @include xxlarge {
+                      font-size: 24px;
+                    }
+                  }
+                  a {
+                    display: block;
+                    margin: 10px 0;
+                    line-height: 1;
+                    @include hc-700;
+                    font-size: 18px;
+                    color: #232323;
                     @include medium {
-                        display: none;
+                      margin: 12px 0;
                     }
-                    .percentage-main {
-                        margin-top: 30px;
+                    @include large {
+                      font-size: 20px;
                     }
+                    @include xxlarge {
+                      font-size: 24px;
+                    }
+                  }
+                  p {
+                    line-height: 1.4;
+                    @include hc-400;
+                    font-size: 15px;
+                    text-align: center;
+                    margin: 0;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    @include medium {
+                      text-align: left;
+                      font-size: 16px;
+                      line-height: 1.2;
+                    }
+                  }
                 }
+                .video-img {
+                  iframe {
+                    width: 100%;
+                    height: 220px;
+                    @include xxsmall {
+                      height: 260px;
+                    }
+                    @include medium {
+                      height: 200px;
+                    }
+                    .ytp-large-play-button-red-bg {
+                      width: 40px;
+                      height: 40px;
+                      transform: translate(-50%, -50%);
+                      margin-left: 0;
+                      margin-top: 0;
+                      svg {
+                        border-radius: 50px;
+                        .ytp-large-play-button-bg {
+                          fill: #fff;
+                          path {
+                            fill: #414141;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
-            
+          }
         }
+        .mobile-per {
+          @include medium {
+            display: none;
+          }
+          .percentage-main {
+            margin-top: 30px;
+          }
+        }
+      }
     }
+  }
 }
 
 .custom-content {
-    display: block;
-    order: 1;
-    @include medium {
-        order: 2;
-    }
-    // Section titles: .or-heading in headings.scss
-    // Section carousels (Forthcoming, etc.): .or-section--slider in slider-chrome.scss
-    // Hero carousel keeps its own arrow placement below.
-    .heroCarousel {
-        .slick-arrow {
-            width: auto;
-            height: auto;
-            padding: 0;
-            background-color: initial;
-            border: none;
-            @include medium {
-                top: -15px;
-                display: inline-block !important;
-            }
-            &:before {
-                background-image: url('../img/left-slider.svg');
-                width: 20px;
-                height: 20px;
-                @include medium {
-                    width: 20px;
-                    height: 20px;
-                    opacity: 1;
-                }
-                @include xxlarge {
-                    width: 23px;
-                    height: 23px;
-                }
-            }
-            &.slick-prev {
-                left: -10px;
-                @include medium {
-                    right: 26px;
-                    left: auto;
-                }
-                @include xxlarge {
-                    right: 29px;
-                }
-            }
-            &.slick-next {
-                right: -10px;
-                @include medium {
-                    left: auto;
-                    right: 0;
-                }
-                &:before {
-                    transform: rotate(180deg);
-                }
-            }
-        }
-    }
-    .statix-text {
-        display: block;
-        margin-top: 11px;
+  display: block;
+  order: 1;
+  @include medium {
+    order: 2;
+  }
+  // Section titles: .or-heading in headings.scss
+  // Section carousels (Forthcoming, etc.): .or-section--slider in slider-chrome.scss
+  // Hero carousel keeps its own arrow placement below.
+  .heroCarousel {
+    .slick-arrow {
+      width: auto;
+      height: auto;
+      padding: 0;
+      background-color: initial;
+      border: none;
+      @include medium {
+        top: -15px;
+        display: inline-block !important;
+      }
+      &:before {
+        background-image: url("../img/left-slider.svg");
+        width: 20px;
+        height: 20px;
         @include medium {
-            margin-top: 18px;
-        }
-        @include breakpoint(1500px) {
-            margin-top: 26px;
-        }    }
-    .heroCarousel {
-        max-height: 100%;
-        // Vertical spacing: parent .or-flow gap
-        margin-block: 0;
-        .slick-arrow {
-            @include medium {
-                top: -15px;
-            }
-        }
-        .carousel-play-pause-button {
-            color: #D2230E;
-            background-color: $color-greyDarkest;
-            border-color: $color-greyDarkest;
-            &:hover {
-                background-color: $color-white;
-            }
-        }
-        .slick-dots {
-            li {
-                background-color:  transparent;
-
-                button {
-                    border-color: $color-greyDarkest;
-                    &::before {
-                        background-color: transparent;
-                    }
-                }
-                &.slick-active {
-                    button {
-                        &::before {
-                            opacity: 1;
-                            background-color: #D2230E;
-                        }
-                    }   
-                }
-            }
-        }
-        .slick-slide {
-            .heroCarousel-image-wrapper {
-//Paige                max-height: 14.5rem;
-                @include xxsmall {
-                    max-height: 16.5rem;
-                }
-                @include xsmall {
-                    max-height: 100%;
-                    height: 100%;
-                }
-                // @include xxlarge {
-                //     max-height: 40.6rem;
-                // }
-                img {
-                    border-radius: 5px;
-                    object-fit: cover;
-                    @include xsmall {
-                        object-fit: contain;
-                    }
-                }
-            }
-        }
-    }
-    .cust-main {
-        display: block;
-        // Vertical spacing: parent .or-flow gap
-        .cust-sub {
-            margin: 0;
-            list-style: none;
-            border-radius: 5px;
-            background-color: stencilColor("bg_color");
-            padding: 25px 0;
-            @include small {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                flex-wrap: wrap;
-            }
-            @include medium {
-                border-radius: 0;
-                background-color: initial;
-                padding: 0;
-                justify-content: flex-start;
-            }
-            @include xlarge {
-                justify-content: center;
-            }
-            .cust-list-item {
-                padding: 0 18px 15px 29px;
-                border-bottom: 2px solid #EEEEEE;
-                margin-bottom: 15px;
-                @include small {
-                    width: 50%;
-                    border: none;
-                    padding: 0px 15px 0 50px;
-                    margin-bottom: 25px;
-                }
-                @include medium {
-                    padding: 0px 18px;
-                    margin-bottom: 22px;
-                }
-                @include large {
-                    padding: 0px 7px;
-                }
-                @include breakpoint(1280px) {
-                    padding: 0px 14px;
-                }
-                @include xlarge {
-                    padding: 0px 14px;
-                }
-                @include breakpoint(1600px) {
-                    padding: 0px 31px;
-                }
-                @include xxlarge {
-                    width: 25%;
-                    margin-bottom: 0;
-                    border-right: 2px solid #EEEEEE;
-                    padding: 0px 10px;
-                }
-                &.first-cust, &.third-cust {
-                    @include medium {
-                        border-right: 2px solid #EEEEEE;
-                    }
-                }
-                .cust-element {
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    .cust-img {
-                        width: 12%;
-                        @include medium {
-                            width: auto;
-                        }
-                        img {
-                            @include medium {
-                                max-width: 20px;
-                                max-height: 20px;
-                            }
-                            @include large {
-                                max-width: 24px;
-                                max-height: 24px;
-                            }
-                            @include xxlarge {
-                                max-width: 30px;
-                                max-height: 28px;
-                            }
-                        }
-                    }
-                    .cust-content {
-                        padding-left: 17px;
-                        width: 88%;
-                        @include medium {
-                            width: auto;
-                        }
-                        @include large {
-                            padding-left: 16px;
-                        }
-                        .cust-content-main {
-                            font-size: 18px;
-                            color: stencilColor("text_color");
-                            font-family: $or-font-body;
-                            font-weight: 700;
-                            line-height: 0.9;
-                            cursor: pointer;
-                            @include small {
-                                font-size: 16px;
-                            }
-                            @include medium {
-                                font-size: 13px;
-                            }
-                            @include xlarge {
-                                font-size: 15px;
-                            }
-                            @include breakpoint(1500px) {
-                                font-size: 16px;
-                            }
-                            @include xxlarge {
-                                font-size: 18px;
-                            }
-                        }
-                        .cust-content-sub {
-                            cursor: pointer;
-                            font-size: 15px;
-                            color: stencilColor("span_color");
-                            font-family: $or-font-body;
-                            font-weight: 700;
-                            line-height: 1.1;
-                            @include small {
-                                font-size: 13px;
-                            }
-                            @include medium {
-                                font-size: 12px;
-                            }
-                            @include xlarge {
-                                font-size: 13px;
-                            }
-                            @include breakpoint(1500px) {
-                                font-size: 14px;
-                            }
-                            @include xxlarge {
-                                font-size: 15px;
-                            }
-                        }
-                    }
-                }
-                &:nth-last-child(1) {
-                    border: none;
-                    margin-bottom: 0;
-                    padding-bottom: 0;
-                }
-                &:nth-last-child(2) {
-                    @include small {
-                        margin-bottom: 0;
-                    }
-                }
-            }
-        }
-    }
-    .home-new {
-        // Vertical spacing: parent .or-flow gap
-        // Carousel shell (margin / padding-block / arrows): slider-chrome.scss
-        .productCarousel {
-            .slick-list {
-                .slick-track {
-                        // Equal-height flex track: slider-chrome.scss (do not flex-wrap here)
-                        .slick-slide {
-                            padding-top: 10px;
-                            padding-bottom: 10px;
-                            // Equal height: slider-chrome.scss (.productCarousel stretch chain)
-                            .productCarousel-slide {
-                                @include medium {
-                                    padding: 9px 10px;
-                                }
-                                @include xlarge {
-                                    padding: 9px 16px;
-                                }
-                            }
-                            .sub-card {
-                                padding: 21px 21px;
-                                @include small {
-                                    padding: 15px 15px;
-                                }
-                                @include medium {
-                                    margin-bottom: 0;
-                                }
-                                @include xlarge {
-                                    padding: 22px 18px 15px;
-                                }
-                                .card-figure {
-                                    width: 100%;
-                                }
-                                .card-body {
-                                    text-align: center;
-                                    @include medium {
-                                        width: 100%;
-                                        text-align: left;
-                                    }
-                                }
-                                // .card-link pin: slider-chrome.scss
-                            }
-                        }
-                        // Equal height wrappers: slider-chrome.scss
-                    }
-                }
-        }
-    }
-
-    .recent-main {
-        // Vertical spacing: parent .or-flow gap
-        .recent-slide {
-            padding-top: 0.5rem;
-            @include xxlarge {
-                padding-top: 0.75rem;
-            }
-            .slick-list {
-                margin: 0 -5px;
-                .rec-img {
-                    height: 56.23vw;
-                    display: flex;
-                    justify-content: center;
-                    max-height: 13rem;
-                    padding: 0 5px;
-                    @include xxsmall {
-                        max-height: 17rem;
-                    }
-                    @include medium {
-                        max-height: 100%;
-                        height: auto;
-                    }
-                    img {
-                        object-fit: contain;
-                        object-position: 0% 50%;
-                        width: 100%;
-                        border-radius: 10px;
-                    }
-                }
-            }
-        }
-    }
-    .home-video-main {
-        // Vertical spacing: parent .or-flow gap
-        .video-slide {
-            padding-top: 0.5rem;
-            .slick-list {
-                margin: 0 -5px;
-                .vid-main {
-                    // max-height: 13.6rem;
-                    // height: 56vw;
-                    height: 100%;
-                    position: relative;
-                    margin: 0 5px;
-                    background-position: bottom left 6%;
-                    background-size: cover;
-                    border-radius: 10px;
-                    @include small {
-                        max-height: 17rem;
-                        height: auto;
-                    }
-                    @include medium {
-                        max-height: 15rem;
-                    }
-                    @include breakpoint(1440px) {
-                        max-height: 17.5rem;
-                    }
-                    @include xxlarge {
-                        max-height: 314px;
-                    }
-                    .vid-img {
-                        height: 100%;
-                        img {
-                            height: 100%;
-                        }
-                    }
-                    .vid-content {
-                        display: block;
-                        position: absolute;
-                        left: 50%;
-                        top: 50%;
-                        transform: translate(-50%, -50%);
-                        text-align: center;
-                        max-width: 90%;
-                        width: 100%;
-
-                        @include small {
-                            max-width: 61%;
-                        }                        p {
-                            font-size: 11px;
-                            text-transform: capitalize;
-                            @include hc-400;
-                            color: $color-white;
-                            line-height: 1;
-                            margin: 5px 0px 0;
-                            @include small {
-                                line-height: 1.4;
-                                font-size: 14px;
-                                margin: 10px 0px 0;
-                            }
-                            @include xlarge {
-                                font-size: 16px;
-                                margin: 18px 0px 0;
-                            }
-                        }
-                        a {
-                            @include hc-700;
-                            padding: 3px 25px;
-                            display: inline-block;
-                            width: auto;
-                            background-color: $color-white;
-                            color: #0B0B0B;
-                            font-size: 12px;
-                            border: 1px solid $color-white;
-                            border-radius: 5px;
-                            margin-top: 5px;
-                            transition: 0.35s ease-in-out;
-                            @include small {
-                                padding: 3px 38px;
-                                font-size: 16px;
-                                margin-top: 10px;
-                            }
-                            @include xlarge {
-                                margin-top: 20px;
-                                padding: 7px 38px;
-                            }
-                            &:hover {
-                                background-color: #333333;
-                                border-color: #333333;
-                                color: #ffffff;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    .percentage-main, .catalog-main, .order-main {
-        display: none;
-        @include medium {
-            display: block
-        }
-    }
-    .percentage-main {
-        @include medium {
-            display: flex;
-        }
-        @include xlarge {
-            margin-top: 25px;
+          width: 20px;
+          height: 20px;
+          opacity: 1;
         }
         @include xxlarge {
-            margin-top: 40px;
+          width: 23px;
+          height: 23px;
         }
+      }
+      &.slick-prev {
+        left: -10px;
+        @include medium {
+          right: 26px;
+          left: auto;
+        }
+        @include xxlarge {
+          right: 29px;
+        }
+      }
+      &.slick-next {
+        right: -10px;
+        @include medium {
+          left: auto;
+          right: 0;
+        }
+        &:before {
+          transform: rotate(180deg);
+        }
+      }
     }
+  }
+  .statix-text {
+    display: block;
+    margin-top: 11px;
+    @include medium {
+      margin-top: 18px;
+    }
+    @include breakpoint(1500px) {
+      margin-top: 26px;
+    }
+  }
+  .heroCarousel {
+    max-height: 100%;
+    // Vertical spacing: parent .or-flow gap (margins zeroed) + extra pad before Forthcoming
+    margin-block: 0;
+    margin-block-end: var(--or-flow-gap, 1.5rem) !important;
+    .slick-arrow {
+      @include medium {
+        top: -15px;
+      }
+    }
+    .carousel-play-pause-button {
+      color: #d2230e;
+      background-color: $color-greyDarkest;
+      border-color: $color-greyDarkest;
+      &:hover {
+        background-color: $color-white;
+      }
+    }
+    .slick-dots {
+      li {
+        background-color: transparent;
+
+        button {
+          border-color: $color-greyDarkest;
+          &::before {
+            background-color: transparent;
+          }
+        }
+        &.slick-active {
+          button {
+            &::before {
+              opacity: 1;
+              background-color: #d2230e;
+            }
+          }
+        }
+      }
+    }
+    .slick-slide {
+      .heroCarousel-image-wrapper {
+        //Paige                max-height: 14.5rem;
+        @include xxsmall {
+          max-height: 16.5rem;
+        }
+        @include xsmall {
+          max-height: 100%;
+          height: 100%;
+        }
+        // @include xxlarge {
+        //     max-height: 40.6rem;
+        // }
+        img {
+          border-radius: 5px;
+          object-fit: cover;
+          @include xsmall {
+            object-fit: contain;
+          }
+        }
+      }
+    }
+  }
+  .cust-main {
+    display: block;
+    // Vertical spacing: parent .or-flow gap
+    .cust-sub {
+      margin: 0;
+      list-style: none;
+      border-radius: 5px;
+      background-color: stencilColor("bg_color");
+      padding: 25px 0;
+      @include small {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+      @include medium {
+        border-radius: 0;
+        background-color: initial;
+        padding: 0;
+        justify-content: flex-start;
+      }
+      @include xlarge {
+        justify-content: center;
+      }
+      .cust-list-item {
+        padding: 0 18px 15px 29px;
+        border-bottom: 2px solid #eeeeee;
+        margin-bottom: 15px;
+        @include small {
+          width: 50%;
+          border: none;
+          padding: 0px 15px 0 50px;
+          margin-bottom: 25px;
+        }
+        @include medium {
+          padding: 0px 18px;
+          margin-bottom: 22px;
+        }
+        @include large {
+          padding: 0px 7px;
+        }
+        @include breakpoint(1280px) {
+          padding: 0px 14px;
+        }
+        @include xlarge {
+          padding: 0px 14px;
+        }
+        @include breakpoint(1600px) {
+          padding: 0px 31px;
+        }
+        @include xxlarge {
+          width: 25%;
+          margin-bottom: 0;
+          border-right: 2px solid #eeeeee;
+          padding: 0px 10px;
+        }
+        &.first-cust,
+        &.third-cust {
+          @include medium {
+            border-right: 2px solid #eeeeee;
+          }
+        }
+        .cust-element {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          .cust-img {
+            width: 12%;
+            @include medium {
+              width: auto;
+            }
+            img {
+              @include medium {
+                max-width: 20px;
+                max-height: 20px;
+              }
+              @include large {
+                max-width: 24px;
+                max-height: 24px;
+              }
+              @include xxlarge {
+                max-width: 30px;
+                max-height: 28px;
+              }
+            }
+          }
+          .cust-content {
+            padding-left: 17px;
+            width: 88%;
+            @include medium {
+              width: auto;
+            }
+            @include large {
+              padding-left: 16px;
+            }
+            .cust-content-main {
+              font-size: 18px;
+              color: stencilColor("text_color");
+              font-family: $or-font-body;
+              font-weight: 700;
+              line-height: 0.9;
+              cursor: pointer;
+              @include small {
+                font-size: 16px;
+              }
+              @include medium {
+                font-size: 13px;
+              }
+              @include xlarge {
+                font-size: 15px;
+              }
+              @include breakpoint(1500px) {
+                font-size: 16px;
+              }
+              @include xxlarge {
+                font-size: 18px;
+              }
+            }
+            .cust-content-sub {
+              cursor: pointer;
+              font-size: 15px;
+              color: stencilColor("span_color");
+              font-family: $or-font-body;
+              font-weight: 700;
+              line-height: 1.1;
+              @include small {
+                font-size: 13px;
+              }
+              @include medium {
+                font-size: 12px;
+              }
+              @include xlarge {
+                font-size: 13px;
+              }
+              @include breakpoint(1500px) {
+                font-size: 14px;
+              }
+              @include xxlarge {
+                font-size: 15px;
+              }
+            }
+          }
+        }
+        &:nth-last-child(1) {
+          border: none;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+        &:nth-last-child(2) {
+          @include small {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+  .home-new {
+    // Vertical spacing: parent .or-flow gap
+    // Carousel shell (margin / padding-block / arrows): slider-chrome.scss
+    .productCarousel {
+      .slick-list {
+        .slick-track {
+          // Equal-height flex track: slider-chrome.scss (do not flex-wrap here)
+          .slick-slide {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            // Equal height: slider-chrome.scss (.productCarousel stretch chain)
+            .productCarousel-slide {
+              @include medium {
+                padding: 9px 10px;
+              }
+              @include xlarge {
+                padding: 9px 16px;
+              }
+            }
+            .sub-card {
+              padding: 21px 21px;
+              @include small {
+                padding: 15px 15px;
+              }
+              @include medium {
+                margin-bottom: 0;
+              }
+              @include xlarge {
+                padding: 22px 18px 15px;
+              }
+              .card-figure {
+                width: 100%;
+              }
+              .card-body {
+                text-align: center;
+                @include medium {
+                  width: 100%;
+                  text-align: left;
+                }
+              }
+              // .card-link pin: slider-chrome.scss
+            }
+          }
+          // Equal height wrappers: slider-chrome.scss
+        }
+      }
+    }
+  }
+
+  .recent-main {
+    // Vertical spacing: parent .or-flow gap
+    .recent-slide {
+      padding-top: 0.5rem;
+      @include xxlarge {
+        padding-top: 0.75rem;
+      }
+      .slick-list {
+        margin: 0 -5px;
+        .rec-img {
+          height: 56.23vw;
+          display: flex;
+          justify-content: center;
+          max-height: 13rem;
+          padding: 0 5px;
+          @include xxsmall {
+            max-height: 17rem;
+          }
+          @include medium {
+            max-height: 100%;
+            height: auto;
+          }
+          img {
+            object-fit: contain;
+            object-position: 0% 50%;
+            width: 100%;
+            border-radius: 10px;
+          }
+        }
+      }
+    }
+  }
+  .home-video-main {
+    // Vertical spacing: parent .or-flow gap
+    .video-slide {
+      padding-top: 0.5rem;
+      .slick-list {
+        margin: 0 -5px;
+        .vid-main {
+          // max-height: 13.6rem;
+          // height: 56vw;
+          height: 100%;
+          position: relative;
+          margin: 0 5px;
+          background-position: bottom left 6%;
+          background-size: cover;
+          border-radius: 10px;
+          @include small {
+            max-height: 17rem;
+            height: auto;
+          }
+          @include medium {
+            max-height: 15rem;
+          }
+          @include breakpoint(1440px) {
+            max-height: 17.5rem;
+          }
+          @include xxlarge {
+            max-height: 314px;
+          }
+          .vid-img {
+            height: 100%;
+            img {
+              height: 100%;
+            }
+          }
+          .vid-content {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            max-width: 90%;
+            width: 100%;
+
+            @include small {
+              max-width: 61%;
+            }
+            p {
+              font-size: 11px;
+              text-transform: capitalize;
+              @include hc-400;
+              color: $color-white;
+              line-height: 1;
+              margin: 5px 0px 0;
+              @include small {
+                line-height: 1.4;
+                font-size: 14px;
+                margin: 10px 0px 0;
+              }
+              @include xlarge {
+                font-size: 16px;
+                margin: 18px 0px 0;
+              }
+            }
+            a {
+              @include hc-700;
+              padding: 3px 25px;
+              display: inline-block;
+              width: auto;
+              background-color: $color-white;
+              color: #0b0b0b;
+              font-size: 12px;
+              border: 1px solid $color-white;
+              border-radius: 5px;
+              margin-top: 5px;
+              transition: 0.35s ease-in-out;
+              @include small {
+                padding: 3px 38px;
+                font-size: 16px;
+                margin-top: 10px;
+              }
+              @include xlarge {
+                margin-top: 20px;
+                padding: 7px 38px;
+              }
+              &:hover {
+                background-color: #333333;
+                border-color: #333333;
+                color: #ffffff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .percentage-main,
+  .catalog-main,
+  .order-main {
+    display: none;
+    @include medium {
+      display: block;
+    }
+  }
+  .percentage-main {
+    @include medium {
+      display: flex;
+    }
+    @include xlarge {
+      margin-top: 25px;
+    }
+    @include xxlarge {
+      margin-top: 40px;
+    }
+  }
 }
 .ytp-large-play-button-red-bg {
-    width: 40px;
-    height: 40px;
-    transform: translate(-50%, -50%);
-    margin-left: 0; 
-    margin-top: 0;
-    svg {
-        border-radius: 50px;
-        .ytp-large-play-button-bg {
-            fill: #fff;
-            path {
-                fill: #414141;
-            }
-        }
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  margin-left: 0;
+  margin-top: 0;
+  svg {
+    border-radius: 50px;
+    .ytp-large-play-button-bg {
+      fill: #fff;
+      path {
+        fill: #414141;
+      }
     }
+  }
 }
-.default-page{
-    .side-category-image {
-            // Vertical spacing on home: parent .or-flow gap
-        .side-category-image-data {           
-            .side-category-image-card {               
-                padding: 10px 0px 10px 0;
-               
-                @include medium {
-                    padding: 10px 0 10px 0;
-                }
-                @include large {
-                    padding: 10px 0px 10px 0;
-                }
-                @include xlarge {
-                    padding: 10px 0px 10px 0;
-                }
-                @include xxlarge {
-                    padding: 10px 0px 10px 0;
-                }
-            }
-        }        
+.default-page {
+  .side-category-image {
+    // Vertical spacing on home: parent .or-flow gap
+    .side-category-image-data {
+      .side-category-image-card {
+        padding: 10px 0px 10px 0;
+
+        @include medium {
+          padding: 10px 0 10px 0;
+        }
+        @include large {
+          padding: 10px 0px 10px 0;
+        }
+        @include xlarge {
+          padding: 10px 0px 10px 0;
+        }
+        @include xxlarge {
+          padding: 10px 0px 10px 0;
+        }
+      }
     }
+  }
 }
