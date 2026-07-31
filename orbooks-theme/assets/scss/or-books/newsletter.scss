@@ -1,0 +1,47 @@
+// Molecule: .or-newsletter — shared mailing-list panel
+// Home: .percentage-main (form) uses same shell.
+// Sidebar CTAs: .or-newsletter.or-newsletter--cta (title + .or-btn-block → external list).
+// Do not restyle in page SCSS.
+
+.or-newsletter,
+.percentage-main {
+  --or-newsletter-bg: #f3f3f3;
+  --or-newsletter-radius: 5px;
+  --or-newsletter-pad-block: 1.25rem;
+  --or-newsletter-pad-inline: 1rem;
+  --or-newsletter-gap: 0.75rem;
+
+  background-color: var(--or-newsletter-bg);
+  border-radius: var(--or-newsletter-radius);
+  padding-block: var(--or-newsletter-pad-block);
+  padding-inline: var(--or-newsletter-pad-inline);
+  text-align: center;
+
+  @media (min-width: 768px) {
+    // --or-newsletter-pad-block: 2.5rem;
+    // --or-newsletter-pad-inline: 1.5625rem;
+    text-align: start;
+  }
+
+  @media (min-width: 1024px) {
+    // --or-newsletter-pad-block: 3.75rem;
+    // --or-newsletter-pad-inline: 3.75rem;
+  }
+}
+
+// External subscribe (booksellers, rights, events) — title + button
+.or-newsletter.or-newsletter--cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--or-newsletter-gap);
+  margin-block-start: 1.5rem;
+
+  @media (min-width: 768px) {
+    align-items: stretch;
+  }
+
+  & .or-newsletter-title {
+    margin: 0;
+  }
+}

@@ -23,9 +23,10 @@ We do **not** need a full Storybook yet. Start by naming things in templates + S
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/buttons.scss`
 - **Classes:**
-  - `or-btn` — Roboto Condensed bold, uppercase; flex-centered label; no letter-spacing stretch on hover
-  - `or-btn-block` — full width of parent
-  - `or-btn-sm` — compact padding (section-head See all)
+  - `or-btn` — one rule in `buttons.scss` (`.or-btn.button`): Condensed bold, uppercase, `--or-btn-max-inline: 25rem`
+  - `or-btn-block` — modifier on same rule: fill parent up to cap, `margin-inline: auto`
+  - `or-btn-sm` — modifier: compact size tokens (section-head See all)
+- **Do not** restyle `.or-btn` in page SCSS (`home`, `pdp`, `category`, …). Layout wrappers only.
 - **Keep** BigCommerce `button` / `button--primary` for Theme Editor colors.
 - **Convert later:** on any CTA you touch, add `or-btn` (and `or-btn-block` / `or-btn-sm` as needed). Example:
 
@@ -34,6 +35,13 @@ We do **not** need a full Storybook yet. Start by naming things in templates + S
 ```
 
 Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
+
+## Molecule: Newsletter (`.or-newsletter`)
+
+- **Styles:** `orbooks-theme/assets/scss/or-books/newsletter.scss`
+- **Shell:** gray panel (`#f3f3f3`), shared with home `.percentage-main` (form signup).
+- **External CTA:** `.or-newsletter.or-newsletter--cta` + `.or-newsletter-title` + `.or-btn-block` (booksellers, rights, events).
+- **Do not** restyle in `category.scss` / `events.scss` / `home.scss`.
 
 ## Layout: Vertical flow (`.or-flow`)
 
@@ -58,7 +66,7 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 | Layer | What |
 |-------|------|
 | **Tokens** | `--or-text-*` scale; `--or-type-body-*`; `--or-type-pullquote-*`; `--or-type-h1-size`…`--or-type-h6-size` + matching `--or-type-h*-margin-block-end` (Major Third 1.25); heading line |
-| **Body** | `body`, `p` — Helvetica stack, body size/line |
+| **Body** | `body`, `p` — Helvetica stack, body size/line; **`p` always `text-align: start`** (editors need no class). Center only short chrome (headings &lt;768, buttons, cards). |
 | **Headings** | bare `h1–h6` — shared chrome (Condensed 700, uppercase); **size + margin stairs** Major Third; **align** center &lt;768, start ≥768; **narrow CQ** ≤30rem → −2px each level; card shells (`text-align: inherit`) |
 | **Pull quotes** | Bare `blockquote` > `h3` (quote) + `cite` or legacy `span` (attribution). Group: `.custom-fields-shouts` (top/bottom rules). |
 | **Accordion labels** | `.accordion-custom-tabs .accordion-title` / `.product-desc-title` — same pullquote size stair (PDP + author). |)
@@ -103,7 +111,7 @@ Covered by the typography system above (not a separate utility class).
 ## Atom: Button (`.or-btn`)
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/buttons.scss`
-- **Block CTA:** `.or-btn-block` — full width; font/padding via **container queries** on parent `.or-section` (`container-name: or-section`) so sidebar vs main sizes correctly.
+- **Block CTA:** `.or-btn-block` — modifier on `.or-btn.button`; fill parent up to `--or-btn-max-inline` (25rem), centered. Font/padding size tokens may still use **container queries** on parent `.or-section` where needed.
 - **Compact:** `.or-btn-sm` for section-head See all.
 
 ## Molecule: Subjects

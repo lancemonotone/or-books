@@ -107,14 +107,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="product-desc">
+                    {{#each custom_fields}}
+                        {{#if name '===' 'Rights'}}
+                            <p>{{{value}}}</p>
+                        {{/if}}
+                    {{/each}}
+                </div>
             </div>
-        </div>
-        <div class="product-desc">
-            {{#each custom_fields}}
-                {{#if name '===' 'Rights'}}
-                    <p>{{{value}}}</p>
-                {{/if}}
-            {{/each}}
         </div>
     </div>
     <div class="list-link">

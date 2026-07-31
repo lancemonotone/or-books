@@ -24,7 +24,9 @@
         {{#replace '%%Syndicate%%' page.content}}
             {{> components/page/rss_feed}}
         {{else}}
-            <p>{{{page.content}}}</p>
+            <div class="page-body">
+                {{{page.content}}}
+            </div>
         {{/replace}}
     </div>
 

@@ -68,7 +68,6 @@ input:focus + label {
   margin: 0;
 }
 
-
 body.search-open {
   overflow-y: hidden;
 
@@ -534,9 +533,12 @@ body.custom {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: stretch;
   margin: 0;
 
   .product {
+    display: flex;
+    flex-direction: column;
     padding: 10px 5px;
     width: 100%;
     margin: 0;
@@ -546,24 +548,32 @@ body.custom {
       padding: 20px 5px;
     }
 
-    @include medium {
-      // width: 44.5%;
+    // One grid for all list pages (merch, rights, booksellers, …)
+    @media (min-width: 1024px) {
+      inline-size: 33.33%;
+      width: 33.33%;
       padding: 25px 5px;
     }
 
     @include xxlarge {
-      // width: 44.5%;
       padding: 35px 5px;
     }
 
     .listItem {
       padding: 5px;
       margin: 0;
-      height: 100%;
+      flex: 1 1 auto;
+      block-size: 100%;
       transition: 0.3s ease-in-out;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
+
+      // Beat stencil table-cell vertical-align: middle (layouts/products/_productList.scss)
+      & .listItem-figure,
+      & .listItem-body {
+        vertical-align: top;
+      }
 
       &:hover {
         box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.19);
@@ -575,21 +585,14 @@ body.custom {
         }
       }
 
-      .sub-listItem {
-        padding: 10px;
-
-        @include medium {
-          padding: 15px;
-        }
-      }
-
       .product-data {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         flex-wrap: wrap;
 
         @include large {
           flex-wrap: nowrap;
+          gap: 0.625rem;
         }
 
         .listItem-figure {
@@ -598,23 +601,16 @@ body.custom {
           margin: 0;
           overflow: hidden;
 
-          @include small {
-          }
-
-          @include medium {
-          }
-
+          // Shared row: flex share — no fixed 200px body (breaks 3-col / sidebar)
           @include large {
-            width: 50%;
-          }
-
-          @include xlarge {
-            width: calc(100% - 200px);
+            inline-size: auto;
+            flex: 0 1 42%;
+            max-inline-size: 45%;
+            padding-block: 0.625rem;
           }
 
           @include xxlarge {
-            width: calc(100% - 250px);
-            padding: 30px 0;
+            padding-block: 1.875rem;
           }
 
           .listItem-figure__link {
@@ -624,18 +620,10 @@ body.custom {
 
             .listItem-image {
               width: auto;
+              max-inline-size: 100%;
               min-height: 200px;
               max-height: 200px;
               object-fit: cover;
-
-              @include small {
-              }
-
-              @include medium {
-              }
-
-              @include xlarge {
-              }
 
               @include xxlarge {
                 min-height: 300px;
@@ -670,25 +658,17 @@ body.custom {
           padding: 0;
           margin-top: 10px;
 
-          @include small {
-          }
-
-          @include medium {
-          }
-
           @include large {
             margin: 0;
-            padding: 0 0 0 10px;
-            width: 50%;
-          }
-
-          @include xlarge {
-            width: 200px;
+            padding-block: 0;
+            padding-inline: 0.625rem 0;
+            inline-size: auto;
+            flex: 1 1 55%;
+            min-inline-size: 0;
           }
 
           @include xxlarge {
-            width: 250px;
-            padding: 0 0 0 18px;
+            padding-inline-start: 1.125rem;
           }
 
           .listItem-content {
@@ -855,6 +835,8 @@ body.custom {
 
       .product-desc {
         margin-top: 15px;
+        // Match .listItem-details: center on narrow, start from 768
+        text-align: center;
 
         @include small {
           margin-top: 20px;
@@ -862,38 +844,28 @@ body.custom {
 
         @include medium {
           margin-top: 25px;
+          text-align: start;
         }
 
         p {
           margin: 0;
-          @include hs-400;
+          @include hc-700;
+          text-transform: uppercase;
           font-size: 16px;
           color: #262626;
           line-height: 20px;
-
-          @include small {
-          }
-
-          @include medium {
-          }
-
-          @include large {
-            font-size: 18px;
-            line-height: 1.1;
-          }
-
-          @include xxlarge {
-            font-size: 21px;
-          }
+          text-align: inherit;
         }
       }
 
       .list-link {
         width: 100%;
-        margin-top: 10px;
+        // Pin magnifier to bottom of stretched card; keep gap from content
+        margin-block-start: auto;
+        padding-block-start: 10px;
 
         @include large {
-          margin-top: 27px;
+          padding-block-start: 27px;
         }
 
         .button {
@@ -1365,7 +1337,8 @@ body.custom {
 
         @include xxlarge {
           margin-top: 50px;
-        }}
+        }
+      }
 
       .pagetitle {
         text-align: center;
@@ -1404,59 +1377,18 @@ body.custom {
         }
       }
 
+      // Stack only — width/center from .or-btn-block (buttons.scss)
       .pagebtns {
-        margin-top: 35px;
+        --or-pagebtns-gap: 0.75rem;
+        --or-pagebtns-margin-block-start: 2.1875rem;
 
-        @include xxsmall {
-          margin-top: 36px;
-        }
+        display: flex;
+        flex-direction: column;
+        gap: var(--or-pagebtns-gap);
+        margin-block-start: var(--or-pagebtns-margin-block-start);
 
-        @include small {
-          max-width: 400px;
-          margin: 0 auto 12px;
-        }
-
-        @include medium {
-          margin: 40px auto 0;
-        }
-
-        @include xlarge {
-          margin: 50px auto 0;
-        }
-
-        @include xxlarge {
-          margin: 70px auto 0;
-        }
-
-        a {
-          font-size: 14px;
-          color: $color-white;
-          @include hc-400;
-          display: block;
-          background-color: $color-greyDarkest;
-          margin-bottom: 12px;
-          padding: 10px 0;
-          text-align: center;
-          line-height: 1;
-          border-radius: 5px;
-          transition: 0.3s ease-in-out;
-
-          @include medium {
-            font-size: 16px;
-          }
-
-          @include xlarge {
-            font-size: 18px;
-          }
-
-          @include xxlarge {
-            padding: 12px 0;
-            font-size: 22px;
-          }
-
-          &:hover {
-            background-color: #333333;
-          }
+        @media (min-width: 768px) {
+          --or-pagebtns-margin-block-start: 2.5rem;
         }
       }
     }
@@ -1640,7 +1572,7 @@ body.custom {
           color: $color-greyDarkest;
           font-size: 16px;
           margin: 0 0 14px;
-          text-align: center;
+          // text-align: typography.scss (bare p → start)
 
           @include xxsmall {
             margin: 0 0 16px;
@@ -1649,7 +1581,6 @@ body.custom {
           @include medium {
             font-size: 16px;
             margin: 0 0 16px;
-            text-align: left;
           }
 
           @include xlarge {
@@ -1697,36 +1628,16 @@ body.custom {
   }
 }
 
-//percentage css
+//percentage css — shell: newsletter.scss (.or-newsletter / .percentage-main)
 .percentage-main {
-  background-color: #f3f3f3;
-  padding: 20px 16px 20px;
-  text-align: center;
-  margin-top: 10px;
-  border-radius: 5px;
+  margin-block-start: 0.625rem;
 
-  @include small {
+  @media (min-width: 768px) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    text-align: left;
-    padding: 40px 25px 40px;
+    margin-block-start: 0;
   }
-
-  @include medium {
-    margin-top: 0;
-  }
-
-  @include xlarge {
-    padding: 60px;
-  }
-
-  @include xxlarge {
-    margin-top: 10px;
-    padding: 80px;
-  }
-
-  .perc-left {  }
 
   .perc-right {
     .news-main {
@@ -1884,7 +1795,8 @@ body.custom {
 }
 
 //Account Pages
-.createaccount_thanks-page {}
+.createaccount_thanks-page {
+}
 
 .account-product-detail-heading {
   @include hc-400;
@@ -1901,7 +1813,8 @@ body.custom {
 .account_recentitems-page,
 .editaccount-page,
 .account_order_page,
-.wishlists-page {  .navBar--account {
+.wishlists-page {
+  .navBar--account {
     .navBar-item {
       .navBar-action {
         color: stencilColor("title_color");
@@ -2079,7 +1992,8 @@ body.custom {
         font-size: 16px;
       }
     }
-  }}
+  }
+}
 
 // cart
 .cart-page {
@@ -2543,4 +2457,5 @@ body.custom {
   margin-top: 40px;
 }
 
-.custom-cat-desc {}
+.custom-cat-desc {
+}

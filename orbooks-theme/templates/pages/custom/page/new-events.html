@@ -25,8 +25,8 @@
                 </div>
             </div>
         </div>
-        <div class="subscribe-link">
-            <h4>Sign-up for our Events newsletter</h4>
+        <div class="or-newsletter or-newsletter--cta">
+            <h4 class="or-newsletter-title">Sign-up for our Events newsletter</h4>
             <a href="https://mailchi.mp/orbooks.com/gijb1sdulu" class="button button--primary or-btn or-btn-block">{{lang 'page.subscribe'}}</a>
         </div>
     </aside>
@@ -128,7 +128,9 @@
             {{#replace '%%Syndicate%%' page.content}}
                 {{> components/page/rss_feed}}
             {{else}}
-                <p>{{{page.content}}}</p>
+                <div class="page-body">
+                    {{{page.content}}}
+                </div>
             {{/replace}}
         </div>
 

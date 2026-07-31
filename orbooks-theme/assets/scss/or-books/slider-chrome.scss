@@ -1,7 +1,7 @@
 // Shared slider chrome for any .or-section--slider
 // Design language: docs/design-language.md
 // Arrows stay on the Slick carousel (DOM). Side-mounted, vertically centered — never in the section head.
-// Track is full-bleed; arrows overlay slide edges (media) so block CTAs can span the section.
+// Track is full-bleed; arrows overlay slide edges (media). Block CTAs use .or-btn max-inline cap.
 // Product carousel shell (margin / block spacing) lives here — not in home.scss.
 // 4.8: style .slick-dots here the same shared way — no per-page one-offs.
 
@@ -9,7 +9,7 @@
     --or-slider-arrow-size: 1.25rem;
     // Sit on the card edge; slight inset so the hit target stays inside the section
     --or-slider-arrow-inset: 0.25rem;
-    // No side gutter — slides (and or-btn-block CTAs) span the section width
+    // No side gutter — slides span the section; CTAs cap via .or-btn
     --or-slider-track-pad: 0;
 
     @media (min-width: 1024px) {
@@ -42,7 +42,7 @@
         overflow: hidden;
     }
 
-    // Title/date clear of overlay arrows; Read Now (.or-btn-block) stays full-bleed
+    // Title/date clear of overlay arrows; Read Now uses .or-btn-block cap
     & .blog .blog-post-body {
         padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
     }

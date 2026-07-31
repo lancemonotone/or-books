@@ -545,143 +545,25 @@
                 //     margin-top: 53px;
                 // }
             }
+            // Stack only — width/center from .or-btn-block (buttons.scss)
             .rights-link {
-                margin: 30px 0 40px;
-                @include small {
-                    margin: 40px 0 20px;
-                }
-                // @include medium {
-                //     margin: 70px 0 80px;
-                // }
-                // @include large {
-                //     margin: 90px 0 100px;
-                // }
-                // @include xxlarge {
-                //     margin: 108px 0 130px;
-                // }
-                .button {
-                    border-radius: 5px;
-                    @include hc-400;
-                    display: block;
-                    margin: 0 auto 12px;
-                    font-size: 14px;
-                    padding: 10px 0;
-                    text-transform: capitalize;
-                    line-height: 1;
+                --or-rights-link-gap: 0.75rem;
+                --or-rights-link-margin-block: 1.875rem 2.5rem;
 
-                    @include small {
-                        width: 60%;
-                    }
-                    @include medium {
-                        font-size: 16px;
-                        width: 100%;
-                    }
-                    @include xlarge {
-                        font-size: 18px;
-                    }
-                    @include xxlarge {
-                        padding: 12px 0;
-                        font-size: 22px;
-                    }
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
-                }
-            }
-            .subscribe-link {
-                p {
-                    text-align: center;
-                    @include hc-400;
-                    margin: 0;
-                    font-size: 24px;
-                    @include small {
-                        font-size: 26px;
-                    }
-                    @include medium {
-                        font-size: 28px;
-                    }
-                    @include large {
-                        font-size: 32px;
-                    }
-                    @include xlarge {
-                        font-size: 36px;
-                    }
-                    @include xxlarge {
-                        font-size: 43px;
-                    }
-                }
-                .button {
-                    border-radius: 5px;
-                    @include hc-400;
-                    display: block;
-                    font-size: 14px;
-                    padding: 10px 0;
-                    text-transform: capitalize;
-                    margin-top: 20px;
-                    line-height: 1;
+                display: flex;
+                flex-direction: column;
+                gap: var(--or-rights-link-gap);
+                margin-block: var(--or-rights-link-margin-block);
 
-                    @include small {
-                        width: 60%;
-                        margin: 20px auto 0;
-                    }
-                    @include medium {
-                        font-size: 16px;
-                        width: 100%;
-                        margin-top: 30px;
-                    }
-                    @include xlarge {
-                        font-size: 18px;
-                    }
-                    @include xxlarge {
-                        padding: 12px 0;
-                        font-size: 22px;
-                    }
+                @media (min-width: 768px) {
+                    --or-rights-link-margin-block: 2.5rem 1.25rem;
                 }
             }
         }
     }
 }
-.custom-list-product {
-    .pagination {
-        margin-top: 20px;
-        @include small {
-            margin-top: 30px;
-        }
-        @include medium {
-            margin-top: 22px;
-        }
-    }
-}
+.custom-list-product,
 .merch-list-product {
-    .productList {
-        .product {
-            @include medium {
-                width: 33.33%;
-            }
-
-            .listItem {
-                .product-data {
-                    .listItem-figure {
-                        .listItem-figure__link {
-                            .listItem-image {
-                                @include large {
-                                    width: 245px;
-                                    min-height: inherit;
-                                }
-                                @include xxlarge {
-                                    width: 245px;
-                                    min-height: inherit;
-                                }
-                            }
-                        }
-                        .listItem-figureBody {
-                            display: none;
-                        }
-                    }
-                }
-            }
-        }
-    }
     .pagination {
         margin-top: 20px;
         @include small {
@@ -1701,18 +1583,6 @@
 .Rights-category , .Booksellers-category{
     .percentage-main{
         display: none !important;
-    }
-     .productList{
-         .product{
-             .listItem{
-                    .product-desc {
-                       
-        p{
-        font-size: 14px;
-        }
-    }
-             }
-         } 
     }
 }
 

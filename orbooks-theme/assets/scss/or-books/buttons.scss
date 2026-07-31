@@ -1,19 +1,28 @@
 // Atom: .or-btn — OR Books button type (design language)
+// Markup: class="button button--primary or-btn" (+ or-btn-block | or-btn-sm)
 // Keep BigCommerce `.button` / `.button--primary` for Theme Editor colors.
-// Conversion: add `or-btn` (and `or-btn-block` / `or-btn-sm` as needed) next to existing classes.
-// Vertical centering: fixed block-size + matching line-height, padding-block 0 (CodyHouse).
-// Block CTAs share one size contract — do not restyle via page files (.read-btn-link, etc.).
+// Vertical center: fixed block-size + matching line-height, padding-block 0.
+// Do not restyle in page SCSS — layout wrappers only.
 
-.or-btn {
+.or-btn.button {
     --or-btn-letter-spacing: 0;
     --or-btn-size: 2.75rem;
     --or-btn-pad-inline: 1.25rem;
     --or-btn-font-size: 1rem;
+    --or-btn-max-inline: 25rem;
 
     box-sizing: border-box;
+    display: inline-block;
+    block-size: var(--or-btn-size);
+    max-inline-size: var(--or-btn-max-inline);
+    margin-block-end: 0;
+    padding-block: 0;
+    padding-inline: var(--or-btn-pad-inline);
+    font-size: var(--or-btn-font-size);
+    line-height: var(--or-btn-size);
+    text-align: center;
     text-transform: uppercase;
     letter-spacing: var(--or-btn-letter-spacing);
-    text-align: center;
     vertical-align: middle;
     transform: none;
     @include hc-700;
@@ -22,64 +31,21 @@
     &:focus {
         letter-spacing: var(--or-btn-letter-spacing);
     }
-}
 
-// Default / full button — same centering contract as .or-btn-sm
-.or-btn.button:not(.or-btn-sm) {
-    display: inline-block;
-    block-size: var(--or-btn-size);
-    padding-block: 0;
-    padding-inline: var(--or-btn-pad-inline);
-    font-size: var(--or-btn-font-size);
-    line-height: var(--or-btn-size);
-    margin-block-end: 0;
-    vertical-align: middle;
-    @include hc-700;
-}
+    // Fill parent up to cap; center when parent is wider
+    // margin-inline: auto also beats Foundation `.button + .button` row gutter
+    &.or-btn-block {
+        --or-btn-pad-inline: 1rem;
 
-// Full-width CTA (View Catalog, Read Now, …) — one shared size everywhere
-.or-btn-block {
-    --or-btn-size: 2.75rem;
-    --or-btn-font-size: 1rem;
-    --or-btn-pad-inline: 1rem;
+        display: block;
+        inline-size: 100%;
+        margin-inline: auto;
+    }
 
-    display: block;
-    inline-size: 100%;
-    box-sizing: border-box;
-}
-
-.or-btn.or-btn-block.button {
-    display: block;
-    inline-size: 100%;
-    block-size: var(--or-btn-size);
-    margin-block-end: 0;
-    padding-block: 0;
-    padding-inline: var(--or-btn-pad-inline);
-    font-size: var(--or-btn-font-size);
-    line-height: var(--or-btn-size);
-    text-transform: uppercase;
-    @include hc-700;
-}
-
-// Compact CTA (e.g. section-head “See all”)
-.or-btn-sm {
-    --or-btn-sm-pad-inline: 0.75rem;
-    --or-btn-sm-font-size: 0.75rem;
-    --or-btn-sm-block-size: 1.625rem;
-
-    display: inline-block;
-    block-size: var(--or-btn-sm-block-size);
-    padding-block: 0;
-    padding-inline: var(--or-btn-sm-pad-inline);
-    font-size: var(--or-btn-sm-font-size);
-    line-height: var(--or-btn-sm-block-size);
-    text-align: center;
-    vertical-align: middle;
-}
-
-.or-btn.or-btn-sm.button {
-    display: inline-block;
-    margin-block-end: 0;
-    line-height: var(--or-btn-sm-block-size);
-    @include hc-700;
+    // Compact (section-head See all)
+    &.or-btn-sm {
+        --or-btn-size: 1.625rem;
+        --or-btn-pad-inline: 0.75rem;
+        --or-btn-font-size: 0.75rem;
+    }
 }

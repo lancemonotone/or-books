@@ -1,19 +1,6 @@
-// Shared newsletter CTA shell (events sidebar, booksellers, rights, …)
-.subscribe-link {
-  margin-block-start: 1.5rem;
-  text-align: center;
-
-  @include medium {
-    text-align: start;
-  }
-
-  .button {
-    margin-block-start: 0.75rem;
-  }
-}
-
 // Events (+ shared video-page card grid) — layout only.
-// Type: typography.scss (bare h*) + .or-btn. Do not reintroduce heading/body stairs here.
+// Type: typography.scss (bare h*) + .or-btn. Newsletter CTA: newsletter.scss (.or-newsletter).
+// Do not reintroduce heading/body stairs here.
 
 .event-main-page {
   display: flex;
@@ -167,7 +154,7 @@
     }
   }
 
-  // subscribe-link: see top-level rule (shared)
+  // Newsletter CTA: newsletter.scss (.or-newsletter)
 }
 
 // Card grids (events archive + videos). No negative side margins (was crushing layout).

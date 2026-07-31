@@ -21,7 +21,9 @@
         {{#if forms.contact.success}}
             <div id="contact-us-success" style="text-align: center;">{{{lang 'forms.contact_us.successful' shopPath=urls.home}}}</div>
         {{else}}
-            <p>{{{page.content}}}</p>
+            <div class="page-body">
+                {{{page.content}}}
+            </div>
             {{> components/page/contact-us-form}}
         {{/if}}
 
