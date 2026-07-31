@@ -27,8 +27,9 @@
     margin-block: 0;
   }
 
-  // Empty BC region stubs must not consume a gap slot
-  > :empty {
+  // Empty BC region stubs (empty divs) must not consume a gap slot.
+  // Do not use bare :empty — that also matches void elements like img.
+  > div:empty {
     display: none;
   }
 }
