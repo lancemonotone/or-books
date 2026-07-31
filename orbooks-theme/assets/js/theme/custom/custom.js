@@ -133,11 +133,13 @@ export default (function (context) {
     $('.page_navigation').html(navigation_html);
     $('.page_navigation .page_link:first').addClass('active_page');
     $('.page_navigation .page_link:first').addClass('pagination-item--current');
+    // Hide with none; show by clearing inline display so SCSS flex column wins
+    // (inline display:block was killing margin-block-start:auto CTA pin).
     $('.custom-page-data').children().css('display', 'none');
     $('.custom-page-data')
       .children()
       .slice(0, show_per_page)
-      .css('display', 'block');
+      .css('display', '');
     var total_page = $('.pagination-number-item').length - 1;
     if (total_page < 1) {
       $('.pagination-custom').css('display', 'none');
@@ -173,7 +175,7 @@ export default (function (context) {
       .children()
       .css('display', 'none')
       .slice(start_from, end_on)
-      .css('display', 'block');
+      .css('display', '');
     $('.pagination-number-item[longdesc=' + page_num + ']')
       .addClass('pagination-item--current')
       .siblings('.pagination-item--current')
@@ -200,7 +202,7 @@ export default (function (context) {
       .children()
       .css('display', 'none')
       .slice(start_from, end_on)
-      .css('display', 'block');
+      .css('display', '');
     $('.pagination-number-item[longdesc=' + page_num + ']')
       .addClass('pagination-item--current')
       .siblings('.pagination-item--current')
