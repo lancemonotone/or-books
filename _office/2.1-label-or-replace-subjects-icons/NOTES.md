@@ -12,7 +12,7 @@ In-house imagery; remove SUBJECTS heading; subject list under a View More accord
 
 ### Subjects → text list
 
-Replaced the icon grid with labeled subject links (same idea as the Fiction category sidebar). Dropped the SUBJECTS heading. Home **and** `/catalog/` sidebar use the shared **Catalog** section head (title + See all → `/catalog/`) above the list — not a block CTA under the list. Home list is trimmed to **10** subjects ranked by bestseller **title** mix (bestsellers are often format SKUs outside subject categories, so we normalize names and score Catalog children). Catalog page keeps the **full** list. GraphQL fail → full SSR list stays.
+Replaced the icon grid with labeled subject links (same idea as the Fiction category sidebar). Dropped the SUBJECTS heading. Home **and** `/catalog/` sidebar use the shared **Catalog** section head (title + See all → `/catalog/`) above the list — not a block CTA under the list. Home list is trimmed to **10** subjects ranked by bestseller **title** mix (bestsellers are often format SKUs outside subject categories, so we normalize names and score Catalog children). **Full list** on Catalog root and Catalog subject pages (`children.is_active`). Other category sidebars that use the molecule get the same popular trim as home. GraphQL fail → full SSR list stays.
 
 Shared molecule: `orbooks-theme/templates/components/orbooks/subjects-nav.html` + `assets/scss/or-books/subjects.scss`. Section head: `section-head.html`. Ranking: `assets/js/theme/custom/home.js` (`orRankSubjectsByBestsellers`). Design notes: `docs/design-language.md`.
 

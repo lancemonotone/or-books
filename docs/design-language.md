@@ -118,18 +118,17 @@ Covered by the typography system above (not a separate utility class).
 
 - **Template:** `orbooks-theme/templates/components/orbooks/subjects-nav.html`
 - **Styles:** `orbooks-theme/assets/scss/or-books/subjects.scss`
-- **Classes:** `or-subjects-section` (home wrapper), `or-subjects`, `or-subjects-list`, `or-subjects-item`, `or-subjects-link`
-- **Variants:** `variant="home"` (Catalog head + See all; list trimmed to 10 via bestsellers) · `variant="category"` (same Catalog head + **full** list, e.g. `/catalog/` sidebar)
-- Home uses shared section head — not a block CTA under the list.
+- **Classes:** `or-subjects-section`, `or-subjects`, `or-subjects-list`, `or-subjects-item`, `or-subjects-link`
+- **One markup path** (home + category sidebar). No `variant` param.
+- Shared section head — not a block CTA under the list.
 
 ### Rules for this molecule
 
 - Text labels only (no icon grid).
-- Full Catalog-child list always visible — no expand/collapse.
-- No drop-shadow hover on links (underline / color only).
-- Head (home + category): **Catalog** + **See all** → `/catalog/`.
-- Home list: SSR all Catalog children, then **trim to 10** by bestseller **title** mix (GraphQL `bestSellingProducts` + each subject’s products; names normalized so E-Book SKUs match subject listings). GraphQL fail → leave full SSR list.
-- Category / `/catalog/` sidebar: full SSR list (no trim).
+- No expand/collapse; no drop-shadow hover on links (underline / color only).
+- Head: **Catalog** + **See all** → `/catalog/`.
+- **Full SSR list** when the current page is Catalog root (`category.name === Catalog`) or a Catalog child (`children.is_active` in the Catalog tree). Detect via nav tree — subject URLs are inconsistent (`/catalog/…` vs e.g. `/fiction-poetry-literature/`).
+- **Elsewhere** (home + other category sidebars): SSR all children, then set `data-or-subjects-popular="10"`; `home.js` trims to top 10 by bestseller **title** mix. GraphQL fail → leave full SSR list.
 - **Alignment:** centered below two-column layout; left-aligned from `medium` (1024) when sidebar is a column.
 
 ## Next candidates (later chunks)

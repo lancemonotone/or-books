@@ -4,7 +4,6 @@
     "category": {
       "authors.html": ["/authors/", "/authors/h/"],
       "single-author.html": ["/authors/h/theodore-hamm/"],
-      "merchandise.html": ["/merchandise/"],
       "booksellers.html": ["/booksellers/"],
       "subsidiary-rights.html": ["/subsidiary-rights/"]
     },

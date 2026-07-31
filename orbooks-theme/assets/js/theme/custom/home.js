@@ -381,7 +381,8 @@ export default (function (context) {
   });
   }
 
-  // Home Catalog subjects: keep top N by bestseller product → category mix
+  // Catalog subjects: trim top N wherever data-or-subjects-popular is set
+  // (home + non–Catalog-tree category sidebars; Catalog tree keeps full SSR)
   orRankSubjectsByBestsellers(context);
 });
 
@@ -389,6 +390,7 @@ export default (function (context) {
  * Trim `.or-subjects-section[data-or-subjects-popular]` to top categories
  * by bestseller title mix (format SKUs often sit outside subject cats, so we
  * normalize names and score Catalog children). On failure, leave SSR list.
+ * Runs from global home.js on any page that includes the molecule.
  */
 function orRankSubjectsByBestsellers(context) {
   const root = document.querySelector('.or-subjects-section[data-or-subjects-popular]');

@@ -24,6 +24,7 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | 2.3 | `2.3-stop-squashing-media-list-images/` | `feature/wave1-2.3-media-list-images` | Complete locally; deploy with Wave 1 batch |
 | 2.4 | `2.4-scale-the-book-cover-on-mobile/` | `feature/wave1-2.4-scale-book-cover-mobile` | Complete locally; deploy with Wave 1 batch |
 | 2.5 | `2.5-make-headings-easier-to-tell-apart/` | `feature/wave1-2.5-headings-type-scale` | Shipped to main; quick-fix follow-up pending |
+| 2.6 | `2.6-left-align-paragraphs/` | `feature/wave1-2.6-left-align-paragraphs` | Complete locally; deploy with Wave 1 batch |
 
 ## Theme rollback archives
 

@@ -1,13 +1,28 @@
 {{!--
-  Molecule: Subjects nav — Catalog children as text list (full list, no accordion).
-  @param variant {String} "home" | "category"
-    Both: Catalog section head (See all → /catalog/) + full SSR list
-    home — also data-or-subjects-popular so home.js trims to top 10
-    category — full list kept (e.g. /catalog/ sidebar)
+  Molecule: Subjects nav — Catalog children as text list (full list SSR, no accordion).
+  One markup path for home + category sidebars.
+
+  Full list: current page is Catalog root OR a Catalog child (children.is_active).
+  Popular trim: everywhere else — data-or-subjects-popular so home.js ranks top 10
+  by bestseller title mix. GraphQL fail → full SSR list stays.
 --}}
+{{assignVar "or_subjects_mode" "popular"}}
+{{#if category.name '===' 'Catalog'}}
+    {{assignVar "or_subjects_mode" "full"}}
+{{/if}}
+{{#each categories}}
+    {{#if name '===' 'Catalog'}}
+        {{#each children}}
+            {{#if is_active}}
+                {{assignVar "or_subjects_mode" "full"}}
+            {{/if}}
+        {{/each}}
+    {{/if}}
+{{/each}}
+
 <div
     class="or-section or-subjects-section"
-    {{#if variant '===' 'home'}}data-or-subjects-popular="10"{{/if}}
+    {{#if (getVar "or_subjects_mode") '===' 'popular'}}data-or-subjects-popular="10"{{/if}}
 >
     {{> components/orbooks/section-head
         title="Catalog"
