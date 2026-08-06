@@ -24,7 +24,7 @@
         justify-content: flex-end;
       }
       .custom-sidebar {
-        display: block;
+        // display from .or-flow (flex + gap) — do not set block here
         order: 2;
         @include medium {
           order: 1;

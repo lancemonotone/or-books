@@ -1,10 +1,13 @@
 {
+  "normalStoreUrlProd": "https://www.orbooks.com",
+  "normalStoreUrlStage": "https://orbooks.mybigcommerce.com",
+  "normalStoreUrl": "https://www.orbooks.com",
+  "port": 3000,
+  "packageManager": "npm",
   "customLayouts": {
     "brand": {},
     "category": {
-      "category-no-sidebar-3.html": [
-        "/India-list/"
-      ],
+      "category-no-sidebar-3.html": ["/India-list/"],
       "authors.html": [
         "/authors/",
         "/authors/0-9/",
@@ -241,12 +244,8 @@
         "/authors/z/slavoj-zizek/",
         "/gary-younge/"
       ],
-      "booksellers.html": [
-        "/booksellers/"
-      ],
-      "categroy-no-sidebar.html": [
-        "/imprints/evergreen/"
-      ],
+      "booksellers.html": ["/booksellers/"],
+      "categroy-no-sidebar.html": ["/imprints/evergreen/"],
       "category-no-sidebar-2.html": [
         "/imprints/serif/",
         "/or-shorts-subscription/",
@@ -260,31 +259,15 @@
         "/imprints/serif/travel-reportage/",
         "/zines/"
       ],
-      "reading-list.html": [
-        "/or-partners-and-imprints/",
-        "/reading-lists/"
-      ],
-      "subsidiary-rights.html": [
-        "/subsidiary-rights/"
-      ]
+      "reading-list.html": ["/or-partners-and-imprints/", "/reading-lists/"],
+      "subsidiary-rights.html": ["/subsidiary-rights/"]
     },
     "page": {
-      "about.html": [
-        "/about/"
-      ],
-      "videos.html": [
-        "/videos/"
-      ],
-      "new-events.html": [
-        "/events/"
-      ],
-      "events.html": [
-        "/past-events/"
-      ]
+      "about.html": ["/about/"],
+      "videos.html": ["/videos/"],
+      "new-events.html": ["/events/"],
+      "events.html": ["/past-events/"]
     },
     "product": {}
-  },
-  "normalStoreUrl": "https://www.orbooks.com",
-  "port": 3000,
-  "packageManager": "npm"
+  }
 }
