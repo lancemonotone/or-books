@@ -53,7 +53,7 @@
 | 7 | Push current theme to staging | done |
 | 8 | Theme settings + homepage IDs | done — New=`111`, Sale=`112` (Page Builder) |
 | 9 | Custom template associations | partial — authors + about/past-events |
-| 10 | Menus, carousel, odds & ends | partial — header/footer destinations audited; `/faq/` created |
+| 10 | Menus, carousel, odds & ends | partial — header/footer audited; `/faq/` created; hero carousel copied from prod (2026-08-13) |
 
 | 11 | Verification checklist | pending |
 | 12 | Point local Stencil at staging (ongoing) | ongoing |
@@ -96,7 +96,10 @@ Do **not** rediscover. Full API/WebDAV notes: `docs/agents/bigcommerce-catalog-a
 
 ### Theme settings (Step 8)
 
-- Homepage category/product IDs: **Page Builder only**. Themes API is GET + validate — no public write.
+- Homepage category/product IDs differ per store (prod `322`/`323`, staging `111`/`112`).
+- **Committed `config.json` always uses prod IDs.**
+- **Agents own the swap** — not the human: `node scripts/apply-homepage-ids-for-staging.js` before staging local/push, then `git restore orbooks-theme/config.json`. Never commit staging IDs; never push them to prod.
+- Why “Theme Editor after push” used to matter: a staging push with **prod** IDs in the bundle resets the store’s theme settings to `322`/`323` and breaks rails. Prefer apply→push→restore so the staging bundle already has `111`/`112`.
 
 ### Header / footer (Step 10)
 
@@ -453,6 +456,7 @@ Append short notes as steps complete (date, who, blockers).
 | 2026-08-13 | 10 | Header/footer are theme-hardcoded. Audit: only `/faq/` 404’d → copied from prod (id 13). `/videos/` associated `videos.html`. |
 | 2026-08-13 | 5 | About sidebar: copied `/job-openings-internships/` (14), `/privacy-policy-guidelines/` (15), `/internships/` (16). All 200. |
 | 2026-08-13 | 3 | Retry 207 FAIL SKUs: 203 created. Mamdani at `/catalog/meet-mayor-mamdani/`. Stage 1711 vs prod 1715 (4 empty-cat SKUs skipped). |
+| 2026-08-13 | 10 | Hero carousel: uploaded 5 prod slides onto staging Home Page Carousel; links pointed at staging URLs (+ Spotify). |
 
 ---
 

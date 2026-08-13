@@ -15,6 +15,16 @@ When working under `orbooks-theme/`, read **`docs/agents/stencil-theme.md`** fir
 - Store URL = storefront homepage (`https://www.orbooks.com`), not the API `/v3/` path.
 - This theme is **not** Briefboard (`app/`). Prefer separate git repo; do not mix theme dumps into Briefboard history without an explicit user decision.
 
+## Homepage category IDs (agent-owned — do not ask the human)
+
+Committed `config.json` = **prod** IDs (`new=322`, `sale=323`). Staging = `111` / `112`.
+
+- Staging local or **staging push**: `node scripts/apply-homepage-ids-for-staging.js` → do work / push → `git restore orbooks-theme/config.json`
+- **Prod push**: never apply staging IDs; restore first if dirty
+- Never commit staging IDs into `config.json`
+
+Full note: `docs/agents/stencil-theme.md` → **Homepage category IDs**.
+
 ## Local customLayouts (do not rediscover)
 
 Production template associations are **not** imported by `stencil pull` / `download`. Local map = `config.stencil.json` → `customLayouts`.

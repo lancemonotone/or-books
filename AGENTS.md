@@ -13,6 +13,7 @@ Default five labels (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for
 Local theme at `orbooks-theme/` (orbooks.com storefront). CLI, secrets, sync/push, font cutover, **local custom template mapping (`config.stencil.json`)**: `docs/agents/stencil-theme.md`. Cursor rule: `.cursor/rules/stencil-theme.mdc` (applies when editing theme files).
 
 - Refresh local `customLayouts` (full URL map, including authors): `cd orbooks-theme && node scripts/harvest-custom-layouts.js --apply` — regenerable dump `customLayouts.from-api.json`; do not hand-edit bulk author paths.
+- **Homepage category IDs:** committed `config.json` = prod (`322`/`323`). Staging (`111`/`112`) via gitignored `config.homepage-ids.stage.json`. Agents apply before staging local/push, then `git restore orbooks-theme/config.json`. Never push staging IDs to prod. See `docs/agents/stencil-theme.md`.
 
 ### BigCommerce Catalog / Content API + WebDAV
 

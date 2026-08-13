@@ -3,6 +3,7 @@ node_modules/
 
 orbooks-theme/secrets.*.json
 !orbooks-theme/secrets.catalog.example.json
+orbooks-theme/config.homepage-ids.stage.json
 orbooks-theme/assets/dist/
 
 # Briefboard Agent API token (local only; see .cursor/secrets.briefboard.example.json)
