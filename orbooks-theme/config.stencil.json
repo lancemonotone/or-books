@@ -1,7 +1,7 @@
 {
   "normalStoreUrlProd": "https://www.orbooks.com",
   "normalStoreUrlStage": "https://orbooks.mybigcommerce.com",
-  "normalStoreUrl": "https://www.orbooks.com",
+  "normalStoreUrl": "https://orbooks.mybigcommerce.com",
   "port": 3000,
   "packageManager": "npm",
   "customLayouts": {
