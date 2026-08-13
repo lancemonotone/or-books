@@ -1,6 +1,7 @@
 // Molecule: .or-newsletter — shared mailing-list panel
 // Home: .percentage-main (form) uses same shell.
 // Sidebar CTAs: .or-newsletter.or-newsletter--cta (title + .or-btn-block → external list).
+// Imported after typography.scss so offer/heading type wins over bare h*.
 // Do not restyle in page SCSS.
 
 .or-newsletter,
@@ -10,6 +11,9 @@
   --or-newsletter-pad-block: 1.25rem;
   --or-newsletter-pad-inline: 1rem;
   --or-newsletter-gap: 0.75rem;
+  --or-newsletter-offer-size: 1.5rem;
+  --or-newsletter-label-size: 1.125rem;
+  --or-newsletter-row-align: stretch;
 
   background-color: var(--or-newsletter-bg);
   border-radius: var(--or-newsletter-radius);
@@ -18,14 +22,42 @@
   text-align: center;
 
   @media (min-width: 768px) {
-    // --or-newsletter-pad-block: 2.5rem;
-    // --or-newsletter-pad-inline: 1.5625rem;
+    // Tighter than live (40–80px) — keep panel compact on the page
+    --or-newsletter-pad-block: 1.5rem;
+    --or-newsletter-pad-inline: 1.5rem;
+    --or-newsletter-row-align: flex-start;
     text-align: start;
   }
 
   @media (min-width: 1024px) {
-    // --or-newsletter-pad-block: 3.75rem;
-    // --or-newsletter-pad-inline: 3.75rem;
+    --or-newsletter-pad-block: 1.75rem;
+    --or-newsletter-pad-inline: 1.75rem;
+    --or-newsletter-offer-size: 2.125rem;
+    --or-newsletter-label-size: 1.25rem;
+  }
+}
+
+// Home “Get N% off” + subscribe row
+.percentage-main {
+  @media (min-width: 768px) {
+    align-items: var(--or-newsletter-row-align);
+  }
+
+  & .perc-left h3 {
+    margin: 0;
+    font-size: var(--or-newsletter-offer-size);
+    font-weight: 700;
+    line-height: 1.15;
+    text-transform: none;
+    color: #333;
+  }
+
+  & .perc-right .footer-info-heading {
+    margin: 0;
+    font-size: var(--or-newsletter-label-size);
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: none;
   }
 }
 

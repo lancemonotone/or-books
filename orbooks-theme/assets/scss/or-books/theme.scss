@@ -12,7 +12,6 @@
 @import "pdp";
 @import "sidebar";
 @import "buttons";
-@import "newsletter";
 @import "subjects";
 @import "section";
 @import "section-head";
@@ -24,3 +23,6 @@
 
 // Last: sole body + heading type source
 @import "typography";
+
+// After typography so .or-newsletter / .percentage-main can lock their own type
+@import "newsletter";

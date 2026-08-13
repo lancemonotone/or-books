@@ -659,6 +659,7 @@
   .percentage-main {
     @include medium {
       display: flex;
+      justify-content: space-evenly;
     }
     @include xlarge {
       margin-top: 25px;
