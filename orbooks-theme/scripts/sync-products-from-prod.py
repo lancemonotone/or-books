@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import time
 from pathlib import Path
@@ -23,6 +24,7 @@ import requests
 ROOT = Path(__file__).resolve().parents[1]
 OFFICE = ROOT.parent / "_office" / "staging-prod-migration"
 STATE_PATH = OFFICE / "product-sync-state.json"
+LOG_PATH = OFFICE / "product-sync-log.txt"
 secrets = json.loads((ROOT / "secrets.catalog.json").read_text(encoding="utf-8"))
 PROD, STAGE = secrets["prod"], secrets["stage"]
 
@@ -123,6 +125,24 @@ def product_key(p):
         return ("sku", sku)
     url = ((p.get("custom_url") or {}).get("url") or "").strip()
     return ("url", url or f"id:{p.get('id')}")
+
+
+def load_fail_keys(path):
+    """Parse FAIL lines from a prior sync log into product_key tuples."""
+    keys = set()
+    if not path.exists():
+        raise FileNotFoundError(f"fail log not found: {path}")
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if "FAIL " not in line:
+            continue
+        m = re.search(r"sku:(\S+?)(?:\s+via=|:)", line)
+        if m:
+            keys.add(("sku", m.group(1).rstrip(":")))
+            continue
+        m = re.search(r"url:(\S+?)(?:\s+via=|:)", line)
+        if m:
+            keys.add(("url", m.group(1).rstrip(":")))
+    return keys
 
 
 def load_categories(store):
@@ -371,6 +391,9 @@ def build_product_body(prod, stage_cat_ids, stage_brand_id):
         cfs.append({"name": name, "value": cf.get("value") or ""})
     if cfs:
         body["custom_fields"] = cfs
+    # omit empty categories — POST rejects []
+    if not stage_cat_ids:
+        body.pop("categories", None)
     # images on create
     images = []
     for i, img in enumerate(prod.get("images") or []):
@@ -449,8 +472,18 @@ def main():
     ap.add_argument("--resume", action="store_true", help="Skip keys in state done_keys")
     ap.add_argument("--limit", type=int, default=0, help="Max prod products to process")
     ap.add_argument("--skip-delete", action="store_true", help="Do not delete stage-only products")
+    ap.add_argument(
+        "--retry-fails",
+        nargs="?",
+        const=str(LOG_PATH),
+        help="Only retry SKUs/URLs from a prior FAIL log (default: product-sync-log.txt). Implies --skip-delete.",
+    )
     args = ap.parse_args()
     dry = args.dry_run
+    retry_keys = load_fail_keys(Path(args.retry_fails)) if args.retry_fails else None
+    if retry_keys is not None:
+        args.skip_delete = True
+        print(f"=== retry-fails keys={len(retry_keys)} from {args.retry_fails} ===", flush=True)
 
     print("=== load categories / brands ===", flush=True)
     prod_by_url, prod_by_id = load_categories(PROD)
@@ -524,8 +557,9 @@ def main():
     def apply_update(pid, prod, body):
         put_body = {k: v for k, v in body.items() if k not in ("images", "custom_fields")}
         code, data = req(STAGE, "PUT", f"/catalog/products/{pid}", body=put_body)
-        if code == 409 and "sku" in str(data):
-            put_body.pop("sku", None)
+        if code == 409 and "sku" in str(data).lower():
+            for k in ("sku", "upc", "gtin", "mpn"):
+                put_body.pop(k, None)
             code, data = req(STAGE, "PUT", f"/catalog/products/{pid}", body=put_body)
         if code == 409 and "custom_url" in str(data):
             put_body.pop("custom_url", None)
@@ -560,6 +594,8 @@ def main():
         key = product_key(prod)
         seen_prod_keys.add(key)
         key_s = f"{key[0]}:{key[1]}"
+        if retry_keys is not None and key not in retry_keys:
+            continue
         if args.resume and key in done:
             stats["skip_done"] += 1
             existing, _how = find_existing(prod)
@@ -579,6 +615,12 @@ def main():
 
         body = build_product_body(prod, stage_cat_ids, brand_id)
         existing, how = find_existing(prod)
+        url_s = ((prod.get("custom_url") or {}).get("url") or "")
+        if "mamdani" in url_s.lower() or "mamdani" in (prod.get("name") or "").lower():
+            print(
+                f"  mamdani {key_s} url={url_s} existing={how} cats={len(stage_cat_ids)}",
+                flush=True,
+            )
 
         if dry:
             if existing:
@@ -597,6 +639,7 @@ def main():
                 if code not in (200, 201):
                     print(f"  FAIL update {key_s} via={how}: {code} {data}", flush=True)
                     stats["fail"] += 1
+                    seen_stage_ids.add(pid)
                     continue
                 seen_stage_ids.add(pid)
                 # keep indexes in sync if sku/url changed
@@ -610,6 +653,16 @@ def main():
                     code, data = req(STAGE, "POST", "/catalog/products", body=body2)
                     if code in (200, 201) and data.get("data"):
                         sync_images(data["data"]["id"], prod.get("images") or [])
+                if code == 409 and "sku" in str(data).lower():
+                    body_nosku = {
+                        k: v
+                        for k, v in body.items()
+                        if k not in ("sku", "upc", "gtin", "mpn", "images")
+                    }
+                    code, data = req(STAGE, "POST", "/catalog/products", body=body_nosku)
+                    if code in (200, 201) and data.get("data"):
+                        sync_images(data["data"]["id"], prod.get("images") or [])
+                        print(f"  create without sku {key_s} -> id={data['data']['id']}", flush=True)
                 # URL already owned by a stage product we didn't index by this SKU
                 if code == 409 and "URL" in str(data):
                     u = ((prod.get("custom_url") or {}).get("url") or "").strip()

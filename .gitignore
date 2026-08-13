@@ -15,3 +15,4 @@ briefboard/
 # Staging to Prod migration
 _office/staging-prod-migration/product-sync-log.txt
 _office/staging-prod-migration/product-sync-state.json
+_office/staging-prod-migration/product-sync-retry-log.txt

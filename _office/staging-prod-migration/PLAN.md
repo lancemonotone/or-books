@@ -46,14 +46,15 @@
 | 0 | Prep & decisions | done |
 | 1 | Wipe / clear staging catalog | skipped — Strategy B upsert instead of wipe |
 | 2 | Export products from production | superseded — CSV exported; live path is Catalog API |
-| 3 | Import products into staging | in progress — `sync-products-from-prod.py` |
+| 3 | Import products into staging | done — 1711/1715; 4 leftover have empty cats on prod |
 | 4 | WebDAV Image Manager assets | partial — blog thumbs for author posts |
 | 5 | Web pages (critical set) | partial — `/about/` + `/past-events/` exist + templates |
 | 6 | Blog posts (if home Latest News needs them) | partial — author-tagged posts copied; many unpublished |
 | 7 | Push current theme to staging | done |
 | 8 | Theme settings + homepage IDs | done — New=`111`, Sale=`112` (Page Builder) |
 | 9 | Custom template associations | partial — authors + about/past-events |
-| 10 | Menus, carousel, odds & ends | pending |
+| 10 | Menus, carousel, odds & ends | partial — header/footer destinations audited; `/faq/` created |
+
 | 11 | Verification checklist | pending |
 | 12 | Point local Stencil at staging (ongoing) | ongoing |
 
@@ -72,7 +73,9 @@ Do **not** rediscover. Full API/WebDAV notes: `docs/agents/bigcommerce-catalog-a
 - **Do not wipe** if stage already has books. **Strategy B:** upsert by **SKU**, then by **`custom_url` path**. SKU-only → 409 “URL is a duplicate” and skipped books.
 - Create missing category paths (parents first) and brands by name. **409 duplicate name** → reuse existing sibling/brand (same name, different URL is normal).
 - Images: prod CDN `url_zoom` / `url_standard` as `image_url`. Prod stays live so staging can fetch.
-- Script: `python scripts/sync-products-from-prod.py` (`--dry-run`, `--resume`).
+- Script: `python scripts/sync-products-from-prod.py` (`--dry-run`, `--resume`, `--retry-fails`).
+- 409 SKU duplicate: omit sku/upc/gtin/mpn and retry; never orphan-delete a product that failed mid-update (that dropped Mamdani).
+- `--retry-fails` re-creates SKUs from the FAIL log. Skip-delete implied.
 
 ### Pages vs theme (Step 5)
 
@@ -94,6 +97,11 @@ Do **not** rediscover. Full API/WebDAV notes: `docs/agents/bigcommerce-catalog-a
 ### Theme settings (Step 8)
 
 - Homepage category/product IDs: **Page Builder only**. Themes API is GET + validate — no public write.
+
+### Header / footer (Step 10)
+
+- Links are **hardcoded in the theme** (`navigation-menu.html`, `footer-navigation.html`). Not a BC channel-menu copy.
+- Audit = hit those URLs on staging. Fix missing **pages/categories**, not rewrite nav HTML.
 
 ---
 
@@ -442,9 +450,12 @@ Append short notes as steps complete (date, who, blockers).
 | 2026-08-12 | 1–3 | Strategy B approved (upsert, no wipe). Script `sync-products-from-prod.py`. SKU-only match failed 409 URL dupes → match SKU then URL |
 | 2026-08-12 | 6+9 | Authors tree + `sync-author-page-content.py` (products into author cats + tagged blog). Many blog copies unpublished |
 | 2026-08-13 | 5+9 | `/about/` (id 11, visible) + `/past-events/` (id 12, hidden like prod) + template associations `about.html` / `events.html` |
+| 2026-08-13 | 10 | Header/footer are theme-hardcoded. Audit: only `/faq/` 404’d → copied from prod (id 13). `/videos/` associated `videos.html`. |
+| 2026-08-13 | 5 | About sidebar: copied `/job-openings-internships/` (14), `/privacy-policy-guidelines/` (15), `/internships/` (16). All 200. |
+| 2026-08-13 | 3 | Retry 207 FAIL SKUs: 203 created. Mamdani at `/catalog/meet-mayor-mamdani/`. Stage 1711 vs prod 1715 (4 empty-cat SKUs skipped). |
 
 ---
 
 ## Next action
 
-**Step 3 in progress** — finish `sync-products-from-prod.py` (SKU then URL). Then verify product counts vs prod (~1714). Pages About/Past Events already wired; menus (Step 10) still later.
+Product catalog close enough. Header/footer destinations work. Menus themselves need no BC menu rebuild.
