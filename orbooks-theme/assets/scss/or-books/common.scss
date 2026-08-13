@@ -1567,55 +1567,6 @@ body.custom {
         }
       }
 
-      .pagetext {
-        margin-top: 30px;
-        margin-bottom: 35px;
-
-        @include xlarge {
-          margin-bottom: 40px;
-        }
-
-        @include xxlarge {
-          margin-top: 35px;
-          margin-bottom: 70px;
-        }
-
-        p {
-          @include hc-400;
-          color: $color-greyDarkest;
-          font-size: 16px;
-          margin: 0 0 14px;
-          // text-align: typography.scss (bare p → start)
-
-          @include xxsmall {
-            margin: 0 0 16px;
-          }
-
-          @include medium {
-            font-size: 16px;
-            margin: 0 0 16px;
-          }
-
-          @include xlarge {
-            font-size: 18px;
-            margin: 0 0 20px;
-          }
-
-          @include xxlarge {
-            font-size: 25px;
-          }
-
-          span {
-            @include hc-700;
-            display: block;
-
-            @include medium {
-              display: inline-block;
-            }
-          }
-        }
-      }
-
       .cntslider {
         margin-top: 20px;
 
