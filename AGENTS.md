@@ -14,6 +14,14 @@ Local theme at `orbooks-theme/` (orbooks.com storefront). CLI, secrets, sync/pus
 
 - Refresh local `customLayouts` (full URL map, including authors): `cd orbooks-theme && node scripts/harvest-custom-layouts.js --apply` — regenerable dump `customLayouts.from-api.json`; do not hand-edit bulk author paths.
 
+### BigCommerce Catalog / Content API + WebDAV
+
+Management API tokens + WebDAV (blog thumbs, Image Manager files, category images): `docs/agents/bigcommerce-catalog-api.md`.
+
+- Secrets: `orbooks-theme/secrets.catalog.json` (gitignored); example `orbooks-theme/secrets.catalog.example.json`
+- WebDAV requires **HTTP Digest** auth (Basic → 401). Password from **Settings → File Access (WebDAV)**, not store login.
+- Staging ← prod catalog playbook + verified methods: `_office/staging-prod-migration/PLAN.md` (Lessons). Product upsert: `orbooks-theme/scripts/sync-products-from-prod.py`.
+
 ### Briefboard Agent API
 
 Live board: `https://lancemonotone.com/or-books/app/` — docs `API.md`, endpoint `api/agent.php`.

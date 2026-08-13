@@ -26,6 +26,7 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | 2.5 | `2.5-make-headings-easier-to-tell-apart/` | `feature/wave1-2.5-headings-type-scale` | Shipped to main; quick-fix follow-up pending |
 | 2.6 | `2.6-left-align-paragraphs/` | `feature/wave1-2.6-left-align-paragraphs` | Complete locally; deploy with Wave 1 batch |
 | 2.7 | `2.7-shorten-news-bylines-on-mobile/` | `fix/wave1-2.7-news-byline-date-only` | Complete locally; deploy with Wave 1 batch |
+| — | `staging-prod-migration/` | — | DIY staging ← prod data transfer (`PLAN.md`) |
 
 ## Theme rollback archives
 
