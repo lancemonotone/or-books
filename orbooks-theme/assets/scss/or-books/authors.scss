@@ -210,7 +210,12 @@
         }
       }
       .card-body {
-        padding: 0;      }
+        --or-card-body-pad-block-start: 1.9375rem; // prod image → name (~31px)
+
+        padding: 0;
+        padding-block-start: var(--or-card-body-pad-block-start);
+        text-align: center;
+      }
       &:hover {
         box-shadow: none;
         .card-img-container {
