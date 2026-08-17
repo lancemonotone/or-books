@@ -299,6 +299,26 @@ h6 {
   }
 }
 
+// Homepage carousel intro — sentence case; quote bold, attribution italic, mission regular
+.statix-text {
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    text-transform: none;
+  }
+
+  & h4 {
+    font-weight: 400;
+  }
+
+  & span {
+    font-style: italic;
+  }
+}
+
 // Card / container headings follow the container’s text-align contract
 // (not productView — those use the naked heading center→768 contract)
 .event-details,

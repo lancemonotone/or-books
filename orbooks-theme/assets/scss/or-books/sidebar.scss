@@ -1,1 +1,13 @@
+// =============================================================================
+// OR Books — sidebar column
+// =============================================================================
+// Shared chrome for page sidebars (home, catalog, about, events, …).
+// 2.1 staging look-see: hairline only (wash lost behind Featured Title cover).
+// PDP image gallery reuses .custom-sidebar — exclude it.
+// =============================================================================
 
+.custom-sidebar:not(.productView-images) {
+  @media (min-width: 1024px) {
+    border-inline-end: 1px solid $color-greyLightest;
+  }
+}
