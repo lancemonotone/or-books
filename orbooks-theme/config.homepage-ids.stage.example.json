@@ -1,5 +1,5 @@
 {
   "new_category_id": "111",
   "sale_category_id": "112",
-  "_comment": "Staging store category IDs for home rails (New Releases / Bestsellers). Copy to config.homepage-ids.stage.json (gitignored) and run: node scripts/apply-homepage-ids-for-staging.js. Before commit or any stencil push: git restore orbooks-theme/config.json"
+  "_comment": "Staging store category IDs for home rails (New Releases / Bestsellers). Copy to config.homepage-ids.stage.json (gitignored) and run: node scripts/apply-homepage-ids.js staging. After staging push, or before prod push: node scripts/apply-homepage-ids.js prod"
 }
