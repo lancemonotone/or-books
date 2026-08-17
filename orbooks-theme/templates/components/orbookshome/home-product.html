@@ -51,41 +51,31 @@
             </div>
         </figure>
     <section class="productView-details product-data">
-        <div class="productView-product">
-            {{!-- Same stack as product cards: h4 title → subtitle → author --}}
-            <h4 class="productView-title card-title">
-                <a class="card-title-name" href="{{product.url}}">
-                    {{product.title}}
-                </a>
-            </h4>
-            <div class="sub-productView-title card-category">
-                {{#each product.custom_fields}}
-                    {{#if name '===' 'sub-heading'}}
+        <h4 class="productView-title card-title">
+            <a class="card-title-name" href="{{product.url}}">
+                {{product.title}}
+            </a>
+        </h4>
+        {{#each product.custom_fields}}
+            {{#if name '===' 'sub-heading'}}
+                <div class="sub-productView-title card-category">
                     <div class="productView-info-name">{{name}}:</div>
                     <div class="card-category-name productView-info-value">{{{value}}}</div>
-                    {{/if}}
-                {{/each}}
-            </div>
-            {{#each product.custom_fields}}
-                {{#if name '===' 'Author'}}
-                    <div class="card-text productView-brand">{{{value}}}</div>
+                </div>
+            {{/if}}
+        {{/each}}
+        {{#each product.custom_fields}}
+            {{#if name '===' 'Author'}}
+                <div class="card-text productView-brand">{{{value}}}</div>
+            {{/if}}
+        {{/each}}
+        {{#each product.custom_fields}}
+            {{#if name '===' 'Short Description'}}
+                {{#if value}}
+                    <p>{{{value}}}</p>
                 {{/if}}
-            {{/each}}
-            
-        </div>
-        <div>
-            
-        </div>
-            <div class="pdp-content">
-                {{#each product.custom_fields}}
-                    {{#if name '===' 'Short Description'}}
-                        {{#if value}}
-                            <p>{{{value}}}</p>
-                        {{/if}}
-                    {{/if}}
-                {{/each}}
-                <a href="{{product.url}}" class="button button--primary or-btn or-btn-block">Read More</a>
-            </div>
-        </div>
+            {{/if}}
+        {{/each}}
+        <a href="{{product.url}}" class="button button--primary or-btn or-btn-block">Read More</a>
     </section>
 </div>

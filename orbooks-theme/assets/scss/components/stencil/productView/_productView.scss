@@ -178,38 +178,37 @@
 // -----------------------------------------------------------------------------
 
 .productView-info {
-  @include clearfix;
-  margin-top: spacing("half");
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: spacing("quarter");
+  row-gap: spacing("eighth");
+  margin-block-start: spacing("half");
+  margin-block-end: 0;
 
   @include breakpoint("small") {
-    margin-top: 0;
+    grid-template-columns: minmax(0, 1fr);
+    margin-block-start: 0;
+    row-gap: spacing("base");
   }
 
   > :first-child {
     @include breakpoint("small") {
-      margin-top: spacing("single");
+      margin-block-start: spacing("single");
     }
   }
 
-  > :last-child {
-    margin-bottom: 0;
+  .sub-measurement,
+  .productView-info-bulkPricing {
+    grid-column: 1 / -1;
   }
 }
 
 .productView-info-name,
 .productView-info-value {
-  float: left;
-
-  @include breakpoint("small") {
-    float: none;
-  }
+  margin: 0;
 }
 
 .productView-info-name {
-  clear: both;
-  margin-bottom: spacing("eighth");
-  margin-right: spacing("quarter");
-
   @include breakpoint("small") {
     font-family: fontFamily("headingSans");
     font-size: fontSize("smallest");
@@ -218,11 +217,7 @@
 }
 
 .productView-info-value {
-  margin-bottom: spacing("quarter");
-
-  @include breakpoint("small") {
-    margin-bottom: spacing("base");
-  }
+  margin-inline-start: 0;
 }
 
 // Details - Product options

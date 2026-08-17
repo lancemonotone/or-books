@@ -3,6 +3,7 @@
 // =============================================================================
 // Layout for `.top-product .productView` (home sidebar + category featured).
 // Type: typography.scss (bare h*) + .or-btn. Do not reintroduce heading stairs here.
+// Stack rhythm: one `--or-featured-gap` on grid (cover + details + meta/CTA).
 // =============================================================================
 
 .top-product {
@@ -18,27 +19,31 @@
   }
 
   .productView {
+    --or-featured-gap: 0.75rem;
+
+    display: grid;
+    gap: var(--or-featured-gap);
     margin: 0;
     padding: 0;
 
-    .mobile-featured {
-      display: none;
-      margin: 0 0 1.5625rem;
-      text-align: center;
+    @media (min-width: 768px) {
+      --or-featured-gap: 1rem;
+    }
 
-      .home-page & {
-        display: block;
+    @media (min-width: 1024px) {
+      --or-featured-gap: 1.25rem;
+    }
 
-        @media (min-width: 1024px) {
-          display: none;
-        }
-      }
+    // Direct kids AND nested (e.g. .productView-info-value inside subtitle)
+    * {
+      margin-block: 0;
     }
 
     .productView-image {
       pointer-events: visible;
       inline-size: 100%;
       max-inline-size: 180px;
+      margin-inline: auto;
 
       .productView-img-container {
         img {
@@ -52,103 +57,28 @@
     }
 
     .productView-details {
+      display: grid;
+      gap: var(--or-featured-gap);
       inline-size: 100%;
-      order: 2;
       padding: 0;
-      margin-block-start: 1.375rem;
+      // Beat Cornerstone `.product-data { order: -1 }` (PDP mobile: text before images)
+      order: 0;
       text-align: center;
 
       @media (min-width: 768px) {
         text-align: start;
       }
 
-      @media (min-width: 1024px) {
-        margin-block-start: 0.9375rem;
+      & .productView-brand {
+        @include hc-700;
       }
 
-      @media (min-width: 1440px) {
-        margin-block-start: 1.25rem;
-        padding-inline: 0;
-      }
-
-      @include xxlarge {
-        margin-block-start: 1.375rem;
-        padding-inline: 0;
-      }
-    }
-
-    .productView-product {
-      border: none;
-      padding-block-end: 0.7rem;
-
-      @media (min-width: 1024px) {
-        padding-block-end: 1.7rem;
-      }
-
-      @include xxlarge {
-        padding-block-end: 2.2rem;
-      }
-
-      .desktop-featured {
-        display: none;
-        margin-block-end: 0.625rem;
-        color: #454545;
-        font-size: 1rem;
-        @include hc-400;
-
-        @media (min-width: 768px) {
-          font-size: 1rem;
-          margin-block-end: 0.9375rem;
-        }
-
-        @media (min-width: 1024px) {
-          display: block;
-        }
-
-        @include xlarge {
-          font-size: 1.125rem;
-        }
-      }
-
-      // Meta type: common.scss (.card-category-name / .card-text)
-      .card-title {
-        margin-block: 0 0.5rem;
-      }
-
-      > p {
-        margin-block-end: 0.625rem;
-
-        @media (min-width: 768px) {
-          margin-block-end: 0.9375rem;
-        }
-      }
-
-      .sub-productView-title {
+      & .sub-productView-title {
         display: flex;
-        margin-block-end: 0.8125rem;
-
-        @media (min-width: 1024px) {
-          margin-block-end: 1.5rem;
-        }
-
-        @include xxlarge {
-          margin-block-end: 1.875rem;
-        }
 
         .productView-info-name {
           display: none;
         }
-      }
-
-      .productView-brand.card-text {
-        margin-block-end: 0;
-      }
-    }
-
-    .pdp-content {
-      p {
-        margin-block: 0 0.75rem;
-        margin-inline: 0;
       }
     }
   }
