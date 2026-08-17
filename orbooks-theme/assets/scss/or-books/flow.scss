@@ -7,7 +7,7 @@
 // Still later: category/CMS/blog/product main columns (`.page-content` / `.page` / `.pdp-js`).
 
 .or-flow {
-  --or-flow-gap-main: 2.5rem;
+  --or-flow-gap-main: 1.25rem;
   --or-flow-gap-sidebar: 2.5rem;
   --or-flow-gap: var(--or-flow-gap-main);
 
@@ -17,12 +17,12 @@
   gap: var(--or-flow-gap);
 
   @media (min-width: 768px) {
-    --or-flow-gap-main: 2.75rem;
+    --or-flow-gap-main: 1.375rem;
     --or-flow-gap-sidebar: 2.75rem;
   }
 
   @media (min-width: 1024px) {
-    --or-flow-gap-main: 3rem;
+    --or-flow-gap-main: 1.5rem;
     --or-flow-gap-sidebar: 3rem;
   }
 

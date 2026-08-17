@@ -98,7 +98,7 @@ Do **not** rediscover. Full API/WebDAV notes: `docs/agents/bigcommerce-catalog-a
 
 - Homepage category/product IDs differ per store (prod `322`/`323`, staging `111`/`112`).
 - **Committed `config.json` always uses prod IDs.**
-- **Agents own the swap** — not the human: `node scripts/apply-homepage-ids.js staging` before staging local/push, then `node scripts/apply-homepage-ids.js prod`. Never commit staging IDs; never push them to prod.
+- **Agents own the swap** — not the human: `node scripts/apply-homepage-ids.js staging` before staging local/push, then `node scripts/apply-homepage-ids.js prod`. Never commit staging IDs (`111`/`112`/`1792`); never push them to prod.
 - Why “Theme Editor after push” used to matter: a staging push with **prod** IDs in the bundle resets the store’s theme settings to `322`/`323` and breaks rails. Prefer apply→push→restore so the staging bundle already has `111`/`112`.
 
 ### Header / footer (Step 10)

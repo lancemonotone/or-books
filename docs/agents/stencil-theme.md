@@ -191,30 +191,30 @@ stencil push -c 1          # push to channel ID 1 (multi-storefront)
 
 Useful flags: `-s theme.zip` (save zip), `-S` (source maps), `-vb` (verbose).
 
-### Homepage category IDs (staging vs prod) — **agent-owned**
+### Homepage / Featured Title IDs (staging vs prod) — **agent-owned**
 
-Home rails use `new_category_id` / `sale_category_id` in `config.json`. Those IDs differ per store.
+Home rails use `new_category_id` / `sale_category_id` in `config.json`. Featured Title uses `sidebar_product_id`. Those IDs differ per store.
 
-| Store | New Releases | Bestsellers |
-|-------|--------------|-------------|
-| Prod | `322` | `323` |
-| Staging | `111` | `112` |
+| Store | New Releases | Bestsellers | Featured Title |
+|-------|--------------|-------------|----------------|
+| Prod | `322` | `323` | `166` |
+| Staging | `111` | `112` | `1792` |
 
 **Committed `config.json` always stays on prod IDs.** Staging IDs are gitignored: `config.homepage-ids.stage.json` (example committed).
 
 **Agents (not the human) must** (from `orbooks-theme/`):
 
 ```bash
-node scripts/apply-homepage-ids.js staging   # patch 111/112
-node scripts/apply-homepage-ids.js prod      # git restore config.json → 322/323
+node scripts/apply-homepage-ids.js staging   # patch 111/112/1792
+node scripts/apply-homepage-ids.js prod      # git restore config.json → 322/323/166
 ```
 
-1. **Local `stencil start` against staging** → `staging` so rails work; leave working tree dirty for IDs only, or run `prod` when done.
-2. **`stencil push` to staging** → `staging` → push/activate → **immediately** `prod`. Do **not** ask the human to re-save Theme Editor if the push used `111`/`112`.
-3. **`stencil push` to prod** → `prod` first. Never push `111`/`112` to prod.
+1. **Local `stencil start` against staging** → `staging` so rails and Featured Title work; leave working tree dirty for IDs only, or run `prod` when done.
+2. **`stencil push` to staging** → `staging` → push/activate → **immediately** `prod`. Do **not** ask the human to re-save Theme Editor if the push used staging IDs.
+3. **`stencil push` to prod** → `prod` first. Never push `111` / `112` / `1792` to prod.
 4. **Never commit** staging IDs into `config.json`.
 
-Why push overwrites store settings: the theme bundle includes `config.json`. Activating that theme loads those IDs into the store’s theme settings. Pushing prod IDs to staging breaks rails until staging IDs are applied again (via a staging-ID push or Theme Editor). Prefer staging → push → prod.
+Why push overwrites store settings: the theme bundle includes `config.json`. Activating that theme loads those IDs into the store’s theme settings. Pushing prod IDs to staging breaks rails / Featured Title until staging IDs are applied again (via a staging-ID push or Theme Editor). Prefer staging → push → prod.
 
 ### Init (rare after first setup)
 

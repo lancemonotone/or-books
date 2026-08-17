@@ -77,7 +77,13 @@
             
         </div>
             <div class="pdp-content">
-                <p>{{{ellipsis product.description 250}}}</p>
+                {{#each product.custom_fields}}
+                    {{#if name '===' 'Short Description'}}
+                        {{#if value}}
+                            <p>{{{value}}}</p>
+                        {{/if}}
+                    {{/if}}
+                {{/each}}
                 <a href="{{product.url}}" class="button button--primary or-btn or-btn-block">Read More</a>
             </div>
         </div>

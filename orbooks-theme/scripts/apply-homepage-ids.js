@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Set homepage rail category IDs for the target store.
+ * Set store-specific theme IDs for the target store (home rails + Featured Title).
  *
  * Usage (from orbooks-theme/):
  *   node scripts/apply-homepage-ids.js staging
@@ -21,19 +21,29 @@ const stageIdsPath = path.join(themeRoot, 'config.homepage-ids.stage.json');
 const examplePath = path.join(themeRoot, 'config.homepage-ids.stage.example.json');
 const PROD_NEW = '322';
 const PROD_SALE = '323';
+const PROD_SIDEBAR = '166';
+const ID_KEYS = ['new_category_id', 'sale_category_id', 'sidebar_product_id'];
 
 const target = (process.argv[2] || '').toLowerCase();
 
-function usage(exitCode = 1) {
+function usage() {
   console.error('Usage: node scripts/apply-homepage-ids.js <staging|prod>');
-  process.exit(exitCode);
+  process.exit(1);
 }
 
 function readConfigIds(config) {
+  const settings = config.settings || {};
   return {
-    newId: String((config.settings && config.settings.new_category_id) || ''),
-    saleId: String((config.settings && config.settings.sale_category_id) || ''),
+    newId: String(settings.new_category_id || ''),
+    saleId: String(settings.sale_category_id || ''),
+    sidebarId: String(settings.sidebar_product_id || ''),
   };
+}
+
+function writeIds(settings, ids) {
+  ID_KEYS.forEach((key) => {
+    settings[key] = ids[key];
+  });
 }
 
 function applyStaging() {
@@ -46,26 +56,28 @@ function applyStaging() {
     process.exit(1);
   }
 
-  const ids = JSON.parse(fs.readFileSync(stageIdsPath, 'utf8'));
-  const newId = String(ids.new_category_id || '');
-  const saleId = String(ids.sale_category_id || '');
-  if (!newId || !saleId) {
-    console.error('config.homepage-ids.stage.json needs new_category_id and sale_category_id');
+  const raw = JSON.parse(fs.readFileSync(stageIdsPath, 'utf8'));
+  const ids = {};
+  ID_KEYS.forEach((key) => {
+    ids[key] = String(raw[key] || '');
+  });
+  if (ID_KEYS.some((key) => !ids[key])) {
+    console.error('config.homepage-ids.stage.json needs new_category_id, sale_category_id, sidebar_product_id');
     process.exit(1);
   }
 
   const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-  config.settings.new_category_id = newId;
-  config.settings.sale_category_id = saleId;
+  writeIds(config.settings, ids);
 
   const light = (config.variations || []).find((v) => v.name === 'Light');
   if (light && light.settings) {
-    light.settings.new_category_id = newId;
-    light.settings.sale_category_id = saleId;
+    writeIds(light.settings, ids);
   }
 
   fs.writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`);
-  console.log(`Applied staging homepage IDs to config.json: new=${newId} sale=${saleId}`);
+  console.log(
+    `Applied staging IDs to config.json: new=${ids.new_category_id} sale=${ids.sale_category_id} sidebar=${ids.sidebar_product_id}`
+  );
   console.log('Local only. After staging push, or before prod push:');
   console.log('  node scripts/apply-homepage-ids.js prod');
 }
@@ -82,10 +94,14 @@ function applyProd() {
   }
 
   const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-  const { newId, saleId } = readConfigIds(config);
-  console.log(`Restored config.json to committed homepage IDs: new=${newId} sale=${saleId}`);
-  if (newId !== PROD_NEW || saleId !== PROD_SALE) {
-    console.error(`Expected prod IDs new=${PROD_NEW} sale=${PROD_SALE}. Do not push to prod.`);
+  const { newId, saleId, sidebarId } = readConfigIds(config);
+  console.log(
+    `Restored config.json to committed IDs: new=${newId} sale=${saleId} sidebar=${sidebarId}`
+  );
+  if (newId !== PROD_NEW || saleId !== PROD_SALE || sidebarId !== PROD_SIDEBAR) {
+    console.error(
+      `Expected prod IDs new=${PROD_NEW} sale=${PROD_SALE} sidebar=${PROD_SIDEBAR}. Do not push to prod.`
+    );
     process.exit(1);
   }
 }
@@ -95,5 +111,5 @@ if (target === 'staging') {
 } else if (target === 'prod') {
   applyProd();
 } else {
-  usage(1);
+  usage();
 }

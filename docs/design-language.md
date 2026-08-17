@@ -53,8 +53,8 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Home:** Wired on `.custom-sidebar` + `.custom-content` — **separate** gap tokens for sidebar vs main (replaces per-block `margin-top` one-offs).
 - **Sidebars:** Wired on home, category, about, events, booksellers, subsidiary-rights, single-author, PDP left column.
 - **Wire later on:** category `.page-content`, CMS `.page` / `.page-content`, product `.pdp-js`, blog `.page`.
-- **Gap tokens (main):** `--or-flow-gap-main` — `2.5rem` → `2.75rem` (768) → `3rem` (1024).
-- **Gap tokens (sidebar):** `--or-flow-gap-sidebar` — same stair until set independently. `or-flow-tight` / `or-flow-loose` still override `--or-flow-gap` on that column.
+- **Gap tokens (main):** `--or-flow-gap-main` — `1.25rem` → `1.375rem` (768) → `1.5rem` (1024).
+- **Gap tokens (sidebar):** `--or-flow-gap-sidebar` — `2.5rem` → `2.75rem` (768) → `3rem` (1024). `or-flow-tight` / `or-flow-loose` still override `--or-flow-gap` on that column.
 
 ## Organism: Section (`.or-section`)
 

@@ -30,14 +30,14 @@ blog:
 <div class="main full home-page">
     <div class="home-main">
         <div class="custom-sidebar stickthis or-flow" id="stickthis">
-            {{#unless theme_settings.home_subject}}
-                {{> components/orbookshome/subject_sidebar}}
-            {{/unless}}
-
             {{#unless theme_settings.home_product}}
             <div class="top-product main-loader">
                 {{> components/orbooks/pre-loading}}
             </div>
+            {{/unless}}
+
+            {{#unless theme_settings.home_subject}}
+                {{> components/orbookshome/subject_sidebar}}
             {{/unless}}
 
             {{#unless theme_settings.home_latest_news}}

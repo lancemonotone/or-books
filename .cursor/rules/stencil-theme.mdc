@@ -15,15 +15,15 @@ When working under `orbooks-theme/`, read **`docs/agents/stencil-theme.md`** fir
 - Store URL = storefront homepage (`https://www.orbooks.com`), not the API `/v3/` path.
 - This theme is **not** Briefboard (`app/`). Prefer separate git repo; do not mix theme dumps into Briefboard history without an explicit user decision.
 
-## Homepage category IDs (agent-owned — do not ask the human)
+## Homepage / Featured Title IDs (agent-owned — do not ask the human)
 
-Committed `config.json` = **prod** IDs (`new=322`, `sale=323`). Staging = `111` / `112`.
+Committed `config.json` = **prod** IDs (`new=322`, `sale=323`, `sidebar_product_id=166`). Staging = `111` / `112` / Featured Title `1792`.
 
 - Staging local or **staging push**: `node scripts/apply-homepage-ids.js staging` → do work / push → `node scripts/apply-homepage-ids.js prod`
-- **Prod push**: `node scripts/apply-homepage-ids.js prod` first (restores committed IDs). Never push `111`/`112`
+- **Prod push**: `node scripts/apply-homepage-ids.js prod` first (restores committed IDs). Never push `111` / `112` / `1792`
 - Never commit staging IDs into `config.json`
 
-Full note: `docs/agents/stencil-theme.md` → **Homepage category IDs**.
+Full note: `docs/agents/stencil-theme.md` → **Homepage / Featured Title IDs**.
 
 ## Local customLayouts (do not rediscover)
 
@@ -47,7 +47,7 @@ stencil bundle
 stencil push          # upload only
 stencil push -a       # upload + activate
 node scripts/harvest-custom-layouts.js --apply   # refresh local customLayouts
-node scripts/apply-homepage-ids.js staging       # patch home rail IDs for staging
+node scripts/apply-homepage-ids.js staging       # patch home rail + Featured Title IDs for staging
 node scripts/apply-homepage-ids.js prod          # restore committed prod IDs
 ```
 
