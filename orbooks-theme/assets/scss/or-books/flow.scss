@@ -7,7 +7,9 @@
 // Still later: category/CMS/blog/product main columns (`.page-content` / `.page` / `.pdp-js`).
 
 .or-flow {
-  --or-flow-gap: 2.5rem;
+  --or-flow-gap-main: 2.5rem;
+  --or-flow-gap-sidebar: 2.5rem;
+  --or-flow-gap: var(--or-flow-gap-main);
 
   display: flex;
   flex-direction: column;
@@ -15,11 +17,13 @@
   gap: var(--or-flow-gap);
 
   @media (min-width: 768px) {
-    --or-flow-gap: 2.75rem;
+    --or-flow-gap-main: 2.75rem;
+    --or-flow-gap-sidebar: 2.75rem;
   }
 
   @media (min-width: 1024px) {
-    --or-flow-gap: 3rem;
+    --or-flow-gap-main: 3rem;
+    --or-flow-gap-sidebar: 3rem;
   }
 
   // Gap owns rhythm between direct children
@@ -35,9 +39,18 @@
 }
 
 // Beat leftover page-file margin one-offs + keep flex from .or-flow
-.custom-content.or-flow,
+.custom-content.or-flow {
+  --or-flow-gap: var(--or-flow-gap-main);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .custom-sidebar.or-flow,
 .page-sidebar.or-flow {
+  --or-flow-gap: var(--or-flow-gap-sidebar);
+
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -51,7 +64,7 @@
   margin-block: 0;
 }
 
-.or-flow-tight {
+.or-flow.or-flow-tight {
   --or-flow-gap: 0.75rem;
 
   @media (min-width: 768px) {
@@ -63,7 +76,7 @@
   }
 }
 
-.or-flow-loose {
+.or-flow.or-flow-loose {
   --or-flow-gap: 1.75rem;
 
   @media (min-width: 768px) {

@@ -18,7 +18,7 @@
 {{#unless theme_settings.view_catalog}}
 <div class="catalog-main">
     {{#if theme_settings.catalog_text}}
-        <a href="{{theme_settings.catalog_link}}">{{theme_settings.catalog_text}}</a>
+        <a class="button button--default or-btn or-btn-block" href="{{theme_settings.catalog_link}}">{{theme_settings.catalog_text}}</a>
     {{/if}}
 </div>
 {{/unless}}
@@ -26,7 +26,7 @@
 {{#unless theme_settings.need_ordering}}
 <div class="order-main">
     {{#if theme_settings.ordering_text}}
-        <a href="{{theme_settings.ordering_link}}">{{theme_settings.ordering_text}}</a>
+        <a class="button button--default or-btn or-btn-block" href="{{theme_settings.ordering_link}}">{{theme_settings.ordering_text}}</a>
     {{/if}}
 </div>
 {{/unless}}

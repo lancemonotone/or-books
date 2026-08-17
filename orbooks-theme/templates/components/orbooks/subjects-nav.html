@@ -25,10 +25,10 @@
     {{#if (getVar "or_subjects_mode") '===' 'popular'}}data-or-subjects-popular="10"{{/if}}
 >
     {{> components/orbooks/section-head
-        title="Catalog"
+        title="Subjects"
         url="/catalog/"
     }}
-    <nav class="or-subjects" aria-label="Catalog subjects">
+    <nav class="or-subjects" aria-label="Subjects">
         <ul class="or-subjects-list">
             {{#each categories}}
                 {{#if name '===' 'Catalog'}}

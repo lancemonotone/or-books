@@ -1,6 +1,6 @@
 // Atom: .or-btn — OR Books button type (design language)
-// Markup: class="button button--primary or-btn" (+ or-btn-block | or-btn-sm)
-// Keep BigCommerce `.button` / `.button--primary` for Theme Editor colors.
+// Markup: class="button button--primary|button--default or-btn" (+ or-btn-block | or-btn-sm)
+// Keep BigCommerce `.button` / `.button--primary` / `.button--default` for Theme Editor colors.
 // Vertical center: fixed block-size + matching line-height, padding-block 0.
 // Do not restyle in page SCSS — layout wrappers only.
 
@@ -30,6 +30,24 @@
     &:hover,
     &:focus {
         letter-spacing: var(--or-btn-letter-spacing);
+    }
+
+    // Outline: rest = primary hover grey; hover fills primary black/white
+    &.button--default {
+        background-color: transparent;
+        border-color: stencilColor("button--primary-backgroundColorHover");
+        color: stencilColor("button--primary-backgroundColorHover");
+        transition:
+            background-color 0.25s ease,
+            border-color 0.25s ease,
+            color 0.25s ease;
+
+        &:hover,
+        &:focus-visible {
+            background-color: stencilColor("button--primary-backgroundColor");
+            border-color: stencilColor("button--primary-backgroundColor");
+            color: stencilColor("button--primary-color");
+        }
     }
 
     // Fill parent up to cap; center when parent is wider

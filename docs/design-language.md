@@ -25,13 +25,15 @@ We do **not** need a full Storybook yet. Start by naming things in templates + S
 - **Classes:**
   - `or-btn` — one rule in `buttons.scss` (`.or-btn.button`): Condensed bold, uppercase, `--or-btn-max-inline: 25rem`
   - `or-btn-block` — modifier on same rule: fill parent up to cap, `margin-inline: auto`
-  - `or-btn-sm` — modifier: compact size tokens (section-head See all)
+  - `or-btn-sm` — compact size tokens (section-head See all)
+  - `button--default` (with `or-btn`) — outline in primary hover grey; hover fills primary black/white
 - **Do not** restyle `.or-btn` in page SCSS (`home`, `pdp`, `category`, …). Layout wrappers only.
-- **Keep** BigCommerce `button` / `button--primary` for Theme Editor colors.
+- **Keep** BigCommerce `button` / `button--primary` / `button--default` for Theme Editor colors.
 - **Convert later:** on any CTA you touch, add `or-btn` (and `or-btn-block` / `or-btn-sm` as needed). Example:
 
 ```html
 <a class="button button--primary or-btn or-btn-block" href="…">Label</a>
+<a class="button button--default or-btn or-btn-block" href="…">Label</a>
 ```
 
 Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
@@ -48,10 +50,11 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Styles:** `orbooks-theme/assets/scss/or-books/flow.scss`
 - **Job:** Column stack whose **gap** owns vertical spacing between direct children (margins zeroed on those children).
 - **Modifiers:** `or-flow-tight` · `or-flow-loose`
-- **Home:** Wired on `.custom-sidebar` + `.custom-content` — one responsive gap for main + sidebar strips (replaces per-block `margin-top` one-offs).
+- **Home:** Wired on `.custom-sidebar` + `.custom-content` — **separate** gap tokens for sidebar vs main (replaces per-block `margin-top` one-offs).
 - **Sidebars:** Wired on home, category, about, events, booksellers, subsidiary-rights, single-author, PDP left column.
 - **Wire later on:** category `.page-content`, CMS `.page` / `.page-content`, product `.pdp-js`, blog `.page`.
-- **Gap tokens:** `2.5rem` → `2.75rem` (768) → `3rem` (1024).
+- **Gap tokens (main):** `--or-flow-gap-main` — `2.5rem` → `2.75rem` (768) → `3rem` (1024).
+- **Gap tokens (sidebar):** `--or-flow-gap-sidebar` — same stair until set independently. `or-flow-tight` / `or-flow-loose` still override `--or-flow-gap` on that column.
 
 ## Organism: Section (`.or-section`)
 
@@ -86,7 +89,7 @@ Covered by the typography system above (not a separate utility class).
 - **Styles:** `orbooks-theme/assets/scss/or-books/section-head.scss` (layout only)
 - **Title type:** bare `h*` from `typography.scss`
 - **Job:** Plain title + **See all** link. **Same for every section** — whether or not a slider follows.
-- **CTA:** Only See all is a link (`button button--primary or-btn or-btn-sm`). Title is not linked.
+- **CTA:** Only See all is a link (`button button--default or-btn or-btn-sm`). Title is not linked.
 - **Omit `url`** when AJAX fills `data-or-section-head-pending` on the See all link.
 - **Never** includes carousel arrows.
 
@@ -112,7 +115,8 @@ Covered by the typography system above (not a separate utility class).
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/buttons.scss`
 - **Block CTA:** `.or-btn-block` — modifier on `.or-btn.button`; fill parent up to `--or-btn-max-inline` (25rem), centered. Font/padding size tokens may still use **container queries** on parent `.or-section` where needed.
-- **Compact:** `.or-btn-sm` for section-head See all.
+- **Compact:** `.or-btn-sm` — size tokens.
+- **Outline:** `.button--default` with `.or-btn` — rest = primary hover grey; hover = primary fill.
 
 ## Molecule: Subjects
 
@@ -126,7 +130,7 @@ Covered by the typography system above (not a separate utility class).
 
 - Text labels only (no icon grid).
 - No expand/collapse; no drop-shadow hover on links (underline / color only).
-- Head: **Catalog** + **See all** → `/catalog/`.
+- Head: **Subjects** + **See all** → `/catalog/`.
 - **Full SSR list** when the current page is Catalog root (`category.name === Catalog`) or a Catalog child (`children.is_active` in the Catalog tree). Detect via nav tree — subject URLs are inconsistent (`/catalog/…` vs e.g. `/fiction-poetry-literature/`).
 - **Elsewhere** (home + other category sidebars): SSR all children, then set `data-or-subjects-popular="10"`; `home.js` trims to top 10 by bestseller **title** mix. GraphQL fail → leave full SSR list.
 - **Alignment:** centered below two-column layout; left-aligned from `medium` (1024) when sidebar is a column.

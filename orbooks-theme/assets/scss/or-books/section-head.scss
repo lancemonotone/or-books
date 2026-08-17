@@ -66,10 +66,3 @@
         outline-offset: 2px;
     }
 }
-
-.or-section-head-cta.button--primary:hover,
-.or-section-head-cta.button--primary:focus-visible {
-    background-color: stencilColor("button--primary-backgroundColorHover");
-    border-color: stencilColor("button--primary-backgroundColorHover");
-    color: stencilColor("button--primary-color");
-}
