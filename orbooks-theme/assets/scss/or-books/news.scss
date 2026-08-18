@@ -130,10 +130,6 @@
                 width: 100%;
                 margin: 0;
                 max-width: 100%;
-
-                img {
-                    border-radius: 5px;
-                }
             }
         }
 
@@ -187,15 +183,11 @@
     }
 }
 
-// PDP / author “in the media” — square thumbs, 3-col cap (Latest News stays 4).
+// PDP / author “in the media” — 3-col cap (Latest News stays 4).
 .blog-list.custom-blog-list {
   & .blog {
     @media (min-width: 1024px) {
       --or-blog-cols: 3;
-    }
-
-    & .blog-thumbnail img {
-      border-radius: 0;
     }
   }
 }

@@ -54,10 +54,6 @@
         box-sizing: border-box;
     }
 
-    & .blog .blog-post-figure .blog-thumbnail img {
-        border-radius: 0;
-    }
-
     // Equal-height product cards: stretch slides → fill chain → pin quick-view
     // Markup: li.product.productCarousel-slide.slick-slide > article.card > .sub-card
     // Slick `float: left` breaks flex stretch; do not set height:100% on the slide itself
