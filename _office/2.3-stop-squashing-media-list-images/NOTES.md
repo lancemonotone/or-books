@@ -7,10 +7,10 @@
 | **Briefboard id** | `2.3` |
 | **taskKey** | `b57d706d-de6d-46d7-8e3f-6452f175c362` |
 | **Briefboard URL** | https://lancemonotone.com/or-books/app/?i=1#/task/b57d706d-de6d-46d7-8e3f-6452f175c362 |
-| **Branch** | `feature/wave1-2.3-media-list-images` |
+| **Branch** | `feature/wave1-2.3-media-list-images` merged → `staging` |
 | **Commits** | `a5d3a34` Stop squashing media-list thumbnails in In the media accordions |
-| **Deploy** | Local only until Wave 1 batch `stencil push` |
-| **Briefboard status** | Delivery comment posted; storefront pending Wave 1 push |
+| **Deploy** | On staging storefront. Not orbooks.com until they ship. |
+| **Briefboard status** | `blocked` — client approved 14 Aug 2026 (“great, can go live”). Nothing left on this card. |
 
 ## Client ask (original)
 
@@ -36,11 +36,11 @@ None for the squash fix. Author CSS tidy is extra hygiene on files already open 
 
 ## Client action needed
 
-- [ ] **Review** when Wave 1 batch is pushed — book or author page → **In the media**; compare list thumbs to the full article image.
+None. Approved for live when they ship.
 
 ## Verify
 
-Local: `stencil start` → author (e.g. Theodore Hamm) or product with media → expand **In the media**.
+Staging (or local): author (e.g. Theodore Hamm) or product with media → expand **In the media**.
 
 - Thumbnails are not vertically compressed.
 - Same image on `/news/…` article page matches list proportions (wide banners stay wide).
@@ -54,6 +54,4 @@ Local: `stencil start` → author (e.g. Theodore Hamm) or product with media →
 
 ## Related / follow-up
 
-- **2.4** — Scale book cover on mobile (separate).
-- **2.5** — Type scale / hierarchy (author bio blow-up + bare `h*` vs `.or-heading`); see `_office/2.5-make-headings-easier-to-tell-apart/NOTES.md`.
-- Home sidebar **Latest News** uses `.blog-list` without the removed rule; no change expected there.
+None for this card.
