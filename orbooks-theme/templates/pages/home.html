@@ -28,8 +28,8 @@ blog:
     {{/each}}
 
 <div class="main full home-page">
-    <div class="home-main">
-        <div class="custom-sidebar stickthis or-flow" id="stickthis">
+    <div class="home-main or-columns">
+        <aside class="custom-sidebar or-flow">
             {{#unless theme_settings.home_product}}
             <div class="top-product main-loader">
                 {{> components/orbooks/pre-loading}}
@@ -71,9 +71,9 @@ blog:
                 {{> components/orbooks/category-sidebar-image}}
             {{/if}}
             <div class="mobile-per">
-                {{> components/orbookshome/percentage}}
+                {{> components/orbooks/newsletter-stack}}
             </div>
-        </div>
+        </aside>
         <div class="custom-content or-flow">
             {{!-- Vertical rhythm: .or-flow gap (see docs/design-language.md) --}}
             <div class="statix-text">
@@ -118,7 +118,7 @@ blog:
         {{/if}}
     </div>
     {{/unless}}
-    {{> components/orbookshome/percentage}}
+    {{> components/orbooks/newsletter-stack}}
     <!--paige-->
     {{{region name="home_below_featured_products"}}}
     <!--paige-->

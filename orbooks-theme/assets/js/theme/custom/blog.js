@@ -10,6 +10,13 @@ export default (function (context) {
     return;
   }
 
+  function setMediaTabVisible(hasPosts) {
+    $list.closest(".accordion-tab").attr("hidden", hasPosts ? null : true);
+  }
+
+  // Empty shell must not show — hide until posts actually arrive.
+  setMediaTabVisible(false);
+
   const catename = $(".catename").first().text().trim();
   if (!catename) {
     return;
@@ -17,14 +24,11 @@ export default (function (context) {
 
   function graphqlquery(tag) {
     const query = `
-      query paginateProducts {
+      query BlogByTag($tags: [String!]) {
         site {
           content {
             blog {
-              posts(
-                after: ""
-                filters: { tags: "${tag}" }
-              ) {
+              posts(first: 50, filters: { tags: $tags }) {
                 edges {
                   node {
                     name
@@ -52,7 +56,10 @@ export default (function (context) {
       headers: {
         Authorization: `Bearer ${context.bearerToken}`,
       },
-      data: JSON.stringify({ query }),
+      data: JSON.stringify({
+        query,
+        variables: { tags: [tag] },
+      }),
     });
   }
 
@@ -108,6 +115,7 @@ export default (function (context) {
     .done((response) => {
       const posts = response?.data?.site?.content?.blog?.posts?.edges;
       if (!posts || !posts.length) {
+        setMediaTabVisible(false);
         return;
       }
       let htmlContent = "";
@@ -115,8 +123,9 @@ export default (function (context) {
         htmlContent += buildBlogPostHTML(post);
       });
       $list.html(htmlContent);
+      setMediaTabVisible(true);
     })
     .fail(() => {
-      // Fail fast: leave empty list; no invented posts
+      setMediaTabVisible(false);
     });
 });

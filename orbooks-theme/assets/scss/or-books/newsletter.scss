@@ -1,7 +1,5 @@
 // Molecule: .or-newsletter — shared mailing-list panel
-// Home: .percentage-main (form) uses same shell.
-// Sidebar CTAs: .or-newsletter.or-newsletter--cta (title + .or-btn-block → external list).
-// Imported after typography.scss so offer/heading type wins over bare h*.
+// Organism: .or-newsletter-stack — panel + catalog/help CTAs (.or-flow gap)
 // Do not restyle in page SCSS.
 
 .or-newsletter,
@@ -14,6 +12,8 @@
   --or-newsletter-offer-size: 1.5rem;
   --or-newsletter-label-size: 1.125rem;
   --or-newsletter-row-align: stretch;
+  --or-nl-input-inline: 10rem;
+  --or-nl-btn-inline: 6.75rem;
 
   background-color: var(--or-newsletter-bg);
   border-radius: var(--or-newsletter-radius);
@@ -22,10 +22,10 @@
   text-align: center;
 
   @media (min-width: 768px) {
-    // Tighter than live (40–80px) — keep panel compact on the page
     --or-newsletter-pad-block: 1.5rem;
     --or-newsletter-pad-inline: 1.5rem;
     --or-newsletter-row-align: flex-start;
+    --or-nl-input-inline: 20rem;
     text-align: start;
   }
 
@@ -37,10 +37,17 @@
   }
 }
 
-// Home “Get N% off” + subscribe row
+// Form signup row (home / catalog / about / …)
 .percentage-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-newsletter-gap);
+
   @media (min-width: 768px) {
-    align-items: var(--or-newsletter-row-align);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 
   & .perc-left h3 {
@@ -59,10 +66,63 @@
     line-height: 1.2;
     text-transform: none;
   }
+
+  & .news-main .form {
+    margin-block-start: 0.5rem;
+  }
+
+  & .form-field {
+    margin: 0;
+  }
+
+  & .form-prefixPostfix .form-input {
+    background-color: #e2e2e2;
+    border: none;
+    border-start-start-radius: 5px;
+    border-end-start-radius: 5px;
+    inline-size: var(--or-nl-input-inline);
+    block-size: 2.9rem;
+
+    &::placeholder {
+      color: rgba(101, 101, 101, 0.4);
+      font-family: $or-font-condensed;
+      font-weight: 400;
+      font-size: 1rem;
+    }
+  }
+
+  & .form-prefixPostfix .button {
+    border-radius: 5px;
+    margin: 0;
+    background: #313131;
+    color: $color-white;
+    font-family: $or-font-condensed;
+    font-weight: 700;
+    font-size: 1rem;
+    padding-block: 0.625rem;
+    padding-inline: 0;
+    max-block-size: 2.9rem;
+    max-inline-size: var(--or-nl-btn-inline);
+
+    @media (min-width: 1024px) {
+      --or-nl-btn-inline: 7.5rem;
+      padding-inline: 1.25rem;
+    }
+
+    &:hover {
+      background-color: #d2230e;
+      border-color: #d2230e;
+      letter-spacing: 0;
+    }
+  }
+}
+
+// Stack sits below listing when parent is not already .or-flow
+.custom-content:not(.or-flow) > .or-newsletter-stack {
+  margin-block-start: var(--or-flow-gap-main, 1.5rem);
 }
 
 // External subscribe (booksellers, rights, events) — title + button
-// Vertical spacing from parent .or-flow gap
 .or-newsletter.or-newsletter--cta {
   display: flex;
   flex-direction: column;

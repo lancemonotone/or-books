@@ -25,8 +25,8 @@ blog:
 
 {{{region name="category_below_header"}}}
 
-<div class="page single-author-page">
-    <aside class="page-sidebar custom-sidebar stickthis for-desk or-flow">
+<div class="page single-author-page or-columns">
+    <aside class="custom-sidebar or-flow for-desk">
         {{#if category.image}}
             {{> components/common/responsive-img
                 image=category.image
@@ -77,7 +77,7 @@ blog:
                     {{> components/category/product-listing}}
                 </div>
             </div>
-            <div class="accordion-tab">
+            <div class="accordion-tab" hidden>
                 <h3 class="accordion-title">in the media
                     <svg class="icon" aria-hidden="true">
                         <use href="#icon-chevron-down"/>
@@ -93,7 +93,7 @@ blog:
         {{{region name="category_below_content"}}}
 
 
-        {{> components/orbookshome/percentage}}
+        {{> components/orbooks/newsletter-stack}}
     </div>
 </div>
 

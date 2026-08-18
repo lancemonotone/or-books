@@ -72,27 +72,6 @@
   .productView {
     margin: 0;
 
-    .productView-details {
-      @include medium {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-
-      &.custom-content {
-        @include medium {
-          padding: 0 0 0 40px;
-        }
-        @include large {
-          padding: 0 0 0 80px;
-        }
-        @include xlarge {
-          padding: 0 0 0 120px;
-        }
-        @include xxlarge {
-          padding: 0 0 0 150px;
-        }
-      }
-    }
     .productView-images {
       order: 0;
     }
@@ -114,12 +93,6 @@
       }
     }
     .custom-sidebar {
-      @include medium {
-        padding-right: 0;
-      }
-      @include xxlarge {
-        padding-right: 0;
-      }
       .productView-images {
         // 2.4 — phones: keep cover from eating the first screenful; zoom still opens full size
         --or-pdp-cover-max-block: min(42vh, 17.5rem);
@@ -130,6 +103,7 @@
         width: 100%;
         float: none;
         margin: 0 auto 1.5rem;
+        flex-shrink: 0;
 
         @include small {
           --or-pdp-cover-max-block: none;
@@ -1059,11 +1033,7 @@
   }
 }
 
-// Related: no sticky / inner scrollbar; show desktop vs mobile placement only
-.related-sidebar.stickthis-pdp {
-  position: static;
-  height: auto;
-}
+// Related: desktop vs mobile placement only
 .related-sidebar {
   .card {
     width: 100%;

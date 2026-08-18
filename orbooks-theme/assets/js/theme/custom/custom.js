@@ -39,13 +39,6 @@ export default (function (context) {
   });
   // sidebar category toggle end
 
-  // in the media hide if no blog
-  setTimeout(function () {
-    console.log($('.blog-list .blog').children().length);
-    if ($('.blog-list .blog').children().length < 1) {
-      $('.blog-list').parents('.accordion-tab').css('display', 'none');
-    }
-  }, 2500);
   function searchresultclose() {
     $('.form-close').click(function () {
       $('.search-input').val('');

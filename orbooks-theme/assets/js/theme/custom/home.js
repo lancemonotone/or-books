@@ -291,9 +291,6 @@ export default (function (context) {
       }
     }, 100);
 
-    // PDP related sidebar (.stickthis-pdp): no sticky / inner scroll — full list scrolls with page
-    // Home/category .stickthis: no sticky / inner scroll — sidebar scrolls with page
-
     if ($(window).width() > 1024) {
       $('.navPages-container .navPages-list .navPages-item').mouseover(function () {
         $(this).children('.navPages-container  a.navPages-action.has-subMenu').addClass('is-open');

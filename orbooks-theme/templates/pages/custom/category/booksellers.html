@@ -18,8 +18,8 @@ category:
 {{#partial "page"}}
 {{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
 
-<div class="page book-seller">
-    <aside class="page-sidebar custom-sidebar stickthis or-flow" id="stickthis">
+<div class="page book-seller or-columns">
+    <aside class="custom-sidebar or-flow">
         <div class="reader-img">
             <a href="#"><img src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/female-reader-fr-letter.png" alt="img"></a>
         </div>
@@ -57,24 +57,6 @@ category:
         <div class="custom-list-product">
             {{> components/category/product-listing}}
         </div>
-        
-        {{#unless theme_settings.get_percentage}}
-            <div class="percentage-main">
-                <div class="perc-left">
-                    {{#if theme_settings.percentage_text}}
-                        <h3>Get <span>{{theme_settings.percentage_text}}</span> % off!</h3>
-                    {{/if}}
-                </div>
-                <div class="perc-right">
-                    <div class="news-main" data-section-type="newsletterSubscription">
-                        {{#if settings.show_newsletter_box}}
-                            {{> components/common/subscription-form}}
-                        {{/if}}
-                    </div>
-                </div>
-            </div>
-        {{/unless}}
-        
     </div>
 </div>
 {{/partial}}

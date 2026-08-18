@@ -1,6 +1,6 @@
 {{inject 'outOfStockDefaultMessage' (lang 'products.out_of_stock_default_message')}}
 
-<div class="productView"
+<div class="productView or-columns"
     {{#if settings.data_tag_enabled}}
     data-event-type="product"
     data-entity-id="{{product.id}}"
@@ -31,14 +31,14 @@
         {{/if}}
     {{/each}}
 
-    <section class="custom-sidebar or-flow">
+    <aside class="custom-sidebar or-flow">
         <div class="productView-images" data-image-gallery>  
 
             <ul class="slider-for slider productView-image" {{#if product.main_image}} itemprop="image" content="{{getImage product.main_image 'Orignal_size' (cdn theme_settings.default_image_product)}}"{{/if}} >
                 {{#each product.images}}
                     <li class="productView-thumbnail" data-image-gallery-main>
                         <a class="zoom" href="{{getImage this 'Original_size' (cdn ../theme_settings.default_image_product)}}" data-caption="{{this.alt}}">
-                            <img class="productView-image-slick lazyload" data-sizes="auto" src="{{cdn 'img/loading.svg'}}" data-src="{{getImage this 'product_size' (cdn ../theme_settings.default_image_product)}}"  title="{{this.alt}}" data-main-image>
+                            <img class="productView-image-slick" src="{{getImage this 'product_size' (cdn ../theme_settings.default_image_product)}}" title="{{this.alt}}" data-main-image>
                         </a>                    
                     </li>
                 {{/each}}
@@ -58,7 +58,7 @@
                 {{/each}}
             </ul>
         </div>
-        <div class="related-sidebar stickthis-pdp desktop-related-product">
+        <div class="related-sidebar desktop-related-product">
             {{#if product.related_products}}
                 <h2>{{lang 'products.related_title'}}</h2>
                 {{#each product.related_products}}
@@ -66,7 +66,7 @@
                 {{/each}}
             {{/if}}
         </div>
-    </section>
+    </aside>
 
     <section class="custom-content productView-details product-data">
         <div class="productView-product">
@@ -124,7 +124,7 @@
                         <span>{{lang 'products.reviews.link_to_review' total=product.num_reviews}}</span>
                     {{/if}}
                 {{/if}}
-                {{#if settings.show_product_reviews}}
+                {{#all settings.show_product_reviews theme_settings.show_product_reviews}}
                     <a href="{{product.url}}{{#if is_ajax}}#write_review{{/if}}"
                        class="productView-reviewLink productView-reviewLink--new"
                        {{#unless is_ajax}}data-reveal-id="modal-review-form"{{/unless}}
@@ -135,7 +135,7 @@
                     {{#unless is_ajax}}
                         {{> components/products/modals/writeReview}}
                     {{/unless}}
-                {{/if}}
+                {{/all}}
             </div>
             {{product.detail_messages}}
             <dl class="productView-info">

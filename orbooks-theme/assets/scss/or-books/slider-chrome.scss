@@ -47,10 +47,15 @@
         padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
     }
 
-    // 1px so slick overflow does not clip the button border
-    & .blog .read-btn {
+    // 1px so slick overflow does not clip the button / thumbnail border
+    & .blog .read-btn,
+    & .blog .blog-post-figure {
         padding-inline: 1px;
         box-sizing: border-box;
+    }
+
+    & .blog .blog-post-figure .blog-thumbnail img {
+        border-radius: 0;
     }
 
     // Equal-height product cards: stretch slides → fill chain → pin quick-view

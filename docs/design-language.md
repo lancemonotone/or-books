@@ -42,9 +42,26 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 ## Molecule: Newsletter (`.or-newsletter`)
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/newsletter.scss`
-- **Shell:** gray panel (`#f3f3f3`), shared with home `.percentage-main` (form signup).
+- **Shell:** gray panel (`#f3f3f3`), shared with `.percentage-main` (form signup).
 - **External CTA:** `.or-newsletter.or-newsletter--cta` + `.or-newsletter-title` + `.or-btn-block` (booksellers, rights, events).
-- **Do not** restyle in `category.scss` / `events.scss` / `home.scss`.
+- **Organism:** `.or-newsletter-stack.or-flow` — panel + catalog/help outline buttons. Partial: `components/orbooks/newsletter-stack.html`.
+- **Do not** restyle in `category.scss` / `events.scss` / `home.scss`. Home only hides the main-column stack below 1024 (sidebar `.mobile-per` shows it).
+
+## Layout: Two-column shell (`.or-columns`)
+
+- **Styles:** `orbooks-theme/assets/scss/or-books/sidebar.scss`
+- **Job:** Shared frame for OR Books two-column pages (26/74, hairline, equal gutter). Page-specific **inner** sidebar content stays unique.
+- **Markup:**
+
+```html
+<div class="… or-columns">
+  <aside class="custom-sidebar or-flow">…</aside>
+  <div class="custom-content">…</div>
+</div>
+```
+
+- **In:** home, catalog, booksellers, rights, events, about, author, book PDP.
+- **Out (permanent):** Search facets (`page-sidebar`), brand, account, Quick View, merchandise / no-sidebar templates.
 
 ## Layout: Vertical flow (`.or-flow`)
 

@@ -1,13 +1,39 @@
 // =============================================================================
 // OR Books — sidebar column
 // =============================================================================
-// Shared chrome for page sidebars (home, catalog, about, events, …).
-// Gutter is equal on both sides of the hairline (was 25/20, then scrollbar 10).
-// PDP image gallery reuses .custom-sidebar — exclude it.
+// Contract: parent.or-columns > aside.custom-sidebar + .custom-content
+// Search / Quick View are out — they never get .or-columns.
 // =============================================================================
 
-.custom-sidebar:not(.productView-images),
-.custom-sidebar:not(.productView-images) + .custom-content {
+.custom-sidebar {
+  container-type: inline-size;
+  container-name: or-narrow;
+  padding-inline: 0;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    width: 26%;
+    overflow: visible;
+    clear: inline-start;
+    float: inline-start;
+  }
+}
+
+.custom-content {
+  width: 100%;
+  padding: 0;
+
+  @media (min-width: 1024px) {
+    width: 74%;
+  }
+
+  .custom-page-cnt {
+    width: 100%;
+  }
+}
+
+.or-columns > .custom-sidebar,
+.or-columns > .custom-content {
   @media (min-width: 1024px) {
     --or-sidebar-gutter: 2.1875rem; // 35px
   }
@@ -17,14 +43,14 @@
   }
 }
 
-.custom-sidebar:not(.productView-images) {
+.or-columns > .custom-sidebar {
   @media (min-width: 1024px) {
     border-inline-end: 1px solid $color-greyLightest;
     padding-inline-end: var(--or-sidebar-gutter);
   }
 }
 
-.custom-sidebar:not(.productView-images) + .custom-content {
+.or-columns > .custom-content {
   @media (min-width: 1024px) {
     padding-inline-start: var(--or-sidebar-gutter);
   }

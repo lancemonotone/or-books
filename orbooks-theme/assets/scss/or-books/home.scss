@@ -51,13 +51,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 flex-direction: column;
-                .blog-post-figure {
-                  .blog-thumbnail {
-                    img {
-                      border-radius: 5px;
-                    }
-                  }
-                }
+                // Thumbnail radius + 1px clip inset: slider-chrome.scss
                 // Listing meta: news.scss + common.scss card stack
                 .blog-post-body {
                   text-align: center;
@@ -178,9 +172,6 @@
         .mobile-per {
           @include medium {
             display: none;
-          }
-          .percentage-main {
-            margin-top: 30px;
           }
         }
       }
@@ -648,24 +639,11 @@
       }
     }
   }
-  .percentage-main,
-  .catalog-main,
-  .order-main {
+  .or-newsletter-stack {
     display: none;
-    @include medium {
-      display: block;
-    }
-  }
-  .percentage-main {
-    @include medium {
+
+    @media (min-width: 1024px) {
       display: flex;
-      justify-content: space-evenly;
-    }
-    @include xlarge {
-      margin-top: 25px;
-    }
-    @include xxlarge {
-      margin-top: 40px;
     }
   }
 }

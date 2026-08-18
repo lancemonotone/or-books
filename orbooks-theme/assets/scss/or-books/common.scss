@@ -108,41 +108,7 @@ body.custom {
   color: $color-greyDarkest;
 }
 
-.custom-sidebar {
-  container-type: inline-size;
-  container-name: or-narrow;
-  padding-left: 0;
-  padding-right: 0;
-  width: 100%;
-
-  @include medium {
-    width: 26%;
-    overflow: visible;
-    clear: left;
-    float: left;
-  }
-}
-
-.custom-sidebar + .custom-content {
-  width: 100%;
-
-  @include medium {
-    width: 74%;
-  }
-}
-
 .custom-content {
-  width: 100%;
-  padding: 0;
-
-  @include medium {
-    width: 74%;
-  }
-
-  .custom-page-cnt {
-    width: 100%;
-  }
-
   &.no-sidebar {
     width: 100%;
     padding: 0;
@@ -160,27 +126,6 @@ body.custom {
 .merchandise-page {
   .custom-content {
     width: 100%;
-  }
-}
-
-.custom-sidebar {
-  &::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.25);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #3e3e3e;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
   }
 }
 
@@ -1321,7 +1266,7 @@ body.custom {
       flex-wrap: initial;
     }
 
-    .page-sidebar {
+    .custom-sidebar {
       padding-left: 0;
 
       @media screen and (max-width: 1022px) {
@@ -1390,7 +1335,7 @@ body.custom {
       }
     }
 
-    .page-right-cnt {
+    > .custom-content {
       margin-top: 25px;
 
       @include xxsmall {
@@ -1399,11 +1344,6 @@ body.custom {
 
       @include medium {
         margin-top: 0;
-        padding: 0 0 0 30px;
-      }
-
-      @include xxlarge {
-        padding: 0 55px 0 55px;
       }
       .slick-arrow {
         width: auto;
@@ -1573,97 +1513,6 @@ body.custom {
     width: 75%;
     padding-left: 70px;
     padding-right: 35px;
-  }
-}
-
-//percentage css — shell + offer type: newsletter.scss (.or-newsletter / .percentage-main)
-.percentage-main {
-  margin-block-start: 0.625rem;
-
-  @media (min-width: 768px) {
-    display: flex;
-    justify-content: space-between;
-    // Bottom-align offer with email input (not vertical center of whole form)
-    align-items: flex-start;
-    margin-block-start: 0;
-  }
-
-  .perc-right {
-    .news-main {
-      margin-top: 0;
-
-      @include medium {
-        margin-top: 0;
-      }
-
-      .form {
-        margin: 0.5rem 0 0;
-
-        @include xlarge {
-          margin: 0.5rem 0 0;
-        }
-
-        .form-field {
-          margin: 0;
-
-          .form-prefixPostfix {
-            .form-input {
-              background-color: #e2e2e2;
-              border-radius: 5px 0px 0px 5px;
-              border: none;
-              width: 10rem;
-              height: 2.9rem;
-
-              @include small {
-                width: 20rem;
-              }
-
-              @include xxlarge {
-                width: 23.8rem;
-              }
-
-              &::placeholder {
-                color: rgba(101, 101, 101, 0.4);
-                @include hc-400;
-                font-size: 16px;
-              }
-            }
-
-            .button {
-              border-radius: 5px;
-              margin: 0;
-              background: #313131;
-              font-size: 16px;
-              @include hc-700;
-              color: $color-white;
-              padding: 10px 0px;
-              max-height: 2.9rem;
-              max-width: 108px;
-
-              @include large {
-                padding: 10px 20px;
-              }
-
-              @include xlarge {
-                max-width: 120px;
-                padding: 10px 27px;
-              }
-
-              @include xxlarge {
-                padding: 10px 29px;
-                max-width: 125px;
-              }
-
-              &:hover {
-                background-color: #d2230e;
-                border-color: #d2230e;
-                letter-spacing: 0;
-              }
-            }
-          }
-        }
-      }
-    }
   }
 }
 
@@ -2097,14 +1946,6 @@ body.custom {
         color: $color-greyDarker;
       }
     }
-  }
-}
-
-// Sidebar: full height with page scroll (no inner scrollbar / sticky)
-.custom-sidebar {
-  &.stickthis {
-    position: static;
-    height: auto;
   }
 }
 

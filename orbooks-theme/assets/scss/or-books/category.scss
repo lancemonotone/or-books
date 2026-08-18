@@ -1,12 +1,22 @@
 .category-page {
+  // Listing grid: 2 → 3 across. Cornerstone `.productGrid` goes to 4 at 801px.
+  .or-columns .productGrid .product {
+    --or-cat-col-width: 50%;
+
+    inline-size: var(--or-cat-col-width);
+    width: var(--or-cat-col-width);
+
+    @media (min-width: 768px) {
+      --or-cat-col-width: 33.33%;
+    }
+  }
+
   .page {
     display: flex;
     flex-wrap: wrap;
     @include medium {
       display: flex;
       justify-content: flex-end;
-    }
-    .page-sidebar {
     }
     .custom-sidebar {
       order: 2;
@@ -28,6 +38,7 @@
   }
 }
 
+.custom-sidebar,
 .page-sidebar {
   .sidebarBlock {
     text-align: center;
@@ -514,7 +525,7 @@
         order: 2;
       }
     }
-    .page-sidebar {
+    .custom-sidebar {
       order: 2;
       @include medium {
         order: 1;
@@ -1518,13 +1529,6 @@
 .book-seller {
   .productGrid .card .product-desc {
     display: none;
-  }
-}
-
-.Rights-category,
-.Booksellers-category {
-  .percentage-main {
-    display: none !important;
   }
 }
 

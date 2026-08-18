@@ -287,7 +287,7 @@
 }
 .category-page {
   .single-author-page {
-    .page-sidebar.custom-sidebar {
+    .custom-sidebar {
       display: block;
       margin-bottom: 20px;
       text-align: center;
@@ -309,17 +309,8 @@
 
 .single-author-page {
   .page-content {
-    width: 100%;
     padding: 0;
-    @include medium {
-      width: 60%;
-    }
-    @include xxlarge {
-      width: 72%;
-    }
-    @include breakpoint(1900px) {
-      width: 74%;
-    }    .cat-desc {
+    .cat-desc {
       background-color: initial;
       padding: 20px 0 22px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.5);

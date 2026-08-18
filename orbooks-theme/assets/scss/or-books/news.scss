@@ -186,6 +186,20 @@
         }
     }
 }
+
+// PDP / author “in the media” — square thumbs, 3-col cap (Latest News stays 4).
+.blog-list.custom-blog-list {
+  & .blog {
+    @media (min-width: 1024px) {
+      --or-blog-cols: 3;
+    }
+
+    & .blog-thumbnail img {
+      border-radius: 0;
+    }
+  }
+}
+
 // Single blog post — figure + meta side-by-side from 768; body/share full width below
 .blog_post-page {
   .blog {

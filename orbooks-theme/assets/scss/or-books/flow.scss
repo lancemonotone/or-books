@@ -47,18 +47,21 @@
   align-items: stretch;
 }
 
-.custom-sidebar.or-flow,
-.page-sidebar.or-flow {
+.custom-sidebar.or-flow {
   --or-flow-gap: var(--or-flow-gap-sidebar);
 
   display: flex;
   flex-direction: column;
   align-items: stretch;
+
+  // Cover must not shrink when Related Interest fills the column.
+  > .productView-images {
+    flex-shrink: 0;
+  }
 }
 
 .custom-content.or-flow > *,
-.custom-sidebar.or-flow > *,
-.page-sidebar.or-flow > * {
+.custom-sidebar.or-flow > * {
   margin-top: 0;
   margin-bottom: 0;
   margin-block: 0;

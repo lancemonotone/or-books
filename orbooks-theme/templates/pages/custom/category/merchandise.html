@@ -34,22 +34,7 @@ category:
             {{> components/category/product-listing}}
         </div>
         
-        {{#unless theme_settings.get_percentage}}
-            <div class="percentage-main">
-                <div class="perc-left">
-                    {{#if theme_settings.percentage_text}}
-                        <h3>Get <span>{{theme_settings.percentage_text}}</span> % off!</h3>
-                    {{/if}}
-                </div>
-                <div class="perc-right">
-                    <div class="news-main" data-section-type="newsletterSubscription">
-                        {{#if settings.show_newsletter_box}}
-                            {{> components/common/subscription-form}}
-                        {{/if}}
-                    </div>
-                </div>
-            </div>
-        {{/unless}}
+        {{> components/orbooks/newsletter-stack}}
     </div>
 </div>
 {{/partial}}
