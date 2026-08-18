@@ -26,6 +26,7 @@ We do **not** need a full Storybook yet. Start by naming things in templates + S
   - `or-btn` — one rule in `buttons.scss` (`.or-btn.button`): Condensed bold, uppercase, `--or-btn-max-inline: 25rem`
   - `or-btn-block` — modifier on same rule: fill parent up to cap, `margin-inline: auto`
   - `or-btn-sm` — compact size tokens (section-head See all)
+  - `button--primary` (with `or-btn`) — fill black/white; hover inverts to white/black
   - `button--default` (with `or-btn`) — outline in primary hover grey; hover fills primary black/white
 - **Do not** restyle `.or-btn` in page SCSS (`home`, `pdp`, `category`, …). Layout wrappers only.
 - **Keep** BigCommerce `button` / `button--primary` / `button--default` for Theme Editor colors.
@@ -116,6 +117,7 @@ Covered by the typography system above (not a separate utility class).
 - **Styles:** `orbooks-theme/assets/scss/or-books/buttons.scss`
 - **Block CTA:** `.or-btn-block` — modifier on `.or-btn.button`; fill parent up to `--or-btn-max-inline` (25rem), centered. Font/padding size tokens may still use **container queries** on parent `.or-section` where needed.
 - **Compact:** `.or-btn-sm` — size tokens.
+- **Fill:** `.button--primary` with `.or-btn` — rest = primary fill; hover inverts to white/black.
 - **Outline:** `.button--default` with `.or-btn` — rest = primary hover grey; hover = primary fill.
 
 ## Molecule: Subjects

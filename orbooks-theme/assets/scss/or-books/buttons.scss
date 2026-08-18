@@ -27,9 +27,24 @@
     transform: none;
     @include hc-700;
 
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease;
+
     &:hover,
     &:focus {
         letter-spacing: var(--or-btn-letter-spacing);
+    }
+
+    // Fill hover: invert to white/black (mirror of outline hover)
+    &.button--primary {
+        &:hover,
+        &:focus-visible {
+            background-color: stencilColor("button--primary-color");
+            border-color: stencilColor("button--primary-backgroundColor");
+            color: stencilColor("button--primary-backgroundColor");
+        }
     }
 
     // Outline: rest = primary hover grey; hover fills primary black/white
@@ -37,10 +52,6 @@
         background-color: transparent;
         border-color: stencilColor("button--primary-backgroundColorHover");
         color: stencilColor("button--primary-backgroundColorHover");
-        transition:
-            background-color 0.25s ease,
-            border-color 0.25s ease,
-            color 0.25s ease;
 
         &:hover,
         &:focus-visible {

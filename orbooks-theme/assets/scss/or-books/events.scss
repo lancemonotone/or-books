@@ -28,15 +28,9 @@
 
   .custom-sidebar + .custom-content {
     inline-size: 100%;
-    padding: 0;
 
     @include medium {
       inline-size: 74%;
-      padding-inline-start: 3.75rem;
-    }
-
-    @include xxlarge {
-      padding-inline-start: 2.5rem;
     }
 
     .event-slider {

@@ -2,12 +2,30 @@
 // OR Books — sidebar column
 // =============================================================================
 // Shared chrome for page sidebars (home, catalog, about, events, …).
-// 2.1 staging look-see: hairline only (wash lost behind Featured Title cover).
+// Gutter is equal on both sides of the hairline (was 25/20, then scrollbar 10).
 // PDP image gallery reuses .custom-sidebar — exclude it.
 // =============================================================================
+
+.custom-sidebar:not(.productView-images),
+.custom-sidebar:not(.productView-images) + .custom-content {
+  @media (min-width: 1024px) {
+    --or-sidebar-gutter: 2.1875rem; // 35px
+  }
+
+  @media (min-width: 1700px) {
+    --or-sidebar-gutter: 3.75rem; // 60px
+  }
+}
 
 .custom-sidebar:not(.productView-images) {
   @media (min-width: 1024px) {
     border-inline-end: 1px solid $color-greyLightest;
+    padding-inline-end: var(--or-sidebar-gutter);
+  }
+}
+
+.custom-sidebar:not(.productView-images) + .custom-content {
+  @media (min-width: 1024px) {
+    padding-inline-start: var(--or-sidebar-gutter);
   }
 }

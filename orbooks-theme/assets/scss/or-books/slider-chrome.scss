@@ -42,9 +42,15 @@
         overflow: hidden;
     }
 
-    // Title/date clear of overlay arrows; Read Now uses .or-btn-block cap
+    // Title/date clear of overlay arrows; Read Now stays full-bleed
     & .blog .blog-post-body {
         padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
+    }
+
+    // 1px so slick overflow does not clip the button border
+    & .blog .read-btn {
+        padding-inline: 1px;
+        box-sizing: border-box;
     }
 
     // Equal-height product cards: stretch slides → fill chain → pin quick-view
