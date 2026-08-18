@@ -94,15 +94,15 @@
     }
     .custom-sidebar {
       .productView-images {
-        // 2.4 — phones: keep cover from eating the first screenful; zoom still opens full size
-        --or-pdp-cover-max-block: min(42vh, 17.5rem);
+        // 2.4 — phones: ~25% larger than first cap; title/subtitle/author still in first screen; zoom still full size
+        --or-pdp-cover-max-block: min(52.5vh, 21.875rem);
         --or-pdp-cover-max-inline: 100%;
 
         padding: 0;
         position: relative;
         width: 100%;
         float: none;
-        margin: 0 auto 1.5rem;
+        margin: 0 auto 0.75rem;
         flex-shrink: 0;
 
         @include small {
