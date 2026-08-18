@@ -1,4 +1,4 @@
-<h2>{{lang 'products.new' }}</h2>
+{{> components/orbooks/section-head title=(lang 'products.new')}}
 
 <ul class="productGrid productGrid--maxCol{{ columns }} productCarousel newprd" data-product-type="new" {{#if settings.data_tag_enabled}} data-list-name="New Products" {{/if}}>
     {{#each products}}

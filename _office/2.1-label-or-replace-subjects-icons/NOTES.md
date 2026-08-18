@@ -1,44 +1,69 @@
 # 2.1 — Label or Replace the Subjects icons
 
-Briefboard: Wave 1 task **2.1**  
-Live board: https://lancemonotone.com/or-books/app/?i=1#/task/280a567f-7694-47ee-8d72-402e68da199d  
-Branch work: `feature/wave1-2.1-subjects-icons` (local; not live on orbooks.com until Wave 1 batch push)
+<!-- Agent-oriented delivery memo. Not a build log. -->
 
-## Client ask (Antara)
+## Meta
 
-In-house imagery; remove SUBJECTS heading; subject list under a View More accordion [P1].
+| Field | Value |
+|-------|--------|
+| **Briefboard id** | `2.1` |
+| **taskKey** | `280a567f-7694-47ee-8d72-402e68da199d` |
+| **Briefboard URL** | https://lancemonotone.com/or-books/app/?i=2#/task/280a567f-7694-47ee-8d72-402e68da199d |
+| **Branch** | Merged to `staging` (`feature/sidebar-column-contract` FF). Earlier: `feature/wave1-2.1-subjects-icons`, `fix/wave1-2.1-subjects-catalog-head` |
+| **Commits** (this close-out) | `650990f` Subjects heading + outline See all · `cde5c8c` Featured Title first + Short Description · `bc7517a` Featured Title spacing · `586f7c9` carousel sentence case + sidebar hairline · `2d872d9` sidebar gutters · `a3be931` 26/74 column shell · `e24a40f` square news thumbs |
+| **Deploy** | On staging storefront (`orbooks.mybigcommerce.com`). Not orbooks.com until Wave 1 approval. |
+| **Briefboard status** | `blocked` — our work done; waiting on client. Reply posted 2026-08-18. |
 
-## What we shipped locally (and why)
+## Client ask (original)
 
-### Subjects → text list
+Icons-only Subjects; hard to tell categories. Card: labels or text. Antara [P1]: in-house imagery, drop the heading, list under a View More accordion.
 
-Replaced the icon grid with labeled subject links (same idea as the Fiction category sidebar). Dropped the SUBJECTS heading. Home **and** `/catalog/` sidebar use the shared **Catalog** section head (title + See all → `/catalog/`) above the list — not a block CTA under the list. Home list is trimmed to **10** subjects ranked by bestseller **title** mix (bestsellers are often format SKUs outside subject categories, so we normalize names and score Catalog children). **Full list** on Catalog root and Catalog subject pages (`children.is_active`). Other category sidebars that use the molecule get the same popular trim as home. GraphQL fail → full SSR list stays.
+Aug 14 (product notes; ignore live-vs-staging split): text names + **SUBJECTS** heading; quieter See all; Featured Title stays top + Read More from **Short Description**; carousel intro sentence case; sidebar divider or grey wash + restore gap; no inner scrollbar.
 
-Shared molecule: `orbooks-theme/templates/components/orbooks/subjects-nav.html` + `assets/scss/or-books/subjects.scss`. Section head: `section-head.html`. Ranking: `assets/js/theme/custom/home.js` (`orRankSubjectsByBestsellers`). Design notes: `docs/design-language.md`.
+## Delivered (final state)
 
-### Why the full list, not a View More accordion
+- Subjects are a labeled text list (no icon grid). Heading is **Subjects** (CSS uppercase). **See all** is a compact outline button → `/catalog/`.
+- Home list: 10 subjects ranked by bestseller title mix. Catalog root + subject pages: full list, current subject marked.
+- Featured Title is at the **top** of the home sidebar. Read More uses the **Short Description** custom field. Card spacing flattened.
+- Homepage carousel intro stays sentence case.
+- Sidebar: light hairline, original gutters (35px / 60px), scrolls with the page (no inner scrollbar). Same 26/74 shell on home, catalog, booksellers, rights, events, about, author, book PDP.
+- Empty **In the media** stays hidden. Latest News thumbs square; Read Now / thumb not clipped by Slick.
 
-The original problem was that people couldn’t tell what each subject was. Hiding names behind expand/collapse would keep that friction. Showing every subject as a plain link means one scroll, no extra tap to discover the list. If the open list feels too long, we can trim or regroup later — starting hidden didn’t match the goal.
+## Diverged from ask (if any)
 
-### Why Featured Title moved under Catalog
+| Original expectation | What we shipped | Why |
+|--------------------|-----------------|-----|
+| View More accordion | Open text list | Names behind expand/collapse repeats the original problem |
+| Drop the heading | **Subjects** heading | Later note asked for SUBJECTS, not Catalog |
+| In-house / typographic icons, first 5–6 on home | Not doing | Client never sent art; owner closed this out |
+| Grey wash on sidebar | Hairline only | She offered line or wash; line shipped |
 
-Catalog subjects are how people browse, so they come first in the sidebar (home + category/`/catalog/`). Featured Title is a promo for one book; it was competing for the top of the column. It now follows the subject list. Longer term: Featured Title as a hero in the main column (not decided / not done).
+## Client action needed
 
-### Why the sidebar no longer has its own scrollbar
+- [ ] Review on staging (Wave 1). Nothing to live until approval.
 
-The old sidebar locked to a short sticky box with an inner scroll. With a full subject list (plus Featured Title, news, etc.) that meant fighting a tiny scrollbar while the rest of the page scrolled separately. The column now grows with the page: one scroll shows everything.
+## Verify
 
-### Book detail: related column (same sticky kill)
+- Home sidebar: Featured Title first (Short Description + Read More), then Subjects + outline See all, hairline + gap.
+- `/catalog/` and a subject page: full subject list.
+- Book / author: In the media hidden when empty.
+- Latest News: square thumb, Read Now borders visible.
 
-Same pattern on product pages: the related/sidebar column used sticky/fixed positioning plus a JS scroll handler (`stickthis-pdp`) and custom scrollbar chrome. That pinned the column while the main product content scrolled separately. Removed the sticky/fixed CSS and the scroll handler so the related column scrolls with the page — one scroll, same idea as the home sidebar.
+## Theme archive (rollback)
 
-## Screenshots (local preview)
+| Kind | Location |
+|------|----------|
+| Pre-change theme files | `templates-archive/` — write-once from `9a14f93` |
+| New files (delete to undo) | `subjects-nav.html`, `subjects.scss`, `newsletter-stack.html` (later 2.1/2.6 overlap) |
+
+## Screenshots / media
 
 | File | Notes |
 |------|--------|
-| `2.1-subjects-home-sidebar.png` | Desktop homepage — Catalog head + See all, subject list, Featured Title below |
+| `2.1-subjects-home-sidebar.png` | Desktop homepage (older Catalog-head shot) |
 | `2.1-subjects-home-sidebar-mobile.png` | Mobile |
 
-## Rollback (theme originals)
+## Related / follow-up
 
-Pre-change theme files live in repo-root `templates-archive/` (not zipped with Stencil). **Write-once** per path from baseline `9a14f93`; see `templates-archive/README.md`. Later tasks skip paths already archived.
+- **2.2** — quieter See all + Featured Title on top also noted there; 2.2 still has smaller desktop section titles + hide Reading List.
+- Extra on this branch not on the 2.1 card: primary hover invert, catalog/order outline buttons, news thumb clip, empty media tab.

@@ -31,7 +31,7 @@ blog:
     <div class="home-main or-columns">
         <aside class="custom-sidebar or-flow">
             {{#unless theme_settings.home_product}}
-            <div class="top-product main-loader">
+            <div class="top-product main-loader or-section">
                 {{> components/orbooks/pre-loading}}
             </div>
             {{/unless}}
@@ -67,9 +67,11 @@ blog:
             </div>
             {{/unless}}
             
+            {{!-- 2.2: Reading Lists widget hidden until client asks to restore
             {{#if theme_settings.show_category_sidebar_image}}
                 {{> components/orbooks/category-sidebar-image}}
             {{/if}}
+            --}}
             <div class="mobile-per">
                 {{> components/orbooks/newsletter-stack}}
             </div>

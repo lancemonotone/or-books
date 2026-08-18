@@ -130,10 +130,8 @@ export default (function (context) {
     })
   }
 
-  // Home bestsellers (or-section) or Catalog page host (.sale-product-section)
-  const $saleSliderHost = $('.home-new.best-seller-product[data-or-slider-ajax="sale"]').length
-    ? $('.home-new.best-seller-product[data-or-slider-ajax="sale"]')
-    : $('.sale-product-section');
+  // Home or Catalog bestsellers (same .or-section--slider host)
+  const $saleSliderHost = $('.home-new.best-seller-product[data-or-slider-ajax="sale"]');
 
   if ($saleSliderHost.length) {
     
@@ -162,7 +160,7 @@ export default (function (context) {
                       $saleSliderHost.append(response);
                       $saleSliderHost.find('.newprd .product:nth-child(n+30)').remove();
                       const saleUrl = $saleSliderHost.find('[data-category-url]').last().attr('data-category-url');
-                      orSetSectionHeadHref($('.home-new.best-seller-product'), saleUrl);
+                      orSetSectionHeadHref($saleSliderHost, saleUrl);
                       const $saleCarousel = $saleSliderHost.find('.newprd').not('.slick-initialized');
                       $saleCarousel.slick(orProductCarouselSettings());
                       return;

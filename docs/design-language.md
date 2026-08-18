@@ -105,10 +105,10 @@ Covered by the typography system above (not a separate utility class).
 
 - **Template:** `orbooks-theme/templates/components/orbooks/section-head.html`
 - **Styles:** `orbooks-theme/assets/scss/or-books/section-head.scss` (layout only)
-- **Title type:** bare `h*` from `typography.scss`
-- **Job:** Plain title + **See all** link. **Same for every section** — whether or not a slider follows.
+- **Title type:** bare `h2` from `typography.scss`. Size token `--or-type-section-head-size` (same as h2 below 1024; does not take the desktop h2 bump).
+- **Job:** Plain title, plus **See all** when `url` or `category_id` is passed. Same type either way.
 - **CTA:** Only See all is a link (`button button--default or-btn or-btn-sm`). Title is not linked.
-- **Omit `url`** when AJAX fills `data-or-section-head-pending` on the See all link.
+- **No destination:** omit See all (Featured Title). Do not invent a pending link.
 - **Never** includes carousel arrows.
 
 ## Molecule: Slider chrome (`.or-section--slider`)

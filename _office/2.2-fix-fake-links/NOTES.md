@@ -1,5 +1,7 @@
 # 2.2 — Fix text that looks like a link but is not
 
+<!-- Agent-oriented delivery memo. Not a build log. -->
+
 ## Meta
 
 | Field | Value |
@@ -7,19 +9,21 @@
 | **Briefboard id** | `2.2` |
 | **taskKey** | `553ddbd1-fe57-4788-ad5f-0d2727de1ebf` |
 | **Briefboard URL** | https://lancemonotone.com/or-books/app/?i=1#/task/553ddbd1-fe57-4788-ad5f-0d2727de1ebf |
-| **Branch** | `feature/wave1-2.2-section-heads` (+ follow-ups merged → `staging` → `main`) |
+| **Branch** | `fix/wave1-2.2-titles-reading-list` → `staging`. Earlier: `feature/wave1-2.2-section-heads` merged. |
 | **Tip** | page-scroll product carousels (`orProductCarouselSettings`) |
-| **Key commits** | `3376838` section-head · `5b5850c` arrows on carousel · `67e6820` `.or-heading` · `f9b67d2` slider shells + block buttons · `3664381` equal-height cards · page-scroll = full page per arrow |
-| **Deploy** | On `main` locally; storefront still Wave 1 batch `stencil push` |
-| **Briefboard status** | `complete` — delivery comment + follow-up note on full-page carousel advance (2026-07-27) |
+| **Key commits** | `3376838` section-head · `5b5850c` arrows on carousel · `67e6820` `.or-heading` · `f9b67d2` slider shells + block buttons · `3664381` equal-height cards · this close-out: smaller desktop heads, hide Reading Lists widget, leftover section labels on shared head |
+| **Deploy** | Staging storefront for Wave 1 review. Not orbooks.com until approval. |
+| **Briefboard status** | `blocked` — Aug 14 follow-up done on our side; pending client |
 
 ## Client ask (original)
 
 “See all” and some section titles looked like links but did nothing on tap (especially mobile). Real links like Latest News were hard to distinguish. Antara [P1]: make real links like the desktop version.
 
+Aug 14 follow-up: quieter See all; Featured Title stays on top; section titles a bit smaller on desktop; hide Reading List for now.
+
 ## Delivered (final state)
 
-- **Section head:** plain title + black **See all** minibutton. Same layout for every strip (slider or not). Title is **not** a link — only See all is.
+- **Section head:** plain title + **See all** minibutton. Same layout for every strip (slider or not). Title is **not** a link — only See all is.
 - **Heading type:** shared `.or-heading` atom (`headings.scss`). No letter-spacing on strip titles (tracking tokens zeroed sitewide).
 - **Slider chrome:** arrows on the **carousel** only (left/right, vertically centered) with gutter padding. Never in the title row. Class: `.or-section--slider`.
 - **Slider DOM contract:** `or-section--slider` → `or-section-head` → slick root (no junk wrappers). AJAX injects `ul.productCarousel` as head’s next sibling. Sidebar Events use `--slider` too.
@@ -27,8 +31,12 @@
 - **Full-page advance:** product carousels scroll a whole page per arrow (`slidesToScroll` matches `slidesToShow`: 3 / 2 / 1 by breakpoint) via shared `orProductCarouselSettings` in `home.js`.
 - **Block CTAs:** View Catalog, Read Now, event/video primaries share `.or-btn` / `.or-btn-block`.
 - **Vertical rhythm:** `.or-flow` on home sidebar + main column.
-- **Applied to:** Forthcoming, Bestsellers, In Focus, Latest News, Recent events/video, sidebar Videos/Events; **Reading Lists** = same head, no slider class.
-- **Category See all:** AJAX fills `href` when the category URL resolves.
+- **Applied to (home):** Forthcoming, Bestsellers, In Focus, Latest News, Recent events/video, sidebar Videos/Events.
+- **See all:** compact outline (not solid black). Featured Title stays at the top of the home sidebar (also 2.1). No See all when there is no destination (Featured Title, Related Interest).
+- **Section titles:** desktop size locked to the pre-1024 h2 (`--or-type-section-head-size`); mobile/tablet unchanged. Page titles still bump at 1024.
+- **Reading Lists** sidebar widget (home + catalog) hidden until the client asks to restore. Footer + `/reading-lists/` pages unchanged. In Focus main-column strip left visible.
+- **Same section-head on leftover labels:** Related Interest (book pages), Bestsellers on Catalog / no-sidebar templates, In Bookstores, Latest Catalog, Live on Ave C 2026. Upcoming / Past Events and Featured news wired the same way inside still-commented blocks.
+- **Category See all:** AJAX fills `href` when the category URL resolves. Catalog Bestsellers uses the same slider host as home.
 
 ## Diverged from ask (if any)
 
@@ -41,18 +49,17 @@
 
 ## Client action needed
 
-- [x] None blocking implementation.
-- [ ] **Review** when Wave 1 batch is pushed — See all on mobile/desktop; arrows on carousels; equal-height cards; arrow advances a full page of cards; heads match Reading Lists vs Bestsellers.
+- [ ] Restore Reading Lists sidebar widget when they want it back.
 - [ ] **4.8 (later):** slider **dots** sitewide — separate task.
 
 ## Verify
 
-Local: `http://localhost:3000/` — hard refresh.
+Staging storefront (and local `http://localhost:3000/`): hard refresh.
 
-- Sidebar **Latest News** + **Reading Lists**: title + See all; only See all navigates.
-- Product strips: equal card heights; magnifiers aligned; **next/prev jumps a full page** (3 cards desktop, 2 mid, 1 narrow).
-- Main strips: slick root under head; arrows clear of covers.
-- Mobile ~390px: See all navigates (does not advance carousel).
+- Home: quieter section titles on desktop; Reading Lists sidebar images gone; Featured Title matches other heads.
+- Book page: Related Interest uses the shared head (desktop sidebar + phone stack).
+- Catalog: Bestsellers head + See all, same as home.
+- `/booksellers/`, `/subsidiary-rights/`, `/events/`: In Bookstores, Latest Catalog, Live on Ave C 2026.
 
 ## Theme archive (rollback)
 
@@ -70,4 +77,3 @@ None under `_office/2.2-fix-fake-links/` yet. Briefboard has client media `12091
 
 - **4.8** — Dots sitewide via `slider-chrome.scss` when approved.
 - **5.2** — Featured Author slider typography (separate).
-- Catalog `.sale-product-section` still AJAX host on category pages (not `or-section` yet).

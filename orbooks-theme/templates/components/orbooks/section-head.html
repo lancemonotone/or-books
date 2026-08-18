@@ -1,17 +1,19 @@
 {{!--
   Shared section head (design language).
-  Plain title + See all link — identical for every section (slider or not).
+  Plain title + optional See all — identical type for every section (slider or not).
   Title type: typography.scss (bare h*). Slider arrows stay on the carousel.
   Pass: title, url and/or category_id, cta.
+  No url and no category_id → title only (no See all).
 --}}
 <div class="or-section-head">
     <h2>{{title}}</h2>
+    {{#if url}}
     <div class="or-section-head-actions">
-        <a
-            class="or-section-head-cta button button--default or-btn or-btn-sm"
-            {{#if url}}href="{{url}}"
-            {{else if category_id}}href="/categories.php?category={{category_id}}"
-            {{else}}data-or-section-head-pending{{/if}}
-        >{{#if cta}}{{cta}}{{else}}See all{{/if}}</a>
+        <a class="or-section-head-cta button button--default or-btn or-btn-sm" href="{{url}}">{{#if cta}}{{cta}}{{else}}See all{{/if}}</a>
     </div>
+    {{else if category_id}}
+    <div class="or-section-head-actions">
+        <a class="or-section-head-cta button button--default or-btn or-btn-sm" href="/categories.php?category={{category_id}}">{{#if cta}}{{cta}}{{else}}See all{{/if}}</a>
+    </div>
+    {{/if}}
 </div>

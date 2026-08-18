@@ -1,5 +1,6 @@
 {{inject 'outOfStockDefaultMessage' (lang 'products.out_of_stock_default_message')}}
 
+{{> components/orbooks/section-head title="Featured Title"}}
 <div class="productView home-pdp"
     product-id="{{product.id}}"
     {{#if settings.data_tag_enabled}}
@@ -23,8 +24,6 @@
     {{/or}}"
     data-product-variant="single-product-option"{{/if}}>
 
-    
-    <h2>Featured Title</h2>
     <figure class="productView-image"
                 data-image-gallery-main
                 {{#if product.main_image}}

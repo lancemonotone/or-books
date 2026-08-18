@@ -14,11 +14,13 @@
 
 <section class="page custom-page event-main-page or-columns">
     <aside class="custom-sidebar or-flow">
-        <h2>Live on Ave C 2026</h2>
-        <img
-            src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/loac-events-2026.jpg?t=1774537269"
-            alt="Live on Ave C 2026"
-        >
+        <div class="or-section">
+            {{> components/orbooks/section-head title="Live on Ave C 2026"}}
+            <img
+                src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/loac-events-2026.jpg?t=1774537269"
+                alt="Live on Ave C 2026"
+            >
+        </div>
         <div class="or-newsletter or-newsletter--cta">
             <h4 class="or-newsletter-title">Sign-up for our Events newsletter</h4>
             <a href="https://mailchi.mp/orbooks.com/gijb1sdulu" class="button button--primary or-btn or-btn-block">{{lang 'page.subscribe'}}</a>
@@ -38,8 +40,8 @@
         <div class="event-page custom-page-data">
             {{!-- Optional Upcoming / Past list: comment out in HTML when empty. --}}
             <!-- BEGIN optional: Upcoming Events + Past Events list
-            <div class="upcomming-events other-events">
-                <h2>Upcoming Events</h2>
+            <div class="upcomming-events other-events or-section">
+                {{> components/orbooks/section-head title="Upcoming Events"}}
                 <div class="upcoming-events">
                     <div class="event-card">
                         <div class="event-img">
@@ -91,8 +93,8 @@
                 </div>
             </div>
 
-            <div class="past-events">
-                <h2>Past Events</h2>
+            <div class="past-events or-section">
+                {{> components/orbooks/section-head title="Past Events" url="/past-events/"}}
                 <ul>
                     <li><span>October 23, 2024:</span> OR Books: Live on Ave C <em>BEAUTIFUL SOLUTIONS</em></li>
                     <li><span>October 2, 2024:</span> OR Books: Live on Ave C <em>UNDERSTANDING HAMAS</em></li>

@@ -39,6 +39,8 @@
   --or-type-h3-size: 1.828125rem; // 29.25
   --or-type-h2-size: 2.31640625rem; // 37.06
   --or-type-h1-size: 2.9267578125rem; // 46.83
+  // Section-head titles: keep this size on desktop (page h2 still bumps at 1024)
+  --or-type-section-head-size: 2.31640625rem;
   --or-type-heading-line: 1;
   // Narrow-column nudge (container query ≤30rem)
   --or-type-heading-narrow-delta: 0.25rem; // −4px
@@ -296,6 +298,20 @@ h6 {
   & h5,
   & h6 {
     margin-block-end: 0;
+    font-size: var(--or-type-section-head-size);
+  }
+}
+
+@container (max-width: 30rem) {
+  .or-section-head h1,
+  .or-section-head h2,
+  .or-section-head h3,
+  .or-section-head h4,
+  .or-section-head h5,
+  .or-section-head h6 {
+    font-size: calc(
+      var(--or-type-section-head-size) - var(--or-type-heading-narrow-delta)
+    );
   }
 }
 
