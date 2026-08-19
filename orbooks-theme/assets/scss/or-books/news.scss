@@ -92,104 +92,7 @@
     }
 }
 .blog-list {
-    display: flex;
-    flex-wrap: wrap;
     align-items: stretch;
-
-    @include small {
-        margin: 0 -15px;
-    }
-    
-    @include medium {
-        margin: 0 -30px;
-    }
-    .blog {
-        --or-blog-cols: 1;
-
-        display: flex;
-        flex-direction: column;
-        width: calc(100% / var(--or-blog-cols));
-        margin: 0;
-        border: none;
-        padding: 0 0 20px;
-        position: relative;
-
-        @include small {
-            --or-blog-cols: 2;
-            padding: 15px 15px 20px;
-        }
-        @include medium {
-            --or-blog-cols: 4;
-            padding: 30px;
-        }
-
-        .blog-post-figure {
-            width: 100%;
-            margin-top: 0;
-            .blog-thumbnail {
-                width: 100%;
-                margin: 0;
-                max-width: 100%;
-            }
-        }
-
-        // In-flow CTA pinned to card bottom (equal-height row).
-        .read-btn {
-            position: static;
-            opacity: 1;
-            margin-block-start: auto;
-            padding-block-start: 0.75rem;
-            background: transparent;
-
-            .read-sub-btn {
-                position: static;
-                transform: none;
-                padding: 0;
-                inline-size: 100%;
-            }
-        }
-
-        .blog-share:empty {
-            display: none;
-        }
-
-        // Meta type: common.scss (.card-category-name / .card-text) — match product cards
-        .blog-post-body {
-            --or-card-body-pad-block-start: 1.25rem;
-
-            width: 100%;
-            padding-block: var(--or-card-body-pad-block-start) 0;
-            padding-inline: 0;
-            text-align: center;
-
-            @media (min-width: 768px) {
-                text-align: start;
-            }
-
-            .card-title {
-                margin-block: 0 0.5rem;
-            }
-
-            .card-category {
-                margin-block-end: 0;
-            }
-
-            .blog-post.card-text {
-                margin-block-start: 0.5rem;
-                text-align: inherit;
-                line-height: 1.35;
-            }
-        }
-    }
-}
-
-// PDP / author “in the media” — 3-col cap (Latest News stays 4).
-.blog-list.custom-blog-list {
-  & .blog {
-    @media (min-width: 1024px) {
-      --or-blog-cols: 3;
-    }
-  }
 }
 
 // Single blog post — figure + meta side-by-side from 768; body/share full width below
@@ -197,7 +100,7 @@
   .blog {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
     column-gap: 2rem;
     row-gap: 1.5rem;
 
@@ -237,7 +140,6 @@
         flex: 1 1 calc(50% - 1rem);
         inline-size: calc(50% - 1rem);
         max-inline-size: calc(50% - 1rem);
-        text-align: start;
       }
 
       .blog-header {

@@ -47,6 +47,13 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 - **Organism:** `.or-newsletter-stack.or-flow` — panel + catalog/help outline buttons. Partial: `components/orbooks/newsletter-stack.html`.
 - **Do not** restyle in `category.scss` / `events.scss` / `home.scss`. Home only hides the main-column stack below 1024 (sidebar `.mobile-per` shows it).
 
+## Molecule: Accordion (`.or-accordion`)
+
+- **Styles:** `orbooks-theme/assets/scss/or-books/accordion.scss`
+- **Job:** Shared collapse stack (gap, panel pad, chevron, label type, panel body, listing cols, bio photo HTML, merchandise label swap).
+- **Out:** Foundation facet `.accordion` (catalog filters).
+- **Do not** restyle accordion chrome in `pdp.scss` / `authors.scss` / `listing-card.scss`.
+
 ## Layout: Two-column shell (`.or-columns`)
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/sidebar.scss`
@@ -90,7 +97,7 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 | **Body** | `body`, `p` — Helvetica stack, body size/line; **`p` always `text-align: start`** (editors need no class). Center only short chrome (headings &lt;768, buttons, cards). |
 | **Headings** | bare `h1–h6` — shared chrome (Condensed 700, uppercase); **size + margin stairs** Major Third; **align** center &lt;768, start ≥768; **narrow CQ** ≤30rem → −2px each level; card shells (`text-align: inherit`) |
 | **Pull quotes** | Bare `blockquote` > `h3` (quote) + `cite` or legacy `span` (attribution). Group: `.custom-fields-shouts` (top/bottom rules). |
-| **Accordion labels** | `.accordion-custom-tabs .accordion-title` / `.product-desc-title` — same pullquote size stair (PDP + author). |)
+| **Accordion labels** | `.or-accordion` in `accordion.scss` (after typography) — pullquote size, start align. |)
 
 **Do not** style `h1–h6` in page/component SCSS (not even margin/align). Layout around headings uses parents / flex children (`:first-child`), not heading selectors.
 

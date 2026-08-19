@@ -61,9 +61,7 @@
         <div class="related-sidebar desktop-related-product or-section">
             {{#if product.related_products}}
                 {{> components/orbooks/section-head title=(lang 'products.related_title')}}
-                {{#each product.related_products}}
-                    {{> components/orbooks/card settings=../settings theme_settings=../theme_settings customer=../customer event="list" position=(add @index 1)}}
-                {{/each}}
+                {{> components/orbooks/listing-grid products=product.related_products event="list"}}
             {{/if}}
         </div>
     </aside>
@@ -287,9 +285,7 @@
     <div class="related-sidebar mobile-related-product or-section">
         {{#if product.related_products}}
             {{> components/orbooks/section-head title=(lang 'products.related_title')}}
-            {{#each product.related_products}}
-                {{> components/orbooks/card settings=../settings theme_settings=../theme_settings customer=../customer event="list" position=(add @index 1)}}
-            {{/each}}
+            {{> components/orbooks/listing-grid products=product.related_products event="list"}}
         {{/if}}
     </div>
 </div>

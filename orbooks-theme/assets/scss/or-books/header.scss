@@ -13,7 +13,7 @@
     @include small{ 
         max-width: 100%;
     }
-    @include breakpoint(800px) {
+    @include small {
         padding: 20px 15px 10px;
         align-items: center;
         background: initial;
@@ -46,7 +46,7 @@
         @include small {
             width: 75%;
         }
-        @include breakpoint(800px) {
+        @include small {
             width: 55%;
         }
         .header-logo-main {
@@ -54,7 +54,7 @@
                 margin: 0;
                 text-align: left;
                 height: auto;
-                @include breakpoint(800px) {
+                @include small {
                     width: 50%;
                 }
                 @include xxlarge {
@@ -74,7 +74,7 @@
                             width: 55%;
                             margin-right: 0;
                         }
-                        @include breakpoint(800px) {
+                        @include small {
                             width: 85%;
                             margin: 0;
                         }
@@ -89,7 +89,7 @@
             }
         }
         .header-menu {
-            @include breakpoint(800px) {
+            @include small {
                 margin-top: 5px;
             }
             .navPages-container {
@@ -105,12 +105,12 @@
             }
             
             .navPages-list {
-                @include breakpoint(800px) {
+                @include small {
                     display: block;
                 }
                 .navPages-item {
                     margin: 0 0 14px;
-                    @include breakpoint(800px) {
+                    @include small {
                         margin: 0;
                         padding-right: 11px;
                     }
@@ -134,7 +134,7 @@
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-                        @include breakpoint(800px) {
+                        @include small {
                             font-size: 14px;
                         }
                         @include medium {
@@ -153,7 +153,7 @@
                                 width: 0.8rem;
                                 border: none;
                                 margin-right: 21px;
-                                @include breakpoint(800px) {
+                                @include small {
                                     display: none;
                                 }
                             }
@@ -169,7 +169,7 @@
                         }
                     }
                     &:hover {
-                        @include breakpoint(800px) {
+                        @include small {
                             .navPages-action {
                                 transform: translate(0px, -8px);
                             }
@@ -263,7 +263,7 @@
                     }
                 }
                 &.navPages-list--user {
-                    @include breakpoint(800px) {
+                    @include small {
                         display: none;
                     }
                 }
@@ -313,7 +313,7 @@
         @include small {
             width: 16%;
         }
-        @include breakpoint(800px) {
+        @include small {
             width: 45%;
             display: flex;
             flex-wrap: wrap;
@@ -327,7 +327,7 @@
             max-width: 528px;
         }
         .header-login {
-            @include breakpoint(800px) {
+            @include small {
                 width: 100%;
             }
         }
@@ -335,7 +335,7 @@
             display: inline-block;
             z-index: 99;
             position: relative;
-            @include breakpoint(800px) {
+            @include small {
                 display: none;
             }
             .navUser-action {
@@ -368,7 +368,7 @@
             transform: none;
             right: 30px;
             top: 20px;
-            @include breakpoint(800px) {
+            @include small {
                 padding: 0;
                 top: 0;
                 right: 0;
@@ -378,14 +378,14 @@
                 &:before, &:after {
                     content: none;
                 }
-                @include breakpoint(800px) {
+                @include small {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     width: 100%;
                 }
                 &.navUser_gift_certificates_not_enabled{
-                    @include breakpoint(800px) {
+                    @include small {
                         justify-content: flex-end; 
                     } 
                     .navUser-item.serc-bar{                        
@@ -413,7 +413,7 @@
                         margin-right: 15px;
                     }
                     &.navUser-item--account {
-                        @include breakpoint(800px) {
+                        @include small {
                             display: flex;
                             width: 27%;
                             max-width: 147px;
@@ -430,7 +430,7 @@
                             font-size: 13px;
                             color: stencilColor("text_color");
                             padding: 11px 24px;
-                            @include breakpoint(800px) {
+                            @include small {
                                 padding: 11px 0px;
                                 width: 100%;
                                 text-align: center;
@@ -545,7 +545,7 @@
                         }
                     }
                     &.gift-cer {
-                        @include breakpoint(800px) {
+                        @include small {
                             width: 22%;
                             max-width: 134px;
                             margin: 0;
@@ -557,7 +557,7 @@
                             background-color: stencilColor("bg_color");
                             border-radius: 5px;
                             padding: 10px 30px;
-                            @include breakpoint(800px) {
+                            @include small {
                                 text-align: center;
                                 padding: 10px 0;
                             }
@@ -598,14 +598,14 @@
                     &.serc-bar {
                         background-color: stencilColor("bg_color");
                         border-radius: 5px;
-                        @include breakpoint(800px) {
+                        @include small {
                             width: 20%;
                             max-width: 53px;
                             margin: 0;
                         }
                         button {
                             padding: 11.1px 17px;
-                            @include breakpoint(800px) {
+                            @include small {
                                 padding: 11.1px 0;
                                 margin: 0 auto;
                                 width: 100%;
@@ -647,7 +647,7 @@
                     }
                     &.navUser-item--cart {
                         margin-right: 0;
-                        @include breakpoint(800px) {
+                        @include small {
                             width: 22%;
                             max-width: 149px;
                             position: static;
@@ -670,7 +670,7 @@
                             @include small {
                                 padding: 14px;
                             }
-                            @include breakpoint(800px) {
+                            @include small {
                                 background-color: stencilColor("bg_color");
                                 font-size: 13px;
                                 padding: 12.1px 0;
@@ -697,7 +697,7 @@
                                     width: 18px;
                                     height: 18px;
                                 }
-                                @include breakpoint(800px) {
+                                @include small {
                                     margin-right: 0;
                                     width: 16px;
                                     height: auto;
@@ -725,7 +725,7 @@
                                 font-size: 10px;
                                 top: 3px;
                                 @include hn-400;
-                                @include breakpoint(800px) {
+                                @include small {
                                     right: 0px;
                                     width: 20px;
                                     height: 20px;
@@ -810,7 +810,7 @@
                     @include small {
                         top: 80px !important;
                     }
-                    @include breakpoint(800px) {
+                    @include small {
                         width: 100% !important;
                         overflow: hidden;
                         right: 0 !important;
@@ -971,7 +971,7 @@
         .header-mail {
             margin: 10px 0 7px;
             display: none;
-            @include breakpoint(800px) {
+            @include small {
                 display: block;
                 width: 100%;
             }
@@ -1004,11 +1004,11 @@
         .header-currency {
             .currencyBoxUl {
                 margin: 0;
-                @include breakpoint(800px) {
+                @include small {
                     width: 100%;
                 }
                 .navUser-item {
-                    @include breakpoint(800px) {                   
+                    @include small {                   
                         width: 100%;
                     }
                     .navUser-action {
@@ -1018,7 +1018,7 @@
                         text-transform: capitalize;
                         font-size: 13px;
                         padding: 7px 30px;
-                        @include breakpoint(800px) {
+                        @include small {
                             padding: 7px 0;
                             text-align: center;
                         }
@@ -1164,7 +1164,7 @@
         }
         .header-currency, .head-icon {
             display: none;
-            @include breakpoint(800px) {
+            @include small {
                 display: inline-block;
                 width: 49%;
             }
@@ -1175,7 +1175,7 @@
         .head-icon {
             .navUser-item {
                 margin: 0;
-                @include breakpoint(800px) {
+                @include small {
                     padding: 0;
                     width: 100%;
                 }
@@ -1188,7 +1188,7 @@
                 .socialLinks-item {
                     margin-right: 10px;
                     margin-bottom: 0;
-                    @include breakpoint(800px) {
+                    @include small {
                         margin-right: 3px;
                     }
                     @include medium {
@@ -1220,7 +1220,7 @@
                             }
                         }
                         &:hover {
-                            @include breakpoint(800px) {
+                            @include small {
                                 transform: scale(1.15);
                                 box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
                                 border-radius: 50%;

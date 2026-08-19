@@ -1,4 +1,4 @@
-<div class="accordion-custom-tabs {{#each breadcrumbs}}{{#if name '==' 'Merchandise'}}Merchandise{{/if}}{{/each}}">
+<div class="or-accordion{{#each breadcrumbs}}{{#if name '==' 'Merchandise'}} or-accordion-merchandise{{/if}}{{/each}}">
     
    
     {{#eachIndex (split product.description '<!-- pagebreak -->')}}

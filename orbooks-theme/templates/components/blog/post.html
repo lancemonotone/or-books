@@ -1,126 +1,43 @@
+{{#if is_blog_post}}
 <article class="blog">
-
     {{#if post.thumbnail}}
-
     <div class="blog-post-figure">
-
-            <figure class="blog-thumbnail">
-
-                <a href="{{post.url}}">
-
-                    {{> components/common/responsive-img
-
-                        image=post.thumbnail
-
-                        fallback_size=theme_settings.blog_size
-
-                        lazyload=theme_settings.lazyload_mode
-
-                    }}
-
-                </a>
-
-            </figure>
-
+        <figure class="blog-thumbnail">
+            <a href="{{post.url}}">
+                {{> components/common/responsive-img
+                    image=post.thumbnail
+                    fallback_size=theme_settings.blog_size
+                    lazyload=theme_settings.lazyload_mode
+                }}
+            </a>
+        </figure>
     </div>
-
     {{/if}}
 
     <div class="blog-post-body {{#if post.thumbnail}}with-img{{/if}}">
-
-        {{#if is_blog_post}}
-
         <header class="blog-header">
-
             <h2 class="blog-title">
-
                 <a href="{{post.url}}">{{{post.title}}}</a>
-
             </h2>
-
             <p class="blog-date">{{post.date_published}}</p>
-
         </header>
-
-        {{else}}
-
-        {{!-- Listing cards: same stack as product cards — title → meta --}}
-
-        <h4 class="card-title">
-
-            <a class="card-title-name" href="{{post.url}}">{{{post.title}}}</a>
-
-        </h4>
-
-        <div class="card-category">
-
-            <div class="card-category-name blog-date">{{post.date_published}}</div>
-
-        </div>
-
-        {{/if}}
-
-
-
-        {{#if post.body}}
-
-            
-
-        {{else}}
-
-<!-- Paige           <div class="blog-post">
-
-                {{{post.summary}}}
-
-                {{#if post.show_read_more}}
-
-                ...
-
-                {{/if}}
-
-            </div> -->
-
-        {{/if}}
-
-
-
     </div>
-
-
-
-    {{#if post.show_read_more}}
-
-        <div class="read-btn">
-
-            <div class="read-sub-btn">
-
-                <a class="button button--primary or-btn or-btn-block" href="{{post.url}}" aria-label="{{post.title}} {{lang 'blog.read_more'}}">{{lang 'blog.read_more'}}</a>
-
-            </div>
-
-        </div>
-
-    {{/if}}
-
-    
 
     {{#if post.body}}
-
-        <div class="blog-post">
-
-            {{{post.body}}}
-
-        </div>
-
+    <div class="blog-post">
+        {{{post.body}}}
+    </div>
     {{/if}}
 
-    
-
     <div class="blog-share">
-
         {{>components/common/share url=post.url}}
-
     </div>
-
 </article>
-
+{{else}}
+{{> components/orbooks/listing-card
+    url=post.url
+    thumbnail=post.thumbnail
+    date=post.date_published
+    title=post.title
+}}
+{{/if}}

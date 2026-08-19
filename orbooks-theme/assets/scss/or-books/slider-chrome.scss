@@ -42,14 +42,13 @@
         overflow: hidden;
     }
 
-    // Title/date clear of overlay arrows; Read Now stays full-bleed
-    & .blog .blog-post-body {
+    // Title/date clear of overlay arrows
+    & .listing-card .listing-card-body {
         padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
     }
 
-    // 1px so slick overflow does not clip the button / thumbnail border
-    & .blog .read-btn,
-    & .blog .blog-post-figure {
+    // 1px so slick overflow does not clip the thumbnail border
+    & .listing-card .listing-card-figure {
         padding-inline: 1px;
         box-sizing: border-box;
     }

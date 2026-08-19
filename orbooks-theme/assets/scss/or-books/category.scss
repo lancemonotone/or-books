@@ -1,5 +1,5 @@
 .category-page {
-  // Listing grid: 2 → 3 across. Cornerstone `.productGrid` goes to 4 at 801px.
+  // Listing grid: 2 → 3 across. Cornerstone `.productGrid` goes to 4 at medium.
   .or-columns .productGrid .product {
     --or-cat-col-width: 50%;
 
@@ -1330,10 +1330,6 @@
       .productView-details.custom-content.product-desc {
         width: 100%;
         padding: 0;
-        .product-desc-title {
-          // type: typography.scss (bare h*)
-          margin-block: 0;
-        }
         .product-desc {
           p {
             float: none;
@@ -1352,8 +1348,7 @@
             }
           }
         }
-        .product-desc,
-        .accordion-desc {
+        .product-desc {
           padding: 5px 0;
           font-size: 14px;
 

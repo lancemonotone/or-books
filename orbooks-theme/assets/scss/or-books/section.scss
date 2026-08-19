@@ -6,7 +6,7 @@
     --or-section-head-min-size: 44px;
     --or-section-head-gap: 0.25rem;
     --or-section-head-pad-block: 0.25rem;
-    --or-section-head-margin-end: 0.5rem;
+    --or-section-head-margin-end: 1.25rem;
 
     box-sizing: border-box;
     position: relative;
@@ -17,6 +17,9 @@
     @media (min-width: 768px) {
         --or-section-head-gap: 0.75rem;
         --or-section-head-pad-block: 0.15rem;
+    }
+
+    @media (min-width: 1024px) {
         --or-section-head-margin-end: 0.35rem;
     }
 }

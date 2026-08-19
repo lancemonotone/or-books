@@ -1,0 +1,140 @@
+// Accordion — book, author, QV about-block (not Foundation facet .accordion)
+
+.or-accordion {
+  --or-accordion-tab-gap: 2.5rem;
+  --or-accordion-panel-pad-block-start: 1.25rem;
+  --or-accordion-title-pad-inline-end: 1.5rem;
+
+  margin-block-end: var(--or-accordion-tab-gap);
+
+  .accordion-tab {
+    margin-block-start: var(--or-accordion-tab-gap);
+    clear: both;
+  }
+
+  .accordion-desc-main {
+    margin-block-start: 0;
+  }
+
+  .accordion-title,
+  .product-desc-title {
+    margin-block-end: var(--or-type-pullquote-margin-block-end);
+    font-size: var(--or-type-pullquote-size);
+    line-height: var(--or-type-pullquote-line);
+    text-align: start;
+  }
+
+  .accordion-title {
+    cursor: pointer;
+    position: relative;
+    padding-inline-end: var(--or-accordion-title-pad-inline-end);
+
+    .icon {
+      position: absolute;
+      inset-inline-end: 0;
+      top: 50%;
+      inline-size: 1rem;
+      block-size: 1rem;
+      transform: translateY(-50%);
+    }
+
+    &.is-open .icon {
+      transform: translateY(-50%) rotate(180deg);
+    }
+  }
+
+  .accordion-desc {
+    display: none;
+    padding-block-start: var(--or-accordion-panel-pad-block-start);
+  }
+
+  .accordion-desc,
+  .product-desc {
+    font-size: var(--or-type-body-size);
+    color: $color-greyDarkest;
+
+    p {
+      margin-block: 0 var(--or-type-body-margin-block-end);
+      line-height: var(--or-type-body-line);
+    }
+
+    p:empty {
+      display: none;
+    }
+  }
+
+  .accordion-desc p img {
+    inline-size: 100%;
+  }
+
+  .or-listing-grid {
+    @media (min-width: 768px) {
+      --or-listing-cols: 2;
+    }
+
+    @media (min-width: 1024px) {
+      --or-listing-cols: 3;
+    }
+  }
+
+  .listing-card {
+    @media (min-width: 1024px) {
+      --or-listing-cols: 3;
+    }
+  }
+
+  .author-img-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .photo-author {
+    display: block;
+
+    @media (min-width: 768px) {
+      inline-size: 50%;
+      line-height: 1;
+      margin-block-start: 0.625rem;
+    }
+  }
+
+  .author-pic {
+    margin-block-end: 1.25rem;
+    font-size: var(--or-text-sm);
+    font-style: italic;
+    color: $color-greyDarkest;
+    order: 1;
+
+    @media (min-width: 768px) {
+      inline-size: 50%;
+      margin-inline-end: 1.25rem;
+    }
+
+    img {
+      margin: 0;
+    }
+  }
+
+  .author-detail-info {
+    order: 2;
+
+    @media (min-width: 768px) {
+      inline-size: 45%;
+    }
+  }
+
+  .special {
+    display: none;
+  }
+
+  &.or-accordion-merchandise {
+    .special {
+      display: block;
+    }
+
+    .normal {
+      display: none;
+    }
+  }
+}

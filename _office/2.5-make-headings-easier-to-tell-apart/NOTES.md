@@ -85,9 +85,14 @@ Target = author books accordion product card text stack.
 - Shouts: bare `<blockquote>`; nested CMS `h*`/`span` reset to body in `typography.scss`.
 - Stripped `pdp.scss` type stairs for `.title-main`, `.short-dec`, subtitle `.productView-info-value`, shout attributions.
 
+### Client notes 1–9 (fix branch)
+
+- **#9 Past Events:** no repeating Watch Event buttons. Same clickable card as News. Shared `listing-card` partial + `listing-card.scss`. Stack: **date → title → blurb**. Card link = former Watch URL (`target="_blank"` when YouTube/http). News listing + In the media JS use the same stack. Single news post page unchanged (title then date beside image). Archived HTML comments in `event.html` still have old button markup.
+- **h4** `--or-type-h4-size` −0.2rem at phone and 1024 (768 inherits phone).
+
 ## Still to do
 
-- Browser verify pass (author accordion, in-the-media, Latest News, featured product, PDP meta).
+- Browser verify pass (author accordion, in-the-media, Latest News, featured product, PDP meta, `/past-events/`).
 - Roll same bare markup to quick-view / default-pdp when ready.
 - BB **3.1** (deferred): logo `h1` every page; content titles → `h2`.
 - BB delivery; Wave 1 `stencil push`.
@@ -118,6 +123,8 @@ Target = author books accordion product card text stack.
 | New | `orbooks-theme/assets/scss/or-books/typography.scss` |
 | New | `orbooks-theme/assets/scss/or-books/events.scss` |
 | New | `orbooks-theme/assets/scss/or-books/productView.scss` |
+| New | `orbooks-theme/templates/components/orbooks/listing-card.html` |
+| New | `orbooks-theme/assets/scss/or-books/listing-card.scss` |
 | Removed | animated blog `.read-btn` overlay styles (`news.scss`) |
 
 ## Related

@@ -46,14 +46,12 @@
             .slick-list {
               // Full-bleed with slider-chrome (no side gutter / no -5px cancel)
               margin-inline: 0;
-              .blog {
+              .listing-card {
+                --or-listing-cols: 1;
                 padding: 0;
-                display: flex;
-                flex-wrap: wrap;
-                flex-direction: column;
+                inline-size: 100%;
                 // Thumbnail radius + 1px clip inset: slider-chrome.scss
-                // Listing meta: news.scss + common.scss card stack
-                .blog-post-body {
+                .listing-card-body {
                   text-align: center;
 
                   @media (min-width: 768px) {

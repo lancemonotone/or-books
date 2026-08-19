@@ -32,26 +32,64 @@
   }
 }
 
+// Cornerstone productView splits columns below our two-column shell.
+// Keep the PDP stacked until 1024.
+.productView.or-columns {
+  display: flex;
+  flex-direction: column;
+
+  .productView-images {
+    float: none;
+    width: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    display: block;
+  }
+}
+
+// Hairline on the frame, not the aside (aside is floated / short).
+// z-index: paint above opaque columns. .productView.or-columns::before
+// beats Cornerstone grid-row clearfix (display: table; no line).
+.or-columns,
+.productView.or-columns {
+  @media (min-width: 1024px) {
+    position: relative;
+
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      z-index: 1;
+      inset-block: 0;
+      inset-inline-start: 26%;
+      inline-size: 1px;
+      background-color: $color-greyLightest;
+      pointer-events: none;
+    }
+  }
+}
+
 .or-columns > .custom-sidebar,
 .or-columns > .custom-content {
   @media (min-width: 1024px) {
-    --or-sidebar-gutter: 2.1875rem; // 35px
+    --or-sidebar-gutter: 2.1875rem;
+    --or-sidebar-rule-gap: 0.3125rem;
   }
 
   @media (min-width: 1700px) {
-    --or-sidebar-gutter: 3.75rem; // 60px
+    --or-sidebar-gutter: 3.75rem;
   }
 }
 
 .or-columns > .custom-sidebar {
   @media (min-width: 1024px) {
-    border-inline-end: 1px solid $color-greyLightest;
-    padding-inline-end: var(--or-sidebar-gutter);
+    padding-inline-end: calc(var(--or-sidebar-gutter) + var(--or-sidebar-rule-gap));
   }
 }
 
 .or-columns > .custom-content {
   @media (min-width: 1024px) {
-    padding-inline-start: var(--or-sidebar-gutter);
+    padding-inline-start: calc(var(--or-sidebar-gutter) + var(--or-sidebar-rule-gap));
   }
 }

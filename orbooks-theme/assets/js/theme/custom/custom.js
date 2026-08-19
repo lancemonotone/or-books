@@ -57,7 +57,7 @@ export default (function (context) {
     $(this).siblings('.share-list').toggle('slow');
   });
 
-  $('.accordion-custom-tabs .accordion-title').click(function () {
+  $('.or-accordion .accordion-title').click(function () {
     $(this).toggleClass('is-open');
     $(this).next().slideToggle(350);
   });

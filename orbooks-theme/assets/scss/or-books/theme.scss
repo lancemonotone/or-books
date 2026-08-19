@@ -7,6 +7,7 @@
 @import "footer";
 @import "header";
 @import "home";
+@import "listing-card";
 @import "news";
 @import "pages";
 @import "pdp";
@@ -24,5 +25,6 @@
 // Last: sole body + heading type source
 @import "typography";
 
-// After typography so .or-newsletter / .percentage-main can lock their own type
+// After typography so components can lock their own type
 @import "newsletter";
+@import "accordion";

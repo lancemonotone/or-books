@@ -69,6 +69,11 @@
         text-align: start;
       }
 
+      // 2.5: title→subtitle tighter than subtitle→author
+      & .productView-title {
+        margin-block-end: calc(var(--or-featured-gap) * -0.5);
+      }
+
       & .productView-brand {
         @include hc-700;
       }

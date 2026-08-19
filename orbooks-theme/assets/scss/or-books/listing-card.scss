@@ -1,0 +1,193 @@
+// Shared listing pad + columns + stacked row-gap.
+// Hosts: news/media (.blog-list), past events (.event-page), videos (.video-page),
+// product cards (.or-listing-grid: author books, PDP related).
+// Hosts set --or-listing-cols. Do not restyle h* here.
+// Pad tokens on the host so bleed = card inline pad (flush content, shadow may hang out).
+
+.blog-list,
+.event-page,
+.video-page,
+.or-listing-grid {
+  --or-listing-card-pad-block-start: 0;
+  --or-listing-card-pad-block-end: 0;
+  --or-listing-card-pad-inline: 0;
+  --or-listing-stack-gap: 2.5rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--or-listing-stack-gap);
+  margin-inline: calc(var(--or-listing-card-pad-inline) * -1);
+  overflow: visible;
+
+  @media (min-width: 768px) {
+    --or-listing-stack-gap: 0;
+    --or-listing-card-pad-block-start: 0.9375rem;
+    --or-listing-card-pad-block-end: 1.25rem;
+    --or-listing-card-pad-inline: 0.9375rem;
+  }
+
+  @media (min-width: 1024px) {
+    --or-listing-card-pad-block-start: 1.875rem;
+    --or-listing-card-pad-block-end: 1.875rem;
+    --or-listing-card-pad-inline: 1.875rem;
+  }
+}
+
+.listing-card {
+  --or-listing-cols: 1;
+  --or-listing-card-shadow: none;
+  --or-listing-card-body-pad: 1.25rem;
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+  inline-size: calc(100% / var(--or-listing-cols));
+  margin: 0;
+  padding-block: var(--or-listing-card-pad-block-start)
+    var(--or-listing-card-pad-block-end);
+  padding-inline: var(--or-listing-card-pad-inline);
+  border: none;
+  border-radius: 5px;
+  box-shadow: var(--or-listing-card-shadow);
+  transition: box-shadow 0.3s ease-in-out;
+
+  &:hover,
+  &:focus-within {
+    @media (min-width: 768px) {
+      --or-listing-card-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.19);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  .listing-card-link {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    color: inherit;
+    text-decoration: none;
+
+    &:focus-visible {
+      outline: 2px solid $color-greyDarkest;
+      outline-offset: 0.25rem;
+    }
+  }
+
+  .listing-card-figure {
+    inline-size: 100%;
+    margin: 0;
+
+    img {
+      display: block;
+      inline-size: 100%;
+      block-size: auto;
+    }
+  }
+
+  .listing-card-body {
+    inline-size: 100%;
+    padding-block-start: var(--or-listing-card-body-pad);
+    padding-inline: 0;
+    text-align: center;
+
+    @media (min-width: 768px) {
+      text-align: start;
+    }
+
+    .card-category {
+      margin-block: 0 0.5rem;
+    }
+
+    .card-title {
+      margin-block: 0;
+    }
+
+    .listing-card-blurb,
+    .card-text {
+      margin-block-start: 0.5rem;
+      line-height: 1.35;
+    }
+  }
+}
+
+.blog-list {
+  .listing-card {
+    margin-block: 0;
+    border: none;
+
+    & + & {
+      border-block-start: none;
+      border-top: none;
+      margin-block-start: 0;
+      margin-top: 0;
+      padding-top: var(--or-listing-card-pad-block-start);
+    }
+
+    @media (min-width: 768px) {
+      --or-listing-cols: 2;
+    }
+
+    @media (min-width: 1024px) {
+      --or-listing-cols: 4;
+    }
+  }
+}
+
+.event-page {
+  .listing-card {
+    @media (min-width: 768px) {
+      --or-listing-cols: 2;
+    }
+
+    @media (min-width: 1024px) {
+      --or-listing-cols: 4;
+    }
+  }
+}
+
+.or-listing-grid {
+  --or-listing-cols: 1;
+
+  .card {
+    box-sizing: border-box;
+    flex: 0 0 calc(100% / var(--or-listing-cols));
+    inline-size: calc(100% / var(--or-listing-cols));
+    max-inline-size: calc(100% / var(--or-listing-cols));
+    min-inline-size: 0;
+    padding-block: var(--or-listing-card-pad-block-start)
+      var(--or-listing-card-pad-block-end);
+    padding-inline: var(--or-listing-card-pad-inline);
+
+    &:hover {
+      box-shadow: none;
+
+      .card-figure .card-figcaption {
+        opacity: 0;
+      }
+    }
+
+    @media (min-width: 768px) {
+      &:hover {
+        box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.19);
+
+        .card-figure .card-figcaption {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .sub-card {
+    padding: 0;
+  }
+}
+
+.video-page .video-card,
+.event-page .event-card {
+  padding-block: var(--or-listing-card-pad-block-start)
+    var(--or-listing-card-pad-block-end);
+  padding-inline: var(--or-listing-card-pad-inline);
+}

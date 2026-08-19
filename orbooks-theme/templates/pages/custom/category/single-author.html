@@ -61,7 +61,7 @@ blog:
         </div>
         
         
-        <div class="accordion-custom-tabs">
+        <div class="or-accordion">
             <div class="accordion-tab">
                 <h3 class="accordion-title">Books by the author / editor
                     <svg class="icon" aria-hidden="true">
@@ -74,7 +74,7 @@ blog:
                             {{> components/products/filter sort=pagination.category.sort}}
                         </div>
                     {{/if}}
-                    {{> components/category/product-listing}}
+                    {{> components/category/product-listing listing_grid=true}}
                 </div>
             </div>
             <div class="accordion-tab" hidden>

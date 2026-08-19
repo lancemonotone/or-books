@@ -1,0 +1,36 @@
+{{!--
+  Shared listing card (News, In the media, Past Events).
+  Stack: image → date → title → optional blurb. Whole card is one link.
+  News: thumbnail=post.thumbnail
+  Events: image=urlString external=true
+--}}
+<article class="listing-card{{#if extraClass}} {{extraClass}}{{/if}}">
+    <a class="listing-card-link" href="{{url}}"{{#if external}} target="_blank" rel="noopener noreferrer"{{/if}}>
+        {{#if thumbnail}}
+        <div class="listing-card-figure">
+            {{> components/common/responsive-img
+                image=thumbnail
+                fallback_size=theme_settings.blog_size
+                lazyload=theme_settings.lazyload_mode
+            }}
+        </div>
+        {{else if image}}
+        <div class="listing-card-figure">
+            <img src="{{image}}" alt="{{#if imageAlt}}{{imageAlt}}{{else}}{{date}}{{/if}}" loading="lazy">
+        </div>
+        {{/if}}
+        <div class="listing-card-body">
+            {{#if date}}
+            <div class="card-category">
+                <div class="card-category-name listing-card-date">{{date}}</div>
+            </div>
+            {{/if}}
+            {{#if title}}
+            <h4 class="card-title">{{{title}}}</h4>
+            {{/if}}
+            {{#if blurb}}
+            <div class="card-text listing-card-blurb">{{{blurb}}}</div>
+            {{/if}}
+        </div>
+    </a>
+</article>

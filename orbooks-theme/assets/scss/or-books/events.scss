@@ -151,12 +151,10 @@
   // Newsletter CTA: newsletter.scss (.or-newsletter)
 }
 
-// Card grids (events archive + videos). No negative side margins (was crushing layout).
+// Video / leftover event-card chrome. Stack gap + outer pad: listing-card.scss
 .event-page,
 .video-page {
   inline-size: 100%;
-  display: flex;
-  flex-wrap: wrap;
 
   .event-card,
   .video-card {
@@ -165,7 +163,6 @@
     inline-size: calc(100% / var(--or-archive-cols));
     margin: 0;
     border: none;
-    padding: 0 0 1.875rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -173,18 +170,10 @@
 
     @media (min-width: 768px) {
       --or-archive-cols: 2;
-      padding: 0.9375rem 0.9375rem 1.875rem;
     }
 
-    @include medium {
+    @media (min-width: 1024px) {
       --or-archive-cols: 3;
-      padding: 1.875rem;
-    }
-
-    // Pin block CTA to card bottom (same contract as news .read-btn / product .card-link).
-    // No padding on the button itself — that skews label vertical centering.
-    > .button.or-btn {
-      margin-block-start: auto;
     }
 
     .event-img,

@@ -78,35 +78,27 @@ export default (function (context) {
       post?.node?.thumbnailImage?.urlOriginal ||
       "https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/noimage.png";
 
-    // Same stack as product cards: title → meta → optional card-text summary.
+    // Same stack as listing-card.html: date → title → optional blurb. Whole card is the link.
+    // 2.5 — In the media: no Read Now. Restore:
+    // <div class="read-btn"><div class="read-sub-btn"><a class="button button--primary or-btn or-btn-block" href="URL" aria-label="NAME read now">read now</a></div></div>
     return `
-    <article class="blog">
-      <div class="blog-post-figure">
-        <figure class="blog-thumbnail">
-          <a href="${url}">
-            <img src="${image}" alt="${name}" loading="lazy">
-          </a>
-        </figure>
-      </div>
-      <div class="blog-post-body with-img">
-        <h4 class="card-title">
-          <a class="card-title-name" href="${url}">${name}</a>
-        </h4>
-        <div class="card-category">
-          <div class="card-category-name blog-date">${date}</div>
+    <article class="listing-card">
+      <a class="listing-card-link" href="${url}">
+        <div class="listing-card-figure">
+          <img src="${image}" alt="${name}" loading="lazy">
         </div>
-        ${
-          summary
-            ? `<div class="card-text blog-post">${summary}</div>`
-            : ""
-        }
-      </div>
-      <div class="read-btn">
-        <div class="read-sub-btn">
-          <a class="button button--primary or-btn or-btn-block" href="${url}" aria-label="${name} read now">read now</a>
+        <div class="listing-card-body">
+          <div class="card-category">
+            <div class="card-category-name listing-card-date">${date}</div>
+          </div>
+          <h4 class="card-title">${name}</h4>
+          ${
+            summary
+              ? `<div class="card-text listing-card-blurb">${summary}</div>`
+              : ""
+          }
         </div>
-      </div>
-      <div class="blog-share"></div>
+      </a>
     </article>
   `;
   }

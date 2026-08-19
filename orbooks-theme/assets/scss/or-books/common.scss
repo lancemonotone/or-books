@@ -95,7 +95,7 @@ body.custom {
     padding-top: 101px;
   }
 
-  @include breakpoint(800px) {
+  @include small {
     padding-top: 0;
   }
 }
@@ -435,6 +435,7 @@ body.custom {
 
 // Shared listing meta — blog/media + featured productView (product cards: .card .card-body above)
 .blog-list .blog-post-body,
+.listing-card-body,
 .top-product .productView-product {
   .card-category-name {
     margin-block-end: 0.8125rem;
@@ -889,6 +890,11 @@ body.custom {
   @include xxlarge {
     max-width: 1192px;
     margin: 0 auto 60px;
+  }
+
+  // One-page catalogs still print an empty <ul class="pagination-list">
+  &:not(:has(.pagination-item)) {
+    display: none;
   }
 
   .pagination-list {
@@ -1742,7 +1748,7 @@ body.custom {
         }
 
         &:first-child {
-          @include breakpoint(800px) {
+          @include small {
             padding-left: calc(8.33% + 1.5rem);
           }
         }
@@ -2069,31 +2075,6 @@ body.custom {
         text-align: center;
       }
     }
-  }
-}
-// Accordion chrome only — type comes from typography.scss (bare h*)
-.accordion-custom-tabs {
-  .accordion-title {
-    cursor: pointer;
-    position: relative;
-    padding-inline-end: 1.5rem;
-
-    .icon {
-      position: absolute;
-      inset-inline-end: 0;
-      top: 50%;
-      inline-size: 1rem;
-      block-size: 1rem;
-      transform: translateY(-50%);
-    }
-
-    &.is-open .icon {
-      transform: translateY(-50%) rotate(180deg);
-    }
-  }
-
-  .accordion-desc {
-    display: none;
   }
 }
 

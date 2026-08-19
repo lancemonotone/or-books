@@ -1,0 +1,17 @@
+{{!--
+  Product-card grid (author books, PDP related). Same wrapper; cards stay card.html.
+  News / media / events use listing-card.html instead.
+--}}
+<div class="or-listing-grid">
+    {{#each products}}
+        {{> components/orbooks/card
+            settings=../settings
+            theme_settings=../theme_settings
+            customer=../customer
+            event=../event
+            position=(add @index 1)
+            show_compare=../show_compare
+            show_rating=../show_rating
+        }}
+    {{/each}}
+</div>
