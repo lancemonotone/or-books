@@ -919,9 +919,7 @@
                                     background-color: $color-white;
                                     
                                     .sub-card {
-                                        @include medium {
-                                            padding: 15px 10px 0;
-                                        }
+                                        padding: 15px 10px 0;
                                     }
                                     .card-body {
                                         padding: 16px 0 0;

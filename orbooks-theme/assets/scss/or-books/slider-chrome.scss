@@ -43,7 +43,7 @@
         overflow: hidden;
     }
 
-    // Title/date clear of overlay arrows
+    // Title/date clear of overlay arrows (news/events listing-cards only)
     & .listing-card .listing-card-body {
         padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
     }
@@ -54,7 +54,6 @@
         box-sizing: border-box;
     }
 
-    // Equal-height product cards: stretch slides → fill chain → pin quick-view
     // Markup: li.product.productCarousel-slide.slick-slide > article.card > .sub-card
     // Slick `float: left` breaks flex stretch; do not set height:100% on the slide itself
     // (that fights stretch when the slide is also .product).
@@ -75,10 +74,6 @@
             height: auto !important;
             min-height: 0 !important;
             box-sizing: border-box;
-            // Room for card hover shadow inside the clipped list
-            padding-block: var(--or-listing-card-pad-block-start)
-                var(--or-listing-card-pad-block-end);
-            padding-inline: var(--or-listing-card-pad-inline);
         }
 
         .card {
@@ -87,7 +82,6 @@
             flex: 1 1 auto;
             min-block-size: 0;
             block-size: 100%;
-            padding: 0;
         }
 
         .sub-card {

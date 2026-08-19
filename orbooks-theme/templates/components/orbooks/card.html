@@ -28,6 +28,7 @@
             {{lang 'common.login_for_pricing'}}
         {{/or}}"
     {{/if}}>
+    <a class="card-hit" href="{{url}}" target="_blank" tabindex="-1" aria-hidden="true"{{#if settings.data_tag_enabled}} data-event-type="product-click"{{/if}}></a>
     <div class="sub-card">
         <figure class="card-figure">
             {{#if stock_level '===' 0}}

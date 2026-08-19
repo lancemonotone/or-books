@@ -38,13 +38,17 @@
           @include medium {
             justify-content: flex-start;
           }
-          --or-news-slider-meta-band: 4.75rem;
-
           .blog-cont {
-            padding-top: 0.5rem;
+            --or-listing-card-body-pad: 1.25rem;
+            --or-news-slider-track-pad-top: 0.5rem;
+
+            container-type: inline-size;
+            padding-block-start: var(--or-news-slider-track-pad-top);
+
             @include xxlarge {
-              padding-top: 0.75rem;
+              --or-news-slider-track-pad-top: 0.75rem;
             }
+
             .slick-list {
               // Full-bleed with slider-chrome (no side gutter / no -5px cancel)
               margin-inline: 0;
@@ -69,14 +73,14 @@
               }
             }
 
-            // Beside date/title, not mid-image (shared chrome is vertical-center)
+            // Fixed from slider top at the date (landscape thumbs). Title wrap does not move arrows.
             .slick-arrow {
-              top: auto;
-              transform: none;
-              inset-block-end: calc(
-                (var(--or-news-slider-meta-band) - var(--or-slider-arrow-size)) /
-                  2
+              top: calc(
+                var(--or-news-slider-track-pad-top) + 100cqw * 9 / 16 +
+                  var(--or-listing-card-body-pad)
               );
+              transform: none;
+              inset-block-end: auto;
             }
           }
         }

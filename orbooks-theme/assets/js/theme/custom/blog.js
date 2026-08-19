@@ -94,7 +94,7 @@ export default (function (context) {
           <h4 class="card-title">${name}</h4>
           ${
             summary
-              ? `<div class="card-text listing-card-blurb">${summary}</div>`
+              ? `<div class="listing-card-blurb">${summary}</div>`
               : ""
           }
         </div>
