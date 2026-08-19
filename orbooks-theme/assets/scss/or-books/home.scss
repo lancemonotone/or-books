@@ -38,6 +38,8 @@
           @include medium {
             justify-content: flex-start;
           }
+          --or-news-slider-meta-band: 4.75rem;
+
           .blog-cont {
             padding-top: 0.5rem;
             @include xxlarge {
@@ -50,6 +52,12 @@
                 --or-listing-cols: 1;
                 padding: 0;
                 inline-size: 100%;
+
+                &:hover,
+                &:focus-within {
+                  --or-listing-card-shadow: none;
+                }
+
                 // Thumbnail radius + 1px clip inset: slider-chrome.scss
                 .listing-card-body {
                   text-align: center;
@@ -59,6 +67,16 @@
                   }
                 }
               }
+            }
+
+            // Beside date/title, not mid-image (shared chrome is vertical-center)
+            .slick-arrow {
+              top: auto;
+              transform: none;
+              inset-block-end: calc(
+                (var(--or-news-slider-meta-band) - var(--or-slider-arrow-size)) /
+                  2
+              );
             }
           }
         }
@@ -462,51 +480,8 @@
   }
   .home-new {
     // Vertical spacing: parent .or-flow gap
-    // Carousel shell (margin / padding-block / arrows): slider-chrome.scss
-    .productCarousel {
-      .slick-list {
-        .slick-track {
-          // Equal-height flex track: slider-chrome.scss (do not flex-wrap here)
-          .slick-slide {
-            padding-top: 10px;
-            padding-bottom: 10px;
-            // Equal height: slider-chrome.scss (.productCarousel stretch chain)
-            .productCarousel-slide {
-              @include medium {
-                padding: 9px 10px;
-              }
-              @include xlarge {
-                padding: 9px 16px;
-              }
-            }
-            .sub-card {
-              padding: 21px 21px;
-              @include small {
-                padding: 15px 15px;
-              }
-              @include medium {
-                margin-bottom: 0;
-              }
-              @include xlarge {
-                padding: 22px 18px 15px;
-              }
-              .card-figure {
-                width: 100%;
-              }
-              .card-body {
-                text-align: center;
-                @include medium {
-                  width: 100%;
-                  text-align: left;
-                }
-              }
-              // .card-link pin: slider-chrome.scss
-            }
-          }
-          // Equal height wrappers: slider-chrome.scss
-        }
-      }
-    }
+    // Card pad / bleed / hover: listing-card.scss
+    // Carousel arrows / equal-height stretch: slider-chrome.scss
   }
 
   .recent-main {

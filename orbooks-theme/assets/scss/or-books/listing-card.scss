@@ -191,3 +191,11 @@
     var(--or-listing-card-pad-block-end);
   padding-inline: var(--or-listing-card-pad-inline);
 }
+
+.listing-card-rights {
+  display: none;
+}
+
+.subsidiry-rights .listing-card-rights {
+  display: block;
+}
