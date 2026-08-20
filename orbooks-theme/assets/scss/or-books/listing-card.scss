@@ -107,9 +107,10 @@
     row-gap: var(--or-listing-stack-gap);
   }
 
-  // Video / past-events archives — own column stairs (not book 3→4).
+  // Video / reading-lists / image-panel archives — own column stairs (not book 3→4).
   // Keep host margin-inline bleed so listing-card pad lines thumbs up with page h1.
-  &.video-page {
+  &.video-page,
+  &.reading-page {
     --or-listing-cols: 1;
 
     @media (min-width: 768px) {

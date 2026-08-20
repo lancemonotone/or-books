@@ -1454,51 +1454,6 @@
   display: flex;
   justify-content: center;
 }
-// reading list category
-.reading-page {
-  .reading-grid {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -10px;
-    @include small {
-      margin: 0 -15px;
-    }
-    @include large {
-      margin: 0 -30px;
-    }
-    .reading-card {
-      width: 100%;
-      padding: 15px 10px;
-
-      @include small {
-        width: 50%;
-        padding: 15px;
-      }
-      @include medium {
-        width: 33.33%;
-      }
-      @include large {
-        padding: 30px;
-      }
-
-      .reading-link {
-        .reading-card-img-container {
-          display: flex;
-          justify-content: center;
-
-          .reading-card-image {
-            width: 100%;
-          }
-        }
-        .card-body {
-          display: none;
-        }
-      }
-    }
-  }
-}
-
-
 .desc.short-description {
   display: none;
 }
