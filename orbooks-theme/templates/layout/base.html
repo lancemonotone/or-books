@@ -142,15 +142,15 @@
 
             $(document).ready(function () {
                 $.ajax({
-                    url: "/events",
+                    url: "/past-events",
                     success: function (data) {
                         const parsedHTML = $('<div>').html(data);
-                        const eventCards = parsedHTML.find('.event-page .event-card');
+                        const eventCards = parsedHTML.find('.event-page .listing-card');
 
                         if (eventCards.length > 0) {
                             $('.event-carousel .eventgrid').html(eventCards);
                         } else {
-                            console.warn("No .event-card elements found in AJAX response.");
+                            console.warn("No .listing-card elements found in AJAX response.");
                         }
                     },
                     error: function (xhr, status, error) {
@@ -160,7 +160,7 @@
                         $(".event-carousel.main-loader").removeClass('main-loader');
                         $(".event-carousel").children(".waviy").remove();
 
-                        const extraCards = $(".event-carousel .eventgrid .event-card:nth-child(n+5)");
+                        const extraCards = $(".event-carousel .eventgrid .listing-card:nth-child(n+5)");
                         extraCards.remove();
 
                         $('.event-carousel .eventgrid').slick({

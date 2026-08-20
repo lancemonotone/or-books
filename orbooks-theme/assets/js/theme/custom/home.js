@@ -73,7 +73,7 @@ export default (function (context) {
     complete: function () {
       $(".video-home.main-loader").removeClass('main-loader')
       $(".video-home").children(".waviy").remove();
-      $(".video-home .videomain .video-card:nth-child(n+5)").remove();
+      $(".video-home .videomain .listing-card:nth-child(n+5)").remove();
       $('.video-home .videomain').slick({
         infinite: true,
         slidesToShow: 1,

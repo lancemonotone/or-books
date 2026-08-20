@@ -128,7 +128,6 @@
 
   > .listing-card,
   > .card,
-  > .video-card,
   > .event-card {
     min-inline-size: 0;
     inline-size: auto;
@@ -218,7 +217,6 @@
     }
   }
 
-  .video-card,
   .event-card {
     padding-block: var(--or-listing-card-pad-block-start)
       var(--or-listing-card-pad-block-end);
