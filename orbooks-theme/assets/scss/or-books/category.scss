@@ -1464,19 +1464,6 @@
   display: flex;
   justify-content: center;
 }
-.cat-desc {
-  @include hs-400;
-  color: $color-greyDarkest;
-  font-size: 14px;
-  line-height: 1;
-  @include medium {
-    font-size: 16px;
-  }
-  @include xxlarge {
-    font-size: 18px;
-  }
-}
-
 // reading list category
 .reading-page {
   .reading-grid {

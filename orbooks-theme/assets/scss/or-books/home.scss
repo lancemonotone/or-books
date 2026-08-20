@@ -63,13 +63,6 @@
                 }
 
                 // Thumbnail radius + 1px clip inset: slider-chrome.scss
-                .listing-card-body {
-                  text-align: center;
-
-                  @media (min-width: 768px) {
-                    text-align: start;
-                  }
-                }
               }
             }
 

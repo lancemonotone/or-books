@@ -898,8 +898,12 @@
   }
 }
 
-// Related: desktop vs mobile placement only
+// Related: desktop vs mobile placement only. Sidebar is one card wide.
 .related-sidebar {
+  .or-listing {
+    --or-listing-cols: 1;
+  }
+
   .card {
     width: 100%;
     height: auto;

@@ -1,8 +1,8 @@
 {{!--
-  Product-card grid (author books, PDP related). Same wrapper; cards stay card.html.
+  Product-card grid (author books, PDP related). Host is .or-listing; cards stay card.html.
   News / media / events use listing-card.html instead.
 --}}
-<div class="or-listing-grid">
+<div class="or-listing">
     {{#each products}}
         {{> components/orbooks/card
             settings=../settings

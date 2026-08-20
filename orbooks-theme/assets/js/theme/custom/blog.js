@@ -70,7 +70,8 @@ export default (function (context) {
   }
 
   function buildBlogPostHTML(post) {
-    const date = formatUTCDate(post.node.publishedDate.utc);
+    const utc = post.node.publishedDate.utc;
+    const date = formatUTCDate(utc);
     const name = post.node.name;
     const summary = post.node.plainTextSummary || "";
     const url = post.node.path;
@@ -78,26 +79,18 @@ export default (function (context) {
       post?.node?.thumbnailImage?.urlOriginal ||
       "https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/noimage.png";
 
-    // Same stack as listing-card.html: date → title → optional blurb. Whole card is the link.
+    // Same stack as listing-card.html: figure → time → h4 → optional p.
     // 2.5 — In the media: no Read Now. Restore:
     // <div class="read-btn"><div class="read-sub-btn"><a class="button button--primary or-btn or-btn-block" href="URL" aria-label="NAME read now">read now</a></div></div>
     return `
     <article class="listing-card">
-      <a class="listing-card-link" href="${url}">
-        <div class="listing-card-figure">
+      <a href="${url}">
+        <figure>
           <img src="${image}" alt="${name}" loading="lazy">
-        </div>
-        <div class="listing-card-body">
-          <div class="card-category">
-            <div class="card-category-name listing-card-date">${date}</div>
-          </div>
-          <h4 class="card-title">${name}</h4>
-          ${
-            summary
-              ? `<div class="listing-card-blurb">${summary}</div>`
-              : ""
-          }
-        </div>
+        </figure>
+        <time datetime="${utc}">${date}</time>
+        <h4>${name}</h4>
+        ${summary ? `<p>${summary}</p>` : ""}
       </a>
     </article>
   `;

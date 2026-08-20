@@ -16,7 +16,7 @@
     <div class="sub-listItem">
         <div class="product-data">
             <figure class="listItem-figure">
-                <a href="{{url}}" target="_blank"
+                <a href="{{url}}"
                 class="listItem-figure__link"
                 aria-label="{{> components/products/product-info}}"
                 {{#if settings.data_tag_enabled}}
@@ -79,7 +79,7 @@
                     <div class="listItem-details">
                         
                         <h4 class="listItem-title">
-                            <a href="{{url}}" target="_blank"
+                            <a href="{{url}}"
                             aria-label="{{> components/products/product-info}}"
                             {{#if settings.data_tag_enabled}}
                             data-event-type="product-click"
@@ -88,20 +88,16 @@
                                 {{name}}
                             </a>
                         </h4>
-                        <div class="card-category custom-author-field">
-                            {{#each custom_fields}}
-                                {{#if name '===' 'sub-heading'}}
-                                    <div class="card-category-title" style="display: none;">{{name}}</div>
-                                    <div class="card-category-name">{{{value}}}</div>
-                                {{/if}}
-                            {{/each}}
-                            {{#each custom_fields}}
-                                {{#if name '===' 'Author'}}
-                                    <div class="card-category-title" style="display: none;">{{name}}</div>
-                                    <div class="card-text">{{{value}}}</div>
-                                {{/if}}
-                            {{/each}}
-                        </div>
+                        {{#each custom_fields}}
+                            {{#if name '===' 'sub-heading'}}
+                                <p>{{{value}}}</p>
+                            {{/if}}
+                        {{/each}}
+                        {{#each custom_fields}}
+                            {{#if name '===' 'Author'}}
+                                <p>{{{value}}}</p>
+                            {{/if}}
+                        {{/each}}
                         <div class="card-warranty">
                             
                         </div>

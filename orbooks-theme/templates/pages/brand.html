@@ -71,7 +71,7 @@ blog:
                         <use href="#icon-chevron-down"/>
                     </svg>
                 </h3>
-                <div class="blog-list">
+                <div class="blog-list or-listing">
                     {{#each blog.recent_posts }}
                         {{#contains (toLowerCase (JSONstringify (pluck tags 'name'))) (toLowerCase (JSONstringify ../brand.name)) }}
                             {{> components/blog/post post=this theme_settings=../theme_settings}}

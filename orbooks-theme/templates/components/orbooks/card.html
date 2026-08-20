@@ -28,7 +28,7 @@
             {{lang 'common.login_for_pricing'}}
         {{/or}}"
     {{/if}}>
-    <a class="card-hit" href="{{url}}" target="_blank" tabindex="-1" aria-hidden="true"{{#if settings.data_tag_enabled}} data-event-type="product-click"{{/if}}></a>
+    <a class="card-hit" href="{{url}}" tabindex="-1" aria-hidden="true"{{#if settings.data_tag_enabled}} data-event-type="product-click"{{/if}}></a>
     <div class="sub-card">
         <figure class="card-figure">
             {{#if stock_level '===' 0}}
@@ -63,7 +63,7 @@
             {{/if}}
             {{/or}}
             {{/if}}
-            <a target="_blank" href="{{url}}"
+            <a href="{{url}}"
                 class="card-figure__link"
                 aria-label="{{> components/products/product-info}}"
                 {{#if settings.data_tag_enabled}}
@@ -78,48 +78,6 @@
                     }}
                 </div>
             </a>
-
-            <figcaption class="card-figcaption">
-                <div class="card-figcaption-body">                    
-                    {{#if show_compare}}
-                    <label class="button button--small card-figcaption-button"
-                        for="compare-{{id}}">
-                        {{lang 'products.compare'}} <input type="checkbox"
-                            name="products[]" value="{{id}}" id="compare-{{id}}"
-                            data-compare-id="{{id}}">
-                    </label>
-                    {{/if}}
-                    {{#if show_cart_action}}
-                    {{#if has_options}}
-                    <a href="{{url}}" data-event-type="product-click"
-                        class="button button--small card-figcaption-button"
-                        data-product-id="{{id}}">{{lang
-                        'products.choose_options'}}</a>
-                    {{/if}}
-                    {{#if pre_order}}
-                    <a href="{{pre_order_add_to_cart_url}}"
-                        data-event-type="product-click"
-                        class="button button--small card-figcaption-button">{{lang
-                        'products.pre_order'}}</a>
-                    {{/if}}
-                    {{#if add_to_cart_url }}
-                    <a href="{{add_to_cart_url}}"
-                        data-event-type="product-click"
-                        data-button-type="add-cart"
-                        class="button button--small card-figcaption-button">{{lang
-                        'products.add_to_cart'}}</a>
-                    <span
-                        class="product-status-message aria-description--hidden">{{lang
-                        'category.add_cart_announcement'}}</span>
-                    {{/if}}
-                    {{#if out_of_stock_message }}
-                    <a href="{{url}}" data-event-type="product-click"
-                        class="button button--small card-figcaption-button"
-                        data-product-id="{{id}}">{{out_of_stock_message}}</a>
-                    {{/if}}
-                    {{/if}}
-                </div>
-            </figcaption>
         </figure>
         <div class="card-body">
             <div>
@@ -141,7 +99,7 @@
                 </p>
                 {{/and}}
                 <h4 class="card-title">
-                    <a target="_blank" class="card-title-name"
+                    <a class="card-title-name"
                         aria-label="{{> components/products/product-info}}"
                         href="{{url}}"
                         {{#if settings.data_tag_enabled}}
@@ -149,20 +107,16 @@
                         {{name}}
                     </a>
                 </h4>
-                <div class="card-category custom-author-field">
-                    {{#each custom_fields}}
-                    {{#if name '===' 'sub-heading'}}
-                    <div class="card-category-title" style="display: none;">{{name}}</div>
-                    <div class="card-category-name">{{{value}}}</div>
-                    {{/if}}
-                    {{/each}}
-                    {{#each custom_fields}}
-                    {{#if name '===' 'Author'}}
-                    <div class="card-category-title" style="display: none;">{{name}}</div>
-                    <div class="card-text">{{{value}}}</div>
-                    {{/if}}
-                    {{/each}}
-                </div>
+                {{#each custom_fields}}
+                {{#if name '===' 'sub-heading'}}
+                <p>{{{value}}}</p>
+                {{/if}}
+                {{/each}}
+                {{#each custom_fields}}
+                {{#if name '===' 'Author'}}
+                <p>{{{value}}}</p>
+                {{/if}}
+                {{/each}}
                 {{#each custom_fields}}
                 {{#if name '===' 'Rights'}}
                 <div class="listing-card-rights product-desc">

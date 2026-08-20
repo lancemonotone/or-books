@@ -67,17 +67,11 @@
     inline-size: 100%;
   }
 
-  .or-listing-grid {
+  .or-listing {
     @media (min-width: 768px) {
       --or-listing-cols: 2;
     }
 
-    @media (min-width: 1024px) {
-      --or-listing-cols: 3;
-    }
-  }
-
-  .listing-card {
     @media (min-width: 1024px) {
       --or-listing-cols: 3;
     }
@@ -101,7 +95,7 @@
 
   .author-pic {
     margin-block-end: 1.25rem;
-    font-size: var(--or-text-sm);
+    font-size: var(--or-text-md);
     font-style: italic;
     color: $color-greyDarkest;
     order: 1;

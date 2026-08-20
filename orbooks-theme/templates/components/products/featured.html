@@ -3,7 +3,7 @@
     url="/reading-lists/the-palestine-list/"
 }}
 
-<ul class="productCarousel newprd-sale" data-product-type="featured" {{#if settings.data_tag_enabled}} data-list-name="Featured Products" {{/if}}>
+<ul class="or-listing productCarousel newprd-sale" data-product-type="featured" {{#if settings.data_tag_enabled}} data-list-name="Featured Products" {{/if}}>
     {{#each products}}
         <li class="product productCarousel-slide">
                 {{>components/orbooks/card settings=../settings theme_settings=../theme_settings customer=../customer event="list" position=(add @index 1)}}

@@ -12,7 +12,7 @@
 | **Branch** | `feature/wave1-2.6-left-align-paragraphs` |
 | **Commits** | `dbbe191` Share shout blockquotes via typography; About matches PDP cite markup. · `933bb40` Unify list cards, newsletter CTAs, and body paragraph alignment. · `804b67e` Keep list-card titles centered through tablet; restore row padding. |
 | **Deploy** | Local only until Wave 1 batch `stencil push` |
-| **Briefboard status** | `planned` — delivery comment posted; estimate 0.5h, `actual_hours` already 1 |
+| **Briefboard status** | Client approved — done on our side |
 | **Estimate note** | Ran longer than 0.5h — many CMS/category templates needed the same alignment + shared layout contract, not a single CSS tweak |
 
 ## Client ask (original)

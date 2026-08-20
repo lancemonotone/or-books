@@ -21,9 +21,9 @@
   --or-text-3xl: 1.875rem; // 30
 
   // Semantic — body
-  --or-type-body-size: var(--or-text-sm); // 14 mobile
-  --or-type-body-line: 1.5;
-  --or-type-body-margin-block-end: 0.75rem;
+  --or-type-body-size: var(--or-text-md);
+  --or-type-body-line: 1.4;
+  --or-type-body-margin-block-end: 0.625rem;
 
   // Pull quotes in product CMS (Shouts / description misuse h2–h3)
   --or-type-pullquote-size: var(
@@ -33,7 +33,7 @@
   --or-type-pullquote-margin-block-end: 0.5rem;
 
   // Semantic — headings (Major Third 1.25 from h6 base, then −2px each)
-  --or-type-h6-size: 0.875rem; // 14
+  --or-type-h6-size: 1rem;
   --or-type-h5-size: 1.125rem; // 18
   --or-type-h4-size: 1.2375rem;
   --or-type-h3-size: 1.828125rem; // 29.25
@@ -171,6 +171,7 @@ blockquote {
 .custom-fields-shouts {
   --or-shouts-pad-block: 0.625rem;
   --or-shouts-quote-gap: 0.9375rem;
+  --or-shouts-quote-size: var(--or-text-lg);
 
   border-block: 1px solid $color-greyLightest;
   padding-block: var(--or-shouts-pad-block);
@@ -192,6 +193,7 @@ blockquote {
 
   & blockquote {
     margin-block-start: var(--or-shouts-quote-gap);
+    font-size: var(--or-shouts-quote-size);
   }
 }
 
@@ -273,7 +275,7 @@ h6 {
     );
   }
 
-  h4 {
+  h4:not(.card-title):not(.listItem-title) {
     font-size: calc(
       var(--or-type-h4-size) - var(--or-type-heading-narrow-delta)
     );
@@ -290,6 +292,11 @@ h6 {
       var(--or-type-h6-size) - var(--or-type-heading-narrow-delta)
     );
   }
+}
+
+h4.card-title,
+.listItem-title {
+  font-size: var(--or-type-h4-size);
 }
 
 // Section heads own their spacing via flex gap / container margin
@@ -342,12 +349,12 @@ h6 {
 // (not productView — those use the naked heading center→768 contract)
 .event-details,
 .video-details,
+.blog-list .blog-post-body,
+.listing-card,
+.listItem-details,
 .card,
 .card-body,
-.card-figure,
-.listItem-details,
-.blog-list .blog-post-body,
-.listing-card-body {
+.card-figure {
   & h1,
   & h2,
   & h3,
@@ -372,15 +379,21 @@ h6 {
 
 // 2.5 — subtitles and news headlines keep CMS title case (not heading uppercase)
 .productView-product h5,
-.listing-card .card-title,
+.listing-card h4,
 .blog-title {
   text-transform: none;
 }
 
 // 2.5 — book page: tighter title→subtitle than subtitle→author (heading stairs were even)
 .custom-pdp .productView-product {
+  --or-pdp-author-size: var(--or-type-h4-size);
+
   & h2 {
     --or-type-heading-margin-block-end: 0.25rem;
+  }
+
+  & h3 {
+    font-size: var(--or-pdp-author-size);
   }
 
   & h5 {
@@ -400,7 +413,7 @@ h6 {
 .product-desc:not(.productView-details) {
   & h1,
   & h2,
-  & h3,
+  & h3:not(.accordion-title):not(.product-desc-title),
   & h4,
   & h5,
   & h6 {

@@ -287,22 +287,6 @@
       @include xxlarge {
         padding: 35px 0 42px;
       }
-
-      p {
-        color: stencilColor("brand-cnt");
-        @include hs-400;
-        font-size: 14px;
-        text-transform: none;
-        text-align: left;
-        line-height: 1.4;
-        margin: 0 0 10px;
-        @include xlarge {
-          font-size: 18px;
-        }
-        @include xxlarge {
-          font-size: 25px;
-        }
-      }
     }
     .actionBar {
       display: none;

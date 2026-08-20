@@ -1,0 +1,14 @@
+---
+description: One rem token per visual job; never snapshot old px
+alwaysApply: true
+---
+
+# CSS tokens (no history in the tree)
+
+Git stores history. CSS does not.
+
+- **One token per visual job.** Shared component → shared token. No page exceptions unless the user names that exception.
+- **Do not snapshot current pixels** (“match this page” ≠ copy `25px` / `1.5625rem`).
+- Map leftover px to the **nearest existing rem step** (`--or-text-*` in `typography.scss`, or an existing space token). If the user names a rem value, use that.
+- **No conversion comments** (`// 25px`, `// two pads`, `// PDP source`).
+- Do not keep a second “old” value beside the new token.

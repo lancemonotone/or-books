@@ -1,6 +1,6 @@
 {{> components/orbooks/section-head title=(lang 'products.top')}}
 {{#if theme_settings.homepage_new_products_column_count ">" 10}}
-    <ul class="productCarousel newprd" data-product-type="top_sellers"  {{#if settings.data_tag_enabled}} data-list-name="Most Popular Products" {{/if}}>
+    <ul class="or-listing productCarousel newprd" data-product-type="top_sellers"  {{#if settings.data_tag_enabled}} data-list-name="Most Popular Products" {{/if}}>
 
     {{#each products}}
     <li class="product productCarousel-slide">
@@ -9,7 +9,7 @@
     {{/each}}
     </ul>
     {{else}}
-    <ul class="productCarousel singleprd" data-product-type="top_sellers"  {{#if settings.data_tag_enabled}} data-list-name="Most Popular Products" {{/if}}>
+    <ul class="or-listing productCarousel singleprd" data-product-type="top_sellers"  {{#if settings.data_tag_enabled}} data-list-name="Most Popular Products" {{/if}}>
 
         {{#each products}}
         <li class="product productCarousel-slide">

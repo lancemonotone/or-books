@@ -1,6 +1,6 @@
 {{> components/orbooks/section-head title=(lang 'products.new')}}
 
-<ul class="productGrid productGrid--maxCol{{ columns }} productCarousel newprd" data-product-type="new" {{#if settings.data_tag_enabled}} data-list-name="New Products" {{/if}}>
+<ul class="or-listing productGrid productGrid--maxCol{{ columns }} productCarousel newprd" data-product-type="new" {{#if settings.data_tag_enabled}} data-list-name="New Products" {{/if}}>
     {{#each products}}
         <li class="product">
                 {{>components/orbooks/card settings=../settings theme_settings=../theme_settings customer=../customer event="list" position=(add @index 1)}}

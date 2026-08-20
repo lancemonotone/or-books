@@ -1,189 +1,195 @@
 // Shared slider chrome for any .or-section--slider
 // Design language: docs/design-language.md
 // Arrows stay on the Slick carousel (DOM). Side-mounted, vertically centered — never in the section head.
-// Track is full-bleed; arrows overlay slide edges (media). Block CTAs use .or-btn max-inline cap.
+// Book sliders: arrows hang half a control outside the track (clear of hover shadow).
+// Narrow listing sliders: arrows stay inset. Block CTAs use .or-btn max-inline cap.
 // Product carousel shell (margin / block spacing) lives here — not in home.scss.
 // 4.8: style .slick-dots here the same shared way — no per-page one-offs.
 
 .or-section.or-section--slider {
-    --or-slider-arrow-size: 1.25rem;
-    // Sit on the card edge; slight inset so the hit target stays inside the section
-    --or-slider-arrow-inset: 0.25rem;
-    // No side gutter — slides span the section; CTAs cap via .or-btn
-    --or-slider-track-pad: 0;
+  --or-slider-arrow-size: 1.25rem;
+  // Narrow hosts (Latest News): stay inside the section
+  --or-slider-arrow-inset: 0.25rem;
+  // No side gutter — slides span the section; CTAs cap via .or-btn
+  --or-slider-track-pad: 0;
+  overflow: visible;
 
-    @media (min-width: 1024px) {
-        --or-slider-arrow-size: 1.4375rem;
+  @media (min-width: 1024px) {
+    --or-slider-arrow-size: 1.4375rem;
+  }
+
+  .productCarousel {
+    // Halfway between flush-on-card and full gutter hang
+    --or-slider-arrow-inset: calc(
+      -0.5 * (var(--or-slider-arrow-size) + var(--or-listing-shadow-room))
+    );
+    padding-block-start: 0;
+    margin-block: 0 !important;
+    margin-inline: 0 !important;
+    overflow: visible;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  .slick-slider.slick-initialized {
+    position: relative;
+    box-sizing: border-box;
+    overflow: visible;
+    padding-inline: var(--or-slider-track-pad);
+    padding-block-start: 0;
+  }
+
+  .slick-slider.slick-initialized .slick-list,
+  .productCarousel.slick-initialized .slick-list {
+    margin-inline: 0;
+    overflow: hidden;
+  }
+
+  & .listing-card time,
+  & .listing-card h4,
+  & .listing-card p {
+    padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
+  }
+
+  // 1px so slick overflow does not clip the thumbnail border
+  & .listing-card figure {
+    padding-inline: 1px;
+    box-sizing: border-box;
+  }
+
+  // Markup: li.product.productCarousel-slide.slick-slide > article.card > .sub-card
+  // Slick `float: left` breaks flex stretch; do not set height:100% on the slide itself
+  // (that fights stretch when the slide is also .product).
+  .productCarousel.slick-initialized {
+    .slick-track {
+      display: flex !important;
+      align-items: stretch;
+      flex-wrap: nowrap;
     }
 
-    // Bleed = listing-card pad tokens (not a second gutter)
-    .productCarousel {
-        padding-block-start: 0;
-        margin-block: 0 !important;
-        margin-inline: calc(var(--or-listing-card-pad-inline) * -1) !important;
-        justify-content: center;
-
-        &::before,
-        &::after {
-            display: none;
-        }
+    .slick-slide {
+      float: none !important;
+      display: flex !important;
+      flex-direction: column;
+      flex-grow: 0;
+      flex-shrink: 0;
+      align-self: stretch;
+      height: auto !important;
+      min-height: 0 !important;
+      box-sizing: border-box;
     }
 
-    // Full-bleed track; arrows overlay (do not reserve gutter)
-    .slick-slider.slick-initialized {
-        position: relative;
-        box-sizing: border-box;
-        padding-inline: var(--or-slider-track-pad);
-        padding-block-start: 0;
+    .card {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-block-size: 0;
+      block-size: 100%;
     }
 
-    .slick-slider.slick-initialized .slick-list,
-    .productCarousel.slick-initialized .slick-list {
-        margin-inline: 0;
-        overflow: hidden;
+    .sub-card {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      inline-size: 100%;
+      min-block-size: 0;
+      block-size: 100%;
+      align-items: center;
     }
 
-    // Title/date clear of overlay arrows (news/events listing-cards only)
-    & .listing-card .listing-card-body {
-        padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
+    .card-body {
+      flex: 1 1 auto;
+      inline-size: 100%;
     }
 
-    // 1px so slick overflow does not clip the thumbnail border
-    & .listing-card .listing-card-figure {
-        padding-inline: 1px;
-        box-sizing: border-box;
+    .card-link {
+      margin-block-start: auto;
+      align-self: stretch;
+      flex-shrink: 0;
+    }
+  }
+
+  .slick-arrow {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    // Physical + logical: beat legacy `width/height: auto` overrides (e.g. sidebar)
+    width: var(--or-slider-arrow-size);
+    height: var(--or-slider-arrow-size);
+    inline-size: var(--or-slider-arrow-size);
+    block-size: var(--or-slider-arrow-size);
+    min-width: var(--or-slider-arrow-size);
+    min-height: var(--or-slider-arrow-size);
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 0;
+    line-height: 0;
+    background-color: transparent;
+    background-image: none;
+    box-shadow: none;
+    // Keep clicks on the control, not the slide underneath
+    pointer-events: auto;
+
+    &::before {
+      content: "";
+      display: block;
+      width: var(--or-slider-arrow-size);
+      height: var(--or-slider-arrow-size);
+      inline-size: var(--or-slider-arrow-size);
+      block-size: var(--or-slider-arrow-size);
+      background-image: url("../img/left-slider.svg");
+      background-position: 50%;
+      background-repeat: no-repeat;
+      background-size: contain;
+      opacity: 1;
     }
 
-    // Markup: li.product.productCarousel-slide.slick-slide > article.card > .sub-card
-    // Slick `float: left` breaks flex stretch; do not set height:100% on the slide itself
-    // (that fights stretch when the slide is also .product).
-    .productCarousel.slick-initialized {
-        .slick-track {
-            display: flex !important;
-            align-items: stretch;
-            flex-wrap: nowrap;
-        }
-
-        .slick-slide {
-            float: none !important;
-            display: flex !important;
-            flex-direction: column;
-            flex-grow: 0;
-            flex-shrink: 0;
-            align-self: stretch;
-            height: auto !important;
-            min-height: 0 !important;
-            box-sizing: border-box;
-        }
-
-        .card {
-            display: flex;
-            flex-direction: column;
-            flex: 1 1 auto;
-            min-block-size: 0;
-            block-size: 100%;
-        }
-
-        .sub-card {
-            display: flex;
-            flex-direction: column;
-            flex: 1 1 auto;
-            inline-size: 100%;
-            min-block-size: 0;
-            block-size: 100%;
-            align-items: center;
-        }
-
-        .card-body {
-            flex: 1 1 auto;
-            inline-size: 100%;
-        }
-
-        .card-link {
-            margin-block-start: auto;
-            align-self: stretch;
-            flex-shrink: 0;
-        }
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      background-image: none;
     }
 
-    .slick-arrow {
-        position: absolute;
-        z-index: 3;
-        top: 50%;
-        transform: translateY(-50%);
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        // Physical + logical: beat legacy `width/height: auto` overrides (e.g. sidebar)
-        width: var(--or-slider-arrow-size);
-        height: var(--or-slider-arrow-size);
-        inline-size: var(--or-slider-arrow-size);
-        block-size: var(--or-slider-arrow-size);
-        min-width: var(--or-slider-arrow-size);
-        min-height: var(--or-slider-arrow-size);
-        margin: 0;
-        padding: 0;
-        border: none;
-        font-size: 0;
-        line-height: 0;
-        background-color: transparent;
-        background-image: none;
-        box-shadow: none;
-        // Keep clicks on the control, not the slide underneath
-        pointer-events: auto;
-
-        &::before {
-            content: "";
-            display: block;
-            width: var(--or-slider-arrow-size);
-            height: var(--or-slider-arrow-size);
-            inline-size: var(--or-slider-arrow-size);
-            block-size: var(--or-slider-arrow-size);
-            background-image: url("../img/left-slider.svg");
-            background-position: 50%;
-            background-repeat: no-repeat;
-            background-size: contain;
-            opacity: 1;
-        }
-
-        &:hover,
-        &:focus {
-            background-color: transparent;
-            background-image: none;
-        }
-
-        &.slick-disabled {
-            opacity: 0.35;
-            cursor: default;
-        }
+    &.slick-disabled {
+      opacity: 0.35;
+      cursor: default;
     }
+  }
 
-    .slick-arrow.slick-prev {
-        left: var(--or-slider-arrow-inset);
-        right: auto;
+  .slick-arrow.slick-prev {
+    left: var(--or-slider-arrow-inset);
+    right: auto;
+  }
+
+  .slick-arrow.slick-next {
+    right: var(--or-slider-arrow-inset);
+    left: auto;
+
+    &::before {
+      transform: rotate(180deg);
     }
+  }
 
-    .slick-arrow.slick-next {
-        right: var(--or-slider-arrow-inset);
-        left: auto;
-
-        &::before {
-            transform: rotate(180deg);
-        }
-    }
-
-    // 4.8 prep — shared dots when enabled
-    .slick-dots {
-        position: static;
-        display: flex;
-        justify-content: center;
-        gap: 0.35rem;
-        margin: 0.75rem 0 0;
-        padding: 0;
-        list-style: none;
-        inset: auto;
-        transform: none;
-        inline-size: auto;
-        block-size: auto;
-    }
+  // 4.8 prep — shared dots when enabled
+  .slick-dots {
+    position: static;
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    inset: auto;
+    transform: none;
+    inline-size: auto;
+    block-size: auto;
+  }
 }
