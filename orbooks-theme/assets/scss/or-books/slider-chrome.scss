@@ -19,9 +19,11 @@
   }
 
   .productCarousel {
-    // Halfway between flush-on-card and full gutter hang
+    // Halfway hang + 0.3125rem farther out.
+    // Shadow-room must be a length (0px not 0) or this calc is invalid → both arrows stack left.
     --or-slider-arrow-inset: calc(
-      -0.5 * (var(--or-slider-arrow-size) + var(--or-listing-shadow-room))
+      -0.5 * (var(--or-slider-arrow-size) + var(--or-listing-shadow-room, 0px)) -
+        0.3125rem
     );
     padding-block-start: 0;
     margin-block: 0 !important;

@@ -59,12 +59,16 @@
       }
     }
 
-    // User override: block layout, no extra padding-left on this grid
+    // User override: block layout, no listing-card bleed into column gutter
     .event-page {
       display: block;
+      margin-inline: 0;
     }
 
     .event-link {
+      display: flex;
+      justify-content: center;
+      inline-size: 100%;
       margin-block: 1.5rem 0.875rem;
       text-align: center;
 
@@ -151,30 +155,23 @@
   // Newsletter CTA: newsletter.scss (.or-newsletter)
 }
 
-// Video / leftover event-card chrome. Stack gap + outer pad: listing-card.scss
+// Video / past-event card chrome. Columns: .or-listing.video-page / .event-page
+// in listing-card.scss (cards fill grid cells — do not % the width again).
 .event-page,
 .video-page {
   inline-size: 100%;
 
   .event-card,
   .video-card {
-    --or-archive-cols: 1;
-
-    inline-size: calc(100% / var(--or-archive-cols));
+    inline-size: auto;
+    max-inline-size: none;
+    min-inline-size: 0;
     margin: 0;
     border: none;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-
-    @media (min-width: 768px) {
-      --or-archive-cols: 2;
-    }
-
-    @media (min-width: 1024px) {
-      --or-archive-cols: 3;
-    }
 
     .event-img,
     .video-img {
@@ -224,12 +221,5 @@
         }
       }
     }
-  }
-}
-
-// Past events archive: four columns on desktop (videos stay three)
-.event-page .event-card {
-  @include medium {
-    --or-archive-cols: 4;
   }
 }

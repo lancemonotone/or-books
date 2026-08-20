@@ -1,16 +1,5 @@
 .category-page {
-  // Listing grid: 2 → 3 across. Cornerstone `.productGrid` goes to 4 at medium.
-  .or-columns .productGrid .product {
-    --or-cat-col-width: 50%;
-
-    inline-size: var(--or-cat-col-width);
-    width: var(--or-cat-col-width);
-
-    @media (min-width: 768px) {
-      --or-cat-col-width: 33.33%;
-    }
-  }
-
+  // Columns + row gap: .or-listing.productGrid in listing-card.scss (1 → 2)
   .page {
     display: flex;
     flex-wrap: wrap;
@@ -198,12 +187,13 @@
     justify-content: flex-start;
   }
 
-  .category-title,
-  .category-short {
+  .category-title {
     padding: 0 0 10px;
   }
 
-  .category-title {
+  .category-short {
+    // Grid owns space below via .or-listing.productGrid margin-block-start
+    padding-block-end: 0;
   }
 }
 .category-short {

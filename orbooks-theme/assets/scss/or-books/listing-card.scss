@@ -6,7 +6,8 @@
   --or-listing-card-pad-block-start: 0;
   --or-listing-card-pad-block-end: 0;
   --or-listing-card-pad-inline: 0;
-  --or-listing-shadow-room: 0;
+  // Unit required — bare `0` breaks calc() in --or-slider-arrow-inset
+  --or-listing-shadow-room: 0px;
   --or-listing-card-body-pad: 1.25rem;
   --or-listing-stack-gap: 2.5rem;
 
@@ -36,6 +37,57 @@
     --or-listing-cols: 4;
   }
 
+  // Static product grids (category / brand / search / authors)
+  &.productGrid:not(.productCarousel) {
+    --or-listing-before-gap: 1.25rem;
+    --or-listing-cols: 1;
+    // Mobile stack: room between author line and next cover
+    --or-listing-stack-gap: 2.5rem;
+
+    display: grid;
+    grid-template-columns: repeat(var(--or-listing-cols), minmax(0, 1fr));
+    align-items: stretch;
+    column-gap: 0;
+    row-gap: var(--or-listing-stack-gap);
+    margin-block-start: var(--or-listing-before-gap);
+
+    // Beat Cornerstone float / flex widths
+    > .product {
+      float: none;
+      display: flex;
+      flex-direction: column;
+      inline-size: auto;
+      width: auto;
+      max-inline-size: none;
+      margin-block-end: 0;
+    }
+
+    @media (min-width: 768px) {
+      --or-listing-before-gap: 1.5rem;
+      --or-listing-cols: 2;
+      --or-listing-stack-gap: 0;
+    }
+  }
+
+  // Book sliders: half the grid surround so cover + type breathe
+  &.productCarousel {
+    // Room inside slick-list clip for sale-badge overhang (C tab)
+    --or-listing-shadow-room: 0.35rem;
+
+    @media (min-width: 768px) {
+      --or-listing-card-pad-block-start: 0.46875rem;
+      --or-listing-card-pad-block-end: 0.625rem;
+      --or-listing-card-pad-inline: 0.46875rem;
+      --or-listing-shadow-room: 0.5rem;
+    }
+
+    @media (min-width: 1024px) {
+      --or-listing-card-pad-block-start: 0.9375rem;
+      --or-listing-card-pad-block-end: 0.9375rem;
+      --or-listing-card-pad-inline: 0.9375rem;
+    }
+  }
+
   // Grid only for static listings. Slider hosts keep or-listing for card chrome;
   // Slick often lives on a child (.blog-cont), so exclude .or-section--slider too.
   &:not(.productCarousel):not(.slick-initialized):not(.productGrid):not(
@@ -47,8 +99,37 @@
     row-gap: var(--or-listing-stack-gap);
   }
 
+  // Video / past-events archives — own column stairs (not book 3→4)
+  &.video-page {
+    --or-listing-cols: 1;
+    margin-inline: 0;
+
+    @media (min-width: 768px) {
+      --or-listing-cols: 2;
+    }
+
+    @media (min-width: 1024px) {
+      --or-listing-cols: 3;
+    }
+  }
+
+  &.event-page {
+    --or-listing-cols: 1;
+    margin-inline: 0;
+
+    @media (min-width: 768px) {
+      --or-listing-cols: 2;
+    }
+
+    @media (min-width: 1024px) {
+      --or-listing-cols: 4;
+    }
+  }
+
   > .listing-card,
-  > .card {
+  > .card,
+  > .video-card,
+  > .event-card {
     min-inline-size: 0;
     inline-size: auto;
     max-inline-size: none;
@@ -182,47 +263,30 @@
   }
 }
 
-.or-listing .card,
-.listItem {
+.or-listing .card {
   container-type: normal;
   container-name: none;
-  --or-listing-sale-size: var(--or-text-md);
-  --or-listing-subtitle-size: var(--or-text-md);
+  // Author = last direct p in card-body stack (not h4+p — that hit solo authors as “subtitle”)
   --or-listing-author-size: var(--or-text-md);
-  --or-listing-subtitle-gap: 0.8125rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     --or-listing-author-size: var(--or-text-lg);
   }
 
-  @media (min-width: 1024px) {
-    --or-listing-subtitle-size: var(--or-text-lg);
-    --or-listing-author-size: var(--or-text-xl);
-  }
-
-  h4 + p {
-    margin-block-end: var(--or-listing-subtitle-gap);
-    font-size: var(--or-listing-subtitle-size);
-    line-height: 1;
-  }
-
-  h4 + p + p {
+  & .card-body > div > p:last-of-type {
     margin-block: 0;
     font-size: var(--or-listing-author-size);
     line-height: 1;
   }
 
-  .discount_off {
-    margin-block-end: 0.5rem;
-
-    span {
-      color: var(--or-listing-author-hover);
-      font-family: $or-font-neue;
-      font-size: var(--or-listing-sale-size);
-      font-weight: 700;
-      line-height: 1;
-    }
+  .card-text-price {
+    display: none;
   }
+}
+
+.listItem {
+  container-type: normal;
+  container-name: none;
 
   .card-text-price {
     display: none;
