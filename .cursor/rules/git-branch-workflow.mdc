@@ -1,18 +1,20 @@
 ---
-description: Git workflow for plans, feature branches, main, and staging
+description: Git workflow for plans, feature branches, staging, main, and remote
 alwaysApply: true
 ---
 
-# Git branch workflow (plans → feature branches → staging → main)
-
-This repo is managed with **local branches** (no `origin` required for the loop below).
+# Git branch workflow (plans → feature branches → staging → main → remote)
 
 ## Branch roles
 
-- **`main`**: approved-only, always in a shippable state.
-- **`staging`** (aka `integration`): aggregates completed work that is not yet approved/shipped; **base for all new plan/feature work**. Must always include the tip of `main`.
+- **`main`**: canonical shipped branch. **Must match `origin/main`** after any push. Agents treat local `main` as stale until it is pushed and verified against remote.
+- **`staging`** (aka `integration`): WIP holding pen — aggregates in-review work; **base for all new plan/feature work**. Must always include the tip of `main`.
 - **`feature/plan-XX-*`**: one branch per plan (or per slice).
 - **`fix/plan-XX-*`**: small follow-ups based on feedback.
+
+## Vocabulary
+
+- **Ship** (user says “ship a branch” / “push to remote”): publish to **`origin`**. Not done until **`main` is pushed** and matches remote.
 
 ## Keep staging current (mandatory)
 
@@ -32,6 +34,7 @@ Do this after:
 - Merge **`staging` → `main`**
 - Any commit or merge that lands **directly on `main`**
 - Cherry-picks / hotfixes onto `main`
+- **`git push origin main`** (remote is now ahead of local `staging` until merged)
 
 ### Before starting new work
 
@@ -53,10 +56,19 @@ Do this after:
   - off **`staging`** if not shipped yet
   - off **`main`** if already shipped — then **merge `main` → `staging`** so staging does not fall behind
 
-## Shipping
+## Shipping to remote (mandatory agent sequence)
 
-- Merge **`staging` → `main`** only after approval.
-- Then **merge `main` → `staging`** (usually a no-op / FF) so the next feature starts clean.
+When the user asks to **ship**, **push**, or publish work to remote:
+
+1. **Feature → staging** — merge or rebase the feature/fix branch into `staging` (resolve conflicts on `staging`).
+2. **Staging → main** — `git checkout main && git merge staging` (FF preferred).
+3. **Main → staging** — `git checkout staging && git merge main` (usually no-op after FF).
+4. **Push** — `git push origin main` (and feature branch only if the user asked to publish that branch too).
+5. **Verify** — `git fetch origin` and confirm `main` matches `origin/main` (`git rev-list --left-right --count main...origin/main` → `0 0`).
+
+Do **not** push only a feature branch and leave `main` behind unless the user explicitly asks for that (e.g. open PR without merging).
+
+Do **not** push `staging` to remote as the canonical release branch — **`main` is what ships**.
 
 ## History safety
 
