@@ -7,9 +7,9 @@
 
 | Kind | Location |
 |------|----------|
-| **Git tag** | `held-theme-unpaid-2026-09-01` on `main` @ `eea83b5` |
-| **Theme zip** | Repo root: `orbooks-held-2026-09-01.zip` (~14 MB) |
-| **Branches** | `main` and `staging` both at same tip when tagged |
+| **Git tag** | `held-theme-unpaid-2026-09-01` → `eea83b5` (on `origin` too) |
+| **Theme zip** | Repo root: `orbooks-held-2026-09-01.zip` (~14 MB, local only) |
+| **Branches** | `main` ≡ `staging` ≡ `origin/main` @ `2274139` (theme tip still `eea83b5`) |
 
 ```bash
 git show held-theme-unpaid-2026-09-01 --no-patch
@@ -42,7 +42,8 @@ Or upload `orbooks-held-2026-09-01.zip` via **Storefront → Themes → Upload**
 
 | Step | Done |
 |------|------|
-| Tag `held-theme-unpaid-2026-09-01` | yes |
-| Bundle `orbooks-held-2026-09-01.zip` | yes |
+| Tag `held-theme-unpaid-2026-09-01` | yes (local + `origin`) |
+| Bundle `orbooks-held-2026-09-01.zip` | yes (local disk) |
+| `main` / `staging` / `origin/main` synced | yes (`2274139`) |
 | Apply stable theme on staging | pending |
 | Delete OR Books_260724 (1–14) | pending |
