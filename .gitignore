@@ -17,3 +17,6 @@ briefboard/
 _office/staging-prod-migration/product-sync-log.txt
 _office/staging-prod-migration/product-sync-state.json
 _office/staging-prod-migration/product-sync-retry-log.txt
+
+# Held theme bundles (Operation Deadbeat Client — local only, do not commit)
+orbooks-held-*.zip

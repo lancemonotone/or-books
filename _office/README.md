@@ -27,6 +27,7 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | 2.6 | `2.6-left-align-paragraphs/` | `feature/wave1-2.6-left-align-paragraphs` | Client approved |
 | 2.7 | `2.7-shorten-news-bylines-on-mobile/` | `fix/wave1-2.7-news-byline-date-only` | Verify sentence/title case; else done |
 | — | `staging-prod-migration/` | — | DIY staging ← prod data transfer (`PLAN.md`) |
+| — | **`deadbeat-client-hold/`** | tag `held-theme-unpaid-2026-09-01` | **Theme hold** — zip + reinstate steps; read before forgetting tag exists |
 
 ## Theme rollback archives
 
