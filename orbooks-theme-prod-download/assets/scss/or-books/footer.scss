@@ -1,0 +1,292 @@
+.footer {
+    background: linear-gradient(95.02deg, #212121 0%, #151515 100%);
+    padding: 44px 0px 0px;
+    @include xsmall {
+        padding: 30px 0px 0px;
+    }
+    @include small {
+        padding: 0;
+    }
+    
+    .footer-main {
+        max-width: 1411px;
+        margin: 0 auto;
+        @include small {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 40px 0;
+        }
+        @include xlarge {
+            padding: 60px 0;
+        }
+        @include xxlarge {
+            padding: 94px 0;
+        }
+        .footer-sub {
+            border-bottom: 1px solid #414141;
+            margin-left: -30px;
+            margin-right: -30px;
+            padding-bottom: 50px;
+            @include xsmall {
+                padding-bottom: 35px;
+            }
+            @include small {
+                padding-bottom: 0;
+                width: 37%;
+                border: none;
+                margin: 0;
+            }
+            .footer-info-col--social {
+                margin-bottom: 34px;
+                text-align: center;
+                @include small {
+                    margin-bottom: 25px;
+                    text-align: left;
+                }
+                @include medium {
+                    text-align: left;
+                }
+                @include xxlarge {
+                    margin-bottom: 50px;
+                }
+                h3 {
+                    color: stencilColor("footer_color");
+                    font-size: 18px;
+                    font-family: HelveticaNeue;
+                    font-weight: 400;
+                    margin-bottom: 6px;
+                    @include xsmall {
+                        font-size: 15px;
+                    }
+                    @include small {
+                        margin-bottom: 0;
+                    }
+                    @include xlarge {
+                        font-size: 17px;
+                        margin-bottom: 2px;
+                    }
+                    @include xxlarge {
+                        font-size: 18px;
+                        margin-bottom: 5px;
+                    }
+                }
+                .socialLinks-item  {
+                    margin: 0 7px 0 0;
+                    .icon {
+                        height: 2.3rem;
+                        width: 2.3rem;
+                        @include xsmall {
+                            height: 2rem;
+                            width: 2rem;
+                        }
+                        @include small {
+                            height: 1.6rem;
+                            width: 1.6rem;
+                        }
+                        @include xlarge {
+                            height: 2.3rem;
+                            width: 2.3rem;
+                        }
+                        svg {
+                            fill: none;
+                            border: 1px solid stencilColor("footer_color");
+                            border-radius: 50px;
+                            path {
+                                fill: stencilColor("footer_color");
+                            }
+                        }
+                        &:hover {
+                            transform: scale(1.15);
+                        }
+                    }
+                    &.youtube {
+                        svg {
+                            path:nth-child(1) {
+                                fill: none;
+                            }
+                        }
+                        
+                    }
+                    &.pinterest {
+                        svg {
+                            @include small {
+                                padding: 5px !important;
+                            }
+                            @include xlarge {
+                                padding: 8px !important;
+                            }
+                        }
+                    }
+                    &.soundcloud{
+                        svg{
+                            border: none;
+                            fill:#fff;
+                        }
+                    }
+                    &.tiktok{
+                        svg{
+                            padding: 7px;
+                        }
+                    }
+                    &.bluesky{
+                        svg{
+                            padding: 6px;
+                        }
+                    }
+                }
+            }
+            .footer-logo {
+                text-align: center;
+                width: 74%;
+                margin: 0 auto;
+                @include xsmall {
+                    width: 40%;
+                }
+                @include small {
+                    width: 62%;
+                    margin: 0;
+                }
+                @include medium {
+                    width: 49%;
+                }
+                @include xlarge {
+                    width: 51%;
+                }
+                @include xxlarge {
+                    width: 60%;
+                    max-width: 312px;
+                }
+            }
+        }
+        .footer-navigation {
+            margin: 0;
+            @include xsmall {
+                width: 100%;
+                padding: 0;
+            }
+            @include small {
+                width: 63%;
+            }
+            @include medium {
+                width: 63%;
+            }
+            .footer-nav {
+                @include xsmall {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                }
+                .footer-info-list {
+                    margin-bottom: 0;
+                    border-bottom: 1px solid #414141;
+                    margin-left: -40px;
+                    margin-right: -40px;
+                    padding: 20px 0;
+                    @include xsmall {
+                        margin: 0;
+                        border: none;
+                        padding: 30px 0;
+                    }
+                    @include small {
+                        padding: 0;
+                    }
+                    li {
+                        margin-bottom: 2px;
+                        @include xsmall {
+                            margin-bottom: 6px;
+                        }
+                        @include xlarge {
+                            margin-bottom: 7px;
+                        }
+                        @include xxlarge {
+                            margin-bottom: 11px;
+                        }
+                        a {
+                            @include hc-400;
+                            font-size: 16px;
+                            color: stencilColor("footer_color");
+                            @include xsmall {
+                                font-size: 13px;
+                            }
+                            @include xlarge {
+                                font-size: 17px;
+                            }
+                            @include xxlarge {
+                                font-size: 18px;
+                            }
+                            &:hover {
+                                color: #f3f3f3;
+                                opacity: 0.8;
+                            }
+                        }
+                        &:nth-last-child(1) {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+        .section-empty {
+            display: none;
+        }
+    }
+    .footer-copyright-main {
+        margin: 0 auto;
+        width: 100%;
+        background: linear-gradient(95.02deg, #2D2D2D 0%, #1E1E1E 100%);
+        @include xsmall {
+            padding: 10px 0 7px;
+        }
+        @include xlarge {
+            padding: 10px 0 13px;
+        }
+        @include xxlarge {
+            padding: 13px 0 15px;
+        }
+        .container {
+            @include xsmall {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .footer-copyright {
+                border-bottom: 1px solid #414141;
+                margin-left: -30px;
+                margin-right: -30px;
+                padding: 22px 0;
+                @include xsmall {
+                    border-bottom: none;
+                    margin-left: 0;
+                    margin-right: 0;
+                    padding: 0;
+                }
+                .powered-by {
+                    font-family: HelveticaNeue;
+                    font-weight: 400;
+                    font-size: 14px;
+                    color: #EDEDED;
+                    @include xsmall {
+                        font-size: 12px;
+                    }
+                    @include xlarge {
+                        font-size: 14px;
+                    }
+                    @include xxlarge {
+                        line-height: 2.5;
+                    }
+                    &:nth-last-child(1) {
+                        a {
+                            color: #727272;
+                            &:hover {
+                                color: #EDEDED;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

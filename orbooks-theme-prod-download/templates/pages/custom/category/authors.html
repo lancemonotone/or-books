@@ -1,0 +1,145 @@
+---
+category:
+  shop_by_price: true
+  products:
+    limit: {{theme_settings.number_of_product_lists}}
+brands: true
+shop_by_brand:
+  limit: 10
+---
+{{inject "bearerToken" settings.storefront_api.token}}
+{{inject "currency_code" currency_selector.active_currency_code}}
+{{inject "AuthorPerPage" theme_settings.author_per_page}}
+
+{{#partial "page"}}
+    <div class="author-page">
+        <div class="author-banner is-loader">
+            {{#unless theme_settings.hide_brand_banner }}
+            <h2 class="page-heading">{{lang 'brand.brand_feature'}}</h2>
+            <div class="author-banner-main">
+                <div class="brand-cnt">
+                    <a href="https://orbooks.com/authors/f/norman-g.-finkelstein/">
+                        <img src="{{cdn 'https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/author-banners.jpg?t=1702382521'}}">
+                    </a>
+                </div>
+                <div class="brand-cnt">
+                    <a href="https://orbooks.com/authors/d/mike-davis/">
+                        <img src="{{cdn 'https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/featured-author.jpg?t=1691503022'}}">
+                    </a>
+                </div>
+                <div class="brand-cnt">
+                    <a href="https://orbooks.com/authors/z/slavoj-zizek/">
+                        <img src="{{cdn 'https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/author-banners2.jpg?t=1702382523'}}">
+                    </a>
+                </div>
+            </div>
+            {{/unless}}
+        </div>
+        <input type='hidden' id='author_current_page' class="author_current_page"/>
+        <input type='hidden' id='author_show_per_page' class="author_show_per_page"/>
+        <section  class="product-list contained" data-facet-content >
+            <div class="page-details {{#if category.description}}has-description{{/if}}">
+                <h1 class="page-title large-title">Our Authors</h1>
+                {{#if category.image}}
+                    <div>
+                        {{> components/common/responsive-img
+                            image=category.image
+                            fallback_size=theme_settings.zoom_size
+                            lazyload=theme_settings.lazyload_mode
+                            class="category-header-image"
+                        }}
+                    </div>
+                {{/if}}
+                {{#if category.description}}
+                    <div class="page-description"> 
+                        {{{category.description}}}
+                    </div>
+                {{/if}}
+            </div>
+            
+            <div class="category-nav">
+                {{#if category.subcategories}}
+                    <ul class="category-navlist authorbuttons">
+                        {{#each categories}}
+                            {{#if ../breadcrumbs.[1].name  '===' name}}
+                                    <li class="category-list-item btn btn-main">
+                                        <a class="navList-action " href="{{url}}" title="All">All</a>
+                                    </li>
+                                    {{#if children}}
+                                        {{#each children}}
+                                        <li class="btn category-list-item{{#if children}}{{#each children}}{{/each}}{{else}} no-active{{/if}} ">
+                                            <a class="navList-action btn" href="{{url}}" title="{{name}}">{{name}}</a>
+                                        </li>
+                                        {{/each}}
+                                    {{else}}
+
+                                    {{/if}}
+                            {{/if}}
+                        {{/each}}
+                    </ul>
+                {{/if}}
+            </div>
+            <div class="brndcnt">
+                <div class="brandGrid author-page-data">
+                    {{#if category.name '===' 'Authors'}}
+                        {{#if category.subcategories}}
+                            {{#each categories}}
+                                {{#if ../breadcrumbs.[1].name  '===' name}}
+                                    {{#if children}}
+                                        {{#each children}}
+                                                {{#if children}}
+                                                    {{#each children}}
+                                                        <div class="subcategory-item brand">
+                                                            <a class="subcategory-link card" href="{{url}}">
+                                                                {{#if image}}
+                                                                    <div class="card-img-container">
+                                                                        <img class="card-image" src="{{getImage image 'zoom_size'}}" width="250" height="250">
+                                                                    </div>
+                                                                {{else}}
+                                                                    <div class="card-img-container">
+                                                                        <img class="card-image" src="{{cdn '/assets/img/noimage.png'}}" width="250" height="250">
+                                                                    </div>
+                                                                {{/if}}
+                                                                <div class="card-body">
+                                                                    <h3 class="card-title">{{name}}</h3>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    {{/each}}
+                                                {{/if}}
+                                        {{/each}}
+                                    {{/if}}
+                                {{/if}}
+                            {{/each}}
+                        {{/if}}
+                    {{else}}
+                        {{#if category.subcategories}}
+                            {{#each category.subcategories}}
+                                <div class="subcategory-item brand">
+                                    <a class="subcategory-link card" href="{{url}}">
+                                        {{#if image}}
+                                        <div class="card-img-container">
+                                            <img class="card-image" src="{{getImage image 'zoom_size'}}" width="250" height="250">
+                                        </div>
+                                        {{else}}
+                                        <div class="card-img-container">
+                                            <img class="card-image" src="{{cdn '../img/noimage.png'}}" width="250" height="250">
+                                        </div>
+                                        {{/if}}
+                                        <div class="card-body">
+                                            <h3 class="card-title">{{name}}</h3>
+                                        </div>
+                                    </a>
+                                </div>
+                            {{/each}}
+                        {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+        </section>
+
+        <nav class="pagination pagination-author"><ul class="author_page_navigation pagination-list"></ul></nav>
+    </div>
+{{/partial}}
+
+{{> layout/base}}

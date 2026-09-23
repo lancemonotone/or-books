@@ -1,0 +1,25 @@
+{{#if product_results.products}}
+<div class="search_popup_wrap">
+    <!-- <a href="javascript:void(0);" id="" class="close_search_popup" onclick="close_popup()">
+        <span>x</span>
+    </a> -->
+    <ul class="productGrid">
+    
+
+        {{#each product_results.products}}
+        <li class="product">
+            {{> components/orbooks/card alternate=true show_compare=../show_compare theme_settings=../theme_settings}}
+        </li>
+        {{/each}}
+    </ul>
+    </div>
+{{else}}
+<div class="search_error">
+    <!-- <a href="javascript:void(0);" id="" class="close_search_popup" onclick="close_popup()">
+        <span>x</span>
+    </a> -->
+    <p class="quickSearchMessage">
+        {{lang 'search.results.quick_count' count=pagination.product_results.total search_query=forms.search.query}}
+    </p>
+    </div>
+{{/if}}

@@ -1,0 +1,94 @@
+---
+category:
+    shop_by_price: true
+    products:
+        limit: {{theme_settings.categorypage_products_per_page}}
+---
+{{inject "categoryProductsPerPage" theme_settings.categorypage_products_per_page}}
+{{inject "SidebarProductId" theme_settings.sidebar_product_id}}
+{{inject "sale_category_id" theme_settings.sale_category_id}}
+{{#partial "head"}}
+    {{#if pagination.category.previous}}
+        <link rel="prev" href="{{pagination.category.previous}}">
+    {{/if}}
+    {{#if pagination.category.next}}
+        <link rel="next" href="{{pagination.category.next}}">
+    {{/if}}
+{{/partial}}
+
+{{#partial "page"}}
+
+{{> components/common/breadcrumbs breadcrumbs=breadcrumbs}}
+<!-- {{#if category.image}}
+    {{> components/common/responsive-img
+        image=category.image
+        fallback_size=theme_settings.zoom_size
+        lazyload=theme_settings.lazyload_mode
+        class="category-header-image"
+    }}
+{{/if}} -->
+
+{{{region name="category_below_header"}}}
+
+<div class="page">
+    <aside class="page-sidebar custom-sidebar stickthis" id="faceted-search-container">
+        <div class="top-product cat-top-product main-loader">
+            {{> components/orbooks/pre-loading}}
+        </div>
+        {{> components/category/sidebar}}
+        {{#if theme_settings.show_category_sidebar_image}}
+            {{> components/orbooks/category-sidebar-image}}
+        {{/if}}
+    </aside>
+
+    <div class="page-content custom-content" id="product-listing-container">
+        <div class="category-header">
+            <div class="category-title">
+                {{#unless theme_settings.hide_category_page_heading }}
+                <h1 class="page-heading">{{category.name}}</h1>
+                {{/unless}}
+            </div>
+        </div>
+        <div class="cat-desc">
+            {{{category.description}}}
+        </div>
+        <!-- {{#if theme_settings.show_sub_category_with_image}}
+        <div class="sub-category-list">
+            {{#each category.subcategories}}
+                <div class="sub-category-item">
+                    <a class="sub-category-link" href="{{url}}" title="{{name}}">                        
+                        <div class="imageanimate">                    
+                            {{#if image}}    
+                                <img src="{{getImage image 'thumbnail'}}" alt="{{name}}" width="179" height="228">
+                            {{else}}
+                                <img src="{{cdn 'assets/img/noimage.png'}}" alt="{{name}}" width="179" height="228">
+                            {{/if}}
+                        </div> 
+                        <p class="cat-name"><span>{{name}}</span></p>
+                    </a>
+                </div>
+            {{/each}}
+        </div>
+        {{/if}} -->
+        <div class="category-short">
+            {{> components/products/filter sort=pagination.category.sort}}
+        </div>
+        {{> components/category/product-listing}}
+        {{#if category.name '==' 'Catalog'}}
+            {{#unless theme_settings.hide_bestsellers_products_catalog}}
+                <div class="home-new">
+                    <h2 class="page-heading">{{lang 'products.top' }}</h2>
+                    <div class="sale-product-section">
+
+                    </div>
+                </div>
+            {{/unless}}
+        {{/if}}
+        {{{region name="category_below_content"}}}
+
+        {{> components/orbookshome/percentage}}
+    </div>
+</div>
+
+{{/partial}}
+{{> layout/base}}

@@ -1,0 +1,531 @@
+
+    .brands-page {
+        max-width: 1820px;
+        margin: 0 auto;
+    }
+    .author-banner {
+        margin-bottom: 35px;
+        @include small {
+            margin-bottom: 45px;
+            margin-top: 30px;
+        }
+        @include medium {
+            margin-top: 0;
+        }
+        @include xxlarge {
+            margin-bottom: 45px;
+        }
+        .page-heading {
+            @include hc-400;
+            font-size: 24px;
+            color: $color-greyDarkest;
+            letter-spacing: 2px;
+            text-transform: capitalize;
+            line-height: 1;
+            margin: 0;
+            text-align: left;
+            @include xlarge {
+                font-size: 27px;
+            }
+            @include xxlarge {
+                font-size: 30px;
+            }
+        }
+        .slick-arrow {
+            width: auto;
+            height: auto;
+            padding: 0;
+            background-color: initial;
+            border: none;
+            top: 5px;
+            &:before {
+                background-image: url('../img/left-slider.svg');
+                width: 23px;
+                height: 23px;
+                @include medium {
+                    width: 18px;
+                    height: 18px;
+                }
+                @include xxlarge {
+                    width: 23px;
+                    height: 23px;
+                }
+            }
+            &.slick-prev {
+                left: auto;
+                right: 26px;
+                @include medium {
+                    right: 22px;
+                }
+                @include xxlarge {
+                    right: 29px;
+                }
+            }
+            &.slick-next {
+                    right: 0;
+                &:before {
+                    transform: rotate(180deg);
+                }
+            }
+            // &:hover {
+            //     &:before {
+            //         background-image: url('../img/arrow-hover.svg');
+            //     }
+            // }
+        }
+        .author-banner-main {
+            display: none;
+            padding-top: 24px;
+            @include xxlarge {
+                padding-top: 39px;
+            }
+            .slick-list {
+                margin: 0 -5px;
+                .brand-cnt {
+                    height: auto;
+                    display: flex;
+                    justify-content: center;
+                    max-height: 13rem;
+                    padding: 0 5px;
+                    @include xxsmall {
+                        max-height: 17rem;
+                    }
+                    @include medium {
+                        max-height: 100%;
+                        height: auto;
+                    }
+                    img {
+                        object-fit: cover;
+                        object-position: 0% 50%;
+                        width: 100%;
+                        border-radius: 10px;
+                    }
+                }
+            }
+        }
+    }
+    .large-title {
+        @include hc-700;
+        font-size: 24px;
+        color: $color-greyDarkest;
+        text-transform: capitalize;
+        line-height: 1.3;
+        margin: 0;
+        text-align: center;
+        @include medium {
+            text-align: left;
+        }
+        @include xlarge {
+            font-size: 27px;
+        }
+        @include xxlarge {
+            font-size: 40px;
+        }
+    }
+    .authorbuttons {
+        margin-top: 15px;
+        border-top: 1px solid #ECECEC;
+        padding: 10px 0;
+        border-bottom: 1px solid #ECECEC;
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        @include xxlarge {
+            margin-top: 44px;
+            margin-left: -12px;
+            margin-right: -12px;
+        }
+        .btn.btn-main {
+            @include xxlarge {
+                margin-right: 28px;
+            }
+            .navList-action {
+                @include hn-500;
+                color: $color-white;
+                background-color: $color-greyDarkest;
+                padding: 7px 25px;
+                text-transform: uppercase;
+                border-radius: 5px;
+                @include small {
+                    padding: 10px 30px;
+                }
+                @include xxlarge {
+                    padding: 9px 41px;
+                }
+                &:hover {
+                    background-color: $color-greyDarker;
+                    color: $color-white;
+                }
+            }
+        }
+        .btn {
+            margin: 0 5px 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include small {
+                margin: 0 8px 10px;
+            }
+            @include medium {
+                margin: 0 5px 0px;
+            }
+            @include xlarge {
+                margin: 0 8px 0px;
+            }
+            @include xxlarge {
+                margin: 0 12px 0px;
+            }
+            .navList-action {
+                text-transform: uppercase;
+                color: $color-greyDarkest;
+                font-size: 14px;
+                @include hn-400;
+                margin: 0;
+                @include small {
+                    font-size: 16px;
+                }
+                @include medium {
+                    font-size: 14px;
+                }
+                @include xlarge {
+                    font-size: 17px;
+                }
+                @include xxlarge {
+                    font-size: 20px;
+                }
+                &:hover {
+                    color: $color-greyDarker;
+                }
+            }
+            &.no-active {
+                .navList-action {
+                    pointer-events: none;
+                    color: #999;
+                }
+            }
+        }
+    }
+    .brandGrid {    
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        margin: 30px -10px 0;
+        @include medium {
+            margin: 50px -10px 0;
+        }
+        @include xxlarge {
+            margin: 70px -10px 0;
+        }
+        .brand {
+            margin-bottom: 35px;
+            @include small {
+                margin-bottom: 45px;
+            }
+            @include xxlarge {
+                margin-bottom: 69px;
+            }
+            .card {
+                padding: 0;
+                .card-figure:after {
+                    content: none;
+                }
+                .card-img-container {
+                    max-width: 350px;
+                    margin: 0 auto;
+                    width: 100%;
+                    height: 100%;
+
+                    .card-image {
+                        position: relative;
+                        height: 100%;
+                        filter: grayscale(1);
+                        transition: 0.2s ease-in-out;
+                    }
+
+                    &::after {
+                        padding: 0;
+                    }
+                }
+                .card-body {
+                    padding: 0;
+                    .card-title {
+                        margin: 31px 0 0;
+                        color: $color-greyDarkest;
+                        font-size: 14px;
+                        @include hc-700;
+                        text-transform: uppercase;
+                        @include small {
+                            font-size: 16px;
+                        }
+                        @include xxlarge {
+                            font-size: 24px;
+                        }
+                    }
+                }
+                &:hover {
+                    box-shadow: none;
+                    .card-img-container {
+                        .card-image {
+                            filter: none;
+                        }
+                    }
+                    .card-body {
+                        .card-title {
+                            color: $color-greyDarker;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+.single-author-page {
+    .for-desk{
+        display: none !important;
+        @include medium{
+            display: block !important;
+        }
+    }
+    .for-mobile{
+        display: block;
+        margin: 15px 0;
+        max-width: 250px;
+        @include medium{
+            display: none;
+        }
+    }
+    .accordion-custom-tabs {
+        margin-bottom: 50px;
+        .accordion-tab {
+            margin-top: 25px;
+
+            @include small {
+                margin-top: 30px;
+            }
+            @include xxlarge {
+                margin-top: 50px;
+            }
+            
+            .accordion-desc {
+                padding: 5px 0;
+                font-size: 14px;
+
+                @include small {
+                    font-size: 16px;
+                }
+                @include large {
+                    padding: 10px 0;
+                }
+                @include xxlarge {
+                    font-size: 20px;
+                }
+                .blog-list {
+                    margin: 0;
+                    @include small {
+                        margin: 0 -20px;
+                    }
+                    
+                }
+            }
+            .accordion-desc {
+                @include large{
+                    padding-top: 20px;
+                }
+            }
+            .accordion-title {
+                color: $color-greyDarkest;
+                cursor: pointer;
+                text-transform: uppercase;
+                @include hc-700;
+                position: relative;
+                font-size: 18px;
+                transition: 0.3s ease;
+
+                @include xxlarge {
+                    font-size: 25px;
+                }
+
+                .icon {
+                    position: absolute;
+                    right: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+                &:hover {
+                    letter-spacing: 1px;
+                }
+                &.is-open {
+                    letter-spacing: 1px;
+
+                    .icon {
+                        transform: translateY(-50%) rotate(180deg);
+                    }
+                }
+            }
+            .accordion-desc {
+                display: none;
+            }
+        }
+    }
+}
+.category-page {
+    .single-author-page {
+        .page-sidebar.custom-sidebar {
+            display: block;
+            margin-bottom: 20px;
+            text-align: center;
+
+            .category-header-image {
+                max-width: 300px;
+                filter: grayscale(1);
+
+                @include medium {
+                    max-width: 100%;
+                }
+                &:hover {
+                    filter: none;
+                }   
+            }
+        }
+    }
+}
+
+
+.single-author-page {
+    .page-content {
+        width: 100%;
+        padding: 0;
+        @include medium {
+            width: 60%;
+        }
+        @include xxlarge {
+            width: 72%;
+        }
+        @include breakpoint(1900px) {
+            width: 74%;
+        }
+        .large-title {
+            @include hc-700;
+            color: $color-greyDarkest;
+            text-transform: uppercase;
+            margin: 0;
+            text-align: left;
+            font-size: 26px;
+
+            @include medium {
+                font-size: 30px;
+            }
+            @include large {
+                font-size: 32px;
+            }
+            @include xlarge {
+                font-size: 36px;
+            }
+            @include xxlarge {
+                font-size: 44px;
+            }
+        }
+        .cat-desc {
+            background-color: initial;
+            padding: 20px 0 22px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.50);
+            @include medium {
+                padding: 25px 0 32px;
+            }
+            @include xxlarge {
+                padding: 35px 0 42px;
+            }
+            
+            p {
+                color: stencilColor('brand-cnt');
+                @include hs-400;
+                font-size: 14px;
+                text-transform: none;
+                text-align: left;
+                line-height: 1.4;
+                margin: 0 0 10px;
+                @include xlarge {
+                    font-size: 18px;
+                }
+                @include xxlarge {
+                    font-size: 25px;
+                }
+            }
+        }
+        .actionBar {
+            display: none;
+        }
+        .page-subheading {
+            @include hc-700;
+            font-size: 18px;
+            color: $color-greyDarkest;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin: 0;
+            text-align: left;
+            padding-top: 30px;
+            @include small {
+                font-size: 20px;
+            }
+            @include medium {
+                font-size: 22px;
+            }
+            @include large {
+                font-size: 24px;
+            }
+            @include xlarge {
+                font-size: 26px;
+            }
+            @include xxlarge {
+                font-size: 30px;
+                padding-top: 49px;
+                line-height: 1;
+            }
+        }
+        .productGrid {
+            padding-top: 30px;
+            @include medium {
+                padding-top: 10px;
+            }
+            @include xxlarge {
+                padding-top: 30px;
+            }
+            .product {
+                @include medium {
+                    width: 33.33333%;
+                }
+            }
+        }
+        .brnd-blog {
+            .page-subheading {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-bottom: 30px;
+                padding-top: 0;
+                cursor: pointer;
+                &:hover {
+                    color: #D2230E;
+                }
+                &.icon-open {
+                    .icon {
+                        transform: rotate(180deg);
+                    }
+                }
+                svg {
+                    cursor: pointer;
+                    width: 18px;
+                    height: 18px;
+                    &:hover {
+                        fill: #D2230E;
+                    }
+                }
+            }
+        }
+    }
+    .pagination {
+        margin-bottom: 0;
+    }
+    
+}

@@ -1,0 +1,128 @@
+---
+products:
+    new:
+        limit: {{theme_settings.homepage_new_products_count}}
+    featured:
+        limit: {{theme_settings.homepage_featured_products_count}}
+    top_sellers:
+        limit: {{theme_settings.homepage_top_products_count}}
+carousel: {{theme_settings.homepage_show_carousel}}
+blog:
+    recent_posts:
+        limit: {{theme_settings.homepage_blog_posts_count}}
+---
+{{inject "SidebarProductId" theme_settings.sidebar_product_id}}
+{{inject "new_category_id" theme_settings.new_category_id}}
+{{inject "sale_category_id" theme_settings.sale_category_id}}
+
+
+{{#partial "hero"}}
+    {{{region name="home_below_menu"}}}
+    
+{{/partial}}
+
+{{#partial "page"}}
+
+    {{#each shipping_messages}}
+        {{> components/common/alert/alert-info message}}
+    {{/each}}
+
+<div class="main full home-page">
+    <div class="home-main">
+        <div class="custom-sidebar stickthis" id="stickthis">
+            {{#unless theme_settings.home_product}}
+            <div class="top-product main-loader">
+                {{> components/orbooks/pre-loading}}
+            </div>
+            {{/unless}}
+
+            {{#unless theme_settings.home_latest_news}}
+                {{> components/orbookshome/home-event}}
+            {{/unless}}
+
+            {{#unless theme_settings.home_events}}
+            <div class="event-carousel main-loader">
+                <a class="sidebar-heading" href="/events/">{{lang 'common.home_events'}}</a>
+                {{> components/orbooks/pre-loading}}
+                <ul class="eventgrid ">
+                </ul>
+            </div>
+            {{/unless}}
+
+            {{#unless theme_settings.home_videos}}
+            <div class="video-home main-loader">
+                <a class="sidebar-heading" href="/videos/">{{lang 'common.home_video'}}</a>
+                {{> components/orbooks/pre-loading}}
+                <ul class="videomain ">
+                </ul>
+            </div>
+            {{/unless}}
+
+            {{#unless theme_settings.home_subject}}
+                {{> components/orbookshome/subject_sidebar}}
+            {{/unless}}
+            
+            {{#if theme_settings.show_category_sidebar_image}}
+                {{> components/orbooks/category-sidebar-image}}
+            {{/if}}
+            <div class="mobile-per">
+                {{> components/orbookshome/percentage}}
+            </div>
+        </div>
+        <div class="custom-content">
+            <div class="statix-text">
+                <h3>“A radical, exciting response to Amazonian hegemony.” <span>—Dazed</span></h3>
+                <h4>OR Books is a publishing company that embraces progressive change in politics, culture, and the way we do business.</h4>
+            </div>
+            {{#and carousel carousel.slides.length}}
+                {{> components/carousel arrows=theme_settings.homepage_show_carousel_arrows play_pause_button=theme_settings.homepage_show_carousel_play_pause_button}}
+            {{/and}}
+            {{{region name="home_below_carousel"}}}
+            {{> components/orbookshome/customer}}
+
+    {{#unless theme_settings.hide_new_products}}
+        {{#if products.new}}
+            <div class="home-new new-product">
+                <h2 class="page-heading">{{lang 'products.new' }}</h2>
+                <div class="category-product-section">
+
+                </div>
+            </div>
+        {{/if}}
+    {{/unless}}
+
+    {{> components/orbookshome/recent-home}}
+    
+        {{#unless theme_settings.hide_bestsellers_products_homepage}}
+            <div class="home-new best-seller-product">
+                <h2 class="page-heading">{{lang 'products.top' }}</h2>
+                <div class="sale-product-section">
+
+                </div>
+            </div>
+        {{/unless}}
+    
+    {{> components/orbookshome/recent-video}}
+
+    {{#unless theme_settings.hide_onsale_products}}
+    <div class="home-new sale-home featured">
+        <div class="inner-featured">
+        {{#if products.featured}}
+            {{> components/products/featured products=products.featured columns=theme_settings.homepage_featured_products_column_count}}
+        {{/if}}
+    </div>
+    </div>
+    {{/unless}}
+    {{> components/orbookshome/percentage}}
+    <!--paige-->
+    {{{region name="home_below_featured_products"}}}
+    <!--paige-->
+    {{{region name="home_below_top_products"}}}
+    <!--paige-->    
+    
+    {{{region name="home_below_new_products"}}}
+        </div>
+    </div>
+</div>
+{{/partial}}
+{{> layout/base}}

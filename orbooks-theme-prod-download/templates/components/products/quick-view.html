@@ -1,0 +1,12 @@
+<div class="modal-body quickView custom-pdp">
+    <div class="custom-quickview-box" id="custom-quickview">
+        {{> components/orbooks/quick-view}}
+    </div>
+    <div class="default-quickview-box" id="default-quickview">
+        {{> components/orbooks/default-quick-view}}
+    </div>
+
+    {{#all settings.show_product_reviews theme_settings.show_product_reviews (if theme_settings.show_product_details_tabs '!==' true)}}
+        {{> components/products/reviews reviews=product.reviews product=product urls=urls}}
+    {{/all}}
+</div>

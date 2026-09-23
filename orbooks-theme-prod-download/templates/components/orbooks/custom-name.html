@@ -1,0 +1,12 @@
+{{#each product.custom_fields}}
+    {{#if name '===' 'sub-heading'}}
+        <div class="card-category-title" style="display: none;">{{name}}</div>
+        <div class="card-category-name">{{{value}}}</div>
+    {{/if}}
+{{/each}}
+{{#each product.custom_fields}}
+    {{#if name '===' 'Author'}}
+        <div class="card-category-title" style="display: none;">{{name}}</div>
+        <div class="card-text">{{{value}}}</div>
+    {{/if}}
+{{/each}}

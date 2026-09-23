@@ -1,0 +1,140 @@
+.page_contact_form-page {
+    .page-heading {
+        @include hc-700;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+    }
+    .form {
+        .form-field {
+            textarea {
+                width: 100% !important;
+            }
+        }
+    }
+}
+
+.sign-up-page {
+    max-width: 1100px;
+    margin: 3rem auto;
+    @include medium {
+        margin: 3rem auto 8rem;
+    }
+    .perc-right {
+        h3 {
+            @include hc-700;
+            color: stencilColor("title_color");
+            font-size: 20px;
+            margin: 0;
+            @include xlarge {
+                font-size: 24px;
+            }
+        }
+   .news-main {
+            margin-top: 29px;
+            @include medium {
+                margin-top: 0;
+            }
+            .form {
+                margin: 11px 0 0;
+                @include xlarge {
+                    margin: 20px 0 0;
+                }
+                .form-field {
+                    margin: 0;
+                    .form-prefixPostfix {
+                        .form-input {
+                            border: 1px solid #c5c5c5;
+                            border-radius: 0;
+                            width: 10rem;
+                            height: 2.9rem;
+                            color: #333;
+                            @include small {
+                                width: 20rem;
+                            }
+                            @include xxlarge {
+                                width: 23.8rem;
+                            }
+                            &::placeholder {
+                                color: #333;
+                                @include hc-400;
+                                font-size: 16px;
+                            }
+                        }
+                        .button {
+                            border-radius: 5px;
+                            margin: 0;
+                            background: #313131;
+                            font-size: 16px;
+                            @include hc-700;
+                            color: $color-white;
+                            padding: 10px 0px;
+                            max-height: 2.9rem;
+                            max-width: 108px;
+                            @include xlarge {
+                                max-width: 120px;
+                                padding: 10px 27px;
+                            }
+                            @include xxlarge {
+                                padding: 10px 29px;
+                                max-width: 125px;
+                            }
+                            
+                            &:hover {
+                            background-color: #D2230E;
+                            border-color: #D2230E;
+                            letter-spacing: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.sitemap_page{
+    ul{
+        
+    @include medium {
+        display: flex;
+    flex-wrap: nowrap;
+    }
+        li{  
+            list-style-position: unset; 
+            @include medium {
+            width: 33.33%;
+           
+            }
+            ul{
+                display: block;
+                li{
+                    width: 100%;
+                }
+            }
+            
+
+        }
+    } 
+} 
+
+.sitemap .sitemap_page li {
+    width: 100%;
+    ul{
+                display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+li{
+    @include small {
+            width: 33.33%;
+           
+            }
+            ul{
+                display: block;
+                li{
+                    width: 100%;
+                }
+            }
+}
+    }
+}
