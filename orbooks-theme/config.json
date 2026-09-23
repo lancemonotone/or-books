@@ -1,5 +1,5 @@
 {
-  "name": "OR Books_260724",
+  "name": "OR Books_260922",
   "version": "6.11.0",
   "template_engine": "handlebars_v4",
   "meta": {
@@ -38,10 +38,14 @@
   },
   "css_compiler": "scss",
   "autoprefixer_cascade": true,
-  "autoprefixer_browsers": ["> 1%", "last 2 versions", "Firefox ESR"],
+  "autoprefixer_browsers": [
+    "> 1%",
+    "last 2 versions",
+    "Firefox ESR"
+  ],
   "settings": {
-    "sale_category_id": "323",
-    "new_category_id": "322",
+    "sale_category_id": "112",
+    "new_category_id": "111",
     "hide_breadcrumbs": false,
     "hide_page_heading": false,
     "hide_category_page_heading": false,
@@ -377,7 +381,7 @@
     "show_sub_category_with_image": true,
     "show_sidebar_sub_category": true,
     "show_events_per_page": 3,
-    "sidebar_product_id": 166,
+    "sidebar_product_id": "1792",
     "author_per_page": 40,
     "reading_list_per_page": 5,
     "show_product_discount": true,
@@ -401,7 +405,11 @@
       "unionpay",
       "visa"
     ],
-    "supported_payment_methods": ["card", "paypal", "bank"],
+    "supported_payment_methods": [
+      "card",
+      "paypal",
+      "bank"
+    ],
     "lazyload_mode": "lazyload+lqip",
     "checkout-paymentbuttons-paypal-color": "black",
     "checkout-paymentbuttons-paypal-shape": "rect",
@@ -446,12 +454,14 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": ["home_garden"]
+        "industries": [
+          "home_garden"
+        ]
       },
       "images": {},
       "settings": {
-        "sale_category_id": "323",
-        "new_category_id": "322",
+        "sale_category_id": "112",
+        "new_category_id": "111",
         "hide_breadcrumbs": true,
         "hide_page_heading": false,
         "hide_category_page_heading": false,
@@ -787,7 +797,7 @@
         "show_sub_category_with_image": true,
         "show_sidebar_sub_category": true,
         "show_events_per_page": "15",
-        "sidebar_product_id": "1886",
+        "sidebar_product_id": "1792",
         "author_per_page": "60",
         "reading_list_per_page": "0",
         "show_product_discount": true,
@@ -811,7 +821,11 @@
           "unionpay",
           "visa"
         ],
-        "supported_payment_methods": ["card", "paypal", "bank"],
+        "supported_payment_methods": [
+          "card",
+          "paypal",
+          "bank"
+        ],
         "lazyload_mode": "lazyload+lqip",
         "checkout-paymentbuttons-paypal-color": "black",
         "checkout-paymentbuttons-paypal-shape": "rect",
@@ -822,7 +836,11 @@
         "afterpay-button-color": "black-mint",
         "amazon-button-color": "Gold",
         "masterpass-button-color": "black",
-        "paymentbuttons-provider-sorting": ["paypal", "sepa", "googlepay"],
+        "paymentbuttons-provider-sorting": [
+          "paypal",
+          "sepa",
+          "googlepay"
+        ],
         "show_product_price": true
       }
     },
@@ -840,7 +858,9 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": ["fashion_jewelry"]
+        "industries": [
+          "fashion_jewelry"
+        ]
       },
       "settings": {
         "homepage_featured_products_count": 6,
@@ -1050,7 +1070,9 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": ["food_beverage"]
+        "industries": [
+          "food_beverage"
+        ]
       },
       "settings": {
         "body-font": "Google_Roboto_400",
