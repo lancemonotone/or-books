@@ -83,8 +83,8 @@
     }
     .custom-sidebar {
       .productView-images {
-        // 2.4 — phones: ~25% larger than first cap; title/subtitle/author still in first screen; zoom still full size
-        --or-pdp-cover-max-block: min(52.5vh, 21.875rem);
+        // 2.4 — phones: +20% on prior cap (Antara Oct); title/subtitle/author still in first screen; zoom still full size
+        --or-pdp-cover-max-block: min(63vh, 26.25rem);
         --or-pdp-cover-max-inline: 100%;
 
         padding: 0;
