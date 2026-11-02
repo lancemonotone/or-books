@@ -1,93 +1,24 @@
-// Sale % off — compare pass (A stamp / B bar / C tab). Absolute on figure.
-// Cycle via nth-child. Pick one; strip the other two.
-//
-// Do NOT use `.card:nth-child(…)` as a descendant — every card is usually
-// first child of `.sub-card`, so 3n+1 always matches and stacks on B/C.
+// 2.1 (6) — % off under the cover as red text (live style). Not a cover stamp.
 
 .or-listing {
-  --or-sale-badge-size: var(--or-text-md);
-  --or-sale-badge-pad-block: 0.25rem;
-  --or-sale-badge-pad-inline: 0.5rem;
-  --or-sale-badge-ink: #fff;
-  --or-sale-badge-ground: #050505;
-  --or-sale-badge-accent: #d2230e;
+  --or-sale-badge-size: var(--or-text-sm);
+  --or-sale-badge-ink: #d2230e;
+  --or-sale-badge-gap: 0.5rem;
 
   @media (min-width: 768px) {
-    --or-sale-badge-size: var(--or-text-lg);
-  }
-
-  .card-figure {
-    position: relative;
+    --or-sale-badge-size: var(--or-text-md);
   }
 
   .discount_off {
-    position: absolute;
-    z-index: 3;
     margin: 0;
-    pointer-events: none;
-    box-sizing: border-box;
-    // Default = A stamp (safe if a host skips nth rules)
-    inset-block-start: 0.5rem;
-    inset-inline-start: 0.5rem;
-    inset-block-end: auto;
-    inset-inline-end: auto;
-    padding-block: var(--or-sale-badge-pad-block);
-    padding-inline: var(--or-sale-badge-pad-inline);
-    background-color: var(--or-sale-badge-ground);
-    text-align: start;
-    transform: none;
-    box-shadow: none;
+    margin-block-end: var(--or-sale-badge-gap);
 
     span {
-      display: block;
-      margin: 0;
       color: var(--or-sale-badge-ink);
       font-family: $or-font-neue;
       font-size: var(--or-sale-badge-size);
       font-weight: 700;
       line-height: 1;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      white-space: nowrap;
     }
-  }
-
-  // A — cover stamp (top-start) — also default above
-  .product:nth-child(3n + 1) .discount_off,
-  > .card:nth-child(3n + 1) .discount_off {
-    inset-block-start: 0.5rem;
-    inset-inline-start: 0.5rem;
-    inset-block-end: auto;
-    inset-inline-end: auto;
-    background-color: var(--or-sale-badge-ground);
-    text-align: start;
-    transform: none;
-    box-shadow: none;
-  }
-
-  // B — bottom bar on cover
-  .product:nth-child(3n + 2) .discount_off,
-  > .card:nth-child(3n + 2) .discount_off {
-    inset-block-start: auto;
-    inset-inline-start: 0;
-    inset-block-end: 0;
-    inset-inline-end: 0;
-    background-color: var(--or-sale-badge-ground);
-    text-align: center;
-    transform: none;
-    box-shadow: none;
-  }
-
-  // C — overhang corner tab
-  .product:nth-child(3n + 3) .discount_off,
-  > .card:nth-child(3n + 3) .discount_off {
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    inset-block-end: auto;
-    inset-inline-end: auto;
-    background-color: var(--or-sale-badge-accent);
-    text-align: start;
-    transform: translate(-0.35rem, -0.35rem);
-    box-shadow: 0.15rem 0.15rem 0 0 var(--or-sale-badge-ground);
   }
 }

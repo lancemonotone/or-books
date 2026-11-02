@@ -78,18 +78,18 @@
                     }}
                 </div>
             </a>
-            {{#if theme_settings.show_product_discount}}
-            {{#if price.non_sale_price_without_tax }}
-            <div class="discount_off">
-                <span>
-            {{round (multiply (divide (subtract price.non_sale_price_without_tax.value price.without_tax.value)
-            price.non_sale_price_without_tax.value)100)}}% off</span>
-            </div>
-            {{/if}}
-            {{/if}}
         </figure>
         <div class="card-body">
             <div>
+                {{#if theme_settings.show_product_discount}}
+                {{#if price.non_sale_price_without_tax }}
+                <div class="discount_off">
+                    <span>
+                {{round (multiply (divide (subtract price.non_sale_price_without_tax.value price.without_tax.value)
+                price.non_sale_price_without_tax.value)100)}}% off</span>
+                </div>
+                {{/if}}
+                {{/if}}
                 {{#and rating show_rating}}
                 <p class="card-text" data-test-info-type="productRating">
                     <span class="rating--small">

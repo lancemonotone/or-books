@@ -383,6 +383,24 @@ h4.card-title,
   text-transform: none;
 }
 
+// 2.1 (4): homepage Latest News card type = live (prod home blog-title / blog-date)
+.blog-main-home {
+  --or-home-news-type-size: var(--or-text-lg);
+
+  @media (min-width: 768px) {
+    --or-home-news-type-size: var(--or-text-xl);
+  }
+
+  @media (min-width: 1024px) {
+    --or-home-news-type-size: var(--or-text-2xl);
+  }
+
+  & .listing-card h4,
+  & .listing-card time {
+    font-size: var(--or-home-news-type-size);
+  }
+}
+
 // 2.5 — book page: tighter title→subtitle than subtitle→author (heading stairs were even)
 .custom-pdp .productView-product {
   --or-pdp-author-size: var(--or-type-h4-size);

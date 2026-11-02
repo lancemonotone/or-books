@@ -2,11 +2,16 @@
 // OR Books — productView (featured / top-product shells)
 // =============================================================================
 // Layout for `.top-product .productView` (home sidebar + category featured).
-// Type: typography.scss (bare h*) + .or-btn. Do not reintroduce heading stairs here.
+// Cover + type sizes match live prod Featured Title (orbooks-theme-prod-download).
 // Stack rhythm: one `--or-featured-gap` on grid (cover + details + meta/CTA).
 // =============================================================================
 
 .top-product {
+  --or-featured-cover-max: 14.25rem;
+  --or-featured-title-size: var(--or-text-xl);
+  --or-featured-subtitle-size: var(--or-text-sm);
+  --or-featured-author-size: var(--or-text-lg);
+
   margin-block-start: 1.875rem;
 
   // Parent .or-flow gap owns vertical rhythm — kill legacy margins
@@ -14,7 +19,14 @@
     margin-block: 0;
   }
 
+  @media (min-width: 768px) {
+    --or-featured-cover-max: 100%;
+  }
+
   @media (min-width: 1024px) {
+    --or-featured-title-size: var(--or-text-3xl);
+    --or-featured-subtitle-size: 1.625rem;
+    --or-featured-author-size: var(--or-text-2xl);
     margin-block-start: 0;
   }
 
@@ -42,7 +54,7 @@
     .productView-image {
       pointer-events: visible;
       inline-size: 100%;
-      max-inline-size: 180px;
+      max-inline-size: var(--or-featured-cover-max);
       margin-inline: auto;
 
       .productView-img-container {
@@ -69,13 +81,20 @@
         text-align: start;
       }
 
-      // 2.5: title→subtitle tighter than subtitle→author
+      // Live Featured Title type (scoped; do not change global heading scale)
       & .productView-title {
         margin-block-end: calc(var(--or-featured-gap) * -0.5);
+        font-size: var(--or-featured-title-size);
+      }
+
+      & .productView-info-value,
+      & .card-category-name {
+        font-size: var(--or-featured-subtitle-size);
       }
 
       & .productView-brand {
         @include hc-700;
+        font-size: var(--or-featured-author-size);
       }
 
       & .sub-productView-title {

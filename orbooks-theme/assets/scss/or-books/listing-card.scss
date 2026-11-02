@@ -274,9 +274,21 @@
   container-name: none;
   // Author = last direct p in card-body stack (not h4+p — that hit solo authors as “subtitle”)
   --or-listing-author-size: var(--or-text-md);
+  // 2.1 (10) — title + subtitle closer (live card-title margin)
+  --or-listing-title-sub-gap: 0.4375rem;
+
+  @media (min-width: 768px) {
+    --or-listing-title-sub-gap: 0.5625rem;
+  }
 
   @media (min-width: 1024px) {
     --or-listing-author-size: var(--or-text-lg);
+    --or-listing-title-sub-gap: 0.625rem;
+  }
+
+  & .card-title {
+    margin-block-end: var(--or-listing-title-sub-gap);
+    line-height: 1;
   }
 
   & .card-body > div > p:last-of-type {

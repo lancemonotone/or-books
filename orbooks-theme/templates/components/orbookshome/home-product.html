@@ -1,6 +1,6 @@
 {{inject 'outOfStockDefaultMessage' (lang 'products.out_of_stock_default_message')}}
 
-{{> components/orbooks/section-head title="Featured Title"}}
+{{!-- No "Featured Title" section-head label (client: match live without the label). --}}
 <div class="productView home-pdp"
     product-id="{{product.id}}"
     {{#if settings.data_tag_enabled}}

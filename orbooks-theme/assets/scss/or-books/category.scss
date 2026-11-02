@@ -189,6 +189,23 @@
 
   .category-title {
     padding: 0 0 10px;
+
+    // 2.1 (3): match live catalog / category title size (prod .page-heading stairs)
+    .page-heading {
+      --or-catalog-title-size: var(--or-text-2xl);
+
+      margin: 0;
+      font-size: var(--or-catalog-title-size);
+      line-height: 1.25;
+
+      @media (min-width: 768px) {
+        --or-catalog-title-size: 1.625rem;
+      }
+
+      @media (min-width: 1024px) {
+        --or-catalog-title-size: 2.5rem;
+      }
+    }
   }
 
   .category-short {
