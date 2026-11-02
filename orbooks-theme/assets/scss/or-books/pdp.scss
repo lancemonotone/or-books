@@ -908,6 +908,39 @@
     width: 100%;
     height: auto;
   }
+
+  // 2.2 — desktop related title + covers match live (no mobile change)
+  @media (min-width: 768px) {
+    .or-listing {
+      --or-listing-card-pad-block-start: 0;
+      --or-listing-card-pad-block-end: 0.625rem;
+      --or-listing-card-pad-inline: 1.5625rem;
+    }
+
+    .card .sub-card {
+      padding-block: 2.8125rem 0.9375rem;
+      padding-inline: 1.625rem;
+    }
+
+    .card-figure,
+    .card-img-container {
+      max-inline-size: 244px;
+      margin-inline: auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    // Narrow sidebar container query would shave the token; lock live 30px
+    .or-section-head h1,
+    .or-section-head h2,
+    .or-section-head h3,
+    .or-section-head h4,
+    .or-section-head h5,
+    .or-section-head h6,
+    .or-section-head .or-heading {
+      font-size: 30px;
+    }
+  }
 }
 .desktop-related-product {
   display: none;
