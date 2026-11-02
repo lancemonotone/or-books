@@ -55,3 +55,7 @@ Staging (or local): author (e.g. Theodore Hamm) or product with media → expand
 ## Related / follow-up
 
 None for this card.
+
+## Free Wave 1 pass (Oct 2026 notes)
+
+Antara flagged a squashed image on the Meet Mayor Mamdani catalog page. Local/staging check: that page was already correct (vertical cover, not the old media-list squash). No theme code in this free pass for 2.3. Briefboard updated.
