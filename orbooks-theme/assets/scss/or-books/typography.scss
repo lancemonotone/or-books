@@ -196,6 +196,8 @@ blockquote {
   & blockquote {
     margin-block-start: var(--or-shouts-quote-gap);
     font-size: var(--or-shouts-quote-size);
+    // 2.5 (3) — medium if available (Roboto Condensed 500); not bold 700
+    font-weight: 500;
   }
 }
 
@@ -403,9 +405,14 @@ h4.card-title,
   }
 }
 
-// 2.5 — book page: tighter title→subtitle than subtitle→author (heading stairs were even)
+// 2.5 — book page: tight title→subtitle; (1) slight extra space subtitle→author
 .custom-pdp .productView-product {
   --or-pdp-author-size: var(--or-type-h4-size);
+  --or-pdp-subtitle-author-gap: 1.125rem;
+
+  @media (min-width: 768px) {
+    --or-pdp-subtitle-author-gap: 1.375rem;
+  }
 
   & h2 {
     --or-type-heading-margin-block-end: 0.25rem;
@@ -416,11 +423,7 @@ h4.card-title,
   }
 
   & h5 {
-    --or-type-heading-margin-block-end: 0.75rem;
-
-    @media (min-width: 768px) {
-      --or-type-heading-margin-block-end: 0.875rem;
-    }
+    --or-type-heading-margin-block-end: var(--or-pdp-subtitle-author-gap);
   }
 }
 

@@ -48,12 +48,18 @@
   }
 }
 
-// Hairline on the frame, not the aside (aside is floated / short).
-// z-index: paint above opaque columns. .productView.or-columns::before
-// beats Cornerstone grid-row clearfix (display: table; no line).
+// Frame tokens + hairline. Sidebar shell = live content share (26%) + inset so
+// Wave 1 gutters stay and PDP cover still fills ~live width. Main shrinks by
+// the same inset. Hairline rides the shell edge.
 .or-columns,
 .productView.or-columns {
   @media (min-width: 1024px) {
+    --or-sidebar-share: 26%;
+    --or-sidebar-gutter: 2.1875rem;
+    --or-sidebar-rule-gap: 0.3125rem;
+    --or-sidebar-inset: calc(var(--or-sidebar-gutter) + var(--or-sidebar-rule-gap));
+    --or-sidebar-shell: calc(var(--or-sidebar-share) + var(--or-sidebar-inset));
+
     position: relative;
 
     &::before {
@@ -62,19 +68,11 @@
       position: absolute;
       z-index: 1;
       inset-block: 0;
-      inset-inline-start: 26%;
+      inset-inline-start: var(--or-sidebar-shell);
       inline-size: 1px;
       background-color: $color-greyLightest;
       pointer-events: none;
     }
-  }
-}
-
-.or-columns > .custom-sidebar,
-.or-columns > .custom-content {
-  @media (min-width: 1024px) {
-    --or-sidebar-gutter: 2.1875rem;
-    --or-sidebar-rule-gap: 0.3125rem;
   }
 
   @media (min-width: 1700px) {
@@ -84,12 +82,14 @@
 
 .or-columns > .custom-sidebar {
   @media (min-width: 1024px) {
-    padding-inline-end: calc(var(--or-sidebar-gutter) + var(--or-sidebar-rule-gap));
+    width: var(--or-sidebar-shell);
+    padding-inline-end: var(--or-sidebar-inset);
   }
 }
 
 .or-columns > .custom-content {
   @media (min-width: 1024px) {
-    padding-inline-start: calc(var(--or-sidebar-gutter) + var(--or-sidebar-rule-gap));
+    width: calc(100% - var(--or-sidebar-shell));
+    padding-inline-start: var(--or-sidebar-inset);
   }
 }

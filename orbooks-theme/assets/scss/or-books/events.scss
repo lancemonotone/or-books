@@ -26,13 +26,9 @@
     }
   }
 
+  // Column widths: .or-columns > .custom-content (sidebar.scss).
+  // Do not set inline-size: 100% here — with flex-end that shoves the sidebar right.
   .custom-sidebar + .custom-content {
-    inline-size: 100%;
-
-    @include medium {
-      inline-size: 74%;
-    }
-
     .event-slider {
       .slider-inner {
         margin-inline-start: 0;
