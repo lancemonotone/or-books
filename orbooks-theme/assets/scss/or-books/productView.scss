@@ -2,16 +2,28 @@
 // OR Books — productView (featured / top-product shells)
 // =============================================================================
 // Layout for `.top-product .productView` (home sidebar + category featured).
-// Cover + type sizes match live prod Featured Title (orbooks-theme-prod-download).
 // Stack rhythm: one `--or-featured-gap` on grid (cover + details + meta/CTA).
 // =============================================================================
 
 .top-product {
-  --or-featured-cover-max: 14.25rem;
+  // Below 500: eye-tuned cover (70cqw). Full slide-width match was still too large.
+  --or-slider-arrow-size: 1.25rem;
+  --or-slider-track-pad: calc(var(--or-slider-arrow-size) + 0.4rem);
+  --or-slider-slides-show: 1;
+  --or-listing-shadow-room: 0.35rem;
+  --or-listing-card-pad-inline: 0px;
+  --or-featured-cover-max: calc(
+    70cqw / var(--or-slider-slides-show) - 2 *
+      var(--or-listing-shadow-room, 0px) - 2 *
+      var(--or-listing-card-pad-inline, 0px)
+  );
   --or-featured-title-size: var(--or-text-xl);
   --or-featured-subtitle-size: var(--or-text-sm);
   --or-featured-author-size: var(--or-text-lg);
 
+  container-type: inline-size;
+  box-sizing: border-box;
+  padding-inline: var(--or-slider-track-pad);
   margin-block-start: 1.875rem;
 
   // Parent .or-flow gap owns vertical rhythm — kill legacy margins
@@ -19,7 +31,8 @@
     margin-block: 0;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 500px) {
+    --or-slider-track-pad: 0px;
     --or-featured-cover-max: 100%;
   }
 

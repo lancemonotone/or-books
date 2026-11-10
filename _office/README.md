@@ -31,7 +31,9 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | — | **`website-development-agreement/`** | — | Client agreement + Wave 2 estimate thread; **how to run billed Wave 2:** `WAVE-2-WORKFLOW.md` |
 | 4.2 | `4.2-latest-news-arrows/` | `feature/wave2-4.2-latest-news-arrows` → `staging` | Done locally — outline arrows outside listing cards; Events/Videos CSS ready |
 | 4.4 | `4.4-book-arrows/` | `feature/wave2-4.4-book-arrows` → `staging` | Done locally — book arrows mid-cover + under head edges |
-| 4.5 | `4.5-mobile-arrows-autoscroll/` | `feature/wave2-4.5-mobile-arrows-autoscroll` | Done locally — phone: no arrows + autoplay on all section sliders |
+| 4.5 | `4.5-mobile-arrows-autoscroll/` | `feature/wave2-4.5-mobile-arrows-autoscroll` → `staging` | Done locally — phone: no arrows + autoplay on all section sliders |
+| 4.8 | `4.8-see-all-below/` | `feature/wave2-4.8-see-all-below` → `staging` | Done locally — See all under section bodies; BB your turn |
+| 4.6 | `4.6-featured-title-cover/` | `feature/wave2-4.6-featured-title-cover` | Done locally — phone Featured Title cover larger; BB your turn |
 | 4.16 | `featured-title-read-more-layout/` | `feature/wave2-4.2-latest-news-arrows` → `staging` | Done locally — Featured Title width/centering + Read More below/at desktop |
 | 4.x | (create per card as done) | off `staging` | Billed Wave 2 — Briefboard cards are the plan; see `website-development-agreement/WAVE-2-WORKFLOW.md` |
 
