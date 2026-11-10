@@ -387,7 +387,8 @@ h4.card-title,
   text-transform: none;
 }
 
-// 2.1 (4): homepage Latest News card type = live (prod home blog-title / blog-date)
+// 2.1 (4): homepage Latest News headline size (sidebar). Date stays listing-card
+// size (--or-text-md) so it matches /news/ cards.
 .blog-main-home {
   --or-home-news-type-size: var(--or-text-lg);
 
@@ -399,8 +400,7 @@ h4.card-title,
     --or-home-news-type-size: var(--or-text-2xl);
   }
 
-  & .listing-card h4,
-  & .listing-card time {
+  & .listing-card h4 {
     font-size: var(--or-home-news-type-size);
   }
 }

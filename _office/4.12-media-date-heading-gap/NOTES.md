@@ -22,6 +22,7 @@ In the media: reduce space between the date and news heading; she also asked abo
 
 - Less space between the date and the title on shared listing cards (In the media, News, and the same card type elsewhere).
 - Date and heading stay left-aligned (not centered on the image).
+- Homepage Latest News date size matches `/news/` cards (no longer oversized with the sidebar headline scale).
 
 ## Client action needed
 
