@@ -1,8 +1,8 @@
 // Shared slider chrome for any .or-section--slider
 // Design language: docs/design-language.md
 // Arrows stay on the Slick carousel (DOM). Side-mounted, vertically centered — never in the section head.
-// Book sliders: arrows hang half a control outside the track (clear of hover shadow).
-// Narrow listing sliders: arrows stay inset. Block CTAs use .or-btn max-inline cap.
+// Book + listing sliders: arrows under section-head edges (inset 0); track/card gutters clear covers.
+// Block CTAs use .or-btn max-inline cap.
 // Product carousel shell (margin / block spacing) lives here — not in home.scss.
 // 4.8: style .slick-dots here the same shared way — no per-page one-offs.
 
@@ -24,17 +24,36 @@
     --or-slider-arrow-size: 1.4375rem;
   }
 
+  // Product carousels: same edge align as listing (inset 0 under head); cover mid-line vertical.
+  // Track pad = arrow gutter so covers clear the controls. Slides-show matches home.js Slick.
   .productCarousel {
-    // Halfway hang + 0.3125rem farther out.
-    // Shadow-room must be a length (0px not 0) or this calc is invalid → both arrows stack left.
-    --or-slider-arrow-inset: calc(
-      -0.5 * (var(--or-slider-arrow-size) + var(--or-listing-shadow-room, 0px)) -
-        0.3125rem
+    --or-slider-slides-show: 1;
+    --or-slider-arrow-inset: 0;
+    --or-slider-track-pad: calc(var(--or-slider-arrow-size) + 0.4rem);
+    // 100cqw is content-box (padding already excluded). Lengths must be 0px not 0.
+    --or-slider-cover-block: calc(
+      100cqw / var(--or-slider-slides-show) -
+        2 * var(--or-listing-shadow-room, 0px) -
+        2 * var(--or-listing-card-pad-inline, 0px)
     );
+    --or-slider-arrow-top: calc(
+      var(--or-listing-shadow-room, 0px) +
+        var(--or-listing-card-pad-block-start, 0px) + var(--or-slider-cover-block) /
+        2
+    );
+    container-type: inline-size;
     padding-block-start: 0;
     margin-block: 0 !important;
     margin-inline: 0 !important;
     overflow: visible;
+
+    @media (min-width: 500px) {
+      --or-slider-slides-show: 2;
+    }
+
+    @media (min-width: 600px) {
+      --or-slider-slides-show: 3;
+    }
 
     &::before,
     &::after {
