@@ -28,7 +28,13 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | 2.7 | `2.7-shorten-news-bylines-on-mobile/` | `fix/wave1-2.7-news-byline-date-only` | Verify sentence/title case; else done |
 | — | `staging-prod-migration/` | — | DIY staging ← prod data transfer (`PLAN.md`) |
 | — | **`deadbeat-client-hold/`** | tag `held-theme-unpaid-2026-09-01` | **Theme hold** — zip + reinstate steps; read before forgetting tag exists |
-| — | **`website-development-agreement/`** | — | Client agreement draft (`OR-BOOKS-WEBSITE-DEVELOPMENT-AGREEMENT.md`) |
+| — | **`website-development-agreement/`** | — | Client agreement + Wave 2 estimate thread; **how to run billed Wave 2:** `WAVE-2-WORKFLOW.md` |
+| 4.2 | `4.2-latest-news-arrows/` | `feature/wave2-4.2-latest-news-arrows` | In progress — outline-on-image arrows local; Events/Videos CSS ready, blocks hidden on home |
+| 4.x | (create per card as done) | off `staging` | Billed Wave 2 — Briefboard cards are the plan; see `website-development-agreement/WAVE-2-WORKFLOW.md` |
+
+## Wave 2 billed work
+
+Same as Wave 1: **Briefboard Wave 2 card = scope**. Feature branch → implement → staging check → `_office/<id>-slug/NOTES.md`. No epic plan required. Short written plan only when easy to overbuild (especially **4.15 Events unscramble**). Full notes: `website-development-agreement/WAVE-2-WORKFLOW.md`.
 
 ## Theme rollback archives
 

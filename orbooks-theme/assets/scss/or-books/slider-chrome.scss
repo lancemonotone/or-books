@@ -12,6 +12,12 @@
   --or-slider-arrow-inset: 0.25rem;
   // No side gutter — slides span the section; CTAs cap via .or-btn
   --or-slider-track-pad: 0;
+  // 4.2 — shared outline chrome (all section sliders). Hover = full white fill.
+  --or-slider-arrow-image: url("../img/left-slider-outline.svg");
+  --or-slider-arrow-image-hover: url("../img/left-slider-outline-hover.svg");
+  --or-slider-arrow-top: 50%;
+  // On-image arrows: no side gutter for listing body copy
+  --or-slider-text-pad-inline: 0;
   overflow: visible;
 
   @media (min-width: 1024px) {
@@ -53,7 +59,7 @@
   & .listing-card time,
   & .listing-card h4,
   & .listing-card p {
-    padding-inline: calc(var(--or-slider-arrow-size) + 0.75rem);
+    padding-inline: var(--or-slider-text-pad-inline);
   }
 
   // 1px so slick overflow does not clip the thumbnail border
@@ -117,7 +123,7 @@
   .slick-arrow {
     position: absolute;
     z-index: 3;
-    top: 50%;
+    top: var(--or-slider-arrow-top);
     transform: translateY(-50%);
     display: inline-flex !important;
     align-items: center;
@@ -147,7 +153,7 @@
       height: var(--or-slider-arrow-size);
       inline-size: var(--or-slider-arrow-size);
       block-size: var(--or-slider-arrow-size);
-      background-image: url("../img/left-slider.svg");
+      background-image: var(--or-slider-arrow-image);
       background-position: 50%;
       background-repeat: no-repeat;
       background-size: contain;
@@ -158,6 +164,10 @@
     &:focus {
       background-color: transparent;
       background-image: none;
+
+      &::before {
+        background-image: var(--or-slider-arrow-image-hover);
+      }
     }
 
     &.slick-disabled {
@@ -193,5 +203,29 @@
     transform: none;
     inline-size: auto;
     block-size: auto;
+  }
+
+  // Listing thumbs (news / events / videos): narrower card, arrows in side gutters.
+  // Same shared outline chrome — only inset + vertical pin tokens.
+  .blog-cont,
+  .eventgrid,
+  .videomain {
+    --or-slider-listing-gutter: calc(var(--or-slider-arrow-size) + 0.4rem);
+    --or-slider-arrow-inset: 0;
+    --or-slider-arrow-track-pad-top: 0px;
+    // Image mid-line uses the inset card width, not the full track.
+    --or-slider-image-block: calc(
+      (100cqw - 2 * var(--or-slider-listing-gutter)) * 9 / 16
+    );
+    --or-slider-arrow-top: calc(
+      var(--or-slider-arrow-track-pad-top) + var(--or-slider-image-block) / 2
+    );
+    container-type: inline-size;
+
+    .listing-card,
+    .event-card {
+      margin-inline: var(--or-slider-listing-gutter);
+      box-sizing: border-box;
+    }
   }
 }

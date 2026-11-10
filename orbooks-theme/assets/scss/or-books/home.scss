@@ -48,6 +48,8 @@
           .blog-cont {
             --or-listing-card-body-pad: 1.25rem;
             --or-news-slider-track-pad-top: 0.5rem;
+            // Track pad feeds shared `--or-slider-arrow-top` in slider-chrome
+            --or-slider-arrow-track-pad-top: var(--or-news-slider-track-pad-top);
 
             container-type: inline-size;
             padding-block-start: var(--or-news-slider-track-pad-top);
@@ -72,16 +74,6 @@
                 // Thumbnail radius + 1px clip inset: slider-chrome.scss
               }
             }
-
-            // Fixed from slider top at the date (landscape thumbs). Title wrap does not move arrows.
-            .slick-arrow {
-              top: calc(
-                var(--or-news-slider-track-pad-top) + 100cqw * 9 / 16 +
-                  var(--or-listing-card-body-pad)
-              );
-              transform: none;
-              inset-block-end: auto;
-            }
           }
         }
         .event-carousel,
@@ -93,15 +85,13 @@
           }
           .eventgrid,
           .videomain {
-            padding-top: 30px;
+            --or-slider-arrow-track-pad-top: 1.875rem;
+            container-type: inline-size;
+            padding-block-start: var(--or-slider-arrow-track-pad-top);
             margin: 0;
             .slick-list {
-              margin: 0 -5px;
-              // Gutters only — type/chrome from listing-card.scss
-              .listing-card,
-              .event-card {
-                padding: 0 5px;
-              }
+              // Listing card inset / arrow gutters: slider-chrome.scss
+              margin-inline: 0;
             }
           }
         }

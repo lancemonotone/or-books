@@ -121,7 +121,7 @@ Covered by the typography system above (not a separate utility class).
 ## Molecule: Slider chrome (`.or-section--slider`)
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/slider-chrome.scss`
-- **Job:** Shared Slick **arrow** look + placement: on the **carousel**, left/right, vertically centered. Not in the title row.
+- **Job:** Shared Slick **arrow** look + placement: on the **carousel**, left/right, vertically centered. Not in the title row. **Look (4.2):** outline circle, slightly see-through white fill; hover = full white fill. Same asset for every `.or-section--slider` (main + sidebar). Listing thumbs (news / events / videos): inset card via `--or-slider-listing-gutter` so arrows sit outside; pin `--or-slider-arrow-top` to the thumb mid-line.
 - **Track:** full-bleed (no side gutter). Arrows overlay the slide edges so block CTAs (`.or-btn-block`) can span the section width.
 - **DOM contract (all section sliders — main + sidebar):**
   ```
