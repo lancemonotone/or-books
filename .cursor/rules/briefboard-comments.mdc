@@ -1,5 +1,5 @@
 ---
-description: Briefboard Agent API — client-facing comments only; no internal state; safe reply mode
+description: Briefboard Agent API — client-facing comments only; never overwrite anyone's comments
 alwaysApply: true
 ---
 
@@ -7,10 +7,37 @@ alwaysApply: true
 
 When posting to Briefboard via `api/agent.php` (`add_comment`, `edit_comment`), treat the thread as **client-facing**. Internal detail belongs in `_office/<task>/NOTES.md`, not on the card.
 
-## Write only what changed
+## Hard rule: never overwrite comments
 
-- Plain language: what is different on the site (behavior, layout, copy).
+`add_comment` with **`mode: "comment"`** (or **omitting `mode`**) **replaces** the latest Rus / admin message. That destroys history.
+
+**Do not overwrite anyone’s comment** — Rus, client, or anyone else — **unless the human explicitly instructs you to overwrite or edit that message.**
+
+### Mandatory before every `add_comment`
+
+1. `GET api/agent.php` and read `comments[taskKey].messages` (or equivalent).
+2. If the task already has **any** messages in the thread → **`mode: "reply"` only**.
+3. If the thread is **empty** (no messages at all) → `mode: "comment"` is allowed **once** for the first note.
+4. **Always pass `mode` explicitly.** Never rely on the API default.
+
+### Forbidden unless the human explicitly says so
+
+- `add_comment` without `mode`
+- `add_comment` with `mode: "comment"` when any message already exists on the task
+- Overwriting, replacing, or “updating” a prior comment by posting `mode: "comment"` again
+- `edit_comment` on any message without an explicit user instruction to edit/overwrite that text
+- Silently swapping a recommendation note for delivery copy (use **`reply`** instead)
+
+### `edit_comment`
+
+- Only when the **user explicitly asks** to fix, restore, or replace a specific message.
+- Never as a shortcut for a follow-up.
+
+## Write only what changed (this card only)
+
+- Plain language: what is different on the site for **this task’s ask**.
 - Intentional scope changes vs the card, when relevant.
+- **Do not** mention other cards, later Wave items, book-arrow centering, deploy batches, or “still to do” unless that text is literally this card’s recommendation.
 - **Do not** add review prompts, next steps, or “nothing needed from you” unless the **user explicitly asks** for that in the comment.
 
 ## Never put internal state in Briefboard comments
@@ -21,12 +48,6 @@ Do **not** include:
 - `main` / `staging` / merge or deploy workflow
 - “Pending push”, “Wave 1 batch”, stencil CLI status, or other dev pipeline state
 - Play-by-play dev logs (those go in `_office/` NOTES)
-
-## API: do not overwrite existing comments
-
-- Default `add_comment` `mode` is `comment` — it **replaces** the latest Rus message. Do **not** use that for follow-ups.
-- After Rus already has a message on the task, use `add_comment` with **`mode: "reply"`** only.
-- Use `edit_comment` only to fix the **latest** Rus message when the user asks; never to silently replace history.
 
 ## Auth
 

@@ -36,3 +36,5 @@ Freehosting runs a **JS cookie gate**. Bare `curl` / Node HTTPS often never reac
 ## Comments
 
 Client-facing only — see `briefboard-comments.mdc`.
+
+**Never overwrite anyone’s comment** unless the human explicitly instructs it. Before `add_comment`, read the task thread. If any messages exist, **`mode: "reply"` only**. Always pass `mode` explicitly; omitted/`comment` replaces the latest admin message.

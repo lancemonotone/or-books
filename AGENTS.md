@@ -31,7 +31,7 @@ Live board: `https://lancemonotone.com/or-books/app/` — docs `API.md`, endpoin
 - Host has a JS cookie gate → call via Chrome DevTools `evaluate_script` `fetch` on an open Briefboard tab (`credentials: 'include'` + Bearer). Bare `curl` usually fails.
 - Token file: `.cursor/secrets.briefboard.json` (gitignored). Copy from `.cursor/secrets.briefboard.example.json`.
 - Fields: `baseUrl`, `agent_api_token` (from that install’s `config.php`). Never commit or paste the token in chat.
-- **Comments are client-facing:** what changed in plain language only. No commit SHAs, branches, deploy/push status, or review nudges unless the user asks for those in the comment. Follow-ups use `add_comment` with `mode: "reply"` (default `comment` overwrites). Rule: `.cursor/rules/briefboard-comments.mdc`.
+- **Comments are client-facing:** what changed in plain language only (this card’s ask only). No commit SHAs, branches, deploy/push status, other cards, or review nudges unless the user asks for those in the comment. **Never overwrite anyone’s comment** unless the human explicitly instructs it. Always set `mode` explicitly; if the task already has any messages, use `mode: "reply"` only (`comment` / omitted mode replaces the latest admin message). Rule: `.cursor/rules/briefboard-comments.mdc`.
 
 ### Task delivery notes (client copy source)
 
