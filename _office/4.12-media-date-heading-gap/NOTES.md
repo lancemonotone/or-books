@@ -10,7 +10,7 @@
 | **taskKey** | `1c4cbf58-1da1-47e7-a439-a71a3c188c8a` |
 | **Briefboard URL** | `https://lancemonotone.com/or-books/app/?i=1#/task/1c4cbf58-1da1-47e7-a439-a71a3c188c8a` |
 | **Branch** | `feature/wave2-4.12-media-date-heading-gap` |
-| **Commits** | `f81d69c` Tighten date-to-title spacing on listing cards (4.12) |
+| **Commits** | `0f7a7b0` Tighten date-to-title spacing on listing cards (4.12) |
 | **Deploy** | Local only until Wave 2 staging push batch |
 | **Briefboard status** | `blocked` (your turn) — delivery comment posted |
 
