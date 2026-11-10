@@ -102,6 +102,13 @@
     }
   }
 
+  // 4.5 — all section sliders: hide arrows below phone breakpoint (Slick + CSS).
+  @media (max-width: 767px) {
+    .slick-arrow {
+      display: none !important;
+    }
+  }
+
   .slick-slider.slick-initialized {
     position: relative;
     box-sizing: border-box;

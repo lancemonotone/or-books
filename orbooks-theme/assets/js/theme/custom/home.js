@@ -19,28 +19,61 @@ export default (function (context) {
     $carousel.slick(settings);
   }
 
+  /**
+   * 4.5 — phone (&lt;768): all section sliders hide arrows + autoplay
+   * (unless prefers-reduced-motion). Shared by product + listing rails.
+   */
+  function orSectionSliderMobileMotion() {
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return {
+      arrows: false,
+      autoplay: !reduceMotion,
+      autoplaySpeed: 4000,
+      pauseOnHover: true,
+      pauseOnFocus: true,
+    };
+  }
+
   /** One-slide section sliders (news, events, videos, recent). */
   function orSingleSlideSettings(extra) {
+    const mobileMotion = orSectionSliderMobileMotion();
     return Object.assign({
       dots: false,
       arrows: true,
       infinite: true,
       slidesToShow: 1,
       slidesToScroll: 1,
+      autoplay: false,
+      // Slick: settings apply when window width is below this value.
+      responsive: [
+        {
+          breakpoint: 768,
+          settings: Object.assign({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+          }, mobileMotion),
+        },
+      ],
     }, extra || {});
   }
 
   /**
    * Product carousel: advance a full page (slidesToScroll === slidesToShow)
    * at each breakpoint. Pass extra keys (e.g. rows, adaptiveHeight) as needed.
+   * 4.5 — same phone motion as other section sliders.
    */
   function orProductCarouselSettings(extra) {
+    const mobileMotion = orSectionSliderMobileMotion();
     const settings = Object.assign({
       dots: false,
       arrows: true,
       infinite: true,
       slidesToShow: 3,
       slidesToScroll: 3,
+      autoplay: false,
       responsive: [
         {
           breakpoint: 1000,
@@ -50,18 +83,25 @@ export default (function (context) {
           },
         },
         {
+          breakpoint: 768,
+          settings: Object.assign({
+            slidesToShow: 3,
+            slidesToScroll: 3,
+          }, mobileMotion),
+        },
+        {
           breakpoint: 600,
-          settings: {
+          settings: Object.assign({
             slidesToShow: 2,
             slidesToScroll: 2,
-          },
+          }, mobileMotion),
         },
         {
           breakpoint: 500,
-          settings: {
+          settings: Object.assign({
             slidesToShow: 1,
             slidesToScroll: 1,
-          },
+          }, mobileMotion),
         },
       ],
     }, extra || {});
@@ -216,22 +256,11 @@ export default (function (context) {
       orInitSlick($(this), orProductCarouselSettings(orProductCarouselExtra($(this))));
     });
 
-    const singleSlideHideArrowsBelow769 = {
-      responsive: [
-        {
-          breakpoint: 769,
-          settings: {
-            arrows: false,
-          },
-        },
-      ],
-    };
-
     setTimeout(() => {
       $(".recent-main.main-loader").removeClass('main-loader');
       $(".recent-main").children(".waviy").remove();
       $('.recent-slide').each(function () {
-        orInitSlick($(this), orSingleSlideSettings(singleSlideHideArrowsBelow769));
+        orInitSlick($(this), orSingleSlideSettings());
       });
     }, 100);
 
@@ -239,7 +268,7 @@ export default (function (context) {
       $(".home-video-main.main-loader").removeClass('main-loader');
       $(".home-video-main").children(".waviy").remove();
       $('.video-slide').each(function () {
-        orInitSlick($(this), orSingleSlideSettings(singleSlideHideArrowsBelow769));
+        orInitSlick($(this), orSingleSlideSettings());
       });
     }, 100);
 

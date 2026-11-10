@@ -121,7 +121,7 @@ Covered by the typography system above (not a separate utility class).
 ## Molecule: Slider chrome (`.or-section--slider`)
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/slider-chrome.scss`
-- **Job:** Shared Slick **arrow** look + placement for every `.or-section--slider`. Not in the title row. **Look:** outline circle, slightly see-through white fill; hover = full white fill. **One clearance recipe:** `--or-slider-arrow-inset: 0` under section-head edges; `--or-slider-track-pad` gutters the track so media clears the controls. **Vertical:** `--or-slider-arrow-top` = mid of slide media (`--or-slider-media-ratio`, default `0.5625` for listing thumbs; product carousels set `1`). Do **not** fork chrome by content type (news vs books). Sidebar vs main may change tokens only (e.g. slides-show).
+- **Job:** Shared Slick **arrow** look + placement for every `.or-section--slider`. Not in the title row. **Look:** outline circle, slightly see-through white fill; hover = full white fill. **One clearance recipe:** `--or-slider-arrow-inset: 0` under section-head edges; `--or-slider-track-pad` gutters the track so media clears the controls. **Vertical:** `--or-slider-arrow-top` = mid of slide media (`--or-slider-media-ratio`, default `0.5625` for listing thumbs; product carousels set `1`). Do **not** fork chrome by content type (news vs books). Sidebar vs main may change tokens only (e.g. slides-show). **Phone (&lt;768):** every `.or-section--slider` hides arrows and autoplays (respect `prefers-reduced-motion`) — news, videos, events, and product rows alike.
 - **Track:** shared `--or-slider-track-pad`. Block CTAs (`.or-btn-block`) still cap via `.or-btn`.
 - **DOM contract (all section sliders — main + sidebar):**
   ```

@@ -30,7 +30,8 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | — | **`deadbeat-client-hold/`** | tag `held-theme-unpaid-2026-09-01` | **Theme hold** — zip + reinstate steps; read before forgetting tag exists |
 | — | **`website-development-agreement/`** | — | Client agreement + Wave 2 estimate thread; **how to run billed Wave 2:** `WAVE-2-WORKFLOW.md` |
 | 4.2 | `4.2-latest-news-arrows/` | `feature/wave2-4.2-latest-news-arrows` → `staging` | Done locally — outline arrows outside listing cards; Events/Videos CSS ready |
-| 4.4 | `4.4-book-arrows/` | `feature/wave2-4.4-book-arrows` | Done locally — book arrows mid-cover + under head edges |
+| 4.4 | `4.4-book-arrows/` | `feature/wave2-4.4-book-arrows` → `staging` | Done locally — book arrows mid-cover + under head edges |
+| 4.5 | `4.5-mobile-arrows-autoscroll/` | `feature/wave2-4.5-mobile-arrows-autoscroll` | Done locally — phone: no arrows + autoplay on all section sliders |
 | 4.16 | `featured-title-read-more-layout/` | `feature/wave2-4.2-latest-news-arrows` → `staging` | Done locally — Featured Title width/centering + Read More below/at desktop |
 | 4.x | (create per card as done) | off `staging` | Billed Wave 2 — Briefboard cards are the plan; see `website-development-agreement/WAVE-2-WORKFLOW.md` |
 
