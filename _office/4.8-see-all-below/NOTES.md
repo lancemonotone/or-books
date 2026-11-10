@@ -8,7 +8,8 @@
 | **taskKey** | `3f9ca77f-7c97-45a6-b55d-a9ec9dd5370e` |
 | **Briefboard URL** | `https://lancemonotone.com/or-books/app/?i=1#/task/3f9ca77f-7c97-45a6-b55d-a9ec9dd5370e` |
 | **Branch** | `feature/wave2-4.8-see-all-below` |
-| **Commits** | (pending) |
+| **Commits** | `bad7baa` Move section See all under slider bodies (4.8) |
+| **Briefboard status** | `blocked` (your turn) — delivery comment posted |
 | **Deploy** | Local only until Wave 2 staging push batch |
 
 ## Client ask (original)
