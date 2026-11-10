@@ -121,17 +121,19 @@ Covered by the typography system above (not a separate utility class).
 ## Molecule: Slider chrome (`.or-section--slider`)
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/slider-chrome.scss`
-- **Job:** Shared Slick **arrow** look + placement: on the **carousel**, left/right. Not in the title row. **Look (4.2):** outline circle, slightly see-through white fill; hover = full white fill. Same asset for every `.or-section--slider` (main + sidebar). **Arrow edges:** `--or-slider-arrow-inset: 0` under section-head left/right. Listing thumbs: card inset via `--or-slider-listing-gutter`; pin `--or-slider-arrow-top` to thumb mid-line. **Book carousels (4.4):** `--or-slider-track-pad` clears covers; pin `--or-slider-arrow-top` to cover mid-line.
-- **Track:** listing/book gutters for arrow clearance. Block CTAs (`.or-btn-block`) still cap via `.or-btn`, not full track bleed.
+- **Job:** Shared Slick **arrow** look + placement for every `.or-section--slider`. Not in the title row. **Look:** outline circle, slightly see-through white fill; hover = full white fill. **One clearance recipe:** `--or-slider-arrow-inset: 0` under section-head edges; `--or-slider-track-pad` gutters the track so media clears the controls. **Vertical:** `--or-slider-arrow-top` = mid of slide media (`--or-slider-media-ratio`, default `0.5625` for listing thumbs; product carousels set `1`). Do **not** fork chrome by content type (news vs books). Sidebar vs main may change tokens only (e.g. slides-show).
+- **Track:** shared `--or-slider-track-pad`. Block CTAs (`.or-btn-block`) still cap via `.or-btn`.
 - **DOM contract (all section sliders — main + sidebar):**
   ```
   .or-section.or-section--slider
     .or-section-head
-    [slick root — direct sibling; may keep a semantic class]
+    ul                          ← slick root (always a list)
+      li                        ← each slide
+        article.listing-card | article.card | …
   ```
-  No intermediate wrappers (`innersection`, `inner-featured`, empty AJAX hosts). AJAX injects the slick root as the next sibling of the head. Optional loader may exist until removed.
-- **Slick root classes (semantic, not structure):** `.blog-cont`, `.eventgrid`, `.videomain`, `.productCarousel` / `.newprd`, `.recent-slide`, `.video-slide` — these *are* the carousel element.
-- **DOM:** Arrows stay Slick children of the slider (default). No `appendArrows` into the head.
+  No `div` / bare `article` as the slick root or as the slide. Card atoms stay inside `li`. No intermediate wrappers (`innersection`, `inner-featured`, empty AJAX hosts). AJAX injects the `ul` as the next sibling of the head (or fills an empty `ul`). Optional loader may exist until removed.
+- **Slick root classes (labels only, not a second structure):** `.blog-cont`, `.eventgrid`, `.videomain`, `.productCarousel` / `.newprd`, `.recent-slide`, `.video-slide` — these are on the `ul`.
+- **DOM:** Arrows stay Slick children of the `ul` (default). No `appendArrows` into the head.
 - **Out of contract:** Hero `.heroCarousel`, PDP galleries, page-only banners.
 - **4.8 (when approved):** style `.slick-dots` in this same file; heads stay unchanged.
 - **Usage:** add `or-section or-section--slider` on the section wrapper. Non-sliders use `or-section` only (e.g. Reading Lists).

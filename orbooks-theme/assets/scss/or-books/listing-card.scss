@@ -190,7 +190,6 @@
 
     @media (min-width: 768px) {
       &:hover {
-        z-index: 2;
         box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.19);
       }
     }
@@ -218,10 +217,7 @@
     overflow: visible;
     padding: var(--or-listing-shadow-room);
 
-    &:hover,
-    &:focus-within {
-      z-index: 2;
-    }
+    // z-index on hover: shared in slider-chrome (.or-section--slider)
   }
 
   .event-card {

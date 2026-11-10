@@ -3,9 +3,11 @@
         url="/news/"
         title=(lang 'common.home_news')
     }}
-    <div class="blog-cont">
+    <ul class="blog-cont">
         {{#each blog.recent_posts }}
-            {{> components/blog/post post=this theme_settings=../theme_settings}}
+            <li>
+                {{> components/blog/post post=this theme_settings=../theme_settings}}
+            </li>
         {{/each}}
-    </div>
+    </ul>
 </div>

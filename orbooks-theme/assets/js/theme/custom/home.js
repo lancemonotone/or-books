@@ -11,6 +11,25 @@ export default (function (context) {
       .removeAttr('data-or-section-head-pending');
   }
 
+  /** Init Slick once. Shared entry for section sliders. */
+  function orInitSlick($carousel, settings) {
+    if (!$carousel || !$carousel.length || $carousel.hasClass('slick-initialized')) {
+      return;
+    }
+    $carousel.slick(settings);
+  }
+
+  /** One-slide section sliders (news, events, videos, recent). */
+  function orSingleSlideSettings(extra) {
+    return Object.assign({
+      dots: false,
+      arrows: true,
+      infinite: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+    }, extra || {});
+  }
+
   /**
    * Product carousel: advance a full page (slidesToScroll === slidesToShow)
    * at each breakpoint. Pass extra keys (e.g. rows, adaptiveHeight) as needed.
@@ -50,6 +69,18 @@ export default (function (context) {
     return settings;
   }
 
+  /** Product root: prefer .productCarousel; legacy .newprd* / .singleprd still match. */
+  function orProductCarouselExtra($carousel) {
+    const extra = {};
+    if ($carousel.closest('[data-or-slider-ajax="new"]').length) {
+      extra.adaptiveHeight = true;
+    } else if ($carousel.hasClass('newprd') && !$carousel.hasClass('newprd-sale')) {
+      const rows = $(window).width() > 1000 ? 2 : 1;
+      extra.rows = rows;
+    }
+    return extra;
+  }
+
   if ($(".top-product").length) {
     var product_id = context.SidebarProductId
 
@@ -68,24 +99,22 @@ export default (function (context) {
   $.ajax({
     url: "/videos",
     success: function (data) {
-      $('.video-home .videomain').html($('.video-page', $(data)).html());
+      const $videoRail = $('.video-home .videomain');
+      $videoRail.html($('.video-page', $(data)).html());
+      // Page grid is div > article; section slider contract is ul > li > article.
+      $videoRail.children('.listing-card').wrap('<li></li>');
     },
     complete: function () {
       $(".video-home.main-loader").removeClass('main-loader')
       $(".video-home").children(".waviy").remove();
-      $(".video-home .videomain .listing-card:nth-child(n+5)").remove();
-      $('.video-home .videomain').slick({
-        infinite: true,
-        slidesToShow: 1,
-        centerMode: false,
-        slidesToScroll: 1,
-        adaptiveHeight: true,
-        arrows: true,
-        dots: false
-      });
+      $('.video-home .videomain').children('li:nth-child(n+5)').remove();
+      orInitSlick(
+        $('.video-home .videomain'),
+        orSingleSlideSettings({ centerMode: false, adaptiveHeight: true })
+      );
     }
   });
-  if ($('.home-new.new-product[data-or-slider-ajax="new"]').length) {
+  if ($('.or-section--slider[data-or-slider-ajax="new"]').length) {
     
     var product_viewidss = [];
     product_viewidss.push(context.new_category_id);
@@ -108,14 +137,16 @@ export default (function (context) {
                       
                       if (err) return;
 
-                      const $section = $('.home-new.new-product[data-or-slider-ajax="new"]');
+                      const $section = $('.or-section--slider[data-or-slider-ajax="new"]');
                       // Contract: slick root is direct sibling of .or-section-head (no inner wrappers)
                       $section.append(response);
-                      $section.find('.newprd .product:nth-child(n+30)').remove();
+                      $section.find('.productCarousel .product:nth-child(n+30)').remove();
                       const newUrl = $section.find('[data-category-url]').last().attr('data-category-url');
                       orSetSectionHeadHref($section, newUrl);
-                      const $newCarousel = $section.find('.newprd').not('.slick-initialized');
-                      $newCarousel.slick(orProductCarouselSettings({ adaptiveHeight: true }));
+                      orInitSlick(
+                        $section.find('.productCarousel').not('.slick-initialized'),
+                        orProductCarouselSettings({ adaptiveHeight: true })
+                      );
                       return;
                     })
                   }
@@ -123,7 +154,7 @@ export default (function (context) {
               datacount++;              
           }
             if(datacount == 0){
-              $('.home-new.new-product[data-or-slider-ajax="new"]').hide();
+              $('.or-section--slider[data-or-slider-ajax="new"]').hide();
         }
       } 
 
@@ -131,7 +162,7 @@ export default (function (context) {
   }
 
   // Home or Catalog bestsellers (same .or-section--slider host)
-  const $saleSliderHost = $('.home-new.best-seller-product[data-or-slider-ajax="sale"]');
+  const $saleSliderHost = $('.or-section--slider[data-or-slider-ajax="sale"]');
 
   if ($saleSliderHost.length) {
     
@@ -156,13 +187,15 @@ export default (function (context) {
                       
                       if (err) return;
 
-                      // Contract: append ul.newprd directly (no sale-innersection wrapper)
+                      // Contract: append productCarousel ul directly (no sale-innersection wrapper)
                       $saleSliderHost.append(response);
-                      $saleSliderHost.find('.newprd .product:nth-child(n+30)').remove();
+                      $saleSliderHost.find('.productCarousel .product:nth-child(n+30)').remove();
                       const saleUrl = $saleSliderHost.find('[data-category-url]').last().attr('data-category-url');
                       orSetSectionHeadHref($saleSliderHost, saleUrl);
-                      const $saleCarousel = $saleSliderHost.find('.newprd').not('.slick-initialized');
-                      $saleCarousel.slick(orProductCarouselSettings());
+                      orInitSlick(
+                        $saleSliderHost.find('.productCarousel').not('.slick-initialized'),
+                        orProductCarouselSettings()
+                      );
                       return;
                     })
                   }
@@ -177,88 +210,41 @@ export default (function (context) {
     })
   }
 
-  var viewportWidth = $(window).width();
-  var Rows = 1;
-  if (viewportWidth > 1000) {
-    Rows = 2;
-  }
   $(document).ready(function () {
-    $('.newprd').each(function () {
-      const $carousel = $(this);
-      if ($carousel.hasClass('slick-initialized')) return;
-      $carousel.slick(orProductCarouselSettings({ rows: Rows }));
+    // Prefer .productCarousel; legacy newprd / newprd-sale / singleprd still covered.
+    $('.productCarousel, .newprd, .newprd-sale, .singleprd').each(function () {
+      orInitSlick($(this), orProductCarouselSettings(orProductCarouselExtra($(this))));
     });
 
-    $('.newprd-sale').each(function () {
-      const $carousel = $(this);
-      if ($carousel.hasClass('slick-initialized')) return;
-      $carousel.slick(orProductCarouselSettings());
-    });
-   
-    $('.singleprd').each(function () {
-      const $carousel = $(this);
-      if ($carousel.hasClass('slick-initialized')) return;
-      $carousel.slick(orProductCarouselSettings());
-    });
+    const singleSlideHideArrowsBelow769 = {
+      responsive: [
+        {
+          breakpoint: 769,
+          settings: {
+            arrows: false,
+          },
+        },
+      ],
+    };
+
     setTimeout(() => {
       $(".recent-main.main-loader").removeClass('main-loader');
       $(".recent-main").children(".waviy").remove();
       $('.recent-slide').each(function () {
-        const $carousel = $(this);
-        if ($carousel.hasClass('slick-initialized')) return;
-        $carousel.slick({
-          dots: false,
-          arrows: true,
-          infinite: true,
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          responsive: [
-            {
-              breakpoint: 769,
-              settings: {
-                arrows: false,
-              }
-            }
-          ]
-        });
+        orInitSlick($(this), orSingleSlideSettings(singleSlideHideArrowsBelow769));
       });
     }, 100);
 
     setTimeout(() => {
-
       $(".home-video-main.main-loader").removeClass('main-loader');
       $(".home-video-main").children(".waviy").remove();
       $('.video-slide').each(function () {
-        const $carousel = $(this);
-        if ($carousel.hasClass('slick-initialized')) return;
-        $carousel.slick({
-          dots: false,
-          arrows: true,
-          infinite: true,
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          responsive: [
-            {
-              breakpoint: 769,
-              settings: {
-                arrows: false,
-              }
-            }
-          ]
-        });
+        orInitSlick($(this), orSingleSlideSettings(singleSlideHideArrowsBelow769));
       });
     }, 100);
+
     $('.blog-cont').each(function () {
-      const $carousel = $(this);
-      if ($carousel.hasClass('slick-initialized')) return;
-      $carousel.slick({
-        dots: false,
-        arrows: true,
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        adaptiveHeight: true
-      });
+      orInitSlick($(this), orSingleSlideSettings({ adaptiveHeight: true }));
     });
     $('.author-banner-main').slick({
       dots: false,

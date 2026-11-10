@@ -59,7 +59,7 @@
             }
 
             .slick-list {
-              // Full-bleed with slider-chrome (no side gutter / no -5px cancel)
+              // Side clearance: shared --or-slider-track-pad in slider-chrome
               margin-inline: 0;
               .listing-card {
                 --or-listing-cols: 1;
@@ -70,8 +70,6 @@
                 &:focus-within {
                   --or-listing-card-shadow: none;
                 }
-
-                // Thumbnail radius + 1px clip inset: slider-chrome.scss
               }
             }
           }
@@ -90,7 +88,7 @@
             padding-block-start: var(--or-slider-arrow-track-pad-top);
             margin: 0;
             .slick-list {
-              // Listing card inset / arrow gutters: slider-chrome.scss
+              // Side clearance: shared --or-slider-track-pad in slider-chrome
               margin-inline: 0;
             }
           }

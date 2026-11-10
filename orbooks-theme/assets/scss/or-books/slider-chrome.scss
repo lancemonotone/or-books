@@ -1,22 +1,22 @@
 // Shared slider chrome for any .or-section--slider
 // Design language: docs/design-language.md
-// Arrows stay on the Slick carousel (DOM). Side-mounted, vertically centered — never in the section head.
-// Book + listing sliders: arrows under section-head edges (inset 0); track/card gutters clear covers.
+// One clearance recipe for all section sliders. Sidebar vs main may change
+// tokens (slides-show, media-ratio); content-type hosts do not get parallel chrome.
+// Arrows: under section-head edges, mid of slide media. Never in the section head.
 // Block CTAs use .or-btn max-inline cap.
-// Product carousel shell (margin / block spacing) lives here — not in home.scss.
 // 4.8: style .slick-dots here the same shared way — no per-page one-offs.
 
 .or-section.or-section--slider {
   --or-slider-arrow-size: 1.25rem;
-  // Narrow hosts (Latest News): stay inside the section
-  --or-slider-arrow-inset: 0.25rem;
-  // No side gutter — slides span the section; CTAs cap via .or-btn
-  --or-slider-track-pad: 0;
-  // 4.2 — shared outline chrome (all section sliders). Hover = full white fill.
+  --or-slider-arrow-inset: 0;
+  --or-slider-track-pad: calc(var(--or-slider-arrow-size) + 0.4rem);
+  --or-slider-slides-show: 1;
+  // Listing thumbs default to 9/16; product carousels set ratio 1.
+  --or-slider-media-ratio: 0.5625;
+  --or-slider-arrow-track-pad-top: 0px;
   --or-slider-arrow-image: url("../img/left-slider-outline.svg");
   --or-slider-arrow-image-hover: url("../img/left-slider-outline-hover.svg");
   --or-slider-arrow-top: 50%;
-  // On-image arrows: no side gutter for listing body copy
   --or-slider-text-pad-inline: 0;
   overflow: visible;
 
@@ -24,24 +24,65 @@
     --or-slider-arrow-size: 1.4375rem;
   }
 
-  // Product carousels: same edge align as listing (inset 0 under head); cover mid-line vertical.
-  // Track pad = arrow gutter so covers clear the controls. Slides-show matches home.js Slick.
-  .productCarousel {
-    --or-slider-slides-show: 1;
-    --or-slider-arrow-inset: 0;
-    --or-slider-track-pad: calc(var(--or-slider-arrow-size) + 0.4rem);
-    // 100cqw is content-box (padding already excluded). Lengths must be 0px not 0.
-    --or-slider-cover-block: calc(
+  // Slick roots are always ul (labels kept for JS). Contract: ul > li > card.
+  .blog-cont,
+  .eventgrid,
+  .videomain,
+  .productCarousel,
+  .recent-slide,
+  .video-slide,
+  .slick-slider.slick-initialized {
+    list-style: none;
+    margin: 0;
+    padding-inline-start: 0; // kill UA ul indent; track-pad applied when initialized
+    // Lengths must be 0px not 0 or cover/mid calc breaks.
+    --or-slider-media-inline: calc(
       100cqw / var(--or-slider-slides-show) -
         2 * var(--or-listing-shadow-room, 0px) -
         2 * var(--or-listing-card-pad-inline, 0px)
     );
+    --or-slider-media-block: calc(
+      var(--or-slider-media-inline) * var(--or-slider-media-ratio)
+    );
     --or-slider-arrow-top: calc(
-      var(--or-listing-shadow-room, 0px) +
-        var(--or-listing-card-pad-block-start, 0px) + var(--or-slider-cover-block) /
+      var(--or-slider-arrow-track-pad-top) +
+        var(--or-listing-shadow-room, 0px) +
+        var(--or-listing-card-pad-block-start, 0px) + var(--or-slider-media-block) /
         2
     );
     container-type: inline-size;
+  }
+
+  // Listing thumbs: section may also be .or-listing — do not inherit product card pads.
+  .blog-cont,
+  .eventgrid,
+  .videomain,
+  .recent-slide,
+  .video-slide {
+    --or-listing-shadow-room: 0px;
+    --or-listing-card-pad-inline: 0px;
+    --or-listing-card-pad-block-start: 0px;
+  }
+
+  // Slide = li; card sits inside (do not make article the slick slide).
+  // Do not zero padding here — product slides use --or-listing-shadow-room.
+  & > ul > li,
+  .slick-slide {
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    margin: 0;
+
+    // Hover outline/shadow must paint above sibling slides (flex track).
+    &:hover,
+    &:focus-within {
+      z-index: 4;
+    }
+  }
+
+  // Square covers; slides-show matches home.js Slick breakpoints.
+  .productCarousel {
+    --or-slider-media-ratio: 1;
     padding-block-start: 0;
     margin-block: 0 !important;
     margin-inline: 0 !important;
@@ -69,8 +110,7 @@
     padding-block-start: 0;
   }
 
-  .slick-slider.slick-initialized .slick-list,
-  .productCarousel.slick-initialized .slick-list {
+  .slick-slider.slick-initialized .slick-list {
     margin-inline: 0;
     overflow: hidden;
   }
@@ -141,7 +181,7 @@
 
   .slick-arrow {
     position: absolute;
-    z-index: 3;
+    z-index: 5; // above hovered slides
     top: var(--or-slider-arrow-top);
     transform: translateY(-50%);
     display: inline-flex !important;
@@ -162,7 +202,6 @@
     background-color: transparent;
     background-image: none;
     box-shadow: none;
-    // Keep clicks on the control, not the slide underneath
     pointer-events: auto;
 
     &::before {
@@ -222,29 +261,5 @@
     transform: none;
     inline-size: auto;
     block-size: auto;
-  }
-
-  // Listing thumbs (news / events / videos): narrower card, arrows in side gutters.
-  // Same shared outline chrome — only inset + vertical pin tokens.
-  .blog-cont,
-  .eventgrid,
-  .videomain {
-    --or-slider-listing-gutter: calc(var(--or-slider-arrow-size) + 0.4rem);
-    --or-slider-arrow-inset: 0;
-    --or-slider-arrow-track-pad-top: 0px;
-    // Image mid-line uses the inset card width, not the full track.
-    --or-slider-image-block: calc(
-      (100cqw - 2 * var(--or-slider-listing-gutter)) * 9 / 16
-    );
-    --or-slider-arrow-top: calc(
-      var(--or-slider-arrow-track-pad-top) + var(--or-slider-image-block) / 2
-    );
-    container-type: inline-size;
-
-    .listing-card,
-    .event-card {
-      margin-inline: var(--or-slider-listing-gutter);
-      box-sizing: border-box;
-    }
   }
 }
