@@ -8,7 +8,7 @@
 | **taskKey** | `880de670-28a2-4034-ab2f-8bd01328afdb` |
 | **Briefboard URL** | `https://lancemonotone.com/or-books/app/?i=1#/task/880de670-28a2-4034-ab2f-8bd01328afdb` |
 | **Branch** | `feature/wave2-4.2-latest-news-arrows` |
-| **Commits** | (none yet) |
+| **Commits** | `1a15d1f` Add Wave 2 4.2 outline slider arrows outside listing cards |
 | **Deploy** | Local only until Wave 2 staging push batch |
 
 ## Client ask (original)
