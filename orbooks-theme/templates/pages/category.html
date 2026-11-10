@@ -79,7 +79,7 @@ category:
         {{> components/category/product-listing}}
         {{#if category.name '==' 'Catalog'}}
             {{#unless theme_settings.hide_bestsellers_products_catalog}}
-                <div class="home-new best-seller-product or-section or-section--slider" data-or-slider-ajax="sale">
+                <div class="home-new best-seller-product or-section or-section--slider or-section--cta-below" data-or-slider-ajax="sale">
                     {{> components/orbooks/section-head
                         title=(lang 'products.top')
                         category_id=theme_settings.sale_category_id

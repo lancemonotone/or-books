@@ -22,4 +22,43 @@
     @media (min-width: 1024px) {
         --or-section-head-margin-end: 0.35rem;
     }
+
+    // 4.8 — See all under the body; title on top.
+    // Contract for every .or-section--slider (news, products, events, videos, …).
+    // .or-section--cta-below = same layout for non-sliders (e.g. Subjects).
+    // display:contents promotes head children into this flex; body must not shrink
+    // (min-inline-size:0 collapsed Slick to ~arrow width and hid the cards).
+    &.or-section--slider,
+    &.or-section--cta-below {
+        --or-section-cta-below-gap: 1.25rem;
+
+        display: flex;
+        flex-direction: column;
+
+        .or-section-head {
+            display: contents;
+        }
+
+        .or-section-head h2 {
+            order: 1;
+            flex: 0 0 auto;
+            inline-size: 100%;
+            margin-block-end: var(--or-section-head-margin-end);
+        }
+
+        > :not(h2):not(.or-section-head):not(.or-section-head-actions) {
+            order: 2;
+            flex: 0 0 auto;
+            inline-size: 100%;
+            max-inline-size: 100%;
+        }
+
+        .or-section-head-actions {
+            order: 3;
+            flex: 0 0 auto;
+            justify-content: center;
+            inline-size: 100%;
+            margin-block-start: var(--or-section-cta-below-gap);
+        }
+    }
 }

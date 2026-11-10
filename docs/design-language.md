@@ -85,7 +85,8 @@ Do **not** mass-rewrite every `.button` in the theme until that chunk of work.
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/section.scss`
 - **Job:** Shared shell for any homepage (etc.) block that uses `.or-section-head` + body.
-- **Modifier:** `.or-section--slider` when the body is a Slick carousel — enables shared arrow chrome only (does not change the head).
+- **modifier:** `.or-section--slider` — Slick body + shared arrow chrome; **See all under the body** (title above) when a CTA is present. Same for news, products, events, videos — no per-slider exceptions.
+- **modifier:** `.or-section--cta-below` — same CTA-below layout for **non-slider** sections (Subjects).
 
 ## Typography system (`typography.scss`)
 
@@ -114,7 +115,7 @@ Covered by the typography system above (not a separate utility class).
 - **Styles:** `orbooks-theme/assets/scss/or-books/section-head.scss` (layout only)
 - **Title type:** bare `h2` from `typography.scss`. Size token `--or-type-section-head-size` (same as h2 below 1024; does not take the desktop h2 bump).
 - **Job:** Plain title, plus **See all** when `url` or `category_id` is passed. Same type either way.
-- **CTA:** Only See all is a link (`button button--default or-btn or-btn-sm`). Title is not linked.
+- **CTA:** Only See all is a link (`button button--default or-btn or-btn-sm`). Title is not linked. Under `.or-section--slider` or `.or-section--cta-below`, the CTA sits under the section body (CSS order); markup stays in the head.
 - **No destination:** omit See all (Featured Title). Do not invent a pending link.
 - **Never** includes carousel arrows.
 

@@ -91,7 +91,7 @@ blog:
     {{#unless theme_settings.hide_new_products}}
         {{#if products.new}}
             {{!-- Body = slick root injected as next sibling of head (home.js) --}}
-            <div class="home-new new-product or-section or-section--slider" data-or-slider-ajax="new">
+            <div class="home-new new-product or-section or-section--slider or-section--cta-below" data-or-slider-ajax="new">
                 {{> components/orbooks/section-head
                     title=(lang 'products.new')
                     category_id=theme_settings.new_category_id
@@ -103,7 +103,7 @@ blog:
     {{> components/orbookshome/recent-home}}
     
         {{#unless theme_settings.hide_bestsellers_products_homepage}}
-            <div class="home-new best-seller-product or-section or-section--slider" data-or-slider-ajax="sale">
+            <div class="home-new best-seller-product or-section or-section--slider or-section--cta-below" data-or-slider-ajax="sale">
                 {{> components/orbooks/section-head
                     title=(lang 'products.top')
                     category_id=theme_settings.sale_category_id
@@ -114,7 +114,7 @@ blog:
     {{> components/orbookshome/recent-video}}
 
     {{#unless theme_settings.hide_onsale_products}}
-    <div class="home-new sale-home featured or-section or-section--slider">
+    <div class="home-new sale-home featured or-section or-section--slider or-section--cta-below">
         {{#if products.featured}}
             {{> components/products/featured products=products.featured columns=theme_settings.homepage_featured_products_column_count}}
         {{/if}}
