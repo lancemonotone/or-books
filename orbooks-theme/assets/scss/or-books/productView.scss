@@ -34,6 +34,9 @@
     --or-featured-gap: 0.75rem;
 
     display: grid;
+    // Implicit `auto` column was sizing to the cover’s intrinsic width (~646px).
+    grid-template-columns: minmax(0, 1fr);
+    inline-size: 100%;
     gap: var(--or-featured-gap);
     margin: 0;
     padding: 0;
@@ -53,7 +56,10 @@
 
     .productView-image {
       pointer-events: visible;
+      float: none;
+      clear: none;
       inline-size: 100%;
+      width: 100%;
       max-inline-size: var(--or-featured-cover-max);
       margin-inline: auto;
 
@@ -71,14 +77,30 @@
     .productView-details {
       display: grid;
       gap: var(--or-featured-gap);
+      // Beat Cornerstone medium: float + 50% width (layouts/products/_productView.scss)
+      float: none;
+      clear: none;
       inline-size: 100%;
+      width: 100%;
+      max-inline-size: none;
       padding: 0;
       // Beat Cornerstone `.product-data { order: -1 }` (PDP mobile: text before images)
       order: 0;
       text-align: center;
 
-      @media (min-width: 768px) {
+      @media (min-width: 1024px) {
         text-align: start;
+      }
+
+      // Beat naked heading start@768 and body `p { text-align: start }`
+      & h1,
+      & h2,
+      & h3,
+      & h4,
+      & h5,
+      & h6,
+      & p {
+        text-align: inherit;
       }
 
       // Live Featured Title type (scoped; do not change global heading scale)
@@ -99,9 +121,29 @@
 
       & .sub-productView-title {
         display: flex;
+        justify-content: center;
+
+        @media (min-width: 1024px) {
+          justify-content: flex-start;
+        }
 
         .productView-info-name {
           display: none;
+        }
+      }
+
+      // Read More: ≤1023 match mailing-list CTAs (cap + center). Beat Cornerstone `margin: 0`.
+      & .or-btn.or-btn-block {
+        margin-inline: auto;
+      }
+
+      // Desktop: fill the details column.
+      @media (min-width: 1024px) {
+        & .or-btn.or-btn-block {
+          justify-self: stretch;
+          inline-size: 100%;
+          max-inline-size: none;
+          margin-inline: 0;
         }
       }
     }

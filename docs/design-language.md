@@ -139,7 +139,7 @@ Covered by the typography system above (not a separate utility class).
 ## Atom: Button (`.or-btn`)
 
 - **Styles:** `orbooks-theme/assets/scss/or-books/buttons.scss`
-- **Block CTA:** `.or-btn-block` — modifier on `.or-btn.button`; fill parent up to `--or-btn-max-inline` (25rem), centered. Font/padding size tokens may still use **container queries** on parent `.or-section` where needed.
+- **Block CTA:** `.or-btn-block` — modifier on `.or-btn.button`; fill parent up to `--or-btn-max-inline` (25rem), centered. Featured Title Read More: same shared block below 1024; full details-column width from 1024. Font/padding size tokens may still use **container queries** on parent `.or-section` where needed.
 - **Compact:** `.or-btn-sm` — size tokens.
 - **Fill:** `.button--primary` with `.or-btn` — rest = primary fill; hover inverts to white/black.
 - **Outline:** `.button--default` with `.or-btn` — rest = primary hover grey; hover = primary fill.
