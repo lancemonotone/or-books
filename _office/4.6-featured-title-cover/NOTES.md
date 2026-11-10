@@ -10,7 +10,7 @@
 | **taskKey** | `7fedbc83-deab-49f2-8fce-eccd2016cd3b` |
 | **Briefboard URL** | `https://lancemonotone.com/or-books/app/?i=1#/task/7fedbc83-deab-49f2-8fce-eccd2016cd3b` |
 | **Branch** | `feature/wave2-4.6-featured-title-cover` |
-| **Commits** | `be5cfa8` Enlarge Featured Title cover on phones (4.6) |
+| **Commits** | `60a097e` Enlarge Featured Title cover on phones (4.6) |
 | **Deploy** | Local only until Wave 2 staging push batch |
 | **Briefboard status** | `blocked` (your turn) — delivery comment posted |
 
