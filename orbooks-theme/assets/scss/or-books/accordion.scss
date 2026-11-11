@@ -78,44 +78,45 @@
   }
 
   .author-img-box {
+    // 4.11 — small photo beside bio (was ~50% width)
+    --or-author-photo-max: 9.375rem; // 150px
+    --or-author-photo-gap: 1rem;
+
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--or-author-photo-gap);
   }
 
   .photo-author {
     display: block;
-
-    @media (min-width: 768px) {
-      inline-size: 50%;
-      line-height: 1;
-      margin-block-start: 0.625rem;
-    }
+    line-height: 1;
+    margin-block-start: 0.625rem;
   }
 
   .author-pic {
-    margin-block-end: 1.25rem;
+    flex: 0 0 auto;
+    inline-size: var(--or-author-photo-max);
+    max-inline-size: var(--or-author-photo-max);
+    margin-block-end: 0;
     font-size: var(--or-text-md);
     font-style: italic;
     color: $color-greyDarkest;
     order: 1;
 
-    @media (min-width: 768px) {
-      inline-size: 50%;
-      margin-inline-end: 1.25rem;
-    }
-
     img {
+      display: block;
+      inline-size: 100%;
+      max-inline-size: 100%;
+      block-size: auto;
       margin: 0;
     }
   }
 
   .author-detail-info {
+    flex: 1 1 12rem;
+    min-inline-size: 0;
     order: 2;
-
-    @media (min-width: 768px) {
-      inline-size: 45%;
-    }
   }
 
   .special {

@@ -34,7 +34,8 @@ Folder slug: `<BB display id>-<short-slug>` — e.g. `2.2-fix-fake-links`, `2.1-
 | 4.5 | `4.5-mobile-arrows-autoscroll/` | `feature/wave2-4.5-mobile-arrows-autoscroll` → `staging` | Done locally — phone: no arrows + autoplay on all section sliders |
 | 4.8 | `4.8-see-all-below/` | `feature/wave2-4.8-see-all-below` → `staging` | Done locally — See all under section bodies; BB your turn |
 | 4.6 | `4.6-featured-title-cover/` | `feature/wave2-4.6-featured-title-cover` → `staging` | Done locally — phone Featured Title cover larger; BB your turn |
-| 4.12 | `4.12-media-date-heading-gap/` | `feature/wave2-4.12-media-date-heading-gap` | Done locally — tighter date→title on listing cards; BB your turn |
+| 4.12 | `4.12-media-date-heading-gap/` | `feature/wave2-4.12-media-date-heading-gap` → `staging` | Done locally — tighter date→title on listing cards; BB your turn |
+| 4.11 | `4.11-author-photo-smaller/` | `feature/wave2-4.11-author-photo-smaller` | Done locally — About the author photo smaller; BB your turn |
 | 4.16 | `featured-title-read-more-layout/` | `feature/wave2-4.2-latest-news-arrows` → `staging` | Done locally — Featured Title width/centering + Read More below/at desktop |
 | 4.x | (create per card as done) | off `staging` | Billed Wave 2 — Briefboard cards are the plan; see `website-development-agreement/WAVE-2-WORKFLOW.md` |
 
