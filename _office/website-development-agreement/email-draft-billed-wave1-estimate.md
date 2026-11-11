@@ -182,3 +182,17 @@ Looking at it side by side, the main difference I see is the column count. Stagi
 
 Thanks,
 Rus
+
+---
+
+Hi Rus,
+
+Attached are the new event posters. There are 4 individual posters and 1 full schedule that goes in the sidebar. I'm not sure what the ideal width would be for that. If you can tell me, I'll adjust and send it back. I'm sending an image for the carousel. 
+
+--
+
+--
+
+**Antara Ghosh**
+
+Production and Design Director

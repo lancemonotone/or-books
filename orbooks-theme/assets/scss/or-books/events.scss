@@ -55,6 +55,28 @@
       }
     }
 
+    // Event posters under the top banner: 1 col phone, 2 col from 768.
+    .event-poster-grid {
+      --event-poster-cols: 1;
+      --event-poster-gap: 0.75rem;
+
+      display: grid;
+      grid-template-columns: repeat(var(--event-poster-cols), minmax(0, 1fr));
+      gap: var(--event-poster-gap);
+      margin-block-start: 1.5rem;
+
+      @media (min-width: 768px) {
+        --event-poster-cols: 2;
+        --event-poster-gap: 1rem;
+      }
+
+      img {
+        display: block;
+        inline-size: 100%;
+        block-size: auto;
+      }
+    }
+
     // User override: block layout, no listing-card bleed into column gutter
     .event-page {
       display: block;

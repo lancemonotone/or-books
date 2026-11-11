@@ -16,9 +16,10 @@
     <aside class="custom-sidebar or-flow">
         <div class="or-section">
             {{> components/orbooks/section-head title="Live on Ave C 2026"}}
+            {{!-- Local theme asset for preview. Before staging/prod ship: Image Manager URL. --}}
             <img
-                src="https://cdn11.bigcommerce.com/s-4rbj5oww8j/images/stencil/original/image-manager/loac-events-2026.jpg?t=1774537269"
-                alt="Live on Ave C 2026"
+                src="{{cdn 'img/events/us-fall-2026-events.jpg'}}"
+                alt="US Fall 2026 Events"
             >
         </div>
         <div class="or-newsletter or-newsletter--cta">
@@ -37,8 +38,15 @@
             </ul>
         </div>
 
+        {{!-- Local theme assets for preview. Before staging/prod ship: Image Manager URLs. --}}
+        <div class="event-poster-grid">
+            <img src="{{cdn 'img/events/us-fall-2026-events-ig.jpg'}}" alt="">
+            <img src="{{cdn 'img/events/us-fall-2026-events-ig2.jpg'}}" alt="">
+            <img src="{{cdn 'img/events/us-fall-2026-events-ig3.jpg'}}" alt="">
+        </div>
+
         <div class="event-page custom-page-data">
-            {{!-- Optional Upcoming / Past list: comment out in HTML when empty. --}}
+            {{!-- Optional Upcoming / Past list: comment out when empty / restore when needed. --}}
             <!-- BEGIN optional: Upcoming Events + Past Events list
             <div class="upcomming-events other-events or-section">
                 {{> components/orbooks/section-head title="Upcoming Events"}}
