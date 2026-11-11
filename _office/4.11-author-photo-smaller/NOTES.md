@@ -10,7 +10,7 @@
 | **taskKey** | `cd1952f8-eb02-4bfe-9a77-0a3475c27b4e` |
 | **Briefboard URL** | `https://lancemonotone.com/or-books/app/?i=1#/task/cd1952f8-eb02-4bfe-9a77-0a3475c27b4e` |
 | **Branch** | `feature/wave2-4.11-author-photo-smaller` |
-| **Commits** | `75370b9` Make About the author photo much smaller (4.11) |
+| **Commits** | `2cb221b` Make About the author photo much smaller (4.11) |
 | **Deploy** | Local only until Wave 2 staging push batch |
 | **Briefboard status** | `blocked` (your turn) — delivery comment posted |
 
