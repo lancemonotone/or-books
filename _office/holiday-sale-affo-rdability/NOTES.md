@@ -99,7 +99,7 @@ THE OR BOOKS AFFO/RDABILITY SALE: All paperbacks at $14.99 | All E-books $4.99 |
 |-------|--------|
 | **taskKey** | `d53216a9-8660-4c4d-8423-ed0729c0cdcf` |
 | **BB comment** | **None yet** (wait for client estimate go-ahead) |
-| **Commits** | *(fill after commit)* |
+| **Commits** | `c7cfc04` Add sticky AFFO/RDABILITY sale ticker under the header (6.1) |
 
 **Delivered (local):**
 
