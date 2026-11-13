@@ -1,4 +1,4 @@
-// AFFO/RDABILITY Sale — sticky top ticker (Holiday Banner wave)
+// AFFO/RDABILITY Sale — ticker + header sticker (Holiday Banner wave)
 // Colors from client Amara ticker ref; pixel face = Silkscreen
 
 .or-holiday-banner {
@@ -6,14 +6,112 @@
     --or-hb-yellow: #ffec00;
     --or-hb-ink: #111;
     --or-hb-height: 2.5rem;
-    --or-hb-z: 1200;
+    // Below medium: header is position:fixed. Keep ticker under that bar
+    // and below header z-index so the sale sticker can overhang the yellow strip.
+    // body.custom pad is 80px (≤568) / 101px (569–767) — see common.scss.
+    --or-hb-body-pad: 80px;
+    --or-hb-sticky-top: 80px;
+    --or-hb-clearance: 0px;
+    --or-hb-z: 50;
     --or-hb-duration: 45s;
 
     position: sticky;
-    top: 0;
+    top: var(--or-hb-sticky-top);
     z-index: var(--or-hb-z);
+    // Extra flow offset when sticky-top > body pad (header taller than reserved gap)
+    margin-block-start: var(--or-hb-clearance);
     inline-size: 100%;
     background: var(--or-hb-yellow);
+
+    // 301–568 only: fixed header grows ~80→102px while body pad stays 80px,
+    // so the bar was covering the ticker. Leave ≤300 alone (already flush).
+    @media (min-width: 301px) and (max-width: 568px) {
+        --or-hb-sticky-top: clamp(
+            80px,
+            calc(80px + (100vw - 300px) * 0.184),
+            102px
+        );
+        --or-hb-clearance: calc(var(--or-hb-sticky-top) - var(--or-hb-body-pad));
+    }
+
+    @media (min-width: 569px) {
+        --or-hb-body-pad: 101px;
+        --or-hb-sticky-top: 101px;
+        --or-hb-clearance: 0px;
+    }
+
+    // Cornerstone medium: header becomes relative and scrolls away
+    @media (min-width: 768px) {
+        --or-hb-sticky-top: 0;
+        --or-hb-clearance: 0px;
+        --or-hb-z: 1200;
+    }
+}
+
+// Header sticker — match mockup: tight to the RIGHT of the logo artwork,
+// vertically centered on the mark, slightly overlapping it. Absolute = out of flow.
+// Context must be the logo image width (.or-holiday-logo-wrap), NOT .header-logo
+// (that box is a wide % column — end-offsets from it land near Sign In).
+.or-holiday-logo-wrap {
+    position: relative;
+    display: inline-block;
+    max-inline-size: 100%;
+    vertical-align: top;
+}
+
+.or-holiday-sticker {
+    --or-hb-sticker-size: clamp(7rem, 11vw, 10rem);
+    // +10px right from prior placement
+    --or-hb-sticker-overlap: calc(-1.25rem + 10px);
+
+    // Mobile header is logo + search/cart only — no room beside the mark
+    // without covering controls (see sticker-mobile-collision.png). Hide
+    // below 768; ticker still carries the sale message on small screens.
+    display: none;
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 100%;
+    inset-inline-end: auto;
+    z-index: 0;
+    inline-size: var(--or-hb-sticker-size);
+    block-size: auto;
+    margin: 0;
+    margin-inline-start: var(--or-hb-sticker-overlap);
+    pointer-events: none;
+    // translateY keeps vertical center; scale = slow continuous pulse (Antara)
+    animation: or-holiday-sticker-pulse 3.2s ease-in-out infinite;
+    transform-origin: center center;
+
+    @media (min-width: 768px) {
+        display: block;
+    }
+}
+
+// Desktop inline nav above sticker; do not lower .header-menu (mobile drawer).
+@include small {
+    .header-menu .navPages-list {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+.or-holiday-sticker__img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+}
+
+@keyframes or-holiday-sticker-pulse {
+    0%,
+    100% {
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-50%) scale(1.18);
+        opacity: 0.92;
+    }
 }
 
 .or-holiday-ticker {
@@ -47,7 +145,8 @@
     margin: 0;
     padding: 0;
     font-family: Silkscreen, "Press Start 2P", monospace;
-    font-size: clamp(0.65rem, 1.6vw, 0.85rem);
+    // Floor raised — Silkscreen illegible at 0.65rem / 14px root (~9px)
+    font-size: clamp(0.75rem, 1.6vw, 0.85rem);
     font-weight: 400;
     line-height: 1;
     letter-spacing: 0.02em;
@@ -90,6 +189,11 @@
     .or-holiday-ticker__viewport {
         overflow-x: auto;
     }
+
+    .or-holiday-sticker {
+        animation: none;
+        transform: translateY(-50%);
+    }
 }
 
 // Hide on cart / checkout / account / auth (body uses {{page_type}}-page)
@@ -116,7 +220,8 @@
 .account_addreturn-page,
 .account_edit-page,
 .account_inbox_message-page {
-    .or-holiday-banner {
+    .or-holiday-banner,
+    .or-holiday-sticker {
         display: none;
     }
 }

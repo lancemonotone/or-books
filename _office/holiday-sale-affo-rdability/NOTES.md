@@ -34,7 +34,7 @@ Full thread (including Nov 13 replies) is in **Email thread** at the bottom.
 | **Sale window (client)** | Through **December 20** (extension possible; keep take-down easy to push out) |
 | **Working title** | OR Books **AFFO/RDABILITY** Sale |
 | **Tone** | Intentionally tacky, garish, in-your-face (Colin) |
-| **Status** | Jumping ahead of client estimate approval. **6.1 ticker done locally** (no BB client comment yet). Next: 6.2 sticker. |
+| **Status** | Jumping ahead of client estimate approval. **6.1–6.2 done locally** (no BB client comments yet). Next: 6.3 In Focus badge. |
 | **Branch** | `feature/holiday-banner` (off staging; theme = `orbooks-theme/`) |
 | **Theme tree** | Preview on **`orbooks-theme/`** (staging store first). After approval, port to **`orbooks-theme-prod-download/`** (sync from live) → prod push. |
 | **Deploy** | Staging preview → client OK → prod. Temporary / toggleable. Extra staging→prod port time **eaten** (not in 5h quote). |
@@ -111,6 +111,38 @@ THE OR BOOKS AFFO/RDABILITY SALE: All paperbacks at $14.99 | All E-books $4.99 |
 
 **Verify:** `stencil start` → homepage → ticker under header; scroll sticks; cart page has no ticker.
 
+### 6.2 Header AFFORDABILITY SALE sticker (pulse) — done locally
+
+| Field | Value |
+|-------|--------|
+| **taskKey** | `6fc12297-b929-4c92-bd64-fbab95beb393` |
+| **BB comment** | **None yet** — do **not** post until client estimate go-ahead. When posting, **must** include mobile hide + ask Antara (checklist below). |
+| **Commits** | *(fill after commit)* |
+
+**Delivered (local):**
+
+- Transparent `Sticker.png` at `assets/img/holiday/affordability-sale-sticker.png`, beside/overlapping OR logo (≥768).
+- Slow continuous CSS pulse (~3.2s); static under `prefers-reduced-motion`.
+- Same cart/account/auth hide as ticker; gated by `or_holiday_banner`.
+- **Sticker hidden below 768px** — mobile header has no free slot beside the logo; sticker sat under search/cart (`sticker-mobile-collision.png`). Ticker still carries the sale on small screens.
+- **Mobile sticky clash (≤767):** ticker sticks under fixed header (not over it); z below header so sticker can overhang yellow strip on desktop.
+- **301–568 cover:** clearance when header taller than body pad; ticker type floor `0.75rem`.
+
+**Verify:** ≥768 header → sticker by logo, pulsing; &lt;768 → no sticker, ticker OK; cart → neither.
+
+### WHEN POSTING 6.2 BB COMMENT (mandatory — do not skip)
+
+Client-facing; `mode: "reply"` if any messages exist. Include:
+
+1. What shipped: sticker by logo with slow pulse (desktop/tablet).
+2. **Mobile scope change:** sticker hidden under 768 because it sat under search/cart — attach or describe `sticker-mobile-collision.png`.
+3. Ticker still on phones so sale copy remains visible.
+4. Ask Antara if hide-on-phone is OK, or if she wants a different small-screen treatment.
+
+**Draft (phones) — paste into that BB comment when approved to post:**
+
+> On phone widths the header is just the logo plus search and cart — there’s no clear spot for the AFFORDABILITY SALE sticker next to the logo without covering those buttons (see attached screenshot). We hid the sticker on phones/tablets under 768px and kept the yellow ticker on all sizes so the sale message still shows. Does that work for you, or would you rather we try a different phone treatment?
+
 ## Assets on hand / still needed
 
 | Item | File |
@@ -122,6 +154,7 @@ THE OR BOOKS AFFO/RDABILITY SALE: All paperbacks at $14.99 | All E-books $4.99 |
 | Ticker video + still (Nov 13) | `ticker-mwejkcuk.gif`, `ticker-mwejkcuk-still.png` |
 | Pixel font / UI ref (Nov 13) | `image.png` |
 | Sticker almost final (Nov 13 later) | `Sticker.png` (transparent) |
+| Mobile sticker under search/cart (Nov 13) | `sticker-mobile-collision.png` — **attach when posting 6.2 BB** |
 | Click / link targets | **None** (Rus) — visual only |
 | Thin inter-section banners art | Idea only; not for estimate |
 
