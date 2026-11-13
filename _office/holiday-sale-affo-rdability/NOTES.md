@@ -117,7 +117,7 @@ THE OR BOOKS AFFO/RDABILITY SALE: All paperbacks at $14.99 | All E-books $4.99 |
 |-------|--------|
 | **taskKey** | `6fc12297-b929-4c92-bd64-fbab95beb393` |
 | **BB comment** | **None yet** — do **not** post until client estimate go-ahead. When posting, **must** include mobile hide + ask Antara (checklist below). |
-| **Commits** | *(fill after commit)* |
+| **Commits** | `3a07765` Add AFFO/RDABILITY header sticker with pulse; hide under 768px (6.2) |
 
 **Delivered (local):**
 
