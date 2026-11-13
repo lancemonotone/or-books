@@ -420,7 +420,8 @@
     "afterpay-button-color": "black-mint",
     "amazon-button-color": "Gold",
     "masterpass-button-color": "black",
-    "paymentbuttons-provider-sorting": []
+    "paymentbuttons-provider-sorting": [],
+    "or_holiday_banner": true
   },
   "read_only_files": [
     "/assets/scss/components/citadel",
@@ -841,7 +842,8 @@
           "sepa",
           "googlepay"
         ],
-        "show_product_price": true
+        "show_product_price": true,
+        "or_holiday_banner": true
       }
     },
     {
@@ -1053,7 +1055,8 @@
         "color_text_product_sold_out_badges": "#ffffff",
         "color_hover_product_sold_out_badges": "#000000",
         "focusTooltip-textColor": "#666666",
-        "focusTooltip-backgroundColor": "#ffffff"
+        "focusTooltip-backgroundColor": "#ffffff",
+        "or_holiday_banner": true
       }
     },
     {
@@ -1263,7 +1266,8 @@
         "color_text_product_sold_out_badges": "#ffffff",
         "color_hover_product_sold_out_badges": "#000000",
         "focusTooltip-textColor": "#ffffff",
-        "focusTooltip-backgroundColor": "#313440"
+        "focusTooltip-backgroundColor": "#313440",
+        "or_holiday_banner": true
       }
     }
   ]

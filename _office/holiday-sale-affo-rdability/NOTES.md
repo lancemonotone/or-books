@@ -34,8 +34,8 @@ Full thread (including Nov 13 replies) is in **Email thread** at the bottom.
 | **Sale window (client)** | Through **December 20** (extension possible; keep take-down easy to push out) |
 | **Working title** | OR Books **AFFO/RDABILITY** Sale |
 | **Tone** | Intentionally tacky, garish, in-your-face (Colin) |
-| **Status** | BB **Holiday Banner** wave created (after Wave 2 Deferred; Wave 3 pushed down). Estimate 5h on board. Client email estimate still to send. |
-| **Branch** | — (implement against **prod** theme tree, not Wave staging theme) |
+| **Status** | Jumping ahead of client estimate approval. **6.1 ticker done locally** (no BB client comment yet). Next: 6.2 sticker. |
+| **Branch** | `feature/holiday-banner` (off staging; theme = `orbooks-theme/`) |
 | **Theme tree** | Preview on **`orbooks-theme/`** (staging store first). After approval, port to **`orbooks-theme-prod-download/`** (sync from live) → prod push. |
 | **Deploy** | Staging preview → client OK → prod. Temporary / toggleable. Extra staging→prod port time **eaten** (not in 5h quote). |
 
@@ -46,7 +46,7 @@ Full thread (including Nov 13 replies) is in **Email thread** at the bottom.
 1. **Sticker** — site chrome (mockup: by logo under ticker). Slow continuous pulse. Working art: `Affordability Sale Pop-Art Burst.png`; (almost) final: `Sticker.png` (**transparent bg**; may still tweak after Colin). Phone size: figure out in build.
 2. **Top ticker** — sticky preferred (skip if too costly). Pixel / old video-game style font (**we pick the face**). Colors from her Amara ticker ref. Full copy locked (below). Not on cart/checkout/account. **Visual only — no links.**
 
-**Layout (from Nov 13):** Ticker + sticker **above** the usual header/carousel. Carousel stays theirs for rotating sale promo graphics.
+**Layout (from Nov 13 mockup):** Header (logo + sticker) first; **ticker between header and content**; carousel stays theirs for sale promo graphics. (Email said “above the usual stuff”; mockup wins for ticker placement.)
 
 **Optional / last priority (call in estimate or skip):**
 
@@ -89,6 +89,27 @@ THE OR BOOKS AFFO/RDABILITY SALE: All paperbacks at $14.99 | All E-books $4.99 |
 - Antara Nov 13 ~2:40 AM + ~10:51 AM: answers + assets (see thread below).
 - BB wave **Holiday Banner** created Nov 13 (phase 6; after Wave 2 Deferred). Cards 6.1–6.4 = 5h.
 - Estimate reply **DRAFT** in email thread below. Not sent until Rus approves.
+- **No Briefboard delivery comments yet** — client has not approved the estimate; local jump-start only.
+
+## Build progress (internal)
+
+### 6.1 Sticky top sale ticker — done locally
+
+| Field | Value |
+|-------|--------|
+| **taskKey** | `d53216a9-8660-4c4d-8423-ed0729c0cdcf` |
+| **BB comment** | **None yet** (wait for client estimate go-ahead) |
+| **Commits** | *(fill after commit)* |
+
+**Delivered (local):**
+
+- Sticky CSS marquee between header and content (mockup placement).
+- Locked sale copy; red/yellow; Silkscreen; pause on hover; reduced-motion calm.
+- Hidden on cart / checkout / account / auth.
+- Theme setting `or_holiday_banner` (Holiday Banner in Theme Editor) gates the chrome.
+- No bottom border under ticker.
+
+**Verify:** `stencil start` → homepage → ticker under header; scroll sticks; cart page has no ticker.
 
 ## Assets on hand / still needed
 

@@ -1,0 +1,122 @@
+// AFFO/RDABILITY Sale — sticky top ticker (Holiday Banner wave)
+// Colors from client Amara ticker ref; pixel face = Silkscreen
+
+.or-holiday-banner {
+    --or-hb-red: #e31c23;
+    --or-hb-yellow: #ffec00;
+    --or-hb-ink: #111;
+    --or-hb-height: 2.5rem;
+    --or-hb-z: 1200;
+    --or-hb-duration: 45s;
+
+    position: sticky;
+    top: 0;
+    z-index: var(--or-hb-z);
+    inline-size: 100%;
+    background: var(--or-hb-yellow);
+}
+
+.or-holiday-ticker {
+    inline-size: 100%;
+    block-size: var(--or-hb-height);
+}
+
+.or-holiday-ticker__viewport {
+    overflow: hidden;
+    inline-size: 100%;
+    block-size: 100%;
+}
+
+.or-holiday-ticker__track {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: max-content;
+    min-block-size: 100%;
+    animation: or-holiday-ticker-scroll var(--or-hb-duration) linear infinite;
+
+    &:hover {
+        animation-play-state: paused;
+    }
+}
+
+.or-holiday-ticker__chunk {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
+    font-family: Silkscreen, "Press Start 2P", monospace;
+    font-size: clamp(0.65rem, 1.6vw, 0.85rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.or-holiday-ticker__lead,
+.or-holiday-ticker__body {
+    display: inline-flex;
+    align-items: center;
+    padding-inline: 0.75rem;
+}
+
+.or-holiday-ticker__lead {
+    background: var(--or-hb-red);
+    color: #fff;
+}
+
+.or-holiday-ticker__body {
+    background: var(--or-hb-yellow);
+    color: var(--or-hb-ink);
+}
+
+@keyframes or-holiday-ticker-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .or-holiday-ticker__track {
+        animation: none;
+    }
+
+    .or-holiday-ticker__viewport {
+        overflow-x: auto;
+    }
+}
+
+// Hide on cart / checkout / account / auth (body uses {{page_type}}-page)
+.cart-page,
+.checkout-page,
+.login-page,
+.createaccount-page,
+.getnewpassword-page,
+.forgotpassword-page,
+.account_order-page,
+.account_orders-page,
+.account_address-page,
+.account_addresses-page,
+.account_paymentmethods-page,
+.account_addpaymentmethod-page,
+.account_editpaymentmethod-page,
+.account_inbox-page,
+.account_recentitems-page,
+.account_downloaditem-page,
+.account_wishlist-page,
+.account_wishlists-page,
+.account_returns-page,
+.account_return_saved-page,
+.account_addreturn-page,
+.account_edit-page,
+.account_inbox_message-page {
+    .or-holiday-banner {
+        display: none;
+    }
+}
