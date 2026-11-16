@@ -6,6 +6,10 @@ orbooks-theme/secrets.*.json
 orbooks-theme/config.homepage-ids.stage.json
 orbooks-theme/assets/dist/
 
+# Stencil CLI context analysis dump (regenerated on bundle/push)
+orbooks-theme/stencil_context/
+orbooks-theme-prod-download/stencil_context/
+
 # Briefboard Agent API token (local only; see .cursor/secrets.briefboard.example.json)
 .cursor/secrets.*.json
 
