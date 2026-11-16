@@ -1,4 +1,22 @@
-<h2 class="page-heading">{{lang 'products.featured' }} <span class="cate_link"><a href="reading-lists/the-palestine-list/" target="_blank">See all</a></span></h2>
+<h2 class="page-heading">
+    <span class="or-holiday-infocus-title">
+        {{lang 'products.featured' }}
+        {{#if theme_settings.or_holiday_banner}}
+            {{!-- Mockup: seal hangs from the “S”; visual only — no link --}}
+            <span class="or-holiday-infocus-badge" aria-hidden="true">
+                <img
+                    class="or-holiday-infocus-badge__img"
+                    src="{{cdn 'img/holiday/rock-bottom-price-badge.png'}}"
+                    alt=""
+                    width="160"
+                    height="200"
+                    decoding="async"
+                >
+            </span>
+        {{/if}}
+    </span>
+    <span class="cate_link"><a href="reading-lists/the-palestine-list/" target="_blank">See all</a></span>
+</h2>
 <h5 class="feature-heading"></h5>
 
 <ul class="productGrid productGrid--maxCol{{ columns }} productCarousel newprd-sale" data-product-type="featured" {{#if settings.data_tag_enabled}} data-list-name="Featured Products" {{/if}}

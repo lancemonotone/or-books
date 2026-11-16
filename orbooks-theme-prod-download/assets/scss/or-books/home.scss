@@ -1191,8 +1191,10 @@
     .featured{
         .page-heading{
         position: relative;
+        overflow: visible;
         }
-        span{
+        // Scope to See all only — bare `span` was stealing layout from holiday hang badge.
+        span.cate_link{
             top: 39px;
             left: 50%;
             transform: translateX(-50%);

@@ -6,45 +6,56 @@
     --or-hb-yellow: #ffec00;
     --or-hb-ink: #111;
     --or-hb-height: 2.5rem;
-    // Below medium: header is position:fixed. Keep ticker under that bar
-    // and below header z-index so the sale sticker can overhang the yellow strip.
-    // body.custom pad is 80px (≤568) / 101px (569–767) — see common.scss.
-    --or-hb-body-pad: 80px;
-    --or-hb-sticky-top: 80px;
-    --or-hb-clearance: 0px;
+    // Mobile/tablet: lock to bottom of fixed header (does not scroll).
+    // top tracks header height; z below header so sticker can overhang.
+    --or-hb-fixed-top: 80px;
     --or-hb-z: 50;
     --or-hb-duration: 45s;
 
-    position: sticky;
-    top: var(--or-hb-sticky-top);
-    z-index: var(--or-hb-z);
-    // Extra flow offset when sticky-top > body pad (header taller than reserved gap)
-    margin-block-start: var(--or-hb-clearance);
     inline-size: 100%;
     background: var(--or-hb-yellow);
 
-    // 301–568 only: fixed header grows ~80→102px while body pad stays 80px,
-    // so the bar was covering the ticker. Leave ≤300 alone (already flush).
-    @media (min-width: 301px) and (max-width: 568px) {
-        --or-hb-sticky-top: clamp(
+    // ≤800: header still fixed (Cornerstone medium = 801). Pin ticker under it.
+    @media (max-width: 800px) {
+        position: fixed;
+        top: var(--or-hb-fixed-top);
+        inset-inline: 0;
+        z-index: var(--or-hb-z);
+        margin: 0;
+    }
+
+    // 301–800: fixed header grows ~80→~112px
+    @media (min-width: 301px) and (max-width: 800px) {
+        --or-hb-fixed-top: clamp(
             80px,
             calc(80px + (100vw - 300px) * 0.184),
-            102px
+            112px
         );
-        --or-hb-clearance: calc(var(--or-hb-sticky-top) - var(--or-hb-body-pad));
     }
 
-    @media (min-width: 569px) {
-        --or-hb-body-pad: 101px;
-        --or-hb-sticky-top: 101px;
-        --or-hb-clearance: 0px;
+    // ≥801: header is relative — ticker in normal flow, sticky at viewport top
+    @media (min-width: 801px) {
+        position: sticky;
+        top: 0;
+        z-index: 1200;
     }
+}
 
-    // Cornerstone medium: header becomes relative and scrolls away
-    @media (min-width: 768px) {
-        --or-hb-sticky-top: 0;
-        --or-hb-clearance: 0px;
-        --or-hb-z: 1200;
+// Reserve space under fixed header+ticker while sale chrome is on (≤800).
+body.custom:has([data-or-holiday-banner]) {
+    @media (max-width: 800px) {
+        --or-hb-fixed-top: 80px;
+        --or-hb-height: 2.5rem;
+
+        @media (min-width: 301px) {
+            --or-hb-fixed-top: clamp(
+                80px,
+                calc(80px + (100vw - 300px) * 0.184),
+                112px
+            );
+        }
+
+        padding-top: calc(var(--or-hb-fixed-top) + var(--or-hb-height));
     }
 }
 
@@ -64,9 +75,8 @@
     // +10px right from prior placement
     --or-hb-sticker-overlap: calc(-1.25rem + 10px);
 
-    // Mobile header is logo + search/cart only — no room beside the mark
-    // without covering controls (see sticker-mobile-collision.png). Hide
-    // below 768; ticker still carries the sale message on small screens.
+    // Hide under 480 (xxsmall); show from there up. Search/cart collision still
+    // possible on very small phones (see sticker-mobile-collision.png).
     display: none;
     position: absolute;
     inset-block-start: 50%;
@@ -82,8 +92,19 @@
     animation: or-holiday-sticker-pulse 3.2s ease-in-out infinite;
     transform-origin: center center;
 
-    @media (min-width: 768px) {
+    @media (min-width: 480px) {
         display: block;
+    }
+
+    // 480–799: wrap wider than mark — pull badge onto mark. Narrow end has
+    // less dead space, so a milder pull (avoids overlapping the letters).
+    @media (min-width: 480px) and (max-width: 569px) {
+        --or-hb-sticker-overlap: calc(-1.25rem + 10px - 4.5rem);
+    }
+
+    // Through 800: header still mobile until Cornerstone medium (801).
+    @media (min-width: 570px) and (max-width: 800px) {
+        --or-hb-sticker-overlap: calc(-1.25rem + 10px - 5.5rem);
     }
 }
 
@@ -181,6 +202,54 @@
     }
 }
 
+// In Focus — hang / oscillate “ROCK BOTTOM PRICE” seal (mockup mark)
+.or-holiday-infocus-head {
+    overflow: visible;
+}
+
+.or-holiday-infocus-title {
+    position: relative;
+    display: inline-block;
+}
+
+.or-holiday-infocus-badge {
+    --or-hb-infocus-size: clamp(4.5rem, 14vw, 5.75rem);
+
+    // Pivot on the “S”: hang-loop sits in the lower bowl of the letter.
+    position: absolute;
+    inset-block-start: calc(0.48em + 0.0625rem);
+    inset-inline-start: 100%;
+    z-index: 3;
+    display: block;
+    inline-size: var(--or-hb-infocus-size);
+    margin: 0;
+    margin-inline-start: calc(var(--or-hb-infocus-size) * -0.5 - 0.625rem);
+    pointer-events: none;
+    transform-origin: 50% 0;
+    animation: or-holiday-infocus-swing 2.8s ease-in-out infinite;
+
+    @media (min-width: 768px) {
+        --or-hb-infocus-size: clamp(5rem, 6.5vw, 6.5rem);
+    }
+}
+
+.or-holiday-infocus-badge__img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+}
+
+@keyframes or-holiday-infocus-swing {
+    0%,
+    100% {
+        transform: rotate(-9deg);
+    }
+
+    50% {
+        transform: rotate(11deg);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .or-holiday-ticker__track {
         animation: none;
@@ -193,6 +262,11 @@
     .or-holiday-sticker {
         animation: none;
         transform: translateY(-50%);
+    }
+
+    .or-holiday-infocus-badge {
+        animation: none;
+        transform: rotate(-6deg);
     }
 }
 
@@ -221,7 +295,8 @@
 .account_edit-page,
 .account_inbox_message-page {
     .or-holiday-banner,
-    .or-holiday-sticker {
+    .or-holiday-sticker,
+    .or-holiday-infocus-badge {
         display: none;
     }
 }

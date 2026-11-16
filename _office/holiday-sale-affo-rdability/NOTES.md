@@ -27,17 +27,20 @@ Full thread (including Nov 13 replies) is in **Email thread** at the bottom.
 
 ## Meta
 
-| Field | Value |
-|-------|--------|
-| **Briefboard id** | Phase **Holiday Banner** (sprint/phase 6) — https://lancemonotone.com/or-books/app/estimates?section=holiday-banner (or Estimates → Holiday Banner). Cards 6.1–6.4 = **5h / $625** |
-| **Client contact** | Antara Ghosh |
-| **Sale window (client)** | Through **December 20** (extension possible; keep take-down easy to push out) |
-| **Working title** | OR Books **AFFO/RDABILITY** Sale |
-| **Tone** | Intentionally tacky, garish, in-your-face (Colin) |
-| **Status** | Jumping ahead of client estimate approval. **6.1–6.2 done locally** (no BB client comments yet). Next: 6.3 In Focus badge. |
-| **Branch** | `feature/holiday-banner` (off staging; theme = `orbooks-theme/`) |
-| **Theme tree** | Preview on **`orbooks-theme/`** (staging store first). After approval, port to **`orbooks-theme-prod-download/`** (sync from live) → prod push. |
-| **Deploy** | Staging preview → client OK → prod. Temporary / toggleable. Extra staging→prod port time **eaten** (not in 5h quote). |
+| Field                    | Value                                                                                                                                                                                                  |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Briefboard id**        | Phase **Holiday Banner** (sprint/phase 6) — https://lancemonotone.com/or-books/app/estimates?section=holiday-banner (or Estimates → Holiday Banner). Cards 6.1–6.4 = **5h / $625**                     |
+| **Client contact**       | Antara Ghosh                                                                                                                                                                                           |
+| **Sale window (client)** | Through **December 20** (extension possible; keep take-down easy to push out)                                                                                                                          |
+| **Working title**        | OR Books **AFFO/RDABILITY** Sale                                                                                                                                                                       |
+| **Tone**                 | Intentionally tacky, garish, in-your-face (Colin)                                                                                                                                                      |
+| **Status**               | Client approved go-live; sale live on their side. **Launch checklist → [TASKS.md](./TASKS.md)** (one push, no stages).                                                                                 |
+| **Branch**               | `feature/holiday-banner` (theme work in `orbooks-theme/`; live port = `orbooks-theme-prod-download/`)                                                                                                  |
+| **Theme tree**           | **Live path:** sync/port holiday chrome into `orbooks-theme-prod-download/` → `stencil push` prod. Staging store (`orbooks.mybigcommerce.com`) was for preview only — **not** moving Wave WIP to live. |
+| **Deploy**               | **Prod direct** (Antara Nov 13 + Nov 15). Staging down (423 maintenance; likely Enterprise→Scale). Temporary / toggleable.                                                                             |
+| **Launch**               | **Monday ET** (client). Sale through Dec 20.                                                                                                                                                           |
+
+**Build & todos:** see [TASKS.md](./TASKS.md) (this file = client communication only).
 
 ## Client ask (current)
 
@@ -58,24 +61,24 @@ Full thread (including Nov 13 replies) is in **Email thread** at the bottom.
 
 ## Rus decisions (Nov 13)
 
-| Topic | Call |
-|-------|------|
-| Links / click targets | **None.** Sticker, ticker, In Focus badge = visual only. |
-| Pixel font | **We choose** closest webfont to her `image.png` vibe. |
-| Phone sticker size | Decide in build. |
-| Theme | **Staging first** (`orbooks-theme/` → staging store), then port to prod (`orbooks-theme-prod-download/`, sync from live) after approval. Dual-deploy extra ~1h **eaten** (not billed). |
+| Topic                 | Call                                                                                                                                                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Links / click targets | **None.** Sticker, ticker, In Focus badge = visual only.                                                                                                                                                                             |
+| Pixel font            | **We choose** closest webfont to her `image.png` vibe.                                                                                                                                                                               |
+| Phone sticker size    | Decide in build.                                                                                                                                                                                                                     |
+| Theme                 | **Was** staging-first preview. **Now (approved):** live only — port to `orbooks-theme-prod-download/` → prod. Staging store unavailable; Antara OK’d live-only Nov 13; asked again for live Nov 15 AM. Dual-deploy buffer **eaten**. |
 
 ## Decisions from Antara (Q1–7)
 
-| # | Topic | Answer |
-|---|--------|--------|
-| 1 | Sticker | Working: `Affordability Sale Pop-Art Burst.png`. Almost final: `Sticker.png` (OR slash, **transparent PNG**). May change after Colin. Phone size: we’ll decide in build. |
-| 2 | Ticker video + copy | Built on [Amara News Ticker Generator](https://amarasoftware.com/news-ticker-generator/) (see below). Assets: `ticker-mwejkcuk.gif` + still. Colors red/yellow. Font vibe: `image.png`. **Wording locked.** |
-| 3 | Animation | Constant, not extremely fast; slow continuous pulse. Open to Rus suggestions. |
-| 4 | Above vs replace | **Above** usual stuff (mockup). |
-| 5 | Sticky | Prefers sticky; OK to skip if complex/time-consuming. |
-| 6 | Take-down | Manual **or** auto: whichever is least work for Rus. Extension should be easy. |
-| 7 | Page exclusions | Ticker not needed on cart/checkout/account; all other pages. Leaves judgement to Rus. |
+| #   | Topic               | Answer                                                                                                                                                                                                                            |
+| --- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Sticker             | Working: `Affordability Sale Pop-Art Burst.png`. Almost final: `Sticker.png` (OR slash, **transparent PNG**). May change after Colin. Phone size: we’ll decide in build.                                                          |
+| 2   | Ticker video + copy | Built on [Amara News Ticker Generator](https://amarasoftware.com/news-ticker-generator/) (notes in [TASKS.md](./TASKS.md)). Assets: `ticker-mwejkcuk.gif` + still. Colors red/yellow. Font vibe: `image.png`. **Wording locked.** |
+| 3   | Animation           | Constant, not extremely fast; slow continuous pulse. Open to Rus suggestions.                                                                                                                                                     |
+| 4   | Above vs replace    | **Above** usual stuff (mockup).                                                                                                                                                                                                   |
+| 5   | Sticky              | Prefers sticky; OK to skip if complex/time-consuming.                                                                                                                                                                             |
+| 6   | Take-down           | Manual **or** auto: whichever is least work for Rus. Extension should be easy.                                                                                                                                                    |
+| 7   | Page exclusions     | Ticker not needed on cart/checkout/account; all other pages. Leaves judgement to Rus.                                                                                                                                             |
 
 ### Locked ticker copy
 
@@ -87,157 +90,31 @@ THE OR BOOKS AFFO/RDABILITY SALE: All paperbacks at $14.99 | All E-books $4.99 |
 
 - Rus Nov 12 reply **sent**.
 - Antara Nov 13 ~2:40 AM + ~10:51 AM: answers + assets (see thread below).
-- BB wave **Holiday Banner** created Nov 13 (phase 6; after Wave 2 Deferred). Cards 6.1–6.4 = 5h.
-- Estimate reply **DRAFT** in email thread below. Not sent until Rus approves.
-- **No Briefboard delivery comments yet** — client has not approved the estimate; local jump-start only.
+- BB wave **Holiday Banner** created Nov 13 (phase 6; after Wave 2 Deferred). Cards 6.1–6.4 = 5h / $625.
+- Estimate email **sent**; Antara checking Colin → **approved Nov 13 ~10:34 PM** (“Please proceed”).
+- Live-only confirmed Nov 13 (Rus 1:49 PM / Antara 10:34 PM). Staging later 423; Antara Nov 15 ~3:26 AM asks again for **live Sale features** (Monday ET launch).
+- Support PIN (Antara): first recall `28991`; later `42766740`. Staging issue likely **Enterprise → Scale** plan change (Antara).
+- **No Briefboard delivery comments yet** — post when shipping live.
+- **Rus → Antara (Nov 15 ~9:17 AM):** local prod preview + video (`OR Books Holiday Recording 2026-11-15 091751.mp4`); noted mobile header badge hidden (no good slot); asked if she wants it elsewhere.
+- **Antara → Rus (Nov 15 ~2:42 AM / thread timing):** loves it — **go live**. Mobile: try sticker **above the Dazed quote** (not sticky). Nice-to-have: red ticker segment **sticks at screen edge** while the rest keeps scrolling (like her reference) — skip if too much time.
+- **Antara → Rus (Nov 16 ~8:33 AM):** sale live; push sticker + ticker whenever convenient. **In Focus:** show “this special offer category” instead of the Palestine list currently featured; replace **See all** too. **Only** make the Rock Bottom **animation** live once that change is done. (No “Rock Bottom category” on the site — Rock Bottom = the seal animation; special offer = the category she wants in In Focus.)
 
-## Build progress (internal)
-
-### 6.1 Sticky top sale ticker — done locally
-
-| Field | Value |
-|-------|--------|
-| **taskKey** | `d53216a9-8660-4c4d-8423-ed0729c0cdcf` |
-| **BB comment** | **None yet** (wait for client estimate go-ahead) |
-| **Commits** | `c7cfc04` Add sticky AFFO/RDABILITY sale ticker under the header (6.1) |
-
-**Delivered (local):**
-
-- Sticky CSS marquee between header and content (mockup placement).
-- Locked sale copy; red/yellow; Silkscreen; pause on hover; reduced-motion calm.
-- Hidden on cart / checkout / account / auth.
-- Theme setting `or_holiday_banner` (Holiday Banner in Theme Editor) gates the chrome.
-- No bottom border under ticker.
-
-**Verify:** `stencil start` → homepage → ticker under header; scroll sticks; cart page has no ticker.
-
-### 6.2 Header AFFORDABILITY SALE sticker (pulse) — done locally
-
-| Field | Value |
-|-------|--------|
-| **taskKey** | `6fc12297-b929-4c92-bd64-fbab95beb393` |
-| **BB comment** | **None yet** — do **not** post until client estimate go-ahead. When posting, **must** include mobile hide + ask Antara (checklist below). |
-| **Commits** | `3a07765` Add AFFO/RDABILITY header sticker with pulse; hide under 768px (6.2) |
-
-**Delivered (local):**
-
-- Transparent `Sticker.png` at `assets/img/holiday/affordability-sale-sticker.png`, beside/overlapping OR logo (≥768).
-- Slow continuous CSS pulse (~3.2s); static under `prefers-reduced-motion`.
-- Same cart/account/auth hide as ticker; gated by `or_holiday_banner`.
-- **Sticker hidden below 768px** — mobile header has no free slot beside the logo; sticker sat under search/cart (`sticker-mobile-collision.png`). Ticker still carries the sale on small screens.
-- **Mobile sticky clash (≤767):** ticker sticks under fixed header (not over it); z below header so sticker can overhang yellow strip on desktop.
-- **301–568 cover:** clearance when header taller than body pad; ticker type floor `0.75rem`.
-
-**Verify:** ≥768 header → sticker by logo, pulsing; &lt;768 → no sticker, ticker OK; cart → neither.
-
-### WHEN POSTING 6.2 BB COMMENT (mandatory — do not skip)
-
-Client-facing; `mode: "reply"` if any messages exist. Include:
-
-1. What shipped: sticker by logo with slow pulse (desktop/tablet).
-2. **Mobile scope change:** sticker hidden under 768 because it sat under search/cart — attach or describe `sticker-mobile-collision.png`.
-3. Ticker still on phones so sale copy remains visible.
-4. Ask Antara if hide-on-phone is OK, or if she wants a different small-screen treatment.
-
-**Draft (phones) — paste into that BB comment when approved to post:**
-
-> On phone widths the header is just the logo plus search and cart — there’s no clear spot for the AFFORDABILITY SALE sticker next to the logo without covering those buttons (see attached screenshot). We hid the sticker on phones/tablets under 768px and kept the yellow ticker on all sizes so the sale message still shows. Does that work for you, or would you rather we try a different phone treatment?
-
-## Assets on hand / still needed
-
-| Item | File |
-|------|------|
-| Sticker placeholder (Nov 12) | `sticker-placeholder-sale.png` |
-| Ticker still (Nov 12, superseded) | `ticker-reference-still.png` |
-| Homepage mockup (Nov 13) | `sale homepage.jpg` |
-| Sticker working (Nov 13 AM) | `Affordability Sale Pop-Art Burst.png` |
-| Ticker video + still (Nov 13) | `ticker-mwejkcuk.gif`, `ticker-mwejkcuk-still.png` |
-| Pixel font / UI ref (Nov 13) | `image.png` |
-| Sticker almost final (Nov 13 later) | `Sticker.png` (transparent) |
-| Mobile sticker under search/cart (Nov 13) | `sticker-mobile-collision.png` — **attach when posting 6.2 BB** |
-| Click / link targets | **None** (Rus) — visual only |
-| Thin inter-section banners art | Idea only; not for estimate |
-
-## Amara ticker generator (what it is)
-
-URL she used: https://amarasoftware.com/news-ticker-generator/
-
-**Not a library** to install or depend on. Browser tool that:
-
-- Lets you configure headlines, colors, speed, presets
-- Exports **HTML + embedded CSS animation** (paste/adapt), or **GIF / MP4 / WebM**
-
-Her GIF/still = look + color + motion reference (and/or an export from that tool). We should **rebuild in our theme** (Handlebars + SCSS/CSS, maybe tiny JS), matching colors/behavior — not load Amara as a third-party widget. Optional: peek at their exported HTML pattern (duplicate track + CSS transform marquee + reduced-motion) and reinvent cleanly in `orbooks-theme-prod-download/`.
-
-## Technical read (theme)
-
-- **Codebase:** Implement on `orbooks-theme/` for staging preview; after approval, port to `orbooks-theme-prod-download/` (sync from live first) and push prod. Keep sale chrome isolated (partials + toggle) so the port stays small.
-- Custom strip above header for sticky ticker + sticker (not stock BC banner alone).
-- Exclude cart/checkout/account for ticker (and sticker as appropriate).
-- No hrefs on sale chrome.
-- Take-down: prefer **theme setting / simple toggle** (least work + easy sale extension).
-- Optional: In Focus dangling/oscillating badge (see above); last priority.
-- Thin banners between rails: out of estimate per Antara.
-- Reduced motion: calmer pulse / static ticker when `prefers-reduced-motion`.
-- Sticker: `Sticker.png` transparent; we pick pixel webfont.
-
-**Not in embellishment estimate:** catalog prices, coupons, free-shipping rules, carousel promo art (they manage), sale landing page content.
-
-## Scope boundaries (for estimate)
-
-**In:**
-
-- Sticky (or non-sticky) top ticker sitewide except cart/checkout/account
-- Header-area sticker with slow pulse
-- Prod theme push; easy on/off / extension
-- Optional line item: In Focus oscillating label (or explicitly skipped)
-
-**Out of this estimate:**
-
-- Thin banners between sections (idea only)
-- Redesigning sticker art
-- Sale pricing / BC promotions / coupons / free shipping config
-- Wave 2 cards
-- Carousel sale graphics (their end)
-
-## Estimate posture (internal)
-
-**Client estimate (Rus, Nov 13): 5 hours** @ $125/hr = **$625**.
-
-Covers: sticky top ticker; header sticker + slow pulse; In Focus hang/oscillate badge; sale on/off toggle; mobile/polish buffer. Visual only. Thin banners **out**.
-
-**Workflow (internal):** build on staging theme first for review → after approval, port to prod theme + push live. Staging→prod port (~1h) **eaten**, not added to the quote.
-
-| Slice | Hours |
-|-------|-------|
-| Sticky ticker | 1.5 |
-| Header sticker + pulse | 1.25 |
-| In Focus hang/oscillate badge | 1.0 |
-| Toggle + smoke / polish buffer | 1.25 |
-| **Client total** | **5.0** |
-| Staging→prod port (eaten) | ~1.0 |
-
-Rate: $125/hr.
-
-## Related / follow-up
-
-- BB **Holiday Banner** phase live: 6.1 ticker 1.5h, 6.2 sticker 1.25h, 6.3 In Focus badge 1h, 6.4 toggle/prod 1.25h (total 5h).
-- Wave 2 still pending her separate reply.
+**Tasks / build checklist:** [TASKS.md](./TASKS.md)
 
 ## Screenshots / media
 
 Embedded under each message in **Email thread**. Index:
 
-| File | Message | Role |
-|------|---------|------|
-| `sticker-placeholder-sale.png` | Nov 12 AM | Placeholder sticker |
-| `ticker-reference-still.png` | Nov 12 AM | Early ticker still (red/black; superseded) |
-| `sale homepage.jpg` | Nov 13 ~2:40 AM | Layout mockup (ticker + sticker + In Focus mark) |
-| `Affordability Sale Pop-Art Burst.png` | Nov 13 ~2:40 AM | Sticker in mind (may change) |
-| `ticker-mwejkcuk.gif` | Nov 13 ~2:40 AM | Ticker motion / color ref |
-| `ticker-mwejkcuk-still.png` | Nov 13 ~2:40 AM | Still from that ticker |
-| `image.png` | Nov 13 ~2:40 AM | Pixel / old video-game font vibe |
-| `Sticker.png` | Nov 13 ~10:51 AM | (Almost) final sticker — transparent bg |
+| File                                   | Message          | Role                                             |
+| -------------------------------------- | ---------------- | ------------------------------------------------ |
+| `sticker-placeholder-sale.png`         | Nov 12 AM        | Placeholder sticker                              |
+| `ticker-reference-still.png`           | Nov 12 AM        | Early ticker still (red/black; superseded)       |
+| `sale homepage.jpg`                    | Nov 13 ~2:40 AM  | Layout mockup (ticker + sticker + In Focus mark) |
+| `Affordability Sale Pop-Art Burst.png` | Nov 13 ~2:40 AM  | Sticker in mind (may change)                     |
+| `ticker-mwejkcuk.gif`                  | Nov 13 ~2:40 AM  | Ticker motion / color ref                        |
+| `ticker-mwejkcuk-still.png`            | Nov 13 ~2:40 AM  | Still from that ticker                           |
+| `image.png`                            | Nov 13 ~2:40 AM  | Pixel / old video-game font vibe                 |
+| `Sticker.png`                          | Nov 13 ~10:51 AM | (Almost) final sticker — transparent bg          |
 
 ---
 
@@ -261,7 +138,7 @@ This is something we'd like to know if you'd be able to do for our Holiday Sale,
 
 ![Ticker reference still](ticker-reference-still.png)
 
-*(Note: she said video here; this PNG still is what we had from that first mail. Motion file arrived Nov 13.)*
+_(Note: she said video here; this PNG still is what we had from that first mail. Motion file arrived Nov 13.)_
 
 The idea (Colin's!) is to make it intentionally tacky, garish, and very in-your-face in terms of the discounts. We are calling it the OR Books AFFO/RDABILITY Sale.
 
@@ -273,7 +150,7 @@ Antara
 ### Rus Miller — Thu, Nov 12 (sent)
 
 To: Antara Ghosh  
-Subject: Re: *(same thread)*  
+Subject: Re: _(same thread)_  
 Attachments: none
 
 Hi Antara,
@@ -357,34 +234,174 @@ The (almost) final sticker is attached. Let me know if you need it in any partic
 
 Antara
 
-### Rus Miller — DRAFT (not sent)
+### Rus Miller — estimate email (sent; text as drafted)
 
 To: Antara Ghosh  
-Cc: Colin Robinson *(optional)*  
-Subject: Re: *(same thread)*
+Subject: Re: _(same thread)_
+
+_(Body as previously drafted — Holiday Banner wave, 5h / $625, ticker + sticker + In Focus badge + toggle; staging-first preview then live. Later superseded: live-only.)_
+
+Thanks,  
+Rus
+
+### Antara Ghosh — Fri, Nov 13, 1:21 PM
+
+To: Rus
+
+Thanks, Russ. I'm checking with Colin about the estimate and I'll confirm in a bit.
+
+Will you be able to do only these changes to the live site? There are still a lot of changes that need done on staging before we can move that to the live site.
+
+### Rus Miller — Fri, Nov 13, 1:49 PM
+
+To: Antara
+
+Hi, yes, I can do them on live only. I was going to use staging just to show you how they looked in place, not to move the current staging work to live.
+
+### Antara Ghosh — Fri, Nov 13, 10:34 PM
+
+To: Rus
+
+Ok great! Sounds good!
+
+Please proceed. Colin has approved the estimate.
+
+### Rus Miller — Sat, Nov 14, 8:39 AM
+
+To: Antara
+
+Great, I'll work those up today and have something for you to review this afternoon.
+
+Thank you,  
+Rus
+
+### Rus Miller — Sat, Nov 14, 1:23 PM
+
+To: Antara
 
 Hi Antara,
 
-Thanks for the mockup, the ticker reference, and the sticker. The transparent PNG is perfect; no other format needed from my side. If Colin has a final tweak, just send the new file and I'll use that.
+I was working my way through the holiday project and the staging site (https://orbooks.mybigcommerce.com) went down for maintenance. Do you have the support PIN so I can chat with them?
 
-I've put the estimate on a new Briefboard wave called **Holiday Banner**, separate from Wave 2:
+Thank you,  
+Rus
 
-https://lancemonotone.com/or-books/app/estimates?section=holiday-banner
+### Antara Ghosh — Sat, Nov 14, 2:09 PM
 
-**Total: 5 hours, $625** at $125/hr.
+To: Rus
 
-What's included:
+Hi Rus,
 
-- Sticky top ticker with your locked sale wording, red/yellow colors from your reference, and a pixel-style font. Hidden on cart, checkout, and account.
-- Header AFFORDABILITY SALE sticker by the logo, with a slow continuous pulse.
-- The In Focus "ROCK BOTTOM PRICE" hanging/oscillating badge from your mockup.
-- An easy on/off for all of this, so take-down after December 20 (or an extension) is simple.
+Can you try this? I'm unable to open the site so I can't see the service pin. This is what I remember: 28991
 
-These are visual only (no click-through links). The thin banners between New Releases / Bestsellers / In Focus stay out of this estimate, as you said. Carousel sale graphics stay on your end.
+### Rus Miller — Sat, Nov 14, 2:20 PM
 
-Same checkpoint as usual: if a task is nearing its estimate and more work is needed, I'll pause and check with you before continuing.
+To: Antara
 
-If this looks good, I'll build it on the staging store first so you can review it there. Once you're happy with it, I'll push the same treatment to the live site.
+Hi, it's not letting me chat with the credentials I have. Can you try on your end?
 
-Thanks,
+I can log into the production store. Hopefully you can reach them there and ask why the staging store (https://orbooks.mybigcommerce.com) is in maintenance mode.
+
+Thank you!
+
+### Antara Ghosh — Sat, Nov 14, 3:20 PM
+
+To: Rus
+
+The whole of Bigcommerce seems to be under maintainance. I can try again tomorrow morning IST.
+
+### Rus Miller — Sat, Nov 14, 3:24 PM
+
+To: Antara
+
+That's annoying! Okay, we'll check in tomorrow. I've got most of it done. It's launching Monday?
+
+### Antara Ghosh — Sun, Nov 15, 3:21 AM
+
+To: Rus
+
+Hi Rus,
+
+I wrote to them, but in any case, here is the support pin: 42766740.
+
+Our new pricing plan has taken effect since yesterday, and I'm hoping this is not to do with that change. I've asked and will keep you posted. Are you able to access the live site admin console? I am.
+
+### Antara Ghosh — Sun, Nov 15, 3:26 AM
+
+To: Rus
+
+Hi Rus,
+
+I think it is very likely that downgrading our plan from Enterprise to Scale has caused this issue. We weren't told this could happen. I've written to them and will wait for a response. This is annoying!!
+
+Meanwhile, would you be able to make the Sale features appear on the live site? We are launching on Monday (ET).
+
+### Rus Miller — Sun, Nov 15, ~9:17 AM
+
+To: Antara
+
+Hi Antara,
+
+I've added the Holiday work to my local version of the production site. I made a video to show you how everything looks and works.
+
+I hid the badge at the top on mobile devices because there isn't a good place for it. Let me know if you'd like to put it somewhere else.
+
+_(attachment: OR Books Holiday Recording 2026-11-15 091751.mp4)_
+
+### Antara Ghosh — Sun, Nov 15, 2:42 AM _(thread / her timezone)_
+
+To: Rus
+
+Hi Rus,
+
+This looks fantastic!! Love it! You can go ahead and make these live.
+
+For the mobile, any chance you can add it above the “A radical, exciting response to Amazonian hegemony.” —Dazed section? Doesn't have to be sticky like the ticker.
+
+This is not a biggie, so if it takes too much time we can skip it: Would you be able to make it so that when the red segment of the ticker (OR BOOKS AFFORDABILITY SALE) reaches the edge of the screen, it sticks and the rest keeps moving? Something like the reference.
+
+### Antara Ghosh — Mon, Nov 16, 8:33 AM
+
+To: Rus
+
+Hi Rus,
+
+The sale has now launched. You can make the sticker and ticker live whenever convenient.
+
+Regarding the 'In Focus' discount animation: Can you make it so that this special offer category is displayed in this section rather than the Palestine list that is currently featured? Note that the link in 'See All' also needs to be replaced. Please only make the 'Rock Bottom' animation live once this change is done.
+
+Thanks!
+
+### Rus Miller - draft (not sent) - clarifying In Focus / special offer
+
+To: Antara
+
+Hi Antara,
+
+Quick check so I match what you want.
+
+**In Focus / Special Offer category**
+
+You asked for the **Special Offer category** to show in **In Focus** instead of the **Palestine** list that’s featured now, for **See all** to be replaced.
+
+On the site, **In Focus** currently has a row of books and a **See all** link to the **Palestine** reading list (`/reading-lists/the-palestine-list/`). Important detail: that row is **not** pulled from the Palestine category. The books are a separate homepage featured set; only the **See all** link points at Palestine. There are two live special-offer category pages, **Special Offer** (`/special-offer/`) and **Special Offers** (`/special-offers/`).
+
+Could you confirm:
+
+1. **Which special offer category** should **See all** go to? Please paste the full URL.
+2. **What should show in the In Focus row?** Should those books match that category (I can wire the row to pull from it), or are you planning to pick the titles yourself on your side?
+
+**Ticker red segment**
+
+You asked about the red segment sticking at the edge while the rest keeps moving, like your reference.
+
+The clean way, and what your reference shows, is to keep the red block **always stuck** on the left, with only the yellow sale line scrolling past it. (Having the red scroll in and then latch is much fiddlier; the end result on screen is the same as your reference.)
+
+One wording note: in the GIF the stuck red text is the shorter **THE AFFO/RDABILITY SALE**. The live ticker copy you locked uses the longer lead **THE OR BOOKS AFFO/RDABILITY SALE:**. That would eat a lot of the bar if it stays pinned. Should the stuck red match the reference (**THE AFFO/RDABILITY SALE**), with the rest of the sale line scrolling in yellow?
+
+**Estimate for these revisions**
+
+On top of the original Holiday Banner work, the follow-ups (In Focus / See all swap, Rock Bottom in the same push, mobile sticker above the Dazed line, and the stuck red ticker lead) come to about **1.75 hours** ($218.75 at $125/hr).
+
+Thanks,  
 Rus

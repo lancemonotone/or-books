@@ -73,6 +73,8 @@
                         @include xxsmall {
                             width: 55%;
                             margin-right: 0;
+                            // Was margin-left:auto (~108px computed). Pin to 40px.
+                            margin-left: 2.5rem;
                         }
                         @include small {
                             width: 85%;

@@ -100,7 +100,9 @@ body.custom {
         padding-top: 101px;
     }
 
-    @include breakpoint(800px) {
+    // 801 = Cornerstone $screen-medium. 800 left a 1px gap: desktop chrome
+    // on, header still position:fixed + burger visible.
+    @include breakpoint(801px) {
         padding-top: 0;
     }
 }
@@ -2576,7 +2578,7 @@ h6 {
                 }
 
                 &:first-child {
-                    @include breakpoint(800px) {
+                    @include breakpoint(801px) {
                         padding-left: calc(8.33% + 1.5rem);
                     }
                 }

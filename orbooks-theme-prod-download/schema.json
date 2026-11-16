@@ -3798,5 +3798,20 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Holiday Banner",
+    "settings": [
+      {
+        "type": "heading",
+        "content": "AFFO/RDABILITY Sale"
+      },
+      {
+        "type": "checkbox",
+        "label": "Show Holiday Banner (ticker, sticker, In Focus badge)",
+        "force_reload": true,
+        "id": "or_holiday_banner"
+      }
+    ]
   }
 ]

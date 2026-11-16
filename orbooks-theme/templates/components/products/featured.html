@@ -1,7 +1,27 @@
-{{> components/orbooks/section-head
-    title=(lang 'products.featured')
-    url="/reading-lists/the-palestine-list/"
-}}
+{{!-- In Focus: custom head so holiday hang-badge can pivot off the title text --}}
+<div class="or-section-head or-holiday-infocus-head">
+    <h2>
+        <span class="or-holiday-infocus-title">
+            {{lang 'products.featured'}}
+            {{#if theme_settings.or_holiday_banner}}
+                {{!-- Mockup: seal hangs from the “S”; visual only — no link --}}
+                <span class="or-holiday-infocus-badge" aria-hidden="true">
+                    <img
+                        class="or-holiday-infocus-badge__img"
+                        src="{{cdn 'img/holiday/rock-bottom-price-badge.png'}}"
+                        alt=""
+                        width="160"
+                        height="200"
+                        decoding="async"
+                    >
+                </span>
+            {{/if}}
+        </span>
+    </h2>
+    <div class="or-section-head-actions">
+        <a class="or-section-head-cta button button--default or-btn or-btn-sm" href="/reading-lists/the-palestine-list/">See all</a>
+    </div>
+</div>
 
 <ul class="or-listing productCarousel newprd-sale" data-product-type="featured" {{#if settings.data_tag_enabled}} data-list-name="Featured Products" {{/if}}>
     {{#each products}}

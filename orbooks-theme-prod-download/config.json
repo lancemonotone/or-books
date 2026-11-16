@@ -38,7 +38,11 @@
   },
   "css_compiler": "scss",
   "autoprefixer_cascade": true,
-  "autoprefixer_browsers": ["> 1%", "last 2 versions", "Firefox ESR"],
+  "autoprefixer_browsers": [
+    "> 1%",
+    "last 2 versions",
+    "Firefox ESR"
+  ],
   "settings": {
     "sale_category_id": "323",
     "new_category_id": "322",
@@ -401,7 +405,11 @@
       "unionpay",
       "visa"
     ],
-    "supported_payment_methods": ["card", "paypal", "bank"],
+    "supported_payment_methods": [
+      "card",
+      "paypal",
+      "bank"
+    ],
     "lazyload_mode": "lazyload+lqip",
     "checkout-paymentbuttons-paypal-color": "black",
     "checkout-paymentbuttons-paypal-shape": "rect",
@@ -412,7 +420,8 @@
     "afterpay-button-color": "black-mint",
     "amazon-button-color": "Gold",
     "masterpass-button-color": "black",
-    "paymentbuttons-provider-sorting": []
+    "paymentbuttons-provider-sorting": [],
+    "or_holiday_banner": true
   },
   "read_only_files": [
     "/assets/scss/components/citadel",
@@ -446,7 +455,9 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": ["home_garden"]
+        "industries": [
+          "home_garden"
+        ]
       },
       "images": {},
       "settings": {
@@ -811,7 +822,11 @@
           "unionpay",
           "visa"
         ],
-        "supported_payment_methods": ["card", "paypal", "bank"],
+        "supported_payment_methods": [
+          "card",
+          "paypal",
+          "bank"
+        ],
         "lazyload_mode": "lazyload+lqip",
         "checkout-paymentbuttons-paypal-color": "black",
         "checkout-paymentbuttons-paypal-shape": "rect",
@@ -822,8 +837,13 @@
         "afterpay-button-color": "black-mint",
         "amazon-button-color": "Gold",
         "masterpass-button-color": "black",
-        "paymentbuttons-provider-sorting": ["paypal", "sepa", "googlepay"],
-        "show_product_price": true
+        "paymentbuttons-provider-sorting": [
+          "paypal",
+          "sepa",
+          "googlepay"
+        ],
+        "show_product_price": true,
+        "or_holiday_banner": true
       }
     },
     {
@@ -840,7 +860,9 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": ["fashion_jewelry"]
+        "industries": [
+          "fashion_jewelry"
+        ]
       },
       "settings": {
         "homepage_featured_products_count": 6,
@@ -1033,7 +1055,8 @@
         "color_text_product_sold_out_badges": "#ffffff",
         "color_hover_product_sold_out_badges": "#000000",
         "focusTooltip-textColor": "#666666",
-        "focusTooltip-backgroundColor": "#ffffff"
+        "focusTooltip-backgroundColor": "#ffffff",
+        "or_holiday_banner": true
       }
     },
     {
@@ -1050,7 +1073,9 @@
           "sales_discounts",
           "large_catalog"
         ],
-        "industries": ["food_beverage"]
+        "industries": [
+          "food_beverage"
+        ]
       },
       "settings": {
         "body-font": "Google_Roboto_400",
@@ -1241,7 +1266,8 @@
         "color_text_product_sold_out_badges": "#ffffff",
         "color_hover_product_sold_out_badges": "#000000",
         "focusTooltip-textColor": "#ffffff",
-        "focusTooltip-backgroundColor": "#313440"
+        "focusTooltip-backgroundColor": "#313440",
+        "or_holiday_banner": true
       }
     }
   ]

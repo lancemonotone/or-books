@@ -23,11 +23,43 @@
         <div class="header-logo-main">
             {{#if page_type '===' 'default'}}
                 <h1 class="header-logo header-logo--{{theme_settings.logo-position}}">
-                    {{> components/common/store-logo}}
+                    {{#if theme_settings.or_holiday_banner}}
+                        <span class="or-holiday-logo-wrap">
+                            {{> components/common/store-logo}}
+                            <span class="or-holiday-sticker" aria-hidden="true">
+                                <img
+                                    class="or-holiday-sticker__img"
+                                    src="{{cdn 'img/holiday/affordability-sale-sticker.png'}}"
+                                    alt=""
+                                    width="220"
+                                    height="220"
+                                    decoding="async"
+                                >
+                            </span>
+                        </span>
+                    {{else}}
+                        {{> components/common/store-logo}}
+                    {{/if}}
                 </h1>
             {{else}}
                 <div class="header-logo header-logo--{{theme_settings.logo-position}}">
-                    {{> components/common/store-logo}}
+                    {{#if theme_settings.or_holiday_banner}}
+                        <span class="or-holiday-logo-wrap">
+                            {{> components/common/store-logo}}
+                            <span class="or-holiday-sticker" aria-hidden="true">
+                                <img
+                                    class="or-holiday-sticker__img"
+                                    src="{{cdn 'img/holiday/affordability-sale-sticker.png'}}"
+                                    alt=""
+                                    width="220"
+                                    height="220"
+                                    decoding="async"
+                                >
+                            </span>
+                        </span>
+                    {{else}}
+                        {{> components/common/store-logo}}
+                    {{/if}}
                 </div>
             {{/if}}
         </div>
@@ -74,3 +106,6 @@
         </div>
     </div>
 </header>
+
+{{!-- Mockup: ticker sits between header and page content --}}
+{{> components/orbooks/holiday-banner}}
