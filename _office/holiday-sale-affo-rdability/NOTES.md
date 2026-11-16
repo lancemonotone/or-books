@@ -98,6 +98,9 @@ THE OR BOOKS AFFO/RDABILITY SALE: All paperbacks at $14.99 | All E-books $4.99 |
 - **Rus → Antara (Nov 15 ~9:17 AM):** local prod preview + video (`OR Books Holiday Recording 2026-11-15 091751.mp4`); noted mobile header badge hidden (no good slot); asked if she wants it elsewhere.
 - **Antara → Rus (Nov 15 ~2:42 AM / thread timing):** loves it — **go live**. Mobile: try sticker **above the Dazed quote** (not sticky). Nice-to-have: red ticker segment **sticks at screen edge** while the rest keeps scrolling (like her reference) — skip if too much time.
 - **Antara → Rus (Nov 16 ~8:33 AM):** sale live; push sticker + ticker whenever convenient. **In Focus:** show “this special offer category” instead of the Palestine list currently featured; replace **See all** too. **Only** make the Rock Bottom **animation** live once that change is done. (No “Rock Bottom category” on the site — Rock Bottom = the seal animation; special offer = the category she wants in In Focus.)
+- **Antara → Rus (Nov 16 ~10:46 AM):** keep ticker as-is / can’t spend more on sale chrome; wants to edit ticker wording herself. Clarifies In Focus: **books stay starred/Featured**; only **See all** → `https://orbooks.com/special-offer/`; wants to change that URL herself weekly. Asks when Rock Bottom animation hits live.
+- **Estimate impact (In Focus clarify):** drop In Focus books wiring. See all + stuck ticker **$0**. Billable follow-up ≈ **0.5h** (mobile Dazed). Theme-file edits for her self-serve (no Theme Editor fields).
+- **Live push (Nov 16):** `stencil push -a Light -d` from `orbooks-theme-prod-download/` OK. See all → special-offer (same tab); ticker; mobile Dazed sticker; Rock Bottom on.
 
 **Tasks / build checklist:** [TASKS.md](./TASKS.md)
 
@@ -402,6 +405,40 @@ One wording note: in the GIF the stuck red text is the shorter **THE AFFO/RDABIL
 **Estimate for these revisions**
 
 On top of the original Holiday Banner work, the follow-ups (In Focus / See all swap, Rock Bottom in the same push, mobile sticker above the Dazed line, and the stuck red ticker lead) come to about **1.75 hours** ($218.75 at $125/hr).
+
+Thanks,  
+Rus
+
+### Antara Ghosh — Mon, Nov 16, 10:46 AM
+
+To: Rus
+
+Hi Rus,
+
+I think let's keep the ticker as it is right now. We really cannot afford to spend more on the affordability sale (irony!). Could you tell me how I can change the ticker's wording if needed? We are likely to add some more sale features, so it would be good if I could modify those at my end without involving you.
+
+Sorry, I was unclear about the IN FOCUS section: We keep everything as it is right now (the books in that section are the 'starred' titles on the BC backend). Just the 'See All' link should be https://orbooks.com/special-offer/. Could you also tell me how I can change this url if needed? We intend to feature a different category each week so the url will have to be updated.
+
+When can we expect the animation to show on the live site? Our promotions are starting soon.
+
+### Rus Miller - draft (not sent) - after Nov 16 10:46 AM reply
+
+To: Antara
+
+Hi Antara,
+
+Thanks for clarifying In Focus. I’ll leave the starred books alone and only change **See all** to https://orbooks.com/special-offer/.
+
+On the ticker: I already updated it to match the reference you sent (red fixed on the left, yellow scrolling) and I won’t charge for that piece, since that’s how your reference looked and I had missed it. One wording choice for you still: the reference uses the shorter red label **THE AFFO/RDABILITY SALE**, while the locked copy lead was the longer **THE OR BOOKS AFFO/RDABILITY SALE:**. Which do you prefer for the stuck red text? It’s currently the shorter version.
+
+Also from your earlier note: on small phones the sale sticker will sit above the Dazed quote (not sticky), since there isn’t room next to the logo there.
+
+For edits on your side (no extra build): in BigCommerce go to **Storefront → Themes → Edit theme files**.
+
+- Ticker wording: `templates/components/orbooks/holiday-banner.html` (there’s a short comment marking the editable bits; change both yellow copies so the loop stays smooth).
+- See all URL: `templates/components/products/featured.html` (change only the `href`).
+
+I’m ready to push live now (sticker, ticker, See all, and the Rock Bottom animation together) on your confirmation. I’ll let you know when it's live.
 
 Thanks,  
 Rus

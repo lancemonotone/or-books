@@ -1,5 +1,5 @@
 // AFFO/RDABILITY Sale — ticker + header sticker (Holiday Banner wave)
-// Colors from client Amara ticker ref; pixel face = Silkscreen
+// Holiday sale ticker + stickers; pixel face = Silkscreen
 
 .or-holiday-banner {
     --or-hb-red: #e31c23;
@@ -88,7 +88,7 @@ body.custom:has([data-or-holiday-banner]) {
     margin: 0;
     margin-inline-start: var(--or-hb-sticker-overlap);
     pointer-events: none;
-    // translateY keeps vertical center; scale = slow continuous pulse (Antara)
+    // translateY keeps vertical center; scale = slow continuous pulse
     animation: or-holiday-sticker-pulse 3.2s ease-in-out infinite;
     transform-origin: center center;
 
@@ -136,14 +136,36 @@ body.custom:has([data-or-holiday-banner]) {
 }
 
 .or-holiday-ticker {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
     inline-size: 100%;
     block-size: var(--or-hb-height);
+    font-family: Silkscreen, "Press Start 2P", monospace;
+    // Floor raised: Silkscreen illegible at 0.65rem / 14px root (~9px)
+    font-size: clamp(0.75rem, 1.6vw, 0.85rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.or-holiday-ticker__lead {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    padding-inline: 0.75rem;
+    background: var(--or-hb-red);
+    color: #fff;
+    white-space: nowrap;
 }
 
 .or-holiday-ticker__viewport {
+    flex: 1 1 auto;
     overflow: hidden;
-    inline-size: 100%;
+    min-inline-size: 0;
     block-size: 100%;
+    background: var(--or-hb-yellow);
 }
 
 .or-holiday-ticker__track {
@@ -165,29 +187,13 @@ body.custom:has([data-or-holiday-banner]) {
     align-items: stretch;
     margin: 0;
     padding: 0;
-    font-family: Silkscreen, "Press Start 2P", monospace;
-    // Floor raised — Silkscreen illegible at 0.65rem / 14px root (~9px)
-    font-size: clamp(0.75rem, 1.6vw, 0.85rem);
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
     white-space: nowrap;
 }
 
-.or-holiday-ticker__lead,
 .or-holiday-ticker__body {
     display: inline-flex;
     align-items: center;
     padding-inline: 0.75rem;
-}
-
-.or-holiday-ticker__lead {
-    background: var(--or-hb-red);
-    color: #fff;
-}
-
-.or-holiday-ticker__body {
     background: var(--or-hb-yellow);
     color: var(--or-hb-ink);
 }
@@ -250,6 +256,41 @@ body.custom:has([data-or-holiday-banner]) {
     }
 }
 
+// Mobile: sale sticker above Dazed quote (header sticker shows from 480px).
+.or-holiday-dazed-sticker {
+    --or-hb-dazed-size: clamp(5.5rem, 42vw, 7.5rem);
+
+    display: flex;
+    justify-content: center;
+    margin-block: 0 0.75rem;
+    pointer-events: none;
+
+    @media (min-width: 480px) {
+        display: none;
+    }
+}
+
+.or-holiday-dazed-sticker__img {
+    display: block;
+    inline-size: var(--or-hb-dazed-size);
+    block-size: auto;
+    animation: or-holiday-dazed-sticker-pulse 3.2s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+@keyframes or-holiday-dazed-sticker-pulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.12);
+        opacity: 0.92;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .or-holiday-ticker__track {
         animation: none;
@@ -262,6 +303,11 @@ body.custom:has([data-or-holiday-banner]) {
     .or-holiday-sticker {
         animation: none;
         transform: translateY(-50%);
+    }
+
+    .or-holiday-dazed-sticker__img {
+        animation: none;
+        transform: none;
     }
 
     .or-holiday-infocus-badge {
@@ -296,6 +342,7 @@ body.custom:has([data-or-holiday-banner]) {
 .account_inbox_message-page {
     .or-holiday-banner,
     .or-holiday-sticker,
+    .or-holiday-dazed-sticker,
     .or-holiday-infocus-badge {
         display: none;
     }

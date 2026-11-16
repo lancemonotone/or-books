@@ -1,10 +1,8 @@
-{{!-- In Focus: custom head so holiday hang-badge can pivot off the title text --}}
 <div class="or-section-head or-holiday-infocus-head">
     <h2>
         <span class="or-holiday-infocus-title">
             {{lang 'products.featured'}}
             {{#if theme_settings.or_holiday_banner}}
-                {{!-- Mockup: seal hangs from the “S”; visual only — no link --}}
                 <span class="or-holiday-infocus-badge" aria-hidden="true">
                     <img
                         class="or-holiday-infocus-badge__img"
@@ -19,7 +17,8 @@
         </span>
     </h2>
     <div class="or-section-head-actions">
-        <a class="or-section-head-cta button button--default or-btn or-btn-sm" href="/reading-lists/the-palestine-list/">See all</a>
+        {{!-- EDIT SEE ALL URL HERE (Storefront → Themes → Edit theme files → this file). Weekly category swaps: change only the href. --}}
+        <a class="or-section-head-cta button button--default or-btn or-btn-sm" href="https://orbooks.com/special-offer/">See all</a>
     </div>
 </div>
 

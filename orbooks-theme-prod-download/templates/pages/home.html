@@ -71,6 +71,18 @@ blog:
         </div>
         <div class="custom-content">
             <div class="statix-text">
+                {{#if theme_settings.or_holiday_banner}}
+                    <div class="or-holiday-dazed-sticker" aria-hidden="true">
+                        <img
+                            class="or-holiday-dazed-sticker__img"
+                            src="{{cdn 'img/holiday/affordability-sale-sticker.png'}}"
+                            alt=""
+                            width="200"
+                            height="200"
+                            decoding="async"
+                        >
+                    </div>
+                {{/if}}
                 <h3>“A radical, exciting response to Amazonian hegemony.” <span>—Dazed</span></h3>
                 <h4>OR Books is a publishing company that embraces progressive change in politics, culture, and the way we do business.</h4>
             </div>

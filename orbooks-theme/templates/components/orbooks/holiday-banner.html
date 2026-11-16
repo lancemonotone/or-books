@@ -1,16 +1,18 @@
-{{!-- AFFO/RDABILITY Sale chrome (temp). Gated by theme_settings.or_holiday_banner. --}}
+{{!-- Holiday sale ticker. Toggle: Theme Editor → Holiday Banner. --}}
 {{#if theme_settings.or_holiday_banner}}
 <div class="or-holiday-banner" data-or-holiday-banner role="region" aria-label="OR Books AFFO/RDABILITY Sale">
     <div class="or-holiday-ticker">
+        {{!-- EDIT TICKER WORDING HERE (Storefront → Themes → Edit theme files → this file).
+             Lead = fixed red text on the left. Body = scrolling yellow text.
+             Change BOTH body copies below so the loop stays seamless. --}}
+        <span class="or-holiday-ticker__lead">THE AFFO/RDABILITY SALE</span>
         <div class="or-holiday-ticker__viewport">
             <div class="or-holiday-ticker__track">
                 <p class="or-holiday-ticker__chunk">
-                    <span class="or-holiday-ticker__lead">THE OR BOOKS AFFO/RDABILITY SALE:</span>
-                    <span class="or-holiday-ticker__body"> All paperbacks at $14.99 | All E-books $4.99 | Not applicable on hardcovers / pre-orders / pre-discounted book bundles | Free shipping above $100 | Weekly gifts for lucky customers | Offer valid till December 20 | Hurry!!</span>
+                    <span class="or-holiday-ticker__body">All paperbacks at $14.99 | All E-books $4.99 | Not applicable on hardcovers / pre-orders / pre-discounted book bundles | Free shipping above $100 | Weekly gifts for lucky customers | Offer valid till December 20 | Hurry!!</span>
                 </p>
                 <p class="or-holiday-ticker__chunk" aria-hidden="true">
-                    <span class="or-holiday-ticker__lead">THE OR BOOKS AFFO/RDABILITY SALE:</span>
-                    <span class="or-holiday-ticker__body"> All paperbacks at $14.99 | All E-books $4.99 | Not applicable on hardcovers / pre-orders / pre-discounted book bundles | Free shipping above $100 | Weekly gifts for lucky customers | Offer valid till December 20 | Hurry!!</span>
+                    <span class="or-holiday-ticker__body">All paperbacks at $14.99 | All E-books $4.99 | Not applicable on hardcovers / pre-orders / pre-discounted book bundles | Free shipping above $100 | Weekly gifts for lucky customers | Offer valid till December 20 | Hurry!!</span>
                 </p>
             </div>
         </div>

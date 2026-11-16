@@ -8,40 +8,36 @@ Working checklist and delivery notes for the AFFO/RDABILITY sale chrome.
 
 ## Current status
 
-Client approved go-live. Sale already live on their side. Do her follow-ups below, then **one** production push with everything together (no staged launch). Briefboard notes after that.
+**Live** (pushed + activated Light variation). See all → special-offer (same tab); stuck ticker; mobile Dazed sticker; Rock Bottom. Holiday Banner BB cards 6.1–6.7 complete.
 
 ## Antara’s latest asks (Nov 15–16)
 
-From her emails after the preview video. Clarifying email drafted in [NOTES.md](./NOTES.md) (In Focus URL + books source; ticker stuck-red wording). Finish follow-ups, then **one** launch. Hours below are **new** work only (not the original 5h). No separate “nice-to-have” lane; all items are in scope unless she cuts them.
+Updated after her **Nov 16 10:46 AM** clarify (full text in [NOTES.md](./NOTES.md)). Hours are **new** follow-up / billable only (not the original 5h).
 
-**How In Focus works today (site fact):** the book row is BigCommerce **Featured Products**, not a category. Only **See all** is hard-coded to Palestine (`/reading-lists/the-palestine-list/`). She asked to show “this special offer category” in that section and replace See all; Rock Bottom **animation** only after that change. Awaiting which URL (`/special-offer/` vs `/special-offers/`) and whether the row should pull from that category or she picks titles.
+**In Focus (confirmed):** books stay **starred / Featured Products**. Only **See all** → `https://orbooks.com/special-offer/`. She edits ticker wording + See all URL herself in BC theme files (no custom Theme Editor fields).
 
 | Ask | Est. | Notes |
 |-----|------|--------|
-| In Focus books → special offer | **0.5h** | New/Bestsellers already load by category ID in `home.js`; reuse that pattern (or she curates Featured Products and this drops near 0). Blocked on her reply. |
-| See all → special offer URL | **0.25h** | One href in `featured.html` once URL confirmed; same sitting as In Focus. |
-| Rock Bottom seal in same launch | **0** | Already built locally; ship with the In Focus swap, not before. |
-| Mobile sticker above Dazed quote | **0.5h** | Reuse sticker asset; insert above Dazed in `home.html` + small-screen CSS (header sticker already hidden on small). |
-| Ticker: red block always stuck left | **0.25h** | Fixed red lead + yellow scrolls (Amara look). Confirm short **THE AFFO/RDABILITY SALE** vs long locked lead. |
-| Go live (one prod push) | **0** | Part of the project; not a separate estimate line. |
-| Briefboard delivery comments | **0.25h** | After push. |
+| In Focus books → special offer | **removed** | Cancelled. Starred titles stay. |
+| See all → `/special-offer/` | **$0** | Minor href change; she edits theme file for weekly swaps. |
+| Rock Bottom seal in same launch | **$0** | Already built; ship with See all. |
+| Mobile sticker above Dazed quote | **0.5h** | Done locally; not cancelled. |
+| Ticker: red lead always stuck left | **$0** | Matches her reference; not charged. Ask short vs long lead. |
+| Go live (one prod push) | **$0** | Project step. |
 
-**Total ≈ 1.75h** (Rock Bottom + go live add no estimate hours).
+**Billable follow-ups ≈ 0.5h** (mobile Dazed only). No Theme Editor fields; she edits theme files in BC.
 
 Checklist:
 
-- [ ] **In Focus books** (~0.5h): show the special offer category in that section (await her URL + whether to pull category products or she sets the titles).
-- [ ] **See all** (~0.25h): point at that same special offer URL (not Palestine).
-- [ ] **Rock Bottom animation** (0 new): include in the same push, only after the In Focus change above.
-- [ ] **Mobile sticker** (~0.5h): above “A radical, exciting response to Amazonian hegemony.” —Dazed; not sticky.
-- [ ] **Ticker red lead** (~0.25h): always stuck on the left like her reference; yellow line scrolls.
-- [ ] **Go live** (0): one production push with sticker + ticker + Rock Bottom + items above (project step, not billed hours).
-- [ ] **Briefboard** (~0.25h): delivery comments after push.
-
-**Candidate URLs (her pick):** https://orbooks.com/special-offer/ · https://orbooks.com/special-offers/
+- [x] **In Focus books:** no change (starred stay).
+- [x] **See all** ($0): `https://orbooks.com/special-offer/` + edit comment in `featured.html`.
+- [x] **Rock Bottom animation** ($0): built locally; ships in go-live push.
+- [x] **Mobile sticker** (~0.5h): above Dazed; &lt;480px.
+- [x] **Ticker red lead** ($0): stuck left like reference; edit comments in `holiday-banner.html`.
+- [x] **Go live** ($0): prod push + activate Light (Nov 16).
 
 **Briefboard phase:** [Holiday Banner on Estimates](https://lancemonotone.com/or-books/app/estimates?section=holiday-banner)  
-6.1–6.4 marked **complete**. New revision cards: **6.5** In Focus books (0.5h), **6.6** See all (0.25h), **6.7** mobile Dazed sticker (0.5h), **6.8** stuck red ticker (0.25h), **6.9** BB delivery notes (0.25h).
+6.1–6.4 **complete**. Revision cards: See all **$0**, mobile Dazed **0.5h**, stuck ticker **$0**. In Focus books + BB delivery notes cards **deleted**.
 
 ## Build progress (internal)
 
