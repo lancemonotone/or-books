@@ -101,6 +101,11 @@ THE OR BOOKS AFFO/RDABILITY SALE: All paperbacks at $14.99 | All E-books $4.99 |
 - **Antara → Rus (Nov 16 ~10:46 AM):** keep ticker as-is / can’t spend more on sale chrome; wants to edit ticker wording herself. Clarifies In Focus: **books stay starred/Featured**; only **See all** → `https://orbooks.com/special-offer/`; wants to change that URL herself weekly. Asks when Rock Bottom animation hits live.
 - **Estimate impact (In Focus clarify):** drop In Focus books wiring. See all + stuck ticker **$0**. Billable follow-up ≈ **0.5h** (mobile Dazed). Theme-file edits for her self-serve (no Theme Editor fields).
 - **Live push (Nov 16):** `stencil push -a Light -d` from `orbooks-theme-prod-download/` OK. See all → special-offer (same tab); ticker; mobile Dazed sticker; Rock Bottom on.
+- **Rus → Antara (Nov 16 ~12:06 PM):** confirm ready to push.
+- **Antara → Rus (Nov 16 ~12:57 PM):** yes push live; ticker stick to **shorter** text for now.
+- **Rus → Antara (Nov 16 ~1:06 PM):** live; please check.
+- **Antara → Rus (Nov 16 ~1:08 PM):** looks great.
+- **Antara → Rus (Nov 19 ~2:55 AM):** (1) ticker font more readable for older customers; (2) ticker sits **on top of** currency + Catalog dropdowns — she wants those menus usable (dropdowns above ticker). Asks if extra cost. Screens: `ticker-over-currency-dropdown.png`, `ticker-over-catalog-dropdown.png`.
 
 **Tasks / build checklist:** [TASKS.md](./TASKS.md)
 
@@ -117,6 +122,8 @@ Embedded under each message in **Email thread**. Index:
 | `ticker-mwejkcuk.gif`                  | Nov 13 ~2:40 AM  | Ticker motion / color ref                        |
 | `ticker-mwejkcuk-still.png`            | Nov 13 ~2:40 AM  | Still from that ticker                           |
 | `image.png`                            | Nov 13 ~2:40 AM  | Pixel / old video-game font vibe                 |
+| `ticker-over-currency-dropdown.png`    | Nov 19 ~2:55 AM  | Currency menu under sticky ticker                |
+| `ticker-over-catalog-dropdown.png`     | Nov 19 ~2:55 AM  | Catalog menu under sticky ticker                 |
 | `Sticker.png`                          | Nov 13 ~10:51 AM | (Almost) final sticker — transparent bg          |
 
 ---
@@ -442,3 +449,59 @@ I’m ready to push live now (sticker, ticker, See all, and the Rock Bottom anim
 
 Thanks,  
 Rus
+
+### Rus Miller — Mon, Nov 16, 12:06 PM
+
+To: Antara
+
+Hi Antara,
+
+I just wanted to make sure you saw my reply and you're ready for me to launch to the live store.
+
+Rus
+
+### Antara Ghosh — Mon, Nov 16, 12:57 PM
+
+To: Rus
+
+Hi Rus,
+
+Yes, please push it to live. Thank you!
+
+For the ticker, let's stick to the shorter text for now.
+
+### Rus Miller — Mon, Nov 16, 1:06 PM
+
+To: Antara
+
+Okay, it's live! Please take a quick look and let me know if anything needs to be changed.
+
+### Antara Ghosh — Mon, Nov 16, 1:08 PM
+
+To: Rus
+
+Looks great! Thank you so much!
+
+### Rus Miller — Mon, Nov 16, 1:08 PM
+
+To: Antara
+
+Awesome! Great to hear it.
+
+### Antara Ghosh — Thu, Nov 19, ~2:55 AM
+
+To: Rus
+
+Hi Rus,
+
+We were wondering if you could make the font on the ticker slightly more readable/clear. The current font is a bit hard to read for older customers.
+
+The ticker is also currently on top of the currency dropdown, which makes it hard for people to change the currency.
+
+![Currency dropdown under ticker](./ticker-over-currency-dropdown.png)
+
+Same with the catalog.
+
+![Catalog dropdown under ticker](./ticker-over-catalog-dropdown.png)
+
+Could you make it appear on top of both these drop-downs please? Would this involve additional cost?

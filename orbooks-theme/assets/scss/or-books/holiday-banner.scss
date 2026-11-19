@@ -1,11 +1,11 @@
 // AFFO/RDABILITY Sale — ticker + header sticker (Holiday Banner wave)
-// Holiday sale ticker + stickers; pixel face = Silkscreen
+// Holiday sale ticker + stickers; pixel face = Jersey 15
 
 .or-holiday-banner {
     --or-hb-red: #e31c23;
     --or-hb-yellow: #ffec00;
     --or-hb-ink: #111;
-    --or-hb-height: 2.5rem;
+    --or-hb-height: 2.75rem;
     // Mobile/tablet: lock to bottom of fixed header (does not scroll).
     // top tracks header height; z below header so sticker can overhang.
     --or-hb-fixed-top: 80px;
@@ -33,11 +33,12 @@
         );
     }
 
-    // ≥801: header is relative — ticker in normal flow, sticky at viewport top
+    // ≥801: header is relative — ticker in normal flow, sticky at viewport top.
+    // Stay under .header (z-index 100) so Catalog + currency menus paint above.
     @media (min-width: 801px) {
         position: sticky;
         top: 0;
-        z-index: 1200;
+        z-index: var(--or-hb-z);
     }
 }
 
@@ -45,7 +46,7 @@
 body.custom:has([data-or-holiday-banner]) {
     @media (max-width: 800px) {
         --or-hb-fixed-top: 80px;
-        --or-hb-height: 2.5rem;
+        --or-hb-height: 2.75rem;
 
         @media (min-width: 301px) {
             --or-hb-fixed-top: clamp(
@@ -141,12 +142,11 @@ body.custom:has([data-or-holiday-banner]) {
     align-items: stretch;
     inline-size: 100%;
     block-size: var(--or-hb-height);
-    font-family: Silkscreen, "Press Start 2P", monospace;
-    // Floor raised: Silkscreen illegible at 0.65rem / 14px root (~9px)
-    font-size: clamp(0.75rem, 1.6vw, 0.85rem);
+    font-family: "Jersey 15", monospace;
+    font-size: 16px;
     font-weight: 400;
     line-height: 1;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
     text-transform: uppercase;
 }
 

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pixel font audition @ 16px — Google Fonts Theme/Pixel</title>
+  <!-- Appearance → Pixel catalog (Latn). Chunked CSS2 links to stay under URL limits. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Bitcount&family=VT323&family=Pixelify+Sans:wght@400;700&family=Silkscreen:wght@400;700&family=Jersey+25&family=DotGothic16&family=Doto&family=Geist+Pixel&family=Jersey+10&family=Bitcount+Single&family=Tiny5&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Handjet&family=Bytesized&family=Coral+Pixels&family=Bitcount+Grid+Double&family=Bitcount+Grid+Double+Ink&family=Bitcount+Grid+Single&family=Bitcount+Grid+Single+Ink&family=Bitcount+Ink&family=Bitcount+Prop+Double&family=Bitcount+Prop+Double+Ink&family=Bitcount+Prop+Single&family=Bitcount+Prop+Single+Ink&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single+Ink&family=Jacquard+12&family=Jacquard+12+Charted&family=Jacquard+24&family=Jacquard+24+Charted&family=Jacquarda+Bastarda+9&family=Jacquarda+Bastarda+9+Charted&family=Jersey+10+Charted&family=Jersey+15&family=Jersey+15+Charted&family=Jersey+20&family=Jersey+20+Charted&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+25+Charted&family=Micro+5&family=Micro+5+Charted&family=Rubik+Broken+Fax&family=Rubik+Iso&family=Rubik+Pixels&family=Sixtyfour&family=Sixtyfour+Convergence&family=Workbench&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #e31c23;
+      --yellow: #ffec00;
+      --ink: #111;
+      --bg: #0b0b0b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px 24px 48px;
+      background: var(--bg);
+      color: #fff;
+      font: 13px/1.35 system-ui, sans-serif;
+    }
+    h1 { margin: 0 0 6px; font: 700 18px/1.2 system-ui, sans-serif; }
+    p.meta { margin: 0 0 18px; opacity: 0.8; max-inline-size: 60rem; }
+    p.meta a { color: #9cf; }
+    .row {
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      background: #171717;
+      border-radius: 8px;
+    }
+    .row.is-current {
+      outline: 2px solid #ffec00;
+    }
+    .row.is-previous {
+      outline: 2px solid #666;
+    }
+    .label {
+      margin-bottom: 8px;
+      opacity: 0.85;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: baseline;
+    }
+    .label .n { opacity: 0.55; min-inline-size: 2ch; }
+    .label .tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #333;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .label .tag.current { background: var(--red); }
+    .label .tag.previous { background: #555; }
+    .sample {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      overflow: hidden;
+      background: var(--yellow);
+      border-radius: 2px;
+    }
+    .lead, .body {
+      display: inline-flex;
+      align-items: center;
+      padding-inline: 0.75rem;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .lead {
+      flex: 0 0 auto;
+      background: var(--red);
+      color: #fff;
+    }
+    .body {
+      flex: 1 1 auto;
+      min-inline-size: 0;
+      overflow: hidden;
+      color: var(--ink);
+      background: var(--yellow);
+    }
+  </style>
+</head>
+<body>
+  <h1>Pixel font audition @ 16px</h1>
+  <p class="meta">
+    Same ticker sample as the sale chrome. All faces from
+    <a href="https://fonts.google.com/?preview.script=Latn&amp;categoryFilters=Appearance:%2FTheme%2FPixel" target="_blank" rel="noopener">Google Fonts → Appearance / Pixel</a>
+    (Latin). Size locked to <strong>16px</strong>. Current theme pick highlighted.
+  </p>
+  <div id="list"></div>
+  <script>
+    const SAMPLE_LEAD = 'THE AFFO/RDABILITY SALE';
+    const SAMPLE_BODY = 'All paperbacks at $14.99 | All E-books $4.99 | Free shipping above $100 | Weekly gifts for lucky customers | Offer valid till December 20 | Hurry!!';
+
+    // Order roughly matches Google catalog browse; current theme pick first among peers.
+    const faces = [
+      { name: 'Silkscreen', previous: true },
+      { name: 'Jersey 25' },
+      { name: 'Press Start 2P' },
+      { name: 'Bitcount' },
+      { name: 'VT323' },
+      { name: 'Pixelify Sans' },
+      { name: 'DotGothic16' },
+      { name: 'Doto' },
+      { name: 'Geist Pixel' },
+      { name: 'Jersey 10' },
+      { name: 'Bitcount Single' },
+      { name: 'Tiny5' },
+      { name: 'Handjet' },
+      { name: 'Bytesized' },
+      { name: 'Coral Pixels' },
+      { name: 'Bitcount Grid Double' },
+      { name: 'Bitcount Grid Double Ink' },
+      { name: 'Bitcount Grid Single' },
+      { name: 'Bitcount Grid Single Ink' },
+      { name: 'Bitcount Ink' },
+      { name: 'Bitcount Prop Double' },
+      { name: 'Bitcount Prop Double Ink' },
+      { name: 'Bitcount Prop Single' },
+      { name: 'Bitcount Prop Single Ink' },
+      { name: 'Bitcount Single Ink' },
+      { name: 'Jacquard 12' },
+      { name: 'Jacquard 12 Charted' },
+      { name: 'Jacquard 24' },
+      { name: 'Jacquard 24 Charted' },
+      { name: 'Jacquarda Bastarda 9' },
+      { name: 'Jacquarda Bastarda 9 Charted' },
+      { name: 'Jersey 10 Charted' },
+      { name: 'Jersey 15', current: true },
+      { name: 'Jersey 15 Charted' },
+      { name: 'Jersey 20' },
+      { name: 'Jersey 20 Charted' },
+      { name: 'Jersey 25 Charted' },
+      { name: 'Micro 5' },
+      { name: 'Micro 5 Charted' },
+      { name: 'Rubik Broken Fax' },
+      { name: 'Rubik Iso' },
+      { name: 'Rubik Pixels' },
+      { name: 'Sixtyfour' },
+      { name: 'Sixtyfour Convergence' },
+      { name: 'Workbench' },
+    ];
+
+    const list = document.getElementById('list');
+
+    faces.forEach((f, i) => {
+      const row = document.createElement('div');
+      row.className = 'row' + (f.current ? ' is-current' : '') + (f.previous ? ' is-previous' : '');
+      row.innerHTML =
+        '<div class="label">' +
+          '<span class="n">' + (i + 1) + '.</span>' +
+          '<strong>' + f.name + '</strong>' +
+          '<span>@ 16px</span>' +
+          (f.previous ? '<span class="tag previous">previous</span>' : '') +
+          (f.current ? '<span class="tag current">current</span>' : '') +
+        '</div>' +
+        '<div class="sample">' +
+          '<span class="lead"></span>' +
+          '<span class="body"></span>' +
+        '</div>';
+      const lead = row.querySelector('.lead');
+      const body = row.querySelector('.body');
+      const stack = '"' + f.name + '", monospace';
+      lead.style.fontFamily = stack;
+      body.style.fontFamily = stack;
+      lead.textContent = SAMPLE_LEAD;
+      body.textContent = SAMPLE_BODY;
+      list.appendChild(row);
+    });
+
+    document.fonts.ready.then(() => {
+      faces.forEach((f, i) => {
+        const ok = document.fonts.check('16px "' + f.name + '"');
+        if (!ok) {
+          const tag = document.createElement('span');
+          tag.className = 'tag';
+          tag.textContent = 'may not have loaded';
+          list.children[i].querySelector('.label').appendChild(tag);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

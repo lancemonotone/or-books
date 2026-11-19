@@ -10,7 +10,24 @@ Working checklist and delivery notes for the AFFO/RDABILITY sale chrome.
 
 **Live** (pushed + activated Light variation). See all → special-offer (same tab); stuck ticker; mobile Dazed sticker; Rock Bottom. Holiday Banner BB cards 6.1–6.7 complete.
 
-## Antara’s latest asks (Nov 15–16)
+**Open revision (Nov 19):** ticker readability + dropdown stacking (currency + Catalog). Work in `orbooks-theme-prod-download/` (local `stencil start` running). Reply / estimate before push unless Rus says otherwise.
+
+## Antara’s latest asks (Nov 19)
+
+| Ask | Est. | Notes |
+|-----|------|--------|
+| Ticker font more readable | **~0.25h** | Leave pixel look but clearer (weight/size/tracking); or swap face if she prefers. |
+| Currency + Catalog above ticker | **~0.25h** | Desktop sticky ticker `z-index: 1200` sits over menus; lower ticker / raise open menus. |
+| Combined small push | **~0.5h** ($62.50) | One prod push after both. |
+
+Checklist:
+
+- [x] Ticker font readability — **Jersey 15** @ 16px (audition #33; local)
+- [x] Currency dropdown above ticker — sticky z under `.header` (100) (local)
+- [x] Catalog dropdown above ticker — same stacking fix (local)
+- [x] Prod push after go-ahead / client OK (Nov 19 — Jersey 15 + dropdown stacking)
+
+## Antara’s prior asks (Nov 15–16) — done
 
 Updated after her **Nov 16 10:46 AM** clarify (full text in [NOTES.md](./NOTES.md)). Hours are **new** follow-up / billable only (not the original 5h).
 

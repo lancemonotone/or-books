@@ -5,6 +5,7 @@ orbooks-theme/secrets.*.json
 !orbooks-theme/secrets.catalog.example.json
 orbooks-theme/config.homepage-ids.stage.json
 orbooks-theme/assets/dist/
+orbooks-theme-prod-download/assets/dist/
 
 # Stencil CLI context analysis dump (regenerated on bundle/push)
 orbooks-theme/stencil_context/
